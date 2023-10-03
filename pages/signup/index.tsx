@@ -1,17 +1,19 @@
+import { ax } from "@/database/axios_config";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function SignUp() {
-  const [form, setForm] = useState({
-    username: "",
-    cnpj: "",
-    email: "",
-    contactPhone: "",
-    address: "",
-    password: "",
-    passwordConfirm: "",
-  });
-
-  const mainClass = "min-h-screen px-16 pt-2 pb-8 grid grid-rows-5 text-lg",
+  const router = useRouter(),
+    [form, setForm] = useState({
+      username: "",
+      cnpj: "",
+      email: "",
+      contactPhone: "",
+      address: "",
+      password: "",
+      passwordConfirm: "",
+    }),
+    mainClass = "min-h-screen px-16 pt-2 pb-8 grid grid-rows-5 text-lg",
     h1Class =
       "indent-8 font-bold py-auto text-4xl flex flex-col justify-center",
     formClass = "px-4 py-2 row-span-4 flex flex-col justify-around",
@@ -24,9 +26,21 @@ export default function SignUp() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // a terminar
+    const clone = { ...form };
+    if (clone.password !== clone.passwordConfirm) {
+      console.log(
+        "The 'password confirm' field does not match the 'password' field."
+      );
+      return;
+    }
+    try {
+      const newUser = await ax.post("/user/create", { ...clone });
+      router.push("/login");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
