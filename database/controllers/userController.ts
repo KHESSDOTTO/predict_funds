@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
+import { generateToken } from "../jwt.config";
 
 // Signup
-async function createUser(clientInfo: {
+async function doCreateUser(clientInfo: {
   username: string;
   email: string;
   cnpj: string;
@@ -20,11 +21,12 @@ async function createUser(clientInfo: {
     ) ||
     password !== passwordConfirm
   ) {
-    console.log(
-      "Error occured. Either password and password confirm didn't match, or there is no password, \
-or password didn't match the required format"
-    );
-    return false;
+    return {
+      ok: false,
+      status: 500,
+      msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
+or password didn't match the required format",
+    };
   }
   try {
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
@@ -34,11 +36,64 @@ or password didn't match the required format"
       passwordHash: hashedPassword,
     });
     delete createdUser._doc.passwordHash;
-    return createdUser;
+    return {
+      ok: true,
+      status: 200,
+      msg: createdUser,
+    };
   } catch (err) {
     console.log(err);
-    return false;
+    return {
+      ok: false,
+      status: 500,
+      msg: err,
+    };
   }
 }
 
-export { createUser };
+// Login
+async function doLogin(clientInfo: {
+  username: string;
+  password: string | Buffer;
+}) {
+  try {
+    const { username, password } = clientInfo;
+    const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      return {
+        ok: false,
+        status: 500,
+        msg: "User not found.",
+      };
+    }
+    if (await bcrypt.compare(password, user.passwordHash)) {
+      const token = generateToken(user);
+      delete user._doc.passwordHash;
+      delete user._doc.favorites;
+      if (!user.emailConfirm) {
+        return {
+          ok: false,
+          status: 500,
+          msg: "Account not yet confirmed",
+        };
+      }
+      return {
+        ok: true,
+        status: 200,
+        msg: { ...user._doc },
+        token: token,
+      };
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return {
+      ok: false,
+      status: 500,
+      msg: err,
+    };
+  }
+}
+
+export { doCreateUser, doLogin };
