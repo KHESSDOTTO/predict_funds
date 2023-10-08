@@ -2,7 +2,7 @@ import { ax } from "@/database/axios_config";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function SignUp() {
+export default function SignUpPage() {
   const router = useRouter(),
     [form, setForm] = useState({
       username: "",
@@ -36,7 +36,7 @@ export default function SignUp() {
       return;
     }
     try {
-      const newUser = await ax.post("/user/create", { ...clone });
+      await ax.post("/user/create", { ...clone });
       router.push("/login");
     } catch (err) {
       console.log(err);

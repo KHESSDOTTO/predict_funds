@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Schema } from "mongoose";
 
-export function generateToken(user: {
+function generateToken(user: {
   _id: Schema.Types.ObjectId;
   username: String;
   email: String;
@@ -50,3 +50,15 @@ export function generateToken(user: {
     }
   );
 }
+
+function verifyToken(token: string) {
+  if (process.env.TOKEN_SIGN_SECRET) {
+    const userToken = jwt.verify(token, process.env.TOKEN_SIGN_SECRET);
+    return userToken;
+  } else {
+    console.log("Token secret not defined");
+    return false;
+  }
+}
+
+export { generateToken, verifyToken };

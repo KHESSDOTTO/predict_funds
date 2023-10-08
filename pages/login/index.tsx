@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { ax } from "@/database/axios_config";
+import { useRouter } from "next/router";
 
-export default function Login() {
+export default function LoginPage() {
   const [form, setForm] = useState({
-    username: "",
-    password: "",
-  });
+      username: "",
+      password: "",
+    }),
+    router = useRouter();
 
   // css - classes
   const mainClass = "min-h-screen px-16 pt-2 pb-8 grid grid-rows-5 text-lg",
@@ -21,9 +24,15 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // a terminar
+    try {
+      const response = await ax.post("user/login", form);
+      console.log(response);
+      router.push("/loggedin/home");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

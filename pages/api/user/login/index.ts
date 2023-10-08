@@ -9,9 +9,10 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
       const user = await doLogin(req.body);
       disconnect();
       if (user) {
-        if (user.ok) {
+        if (user.ok && user.authCookie) {
           return res
             .status(user.status)
+            .setHeader("Set-Cookie", user.authCookie)
             .json({ ...user.msg, token: user.token });
         } else {
           return res.status(user.status).json(user.msg);

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
 import { generateToken } from "../jwt.config";
+import { serialize, parse } from "cookie";
 
 // Signup
 async function doCreateUser(clientInfo: {
@@ -68,8 +69,12 @@ async function doLogin(clientInfo: {
     }
     if (await bcrypt.compare(password, user.passwordHash)) {
       const token = generateToken(user);
+      const authCookie = serialize("loggedInUser", token, {
+        httpOnly: true,
+        maxAge: 60 * 60 * 12,
+        path: "/",
+      });
       delete user._doc.passwordHash;
-      delete user._doc.favorites;
       if (!user.emailConfirm) {
         return {
           ok: false,
@@ -82,6 +87,7 @@ async function doLogin(clientInfo: {
         status: 200,
         msg: { ...user._doc },
         token: token,
+        authCookie: authCookie,
       };
     } else {
       return false;
