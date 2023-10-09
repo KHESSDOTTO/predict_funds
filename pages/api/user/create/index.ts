@@ -7,7 +7,7 @@ async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
     try {
       await connect();
       const newUser = await doCreateUser(req.body);
-      disconnect();
+      await disconnect();
       if (newUser) {
         if (newUser.ok) {
           return res.status(newUser.status).json(newUser.msg);
@@ -17,7 +17,7 @@ async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
       }
       return res.status(500).json("newUser returned null/falsy.");
     } catch (err) {
-      disconnect();
+      await disconnect();
       return res.status(500).json(err);
     }
   }

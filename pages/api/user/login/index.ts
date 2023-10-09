@@ -7,7 +7,7 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
     try {
       await connect();
       const user = await doLogin(req.body);
-      disconnect();
+      await disconnect();
       if (user) {
         if (user.ok && user.authCookie) {
           return res
@@ -20,7 +20,7 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
       }
       return res.status(500).json("user returned null/falsy.");
     } catch (err) {
-      disconnect();
+      await disconnect();
       return res.status(500).json(err);
     }
   }

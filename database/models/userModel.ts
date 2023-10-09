@@ -28,7 +28,7 @@ const UserSchema = new Schema({
   },
   products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   createdAt: { type: Date, default: Date.now() },
-  emailConfirm: { type: Boolean, default: true }, // change to false afterwards
+  emailConfirm: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true, required: true },
 });
 

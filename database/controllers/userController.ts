@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
 import { generateToken } from "../jwt.config";
-import { serialize, parse } from "cookie";
+import { serialize } from "cookie";
 
 // Signup
 async function doCreateUser(clientInfo: {
@@ -67,6 +67,13 @@ async function doLogin(clientInfo: {
         msg: "User not found.",
       };
     }
+    if (!user.emailConfirm) {
+      return {
+        ok: false,
+        status: 500,
+        msg: "Account not yet confirmed.",
+      };
+    }
     if (await bcrypt.compare(password, user.passwordHash)) {
       const token = generateToken(user);
       const authCookie = serialize("loggedInUser", token, {
@@ -102,4 +109,31 @@ async function doLogin(clientInfo: {
   }
 }
 
-export { doCreateUser, doLogin };
+// Confirma email da conta - ativar conta
+async function doConfirmEmail(userId: string) {
+  try {
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      return {
+        ok: false,
+        status: 500,
+        msg: "Couldn't confirm e-mail. Try again.",
+      };
+    }
+    await UserModel.findByIdAndUpdate(userId, { emailConfirm: true });
+    return {
+      ok: true,
+      status: 200,
+      msg: "Account confirmed!",
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      ok: false,
+      status: 500,
+      msg: `Error: ${err}`,
+    };
+  }
+}
+
+export { doCreateUser, doLogin, doConfirmEmail };
