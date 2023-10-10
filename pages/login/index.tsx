@@ -27,7 +27,7 @@ export default function LoginPage() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const response = await ax.post("user/login", form);
+      const response = await ax.post("/user/login", form);
       console.log(response);
       router.push("/loggedin/home");
     } catch (err) {

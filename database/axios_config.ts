@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiURLs = {
   development: "http://localhost:3000/api",
-  production: "",
+  production: "https://predict-funds.vercel.app/api",
   test: "",
 };
 
