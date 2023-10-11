@@ -3,6 +3,8 @@ import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { ax } from "@/database/axios_config";
+import toast from "react-hot-toast";
 
 export default function LoggedInHome({ user }: any) {
   const router = useRouter();
@@ -12,10 +14,28 @@ export default function LoggedInHome({ user }: any) {
     }
     return;
   });
+
+  async function handleLogout() {
+    try {
+      await ax.post("/user/logout");
+      toast.success("Logged out.");
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error logging out.");
+    }
+  }
+
   return (
     <div>
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
+      <button
+        className="py-2 px-4 border-2 border-blue-900 rounded-md"
+        onClick={handleLogout}
+      >
+        Log Out
+      </button>
     </div>
   );
 }

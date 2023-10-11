@@ -1,6 +1,7 @@
 import { ax } from "@/database/axios_config";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 export default function SignUpPage() {
   const router = useRouter(),
@@ -37,9 +38,13 @@ export default function SignUpPage() {
     }
     try {
       await ax.post("/user/create", { ...clone });
+      toast.success("User created successfully!");
       router.push("/login");
     } catch (err) {
       console.log(err);
+      toast.error(
+        "Error creating the user. Please, check the informations provided."
+      );
     }
   }
 
