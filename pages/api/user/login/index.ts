@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { doLogin } from "@/database/controllers/userController";
-import { connect, disconnect } from "@/database/database";
+import { connect, disconnect } from "@/database/database.config";
 
 async function Login(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {

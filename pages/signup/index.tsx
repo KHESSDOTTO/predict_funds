@@ -1,4 +1,4 @@
-import { ax } from "@/database/axios_config";
+import { ax } from "@/database/axios.config";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";

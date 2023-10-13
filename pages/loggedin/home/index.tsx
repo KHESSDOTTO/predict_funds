@@ -1,9 +1,9 @@
-import { verifyToken } from "@/database/jwt.config";
+import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { ax } from "@/database/axios_config";
+import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 
 export default function LoggedInHome({ user }: any) {

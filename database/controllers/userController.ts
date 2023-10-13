@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
-import { generateToken } from "../jwt.config";
+import { generateToken } from "../../utils/jwt.config";
 import { serialize } from "cookie";
 
 // Signup
