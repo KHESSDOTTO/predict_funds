@@ -8,7 +8,11 @@ async function sendConfirmEmail(userId: string, email: string) {
     from: process.env.EMAIL_ADDRESS,
     to: email,
     subject: "Confirm Your E-mail - PREDICT FUNDS",
-    html: `<p>Click here to activate your account:<p> <a href=https://predict-funds.vercel.app/api/user/account-confirm/${userId}>CLICK HERE</a>`,
+    html: `<p>Click here to activate your account:<p> <a href=${
+      process.env.NODE_ENV == "development"
+        ? "http://localhost:3000/api/user/account-confirm"
+        : "https://predict-funds.vercel.app/api/user/account-confirm"
+    }/${userId}>CLICK HERE</a>`,
   });
 }
 
@@ -21,10 +25,8 @@ async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
       if (newUser) {
         if (newUser.ok) {
           sendConfirmEmail(newUser.msg._id, newUser.msg.email);
-          return res.status(newUser.status).json(newUser.msg);
-        } else {
-          return res.status(newUser.status).json(newUser.msg);
         }
+        return res.status(newUser.status).json(newUser.msg);
       }
       return res.status(500).json("newUser returned null/falsy.");
     } catch (err) {
