@@ -19,7 +19,8 @@ export default function LoginPage() {
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "indent-1",
     inputClass = "rounded-md",
-    btnClass = "rounded-md bg-blue-300 w-32 py-1 mt-8 border-2 border-blue-600";
+    btnClass =
+      "rounded-md bg-gradient-to-b from-indigo-600 to-indigo-400 text-white font-semibold py-2 px-8 mt-8 border-2 border-indigo-800 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });

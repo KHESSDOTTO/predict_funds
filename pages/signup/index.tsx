@@ -14,14 +14,15 @@ export default function SignUpPage() {
       password: "",
       passwordConfirm: "",
     }),
-    mainClass = "min-h-screen px-16 pt-2 pb-8 grid grid-rows-5 text-lg",
+    mainClass =
+      "min-h-screen px-auto pt-8 pb-8 grid grid-rows-6 justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
     h1Class =
-      "indent-8 font-bold py-auto text-4xl flex flex-col justify-center",
-    formClass = "px-4 py-2 row-span-4 flex flex-col justify-around",
+      "text-center font-bold text-5xl flex flex-col justify-center font-serif md:text-left md:mx-4 md:indent-8 md:w-10/12 lg:indent-24",
+    formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col gap-2",
     inputClass = "rounded-md",
     btnClass =
-      "rounded-md bg-blue-300 w-64 px-4 py-1 border-2 border-blue-600 self-center mt-2";
+      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-400 text-white font-semibold w-64 px-4 py-1 border-2 border-blue-600 self-center mt-2";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -53,7 +54,9 @@ export default function SignUpPage() {
       <h1 className={h1Class}>Sign up</h1>
       <form className={formClass} onSubmit={handleSubmit}>
         <div className={divClass}>
-          <label htmlFor="username">Nome de usuário</label>
+          <label htmlFor="username" className="indent-2">
+            Nome de usuário
+          </label>
           <input
             className={inputClass}
             id="username"
@@ -64,7 +67,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="cnpj">CNPJ</label>
+          <label htmlFor="cnpj" className="indent-2">
+            CNPJ
+          </label>
           <input
             className={inputClass}
             id="cnpj"
@@ -75,7 +80,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="email">E-mail</label>
+          <label htmlFor="email" className="indent-2">
+            E-mail
+          </label>
           <input
             className={inputClass}
             id="email"
@@ -86,7 +93,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="contactPhone">Telefone de contato</label>
+          <label htmlFor="contactPhone" className="indent-2">
+            Telefone de contato
+          </label>
           <input
             className={inputClass}
             id="contactPhone"
@@ -97,7 +106,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="address">Endereço</label>
+          <label htmlFor="address" className="indent-2">
+            Endereço
+          </label>
           <input
             className={inputClass}
             id="address"
@@ -108,7 +119,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="password">Senha</label>
+          <label htmlFor="password" className="indent-2">
+            Senha
+          </label>
           <input
             className={inputClass}
             id="password"
@@ -119,7 +132,9 @@ export default function SignUpPage() {
           ></input>
         </div>
         <div className={divClass}>
-          <label htmlFor="passwordConfirm">Confirmar Senha</label>
+          <label htmlFor="passwordConfirm" className="indent-2">
+            Confirmar Senha
+          </label>
           <input
             className={inputClass}
             id="passwordConfirm"

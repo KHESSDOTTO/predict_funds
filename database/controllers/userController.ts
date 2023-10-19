@@ -2,6 +2,20 @@ import bcrypt from "bcrypt";
 import UserModel from "../models/userModel";
 import { generateToken } from "../../utils/jwt.config";
 import { serialize } from "cookie";
+import transporter from "@/utils/transporter.config";
+
+async function sendConfirmEmail(userId: string, email: string) {
+  transporter.sendMail({
+    from: process.env.EMAIL_ADDRESS,
+    to: email,
+    subject: "Confirm Your E-mail - PREDICT FUNDS",
+    html: `<p>Click here to activate your account:<p> <a href=${
+      process.env.NODE_ENV == "development"
+        ? "http://localhost:3000/api/user/account-confirm"
+        : "https://predict-funds.vercel.app/api/user/account-confirm"
+    }/${userId}>CLICK HERE</a>`,
+  });
+}
 
 // Signup
 async function doCreateUser(clientInfo: {
@@ -36,7 +50,9 @@ or password didn't match the required format",
       ...clientInfo,
       passwordHash: hashedPassword,
     });
+    sendConfirmEmail(createdUser._doc._id, createdUser._doc.email);
     delete createdUser._doc.passwordHash;
+    delete createdUser._doc._id;
     return {
       ok: true,
       status: 200,

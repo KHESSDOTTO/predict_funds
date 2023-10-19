@@ -31,7 +31,7 @@ export default function LoggedInHome({ user }: any) {
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
       <button
-        className="py-2 px-4 border-2 border-blue-900 rounded-md"
+        className="py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold"
         onClick={handleLogout}
       >
         Log Out
