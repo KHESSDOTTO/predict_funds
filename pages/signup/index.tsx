@@ -82,7 +82,11 @@ export default function SignUpPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const clone = { ...form, cnpj: form.cnpj.replaceAll(/[.\/-]/gm, "") };
+    const clone = {
+      ...form,
+      cnpj: form.cnpj.replaceAll(/[.\/-]/gm, ""),
+      contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
+    };
     if (clone.password !== clone.passwordConfirm) {
       console.log(
         "The 'password confirm' field does not match the 'password' field."
