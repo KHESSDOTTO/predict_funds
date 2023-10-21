@@ -25,14 +25,73 @@ export default function SignUpPage() {
       "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-400 text-white font-semibold w-64 px-4 py-1 border-2 border-blue-600 self-center mt-2";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let newVal = e.target.value;
+    if (e.target.name === "cnpj") {
+      const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
+        lenNum = cnpjNum.length,
+        len = e.target.value.length,
+        specialChars = [".", "/", "-"];
+      if (!specialChars.includes(e.target.value[len - 2])) {
+        switch (lenNum) {
+          case 3:
+            newVal =
+              e.target.value.slice(0, lenNum - 1) +
+              "." +
+              e.target.value.slice(lenNum - 1, lenNum);
+            break;
+          case 6:
+            newVal =
+              e.target.value.slice(0, lenNum) +
+              "." +
+              e.target.value.slice(lenNum, lenNum + 1);
+            break;
+          case 9:
+            newVal =
+              e.target.value.slice(0, lenNum + 1) +
+              "/" +
+              e.target.value.slice(lenNum + 1, lenNum + 2);
+            break;
+          case 13:
+            newVal =
+              e.target.value.slice(0, lenNum + 2) +
+              "-" +
+              e.target.value.slice(lenNum + 2, lenNum + 3);
+            break;
+          case 15:
+            newVal = e.target.value.slice(0, len - 1);
+            break;
+          default:
+            break;
+        }
+      }
+      setForm({ ...form, [e.target.name]: newVal });
+    } else if (e.target.name === "contactPhone") {
+      const len = e.target.value.length,
+        lastChar = e.target.value[len - 1];
+      if (len === 1 && lastChar !== "+") {
+        newVal = "+" + newVal;
+      }
+      if (len > 14) {
+        newVal = e.target.value.slice(0, len - 1);
+      }
+      setForm({ ...form, [e.target.name]: newVal });
+    } else {
+      setForm({ ...form, [e.target.name]: newVal });
+    }
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const clone = { ...form };
+    const clone = {
+      ...form,
+      cnpj: form.cnpj.replaceAll(/[.\/-]/gm, ""),
+      contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
+    };
     if (clone.password !== clone.passwordConfirm) {
       console.log(
+        "The 'password confirm' field does not match the 'password' field."
+      );
+      toast.error(
         "The 'password confirm' field does not match the 'password' field."
       );
       return;
@@ -68,7 +127,7 @@ export default function SignUpPage() {
         </div>
         <div className={divClass}>
           <label htmlFor="cnpj" className="indent-2">
-            CNPJ
+            CNPJ (somente números)
           </label>
           <input
             className={inputClass}
@@ -77,6 +136,7 @@ export default function SignUpPage() {
             type="text"
             value={form.cnpj}
             onChange={handleChange}
+            placeholder="  xx.xxx.xxx/xxxx-xx"
           ></input>
         </div>
         <div className={divClass}>
@@ -90,11 +150,15 @@ export default function SignUpPage() {
             type="email"
             value={form.email}
             onChange={handleChange}
+            placeholder="  example@ex.com"
           ></input>
         </div>
         <div className={divClass}>
           <label htmlFor="contactPhone" className="indent-2">
-            Telefone de contato
+            Telefone de contato{" "}
+            <small className="italic">
+              (com DD e código país: Brasil "+55")
+            </small>
           </label>
           <input
             className={inputClass}
@@ -103,6 +167,7 @@ export default function SignUpPage() {
             type="text"
             value={form.contactPhone}
             onChange={handleChange}
+            placeholder=" +xxxxxxxxxxxxx"
           ></input>
         </div>
         <div className={divClass}>
@@ -120,7 +185,11 @@ export default function SignUpPage() {
         </div>
         <div className={divClass}>
           <label htmlFor="password" className="indent-2">
-            Senha
+            Senha{" "}
+            <small className="italic">
+              (mínimo 8 dígitos, incluindo letras maíusculas, minúsculas e
+              caractere especial)
+            </small>
           </label>
           <input
             className={inputClass}

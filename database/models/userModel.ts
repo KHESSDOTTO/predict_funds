@@ -22,7 +22,7 @@ const UserSchema = new Schema({
   contactPhone: {
     type: String,
     trim: true,
-    match: /^[0-9]{10,11}$/gm,
+    match: /^[0-9]{11,13}$/gm,
     unique: false,
     required: true,
   },

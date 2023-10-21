@@ -27,7 +27,7 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div>
+    <div className="min-h-screen">
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
       <button
