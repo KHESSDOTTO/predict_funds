@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
+import RedButton from "@/components/redButton";
 
 export default function LoggedInHome({ user }: any) {
   const router = useRouter();
@@ -30,12 +31,7 @@ export default function LoggedInHome({ user }: any) {
     <div className="min-h-screen">
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
-      <button
-        className="py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold"
-        onClick={handleLogout}
-      >
-        Log Out
-      </button>
+      <RedButton onClick={handleLogout}>Log Out</RedButton>
     </div>
   );
 }
