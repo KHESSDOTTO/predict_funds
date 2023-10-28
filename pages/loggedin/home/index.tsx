@@ -32,7 +32,7 @@ export default function LoggedInHome({ user }: any) {
     <div className="min-h-screen min-w-screen">
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
-      <Dashboard />
+      {/* <Dashboard /> */}
       <button onClick={handleLogout} className={btnClass}>
         Log Out
       </button>
