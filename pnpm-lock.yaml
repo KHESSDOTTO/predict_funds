@@ -13,6 +13,7 @@ specifiers:
   bcrypt: ^5.1.1
   cookie: ^0.5.0
   csstype: ^3.0.10
+  date-fns: ^2.30.0
   jsonwebtoken: ^9.0.2
   mongoose: ^7.5.3
   next: latest
@@ -31,6 +32,7 @@ dependencies:
   bcrypt: 5.1.1
   cookie: 0.5.0
   csstype: 3.1.2
+  date-fns: 2.30.0
   jsonwebtoken: 9.0.2
   mongoose: 7.5.3
   next: 14.0.0_biqbaboplfbrettd7655fr4n2y
@@ -617,6 +619,13 @@ packages:
   /d3-timer/3.0.1:
     resolution: {integrity: sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==}
     engines: {node: '>=12'}
+    dev: false
+
+  /date-fns/2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.23.2
     dev: false
 
   /debug/4.3.4:
