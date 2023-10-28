@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 import RedButton from "@/components/UI/redButton";
+import Dashboard from "@/components/sections/dashboard";
 
 export default function LoggedInHome({ user }: any) {
   const router = useRouter();
@@ -15,7 +16,6 @@ export default function LoggedInHome({ user }: any) {
     }
     return;
   });
-
   async function handleLogout() {
     try {
       await ax.post("/user/logout");
@@ -28,9 +28,10 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen min-w-screen">
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
+      <Dashboard />
       <RedButton onClick={handleLogout}>Log Out</RedButton>
     </div>
   );
