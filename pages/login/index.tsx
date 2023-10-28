@@ -3,6 +3,7 @@ import { ax } from "@/database/axios.config";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import IndigoButton from "@/components/UI/indigoButton";
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -20,7 +21,7 @@ export default function LoginPage() {
     labelClass = "indent-1",
     inputClass = "rounded-md",
     btnClass =
-      "rounded-md bg-gradient-to-b from-indigo-600 to-indigo-400 text-white font-semibold py-2 px-8 mt-8 border-2 border-indigo-800 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
+      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-300 text-white font-semibold py-2 px-8 mt-8 border-2 border-indigo-800 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -65,9 +66,7 @@ export default function LoginPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <button type="submit" className={btnClass}>
-          Log in
-        </button>
+        <IndigoButton>Log in</IndigoButton>
       </form>
       <div className="flex flex-col justify-center items-center text-sm italic text-center">
         <p className="italic text-sm text-center">Não tem uma conta?</p>
