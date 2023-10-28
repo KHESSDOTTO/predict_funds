@@ -2,7 +2,7 @@ import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 
@@ -10,12 +10,12 @@ export default function LoggedInHome({ user }: any) {
   const router = useRouter(),
     btnClass =
       "mx-4 my-2 py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold hover:text-lg hover:transition-all hover:text-yellow-200/90 hover:underline";
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-    return;
-  });
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push("/login");
+  //   }
+  //   return;
+  // });
   async function handleLogout() {
     try {
       await ax.post("/user/logout");
