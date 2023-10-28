@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-// import Dashboard from "../../../components/sections/dashboard";
 
 export default function LoggedInHome({ user }: any) {
   const router = useRouter(),
