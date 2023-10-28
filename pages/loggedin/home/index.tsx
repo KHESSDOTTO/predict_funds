@@ -2,7 +2,7 @@ import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+const { useEffect } = require("react");
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 
