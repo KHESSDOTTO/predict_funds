@@ -3,7 +3,6 @@ import { ax } from "@/database/axios.config";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import IndigoButton from "@/components/UI/indigoButton";
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -66,7 +65,9 @@ export default function LoginPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <IndigoButton>Log in</IndigoButton>
+        <button type="submit" className={btnClass}>
+          Log in
+        </button>
       </form>
       <div className="flex flex-col justify-center items-center text-sm italic text-center">
         <p className="italic text-sm text-center">Não tem uma conta?</p>
