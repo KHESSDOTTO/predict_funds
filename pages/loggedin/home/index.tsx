@@ -8,7 +8,9 @@ import toast from "react-hot-toast";
 import Dashboard from "./dashboard";
 
 export default function LoggedInHome({ user }: any) {
-  const router = useRouter();
+  const router = useRouter(),
+    btnClass =
+      "mx-4 my-2 py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold hover:text-lg hover:transition-all hover:text-yellow-200/90 hover:underline";
   useEffect(() => {
     if (!user) {
       router.push("/login");
@@ -31,10 +33,7 @@ export default function LoggedInHome({ user }: any) {
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
       <Dashboard />
-      <button
-        onClick={handleLogout}
-        className="mx-4 my-2 py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold hover:text-lg hover:transition-all hover:text-yellow-200/90 hover:underline"
-      >
+      <button onClick={handleLogout} className={btnClass}>
         Log Out
       </button>
     </div>
