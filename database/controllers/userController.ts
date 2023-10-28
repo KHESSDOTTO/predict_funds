@@ -4,6 +4,7 @@ import { generateToken } from "../../utils/jwt.config";
 import { serialize } from "cookie";
 import transporter from "@/utils/transporter.config";
 
+// Enviar email de confirmação da conta/email
 async function sendConfirmEmail(userId: string, email: string) {
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,

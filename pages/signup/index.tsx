@@ -22,7 +22,7 @@ export default function SignUpPage() {
     divClass = "flex flex-col gap-2",
     inputClass = "rounded-md",
     btnClass =
-      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-400 text-white font-semibold w-64 px-4 py-1 border-2 border-blue-600 self-center mt-2";
+      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-400 text-white font-semibold px-24 py-1 border-2 border-blue-600 self-center mt-2 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let newVal = e.target.value;
@@ -187,8 +187,8 @@ export default function SignUpPage() {
           <label htmlFor="password" className="indent-2">
             Senha{" "}
             <small className="italic">
-              (mínimo 8 dígitos, incluindo letras maíusculas, minúsculas e
-              caractere especial)
+              (mínimo 8 dígitos: incluir letras maíusculas, minúsculas, números
+              e caracteres especiais)
             </small>
           </label>
           <input
