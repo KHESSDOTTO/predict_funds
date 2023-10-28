@@ -15,7 +15,7 @@ function Dashboard() {
   const data = [];
   for (let i = 0; i < 10; i++) {
     data.push({
-      name: `Name${i}`,
+      name: `Name ${i}`,
       value: Math.random() * 10,
     });
   }
