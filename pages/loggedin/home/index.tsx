@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-import Dashboard from "./dashboard";
+// import Dashboard from "../../../components/sections/dashboard";
 
 export default function LoggedInHome({ user }: any) {
   const router = useRouter(),
@@ -32,7 +32,6 @@ export default function LoggedInHome({ user }: any) {
     <div className="min-h-screen min-w-screen">
       <h1>LoggedIn Home</h1>
       <p>Username: {user?.username}</p>
-      {/* <Dashboard /> */}
       <button onClick={handleLogout} className={btnClass}>
         Log Out
       </button>
