@@ -31,7 +31,7 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen">
+    <div className="min-h-screen min-w-screen bg-gray-400">
       <Header user={user} />
       <Dashboard />
       <ButtonRed onClick={handleLogout}>Log Out</ButtonRed>

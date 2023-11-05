@@ -11,6 +11,7 @@ import PredictCard from "../UI/predictCard";
 import OptionButtonGreen from "../UI/optionButtonGreen";
 import OptionButtonIndigo from "../UI/optionButtonIndigo";
 import OptionButtonRed from "../UI/optionButtonRed";
+import { useState } from "react";
 
 function Dashboard() {
   const data = [];
@@ -24,17 +25,20 @@ function Dashboard() {
     });
   }
 
-  function handleClick() {
+  function handleClick(e) {
+    e.target.addClass;
     return;
   }
 
   return (
     <>
-      <div className="flex justify-end items-center flex-col md:flex-row">
-        <p className="font-bold">Expectations: </p>
-        <PredictCard data={data} time={"Week"} />
-        <PredictCard data={data} time={"Month"} />
-        <PredictCard data={data} time={"Three Months"} />
+      <div className="grid items-center grid-rows-5 border-b-white bg-gradient-to-t from-white to-transparent mb-4 md:grid-rows-1 md:grid-cols-12">
+        <p className="font-bold inline col-start-2 underline">Expectations</p>
+        <div className="my-4 col-span-10 flex flex-col items-center justify-around md:flex-row">
+          <PredictCard data={data} time={"Week"} />
+          <PredictCard data={data} time={"Month"} />
+          <PredictCard data={data} time={"Three Months"} />
+        </div>
       </div>
       <div className="flex justify-around">
         <OptionButtonRed handleClick={handleClick}>Pessimistic</OptionButtonRed>
@@ -84,18 +88,18 @@ function Dashboard() {
               stroke="purple"
               fill="url(#customIndigo)"
             ></Area>
-            <Area
+            {/* <Area
               type="monotone"
               dataKey="valuePes"
               stroke="red"
               fill="url(#customRed)"
-            ></Area>
-            <Area
+            ></Area> */}
+            {/* <Area
               type="monotone"
               dataKey="valueOpt"
               stroke="green"
               fill="url(#customGreen)"
-            ></Area>
+            ></Area> */}
             <XAxis dataKey="name" tick={{ fill: "rgb(230, 230, 230)" }} />
             <YAxis tick={{ fill: "rgb(230, 230, 230)" }} />
             <Tooltip />
