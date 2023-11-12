@@ -1,17 +1,28 @@
-function PredictCard(props) {
-  console.log(props.data["Net Funding"]);
-  const total = props.data.reduce((ac, cE) => {
-    return ac + cE["Net Funding"];
-  }, 0);
+import { useEffect, useState } from "react";
 
-  const txtColorPosi = "text-indigo-900",
-    txtColorNega = "text-red-800",
-    bgColorPosi = "from-indigo-900/30",
-    bgColorNega = "from-red-900/30",
-    pClass = `${total < 0 ? txtColorNega : txtColorPosi} underline text-xl`,
-    divClass1 = `rounded-md flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b ${
-      total < 0 ? bgColorNega : bgColorPosi
-    } to-white font-bold w-72 m-4 shadow-md shadow-indigo-900 cursor-pointer text-gray-800 hover:text-indigo-900 hover:transition-all hover:bg-indigo-300/40`;
+function PredictCard(props) {
+  // console.log(props.data);
+  // console.log(props.data[0].netFunding);
+  const [total, setTotal] = useState(0);
+
+  // Cálculo do total
+  useEffect(() => {
+    const rawTotal = props.data.reduce((ac, cE) => {
+      return ac + cE.netFunding;
+    }, 0);
+    const totalToUse = rawTotal.toFixed(2);
+    setTotal(totalToUse);
+  }, [props]);
+
+  // Formatação:
+  let pClass = "text-indigo-900 underline text-xl",
+    divClass1 =
+      "rounded-md flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-900 cursor-pointer text-gray-800 hover:text-indigo-900 hover:transition-all hover:bg-indigo-300/40 from-indigo-900/30";
+  if (total < 0) {
+    pClass = "text-red-800  underline text-xl";
+    divClass1 =
+      "rounded-md flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-900 cursor-pointer text-gray-800 hover:text-indigo-900 hover:transition-all hover:bg-indigo-300/40 from-red-900/30";
+  }
 
   return (
     <div className={divClass1}>
@@ -33,7 +44,7 @@ function PredictCard(props) {
         <h2 className="text-lg">Total - {props.time}</h2>
       </div>
       <div className="flex justify-center items-center py-6">
-        <p className={pClass}>Expected: R$ {total.toFixed(2)}</p>
+        <p className={pClass}>Expected: R$ {total}</p>
       </div>
     </div>
   );

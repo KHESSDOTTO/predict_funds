@@ -20,28 +20,28 @@ function Dashboard() {
     [showOptimistic, setShowOptimistic] = useState(false),
     [showNetFunding, setShowNetFunding] = useState(true);
 
-  for (let i = 0; i < 10; i++) {
-    const val = Math.random() * 10;
+  function togglePessimistic() {
+    setShowPessimistic(!showPessimistic);
+  }
+
+  function toggleOptimistic() {
+    setShowOptimistic(!showOptimistic);
+  }
+
+  function toggleNetFunding() {
+    setShowNetFunding(!showNetFunding);
+  }
+
+  for (let i = 0; i < 12; i++) {
+    const val = Math.random() * 12;
     data.push({
       date: addDays(new Date(), 7 * i)
         .toISOString()
         .substring(0, 10),
-      "1std less": val - 5,
-      "Net Funding": val,
-      "1std more": val + 5,
+      std1Less: val - 5,
+      netFunding: val,
+      std1More: val + 5,
     });
-  }
-
-  function togglePessimistic(e) {
-    setShowPessimistic(!showPessimistic);
-  }
-
-  function toggleOptimistic(e) {
-    setShowOptimistic(!showOptimistic);
-  }
-
-  function toggleNetFunding(e) {
-    setShowNetFunding(!showNetFunding);
   }
 
   return (
@@ -111,30 +111,6 @@ function Dashboard() {
                 />
               </linearGradient>
             </defs>
-            {showNetFunding && (
-              <Area
-                type="monotone"
-                dataKey="Net Funding"
-                stroke="purple"
-                fill="url(#customIndigo)"
-              ></Area>
-            )}
-            {showPessimistic && (
-              <Area
-                type="monotone"
-                dataKey="1std less"
-                stroke="red"
-                fill="url(#customRed)"
-              ></Area>
-            )}
-            {showOptimistic && (
-              <Area
-                type="monotone"
-                dataKey="1std more"
-                stroke="green"
-                fill="url(#customGreen)"
-              ></Area>
-            )}
             <XAxis
               dataKey="date"
               tick={{ fill: "rgb(230, 230, 230)" }}
@@ -149,13 +125,73 @@ function Dashboard() {
               tickFormatter={(num) => `R$${num.toFixed(2)}`}
               width={100}
             />
-            <Tooltip />
             <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
+            {showNetFunding && (
+              <Area
+                type="monotone"
+                dataKey="netFunding"
+                stroke="purple"
+                fill="url(#customIndigo)"
+              ></Area>
+            )}
+            {showPessimistic && (
+              <Area
+                type="monotone"
+                dataKey="std1Less"
+                stroke="red"
+                fill="url(#customRed)"
+              ></Area>
+            )}
+            {showOptimistic && (
+              <Area
+                type="monotone"
+                dataKey="std1More"
+                stroke="green"
+                fill="url(#customGreen)"
+              ></Area>
+            )}
+            <Tooltip
+              content={
+                <CustomTooltip
+                  showNetFunding={showNetFunding}
+                  showOptimistic={showOptimistic}
+                  showPessimistic={showPessimistic}
+                />
+              }
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>
     </>
   );
+}
+
+function CustomTooltip({
+  active,
+  payload,
+  label,
+  showNetFunding,
+  showOptimistic,
+  showPessimistic,
+}) {
+  // console.log(JSON.stringify(payload));
+  if (active) {
+    return (
+      <div className="bg-black/80 text-white p-2 rounded-sm">
+        <h4 className="font-semibold ">{format(parseISO(label), "d, MMM")}</h4>
+        {showPessimistic && (
+          <p>Less 1std: R${payload[0].payload.std1Less.toFixed(2)}mln</p>
+        )}
+        {showNetFunding && (
+          <p>Net Funding: R${payload[0].payload.netFunding.toFixed(2)}mln</p>
+        )}
+        {showOptimistic && (
+          <p>More 1std: R${payload[0].payload.std1More.toFixed(2)}mln</p>
+        )}
+      </div>
+    );
+  }
+  return <></>;
 }
 
 export default Dashboard;
