@@ -15,7 +15,8 @@ import { useState } from "react";
 import { format, parseISO, addDays } from "date-fns";
 
 function Dashboard() {
-  const data = [];
+  const data = [],
+    [dataLength, setDataLength] = useState(2);
   const [showPessimistic, setShowPessimistic] = useState(false),
     [showOptimistic, setShowOptimistic] = useState(false),
     [showNetFunding, setShowNetFunding] = useState(true);
@@ -80,7 +81,7 @@ function Dashboard() {
       </div>
       <div className="border-4 bg-gradient-to-b from-black to-gray-600">
         <ResponsiveContainer height={400}>
-          <AreaChart data={data}>
+          <AreaChart data={data} className="pt-8">
             <defs>
               <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="10%" stopColor="#8884d8" stopOpacity={0.9} />
@@ -177,7 +178,7 @@ function CustomTooltip({
   // console.log(JSON.stringify(payload));
   if (active) {
     return (
-      <div className="bg-black/80 text-white p-2 rounded-sm">
+      <div className="bg-black/50 text-white p-2 rounded-md shadow-indigo-700 shadow-sm">
         <h4 className="font-semibold ">{format(parseISO(label), "d, MMM")}</h4>
         {showPessimistic && (
           <p>Less 1std: R${payload[0].payload.std1Less.toFixed(2)}mln</p>
