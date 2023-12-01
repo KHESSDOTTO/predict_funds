@@ -2,23 +2,54 @@ import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/sections/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 
+interface DataResponse {
+  DT_COMPTC: Date;
+  CNPJ_FUNDO: string;
+  VL_QUOTA?: number;
+  VL_TOTAL?: number;
+  CAPTC_DIA?: number;
+  NR_COTST?: number;
+  TP_FUNDO: string;
+  VL_PATRIM_LIQ?: number;
+  RESG_DIA?: number;
+  CAPTC_LIQ?: number;
+}
+
 export default function LoggedInHome({ user }: any) {
-  const router = useRouter(),
-    btnClass =
-      "mx-4 my-2 py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold hover:text-lg hover:transition-all hover:text-yellow-200/90 hover:underline";
+  const [data, setData] = useState([]);
+  console.log("data");
+  console.log(data);
+
+  const router = useRouter();
+
   useEffect(() => {
+    console.log(user);
     if (!user) {
+      console.log("There is no user!");
       router.push("/login");
+      return;
     }
+    const getData = async () => {
+      try {
+        const newData = await ax.get("/rawData/getAllFromCnpj");
+        setData(newData.data);
+        console.log("Here after setData(newData);");
+        return;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
     return;
-  });
+  }, []);
+
   async function handleLogout() {
     try {
       await ax.post("/user/logout");
@@ -31,10 +62,24 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen bg-gray-300">
+    <div className="min-h-screen min-w-screen bg-gray-300 relative min-h-screen">
       <Header user={user} />
-      <Dashboard />
-      <ButtonRed onClick={handleLogout}>Log Out</ButtonRed>
+      <Dashboard data={data} />
+      <div>
+        <h1>Data below</h1>
+        {data &&
+          data.map((cE) => {
+            return (
+              <>
+                <p>{cE.DT_COMPTC.toLocaleString()}</p>
+                <p>{cE.CAPTC_LIQ}</p>
+              </>
+            );
+          })}
+      </div>
+      <div className="flex justify-end px-4 pb-4">
+        <ButtonRed onClick={handleLogout}>Log Out</ButtonRed>
+      </div>
     </div>
   );
 }
@@ -45,6 +90,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (token) {
     user = verifyToken(token);
   }
+  user["formatedCnpj"] =
+    user.cnpj.slice(0, 2) +
+    "." +
+    user.cnpj.slice(2, 5) +
+    "." +
+    user.cnpj.slice(5, 8) +
+    "/" +
+    user.cnpj.slice(8, 12) +
+    "-" +
+    user.cnpj.slice(12, 14);
   return {
     props: {
       user,
