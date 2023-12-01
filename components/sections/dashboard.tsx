@@ -13,6 +13,7 @@ import OptionButtonIndigo from "../UI/optionButtonIndigo";
 import OptionButtonRed from "../UI/optionButtonRed";
 import { useEffect, useState } from "react";
 import { format, parseISO, addDays } from "date-fns";
+import ButtonIndigo from "../UI/buttonIndigo";
 
 function Dashboard({ data }) {
   const [showPessimistic, setShowPessimistic] = useState(false),
@@ -47,9 +48,51 @@ function Dashboard({ data }) {
 
   return (
     <div className="grid grid-rows-5 md:grid-cols-12 md:grid-rows-1">
-      <div id="controls" className="col-span-4">
-        Control section
-      </div>
+      <section id="controls" className="col-span-4 px-8">
+        <h2 className="font-bold text-2xl text-center py-12 underline">
+          Control section
+        </h2>
+        <form id="controlForm">
+          <div className="flex flex-row gap-8">
+            <div className="flex flex-col gap-4 font-semibold">
+              <label htmlFor="buscaCnpj" className="h-8">
+                CNPJ to show
+              </label>
+              <label htmlFor="DI" className="h-8">
+                DI
+              </label>
+              <label htmlFor="varCota" className="h-8">
+                Quota variation (%)
+              </label>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="buscaCnpj"
+                  name="buscaCnpj"
+                  className="rounded-sm"
+                ></input>
+              </div>
+              <input
+                type="range"
+                id="DI"
+                name="DI"
+                className="h-8 indigo-500"
+              ></input>
+              <input
+                type="range"
+                id="varCota"
+                name="varCota"
+                className="h-8 indigo-500"
+              ></input>
+            </div>
+          </div>
+          <div className="text-center">
+            <ButtonIndigo>Update</ButtonIndigo>
+          </div>
+        </form>
+      </section>
       <div className="col-start-5 col-span-12">
         <div className="flex justify-around">
           <OptionButtonRed
@@ -73,7 +116,7 @@ function Dashboard({ data }) {
         </div>
         <div className="border-4 bg-gray-900 pb-8 rounded-xl">
           <ResponsiveContainer height={400}>
-            <AreaChart data={data} className="pt-8">
+            <AreaChart data={data} className="pt-8 px-4">
               <defs>
                 <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="10%" stopColor="#8884d8" stopOpacity={0.9} />

@@ -38,7 +38,8 @@ export default function LoggedInHome({ user }: any) {
     }
     const getData = async () => {
       try {
-        const newData = await ax.get("/rawData/getAllFromCnpj");
+        let newData = await ax.get("/rawData/getAllFromCnpj");
+        // newData = newData.data.slice(-90, -1);
         setData(newData.data);
         console.log("Here after setData(newData);");
         return;
@@ -65,7 +66,7 @@ export default function LoggedInHome({ user }: any) {
     <div className="min-h-screen min-w-screen bg-gray-300 relative min-h-screen">
       <Header user={user} />
       <Dashboard data={data} />
-      <div>
+      {/* <div>
         <h1>Data below</h1>
         {data &&
           data.map((cE) => {
@@ -76,7 +77,7 @@ export default function LoggedInHome({ user }: any) {
               </>
             );
           })}
-      </div>
+      </div> */}
       <div className="flex justify-end px-4 pb-4">
         <ButtonRed onClick={handleLogout}>Log Out</ButtonRed>
       </div>
