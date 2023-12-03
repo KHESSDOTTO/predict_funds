@@ -3,9 +3,7 @@ import { GetAllRawDataFromCnpj } from "@/database/controllers/rawDataController"
 import { connect, disconnect } from "@/database/database.config";
 import { verifyToken } from "@/utils/jwt.config";
 
-// Busca unicamente por um CNPJ fixo no código. Alterar depois.
 async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
-  console.log(`Method used in request is: ${req.method}`);
   if (req.method === "GET") {
     try {
       await connect();
@@ -25,11 +23,7 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                 "-" +
                 user.cnpj.slice(12, 14);
             }
-            console.log("user.formatedCnpj");
-            console.log(user.formatedCnpj);
-            const allRawData = await GetAllRawDataFromCnpj(
-              "00.089.915/0001-15"
-            );
+            const allRawData = await GetAllRawDataFromCnpj(req.query.cnpj);
             console.log(allRawData);
             await disconnect();
             return res.status(200).json(allRawData);

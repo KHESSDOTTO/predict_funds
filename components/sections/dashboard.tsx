@@ -7,20 +7,66 @@ import {
   Area,
   ResponsiveContainer,
 } from "recharts";
+import { ax } from "@/database/axios.config";
 import PredictCard from "../UI/predictCard";
 import OptionButtonGreen from "../UI/optionButtonGreen";
 import OptionButtonIndigo from "../UI/optionButtonIndigo";
 import OptionButtonRed from "../UI/optionButtonRed";
 import { useEffect, useState } from "react";
-import { format, parseISO, addDays } from "date-fns";
+import { format } from "date-fns";
 import ButtonIndigo from "../UI/buttonIndigo";
+import toast from "react-hot-toast";
 
-function Dashboard({ data }) {
+function Dashboard({ user }) {
   const [showPessimistic, setShowPessimistic] = useState(false),
     [showOptimistic, setShowOptimistic] = useState(false),
-    [showNetFunding, setShowNetFunding] = useState(true);
-  console.log("data inside dashboard");
-  console.log(data);
+    [showNetFunding, setShowNetFunding] = useState(true),
+    [data, setData] = useState([]),
+    [controlForm, setControlForm] = useState({
+      buscaCnpj: "",
+      DI: 0.1,
+      varCota: 0,
+    });
+
+  useEffect(() => {
+    if (data[0]) {
+      setControlForm({
+        ...controlForm,
+        buscaCnpj: data[0].CNPJ_FUNDO ? data[0].CNPJ_FUNDO : "",
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const encodedParam = encodeURIComponent(user.cnpj);
+        const newData = await ax.get(
+          `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
+        );
+        console.log(newData);
+        let finalData = newData.data.slice(-60, -1);
+        finalData = finalData.map((cE) => {
+          const convDate = new Date(cE.DT_COMPTC);
+          return { ...cE, DT_COMPTC: convDate };
+        });
+        setData(finalData);
+        console.log("Here after setData(newData);");
+        return;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+    return;
+  }, []);
+
+  const thresholdDate = new Date("2023-03-01");
+
+  function getColor(entry) {
+    const entryDate = new Date(entry);
+    return entryDate >= thresholdDate ? "red" : "green";
+  }
 
   function togglePessimistic() {
     setShowPessimistic(!showPessimistic);
@@ -34,17 +80,74 @@ function Dashboard({ data }) {
     setShowNetFunding(!showNetFunding);
   }
 
-  // for (let i = 0; i < 12; i++) {
-  //   const val = Math.random() * 12;
-  //   data.push({
-  //     date: addDays(new Date(), 7 * i)
-  //       .toISOString()
-  //       .substring(0, 10),
-  //     std1Less: val - 5,
-  //     netFunding: val,
-  //     std1More: val + 5,
-  //   });
-  // }
+  function handleControlFormChange(e) {
+    let newVal = e.target.value;
+    if (e.target.name === "buscaCnpj") {
+      const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
+        lenNum = cnpjNum.length,
+        len = e.target.value.length,
+        specialChars = [".", "/", "-"];
+      if (!specialChars.includes(e.target.value[len - 2])) {
+        switch (lenNum) {
+          case 3:
+            newVal =
+              e.target.value.slice(0, lenNum - 1) +
+              "." +
+              e.target.value.slice(lenNum - 1, lenNum);
+            break;
+          case 6:
+            newVal =
+              e.target.value.slice(0, lenNum) +
+              "." +
+              e.target.value.slice(lenNum, lenNum + 1);
+            break;
+          case 9:
+            newVal =
+              e.target.value.slice(0, lenNum + 1) +
+              "/" +
+              e.target.value.slice(lenNum + 1, lenNum + 2);
+            break;
+          case 13:
+            newVal =
+              e.target.value.slice(0, lenNum + 2) +
+              "-" +
+              e.target.value.slice(lenNum + 2, lenNum + 3);
+            break;
+          case 15:
+            newVal = e.target.value.slice(0, len - 1);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    setControlForm({ ...controlForm, [e.target.name]: newVal });
+    return;
+  }
+
+  async function handleControlFormSubmit(e) {
+    e.preventDefault();
+    const loadingToast = toast.loading("Fetching data...");
+    try {
+      const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
+      const newData = await ax.get(
+        `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
+      );
+      console.log(newData);
+      let finalData = newData.data.slice(-60, -1);
+      finalData = finalData.map((cE) => {
+        const convDate = new Date(cE.DT_COMPTC);
+        return { ...cE, DT_COMPTC: convDate };
+      });
+      setData(finalData);
+      toast.success("Done.");
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      console.log(err);
+      toast.error("Sorry. We had a problem handling the request.");
+      toast.dismiss(loadingToast);
+    }
+  }
 
   return (
     <div className="grid grid-rows-5 md:grid-cols-12 md:grid-rows-1">
@@ -52,7 +155,7 @@ function Dashboard({ data }) {
         <h2 className="font-bold text-2xl text-center py-12 underline">
           Control section
         </h2>
-        <form id="controlForm">
+        <form id="controlForm" onSubmit={handleControlFormSubmit}>
           <div className="flex flex-row gap-8">
             <div className="flex flex-col gap-4 font-semibold">
               <label htmlFor="buscaCnpj" className="h-8">
@@ -71,24 +174,56 @@ function Dashboard({ data }) {
                   type="text"
                   id="buscaCnpj"
                   name="buscaCnpj"
-                  className="rounded-sm"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.buscaCnpj}
+                  onChange={handleControlFormChange}
                 ></input>
               </div>
-              <input
-                type="range"
-                id="DI"
-                name="DI"
-                className="h-8 indigo-500"
-              ></input>
-              <input
-                type="range"
-                id="varCota"
-                name="varCota"
-                className="h-8 indigo-500"
-              ></input>
+              <div className="flex h-8 gap-4 text-sm">
+                <span className="range-value w-12">
+                  {(controlForm.DI * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="DI"
+                  name="DI"
+                  min={0.01}
+                  max={0.2}
+                  step={0.0025}
+                  className="indigo-500"
+                  value={controlForm.DI}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="flex h-8 gap-4">
+                <span
+                  className="range-value w-12 text-sm"
+                  style={{
+                    color:
+                      controlForm.varCota < 0
+                        ? "red"
+                        : controlForm.varCota == 0
+                        ? ""
+                        : "green",
+                  }}
+                >
+                  {(controlForm.varCota * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="varCota"
+                  name="varCota"
+                  min={-0.99}
+                  max={1.5}
+                  step={0.01}
+                  className="indigo-500"
+                  value={controlForm.varCota}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
             </div>
           </div>
-          <div className="text-center">
+          <div className="text-center mt-6">
             <ButtonIndigo>Update</ButtonIndigo>
           </div>
         </form>
@@ -114,9 +249,9 @@ function Dashboard({ data }) {
             Forecast + 1 std
           </OptionButtonGreen>
         </div>
-        <div className="border-4 bg-gray-900 pb-8 rounded-xl">
+        <div className="border-4 bg-gray-900 py-4 pl-8 pr-2 rounded-xl">
           <ResponsiveContainer height={400}>
-            <AreaChart data={data} className="pt-8 px-4">
+            <AreaChart data={data}>
               <defs>
                 <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="10%" stopColor="#8884d8" stopOpacity={0.9} />
@@ -153,7 +288,7 @@ function Dashboard({ data }) {
                 height={50}
                 tickLine={false}
                 tickFormatter={(DT_COMPTC) => {
-                  return format(parseISO(DT_COMPTC), "MMM, d");
+                  return format(DT_COMPTC, "MMM, d");
                 }}
               />
               <YAxis
@@ -166,7 +301,7 @@ function Dashboard({ data }) {
                 <Area
                   type="monotone"
                   dataKey="CAPTC_LIQ"
-                  stroke="purple"
+                  stroke={getColor}
                   fill="url(#customIndigo)"
                 ></Area>
               )}
@@ -223,14 +358,10 @@ function CustomTooltip({
   // showOptimistic,
   // showPessimistic,
 }) {
-  console.log(JSON.stringify(payload));
-  console.log("label");
-  console.log(label);
-  console.log(typeof label);
   if (active && label && payload) {
     return (
       <div className="bg-black/30 text-white p-2 rounded-md shadow-indigo-700 shadow-md">
-        <h4 className="font-semibold">{format(parseISO(label), "d, MMM")}</h4>
+        <h4 className="font-semibold">{format(label, "d, MMM")}</h4>
         {/* {showPessimistic && (
           <p>Less 1std: R${payload[0].payload.std1Less.toFixed(2)}mln</p>
         )} */}
