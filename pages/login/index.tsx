@@ -66,7 +66,7 @@ export default function LoginPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <ButtonIndigo type="submit">Log in</ButtonIndigo>
+        <ButtonIndigo>Log in</ButtonIndigo>
       </form>
       <div className="flex flex-col justify-center items-center text-sm italic text-center">
         <p className="italic text-sm text-center">Não tem uma conta?</p>
