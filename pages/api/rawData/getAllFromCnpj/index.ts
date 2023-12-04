@@ -23,7 +23,10 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                 "-" +
                 user.cnpj.slice(12, 14);
             }
-            const allRawData = await GetAllRawDataFromCnpj(req.query.cnpj);
+            let allRawData = [];
+            if (typeof req.query.cnpj == "string") {
+              allRawData = await GetAllRawDataFromCnpj(req.query.cnpj);
+            }
             console.log(allRawData);
             await disconnect();
             return res.status(200).json(allRawData);

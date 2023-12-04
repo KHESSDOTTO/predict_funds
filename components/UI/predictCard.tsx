@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 
-function PredictCard(props) {
+interface PredictCardProps {
+  time: string;
+}
+
+function PredictCard(props: PredictCardProps) {
   // console.log(props.data);
   // console.log(props.data[0].netFunding);
   const [total, setTotal] = useState(0);
 
   // Cálculo do total
-  useEffect(() => {
-    const rawTotal = props.data.reduce((ac, cE) => {
-      return ac + cE.netFunding;
-    }, 0);
-    const totalToUse = rawTotal.toFixed(2);
-    setTotal(totalToUse);
-  }, [props]);
+  // useEffect(() => {
+  //   const rawTotal = props.data.reduce((ac, cE) => {
+  //     return ac + cE.netFunding;
+  //   }, 0);
+  //   const totalToUse = rawTotal.toFixed(2);
+  //   setTotal(totalToUse);
+  // }, [props]);
 
   // Formatação:
   let pClass = "text-indigo-900 underline text-xl",

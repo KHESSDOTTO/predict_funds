@@ -34,14 +34,13 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen bg-gradient-to-b from-gray-200 to-gray-400 relative min-h-screen md:bg-gradient-to-r">
+    <div className="min-h-screen min-w-screen bg-gradient-to-b from-gray-100 to-gray-400 relative min-h-screen md:bg-gradient-to-r">
       <Header user={user} />
       <Dashboard user={user} />
-      <div>
-        <h1>Data below</h1>
-      </div>
       <div className="flex justify-end px-4 pb-4">
-        <ButtonRed onClick={handleLogout}>Log Out</ButtonRed>
+        <div onClick={handleLogout} className="w-fit">
+          <ButtonRed>Log Out</ButtonRed>
+        </div>
       </div>
     </div>
   );

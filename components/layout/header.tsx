@@ -1,6 +1,11 @@
+import { UserType } from "@/utils/types";
 import Link from "next/link";
 
-function Header({ user }) {
+interface HeaderProps {
+  user: UserType;
+}
+
+function Header({ user }: HeaderProps) {
   let { username, cnpj } = user;
   if (!user) {
     (username = ""), (cnpj = "");
@@ -11,7 +16,7 @@ function Header({ user }) {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-6 h-6"
+        className="w-6 h-6 flex items-center gap-2 hover:text-lg hover:transition-all hover:text-yellow-600 hover:cursor-pointer"
       >
         <path
           fillRule="evenodd"

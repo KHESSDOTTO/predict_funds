@@ -6,7 +6,12 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
+  TooltipProps,
 } from "recharts";
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 import { ax } from "@/database/axios.config";
 import PredictCard from "../UI/predictCard";
 import OptionButtonGreen from "../UI/optionButtonGreen";
@@ -16,12 +21,23 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import ButtonIndigo from "../UI/buttonIndigo";
 import toast from "react-hot-toast";
+import { RawDataType, UserType } from "@/utils/types";
 
-function Dashboard({ user }) {
+interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
+  showNetFunding: boolean;
+}
+
+interface DashboardProps {
+  user: UserType;
+}
+
+function Dashboard({ user }: DashboardProps) {
+  console.log("this is the user:");
+  console.log(user);
   const [showPessimistic, setShowPessimistic] = useState(false),
     [showOptimistic, setShowOptimistic] = useState(false),
     [showNetFunding, setShowNetFunding] = useState(true),
-    [data, setData] = useState([]),
+    [data, setData] = useState<RawDataType[]>([]),
     [controlForm, setControlForm] = useState({
       buscaCnpj: "",
       DI: 0.1,
@@ -46,7 +62,7 @@ function Dashboard({ user }) {
         );
         console.log(newData);
         let finalData = newData.data.slice(-60, -1);
-        finalData = finalData.map((cE) => {
+        finalData = finalData.map((cE: RawDataType) => {
           const convDate = new Date(cE.DT_COMPTC);
           return { ...cE, DT_COMPTC: convDate };
         });
@@ -63,11 +79,6 @@ function Dashboard({ user }) {
 
   const thresholdDate = new Date("2023-03-01");
 
-  function getColor(entry) {
-    const entryDate = new Date(entry);
-    return entryDate >= thresholdDate ? "red" : "green";
-  }
-
   function togglePessimistic() {
     setShowPessimistic(!showPessimistic);
   }
@@ -80,7 +91,7 @@ function Dashboard({ user }) {
     setShowNetFunding(!showNetFunding);
   }
 
-  function handleControlFormChange(e) {
+  function handleControlFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     let newVal = e.target.value;
     if (e.target.name === "buscaCnpj") {
       const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
@@ -125,7 +136,7 @@ function Dashboard({ user }) {
     return;
   }
 
-  async function handleControlFormSubmit(e) {
+  async function handleControlFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const loadingToast = toast.loading("Fetching data...");
     try {
@@ -135,7 +146,7 @@ function Dashboard({ user }) {
       );
       console.log(newData);
       let finalData = newData.data.slice(-60, -1);
-      finalData = finalData.map((cE) => {
+      finalData = finalData.map((cE: RawDataType) => {
         const convDate = new Date(cE.DT_COMPTC);
         return { ...cE, DT_COMPTC: convDate };
       });
@@ -230,26 +241,17 @@ function Dashboard({ user }) {
       </section>
       <div className="col-start-5 col-span-12">
         <div className="flex justify-around">
-          <OptionButtonRed
-            handleClick={togglePessimistic}
-            showing={showPessimistic}
-          >
-            Forecast - 1 std
-          </OptionButtonRed>
-          <OptionButtonIndigo
-            handleClick={toggleNetFunding}
-            showing={showNetFunding}
-          >
-            Forecast
-          </OptionButtonIndigo>
-          <OptionButtonGreen
-            handleClick={toggleOptimistic}
-            showing={showOptimistic}
-          >
-            Forecast + 1 std
-          </OptionButtonGreen>
+          <div className="w-1/3 pl-2" onClick={togglePessimistic}>
+            <OptionButtonRed>Forecast - 1 std</OptionButtonRed>
+          </div>
+          <div className="w-1/3" onClick={toggleNetFunding}>
+            <OptionButtonIndigo>Forecast</OptionButtonIndigo>
+          </div>
+          <div className="w-1/3 pr-2" onClick={toggleOptimistic}>
+            <OptionButtonGreen>Forecast + 1 std</OptionButtonGreen>
+          </div>
         </div>
-        <div className="border-4 bg-gray-900 py-4 pl-8 pr-2 rounded-xl">
+        <div className="bg-gray-900 py-4 pl-8 pr-2 rounded-xl">
           <ResponsiveContainer height={400}>
             <AreaChart data={data}>
               <defs>
@@ -301,7 +303,7 @@ function Dashboard({ user }) {
                 <Area
                   type="monotone"
                   dataKey="CAPTC_LIQ"
-                  stroke={getColor}
+                  stroke="rgb(70, 0, 100)"
                   fill="url(#customIndigo)"
                 ></Area>
               )}
@@ -341,9 +343,9 @@ function Dashboard({ user }) {
           </p>
         </div>
         <div className="my-4 col-span-9 flex flex-col items-center justify-around md:flex-row">
-          <PredictCard data={data} time={"Week"} />
-          <PredictCard data={data} time={"Month"} />
-          <PredictCard data={data} time={"Three Months"} />
+          <PredictCard time={"Week"} />
+          <PredictCard time={"Month"} />
+          <PredictCard time={"Three Months"} />
         </div>
       </div>
     </div>
@@ -355,9 +357,10 @@ function CustomTooltip({
   payload,
   label,
   showNetFunding,
-  // showOptimistic,
-  // showPessimistic,
-}) {
+}: // showOptimistic,
+// showPessimistic,
+CustomTootipProps) {
+  console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
       <div className="bg-black/30 text-white p-2 rounded-md shadow-indigo-700 shadow-md">
