@@ -2,6 +2,7 @@ import { ax } from "@/database/axios.config";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import ButtonIndigo from "@/components/UI/buttonIndigo";
 
 export default function SignUpPage() {
   const router = useRouter(),
@@ -15,9 +16,9 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "min-h-screen px-auto pt-8 pb-8 grid grid-rows-6 justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
+      "min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
     h1Class =
-      "text-center font-bold text-5xl flex flex-col justify-center font-serif md:text-left md:mx-4 md:indent-8 md:w-10/12 lg:indent-24",
+      "text-center font-bold text-5xl flex flex-col justify-center font-serif py-4 md:text-left md:mx-4 md:indent-8 md:w-10/12 lg:indent-24",
     formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col gap-2",
     inputClass = "rounded-md",
@@ -84,7 +85,6 @@ export default function SignUpPage() {
     e.preventDefault();
     const clone = {
       ...form,
-      cnpj: form.cnpj.replaceAll(/[.\/-]/gm, ""),
       contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
     };
     if (clone.password !== clone.passwordConfirm) {
@@ -213,9 +213,9 @@ export default function SignUpPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <button type="submit" className={btnClass}>
-          Cadastrar
-        </button>
+        <div className="self-center">
+          <ButtonIndigo>Create user</ButtonIndigo>
+        </div>
       </form>
     </main>
   );

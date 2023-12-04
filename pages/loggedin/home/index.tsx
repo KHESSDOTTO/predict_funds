@@ -2,20 +2,26 @@ import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps, NextApiRequest } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
-// import { useEffect } from "react";
-import { ax } from "@/database/axios.config";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Dashboard from "@/components/sections/dashboard";
+import ButtonRed from "@/components/UI/buttonRed";
+import Header from "@/components/layout/header";
+import { ax } from "@/database/axios.config";
 
 export default function LoggedInHome({ user }: any) {
-  const router = useRouter(),
-    btnClass =
-      "mx-4 my-2 py-2 px-4 border-2 border-red-900 rounded-md bg-gradient-to-b from-red-700 to-red-500 text-white font-semibold hover:text-lg hover:transition-all hover:text-yellow-200/90 hover:underline";
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/login");
-  //   }
-  //   return;
-  // });
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(user);
+    if (!user) {
+      console.log("There is no user!");
+      router.push("/login");
+      return;
+    }
+    return;
+  }, []);
+
   async function handleLogout() {
     try {
       await ax.post("/user/logout");
@@ -28,12 +34,14 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen">
-      <h1>LoggedIn Home</h1>
-      <p>Username: {user?.username}</p>
-      <button onClick={handleLogout} className={btnClass}>
-        Log Out
-      </button>
+    <div className="min-h-screen min-w-screen bg-gradient-to-b from-gray-100 to-gray-400 relative min-h-screen md:bg-gradient-to-r">
+      <Header user={user} />
+      <Dashboard user={user} />
+      <div className="flex justify-end px-4 pb-4">
+        <div onClick={handleLogout} className="w-fit">
+          <ButtonRed>Log Out</ButtonRed>
+        </div>
+      </div>
     </div>
   );
 }
