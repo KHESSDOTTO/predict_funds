@@ -13,15 +13,14 @@ export default function LoginPage() {
     router = useRouter();
 
   // css - classes
-  const mainClass = "min-h-screen px-16 pt-2 pb-8 grid grid-rows-5 text-lg",
+  const mainClass =
+      "min-h-screen px-16 pt-12 text-lg flex flex-col justify-around md:grid md:grid-rows-5 md:pb-8 md:pt-2",
     h1Class = "font-bold py-auto text-5xl flex justify-center items-end",
     formClass =
-      "px-32 pt-16 row-span-3 flex flex-col justify-start items-center rounded-sm gap-8",
+      "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "indent-1",
-    inputClass = "rounded-md",
-    btnClass =
-      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-300 text-white font-semibold py-2 px-8 mt-8 border-2 border-indigo-800 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
+    inputClass = "rounded-md";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,9 +65,11 @@ export default function LoginPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <ButtonIndigo>Log in</ButtonIndigo>
+        <div className="w-32">
+          <ButtonIndigo>Log in</ButtonIndigo>
+        </div>
       </form>
-      <div className="flex flex-col justify-center items-center text-sm italic text-center">
+      <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
         <p className="italic text-sm text-center">Não tem uma conta?</p>
         <Link
           href={"/signup"}
