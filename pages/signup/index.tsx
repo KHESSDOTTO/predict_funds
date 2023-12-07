@@ -21,9 +21,7 @@ export default function SignUpPage() {
       "text-center font-bold text-5xl flex flex-col justify-center font-serif py-4 md:text-left md:mx-4 md:indent-8 md:w-10/12 lg:indent-24",
     formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col gap-2",
-    inputClass = "rounded-md",
-    btnClass =
-      "rounded-md bg-gradient-to-b from-indigo-700 to-indigo-400 text-white font-semibold px-24 py-1 border-2 border-blue-600 self-center mt-2 hover:text-xl hover:transition-all hover:text-yellow-500 hover:underline";
+    inputClass = "rounded-md";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let newVal = e.target.value;
