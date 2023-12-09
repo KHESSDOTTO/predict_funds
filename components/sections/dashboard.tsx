@@ -161,7 +161,7 @@ function Dashboard({ user }: DashboardProps) {
   return (
     <section className="flex flex-col gap-4 min-w-full text-sm md:grid md:grid-cols-12">
       <div id="controls" className="col-span-4 px-4 lg:px-6">
-        <h2 className="font-bold text-xl text-center py-8 underline md:py-12">
+        <h2 className="font-bold text-xl text-center py-6 underline md:py-12">
           Control section
         </h2>
         <form id="controlForm" onSubmit={handleControlFormSubmit}>
