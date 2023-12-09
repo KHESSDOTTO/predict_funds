@@ -77,8 +77,6 @@ function Dashboard({ user }: DashboardProps) {
     return;
   }, []);
 
-  const thresholdDate = new Date("2023-03-01");
-
   function togglePessimistic() {
     setShowPessimistic(!showPessimistic);
   }
@@ -161,13 +159,13 @@ function Dashboard({ user }: DashboardProps) {
   }
 
   return (
-    <div className="grid grid-rows-5 md:grid-cols-12 md:grid-rows-1">
-      <section id="controls" className="col-span-4 px-8">
-        <h2 className="font-bold text-2xl text-center py-12 underline">
+    <section className="flex flex-col gap-4 min-w-full text-sm md:grid md:grid-cols-12">
+      <div id="controls" className="col-span-4 px-4 lg:px-6">
+        <h2 className="font-bold text-xl text-center py-8 underline md:py-12">
           Control section
         </h2>
         <form id="controlForm" onSubmit={handleControlFormSubmit}>
-          <div className="flex flex-row gap-8">
+          <div className="flex flex-row gap-4">
             <div className="flex flex-col gap-4 font-semibold">
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ to show
@@ -238,21 +236,21 @@ function Dashboard({ user }: DashboardProps) {
             <ButtonIndigo>Update</ButtonIndigo>
           </div>
         </form>
-      </section>
+      </div>
       <div className="col-start-5 col-span-12">
-        <div className="flex justify-around">
-          <div className="w-1/3 pl-2" onClick={togglePessimistic}>
+        <div className="flex justify-around items-center">
+          <div className="w-1/3 md:pl-2" onClick={togglePessimistic}>
             <OptionButtonRed>Forecast - 1 std</OptionButtonRed>
           </div>
           <div className="w-1/3" onClick={toggleNetFunding}>
             <OptionButtonIndigo>Forecast</OptionButtonIndigo>
           </div>
-          <div className="w-1/3 pr-2" onClick={toggleOptimistic}>
+          <div className="w-1/3 md:pr-2" onClick={toggleOptimistic}>
             <OptionButtonGreen>Forecast + 1 std</OptionButtonGreen>
           </div>
         </div>
         <div className="bg-gray-900 py-4 pl-8 pr-2 rounded-xl">
-          <ResponsiveContainer height={400}>
+          <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
@@ -336,9 +334,9 @@ function Dashboard({ user }: DashboardProps) {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="grid items-center grid-rows-5 col-span-12 md:grid-rows-1 md:grid-cols-12">
+      <div className="pt-8 pb-4 flex flex-col items-center col-span-12 md:grid-rows-1 md:grid-cols-12 md:grid">
         <div className="flex justify-center items-center col-span-3">
-          <p className="font-bold inline underline text-2xl px-4">
+          <p className="font-bold inline underline text-xl px-4">
             Expectations:
           </p>
         </div>
@@ -348,7 +346,7 @@ function Dashboard({ user }: DashboardProps) {
           <PredictCard time={"Three Months"} />
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
