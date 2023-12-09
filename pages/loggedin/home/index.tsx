@@ -1,8 +1,8 @@
 import { verifyToken } from "@/utils/jwt.config";
-import type { GetServerSideProps, NextApiRequest } from "next";
+import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/sections/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
