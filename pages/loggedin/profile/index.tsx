@@ -72,13 +72,15 @@ export default function ProfilePage({ user }: any) {
                 value={form.username}
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 italic">
               <input
                 type="text"
                 id="email"
                 name="email"
+                style={{ color: "rgb(125, 125, 125" }}
                 className={inputClass}
                 value={form.email}
+                disabled
               />
             </div>
             <div className="flex gap-2">

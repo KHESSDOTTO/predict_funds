@@ -35,7 +35,6 @@ function Dashboard({ user }: DashboardProps) {
   console.log("this is the user:");
   console.log(user);
   const [showPessimistic, setShowPessimistic] = useState(false),
-    [isLoading, setIsLoading] = useState(false),
     [showOptimistic, setShowOptimistic] = useState(false),
     [showNetFunding, setShowNetFunding] = useState(true),
     [data, setData] = useState<RawDataType[]>([]),
