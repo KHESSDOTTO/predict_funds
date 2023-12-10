@@ -23,16 +23,31 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarProps) {
     setShowSideBar(false);
   }
 
-  function doNothing() {}
-
   return (
     <>
       <div className={containerClass}>
         <div
-          className={`bg-black/90 pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white`}
+          className={`bg-black/90 pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col items-center justify-around`}
           onMouseLeave={handleMouseLeave}
         >
-          <p>Side bar</p>
+          <div>
+            <h2 className="font-semibold">My Products</h2>
+            <ul>
+              <li>
+                <h3>Future Net Funding</h3>
+                <div>
+                  <span>Simulate</span>
+                  <span>Cenarios</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="font-semibold">Other Products</h2>
+            <ul>
+              <li>Optimize Fixed Income Portfolio</li>
+            </ul>
+          </div>
         </div>
       </div>
     </>
