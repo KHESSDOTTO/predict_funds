@@ -1,27 +1,35 @@
 import { SideBarProps } from "@/utils/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function SideBar({ showSideBar, setShowSideBar }: SideBarProps) {
-  // useEffect(() => {
-  //   if (showSideBar) {
-  //     opacity = "opacity-100";
-  //   } else {
-  //     opacity = "opacity-0";
-  //   }
-  // }, [showSideBar]);
+  const [containerClass, setContainerClass] = useState(
+    `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-0 -z-10`
+  );
+
+  useEffect(() => {
+    if (showSideBar) {
+      setContainerClass(
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-100 z-20`
+      );
+    } else {
+      setContainerClass(
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-0 -z-10`
+      );
+    }
+  }, [showSideBar]);
 
   function handleMouseLeave() {
     console.log("Mouse left");
     setShowSideBar(false);
   }
 
+  function doNothing() {}
+
   return (
     <>
-      <div
-        className={`absolute top-0 bottom-0 z-20 backdrop-blur-sm min-h-screen w-screen`}
-      >
+      <div className={containerClass}>
         <div
-          className={`bg-black/90 transition-all duration-300 sticky h-96 w-[90%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white lg:left-2`}
+          className={`bg-black/90 pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white`}
           onMouseLeave={handleMouseLeave}
         >
           <p>Side bar</p>

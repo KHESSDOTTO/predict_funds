@@ -17,9 +17,8 @@ function Header({ user }: HeaderProps) {
 
   return (
     <>
-      {showSideBar && (
-        <SideBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
-      )}
+      <SideBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
+
       <header className="grid grid-cols-12 text-xs bg-black/80 items-center text-white h-16 px-4 border-b-4 border-indigo-900 sticky top-0 z-10 md:text-sm">
         <svg
           xmlns="http://www.w3.org/2000/svg"
