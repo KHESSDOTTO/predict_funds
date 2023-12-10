@@ -169,8 +169,11 @@ function Dashboard({ user }: DashboardProps) {
 
   return (
     <section className="flex flex-col gap-4 min-w-full text-sm lg:grid lg:grid-cols-12">
-      <div id="controls" className="col-span-4 px-4 lg:px-6">
-        <h2 className="font-bold text-xl text-center py-6 underline lg:py-12">
+      <div
+        id="controls"
+        className="col-span-4 px-1 mx-1 border-2 border-gray-400 mt-4 mb-2 py-4 rounded-lg bg-gray-300 box-shadow shadow-sm shadow-black lg:mx-2 lg:my-8 lg:h-[350px] lg:px-6 lg:mb-0"
+      >
+        <h2 className="font-bold text-2xl text-center underline pb-4 lg:pb-6">
           Control section
         </h2>
         <form id="controlForm" onSubmit={handleControlFormSubmit}>
@@ -369,7 +372,7 @@ function Dashboard({ user }: DashboardProps) {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="pt-8 pb-4 flex flex-col items-center col-span-12 lg:grid-rows-1 lg:grid-cols-12 lg:grid">
+      <div className="pt-8 pb-4 flex flex-col items-center col-span-12 lg:grid-rows-1 lg:grid-cols-12 lg:grid lg:pt-0">
         <div className="flex justify-center items-center col-span-3">
           <p className="font-bold inline underline text-2xl px-4">
             Expectations:
