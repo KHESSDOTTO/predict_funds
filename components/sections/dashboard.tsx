@@ -35,6 +35,7 @@ function Dashboard({ user }: DashboardProps) {
   console.log("this is the user:");
   console.log(user);
   const [showPessimistic, setShowPessimistic] = useState(false),
+    [isLoading, setIsLoading] = useState(false),
     [showOptimistic, setShowOptimistic] = useState(false),
     [showNetFunding, setShowNetFunding] = useState(true),
     [data, setData] = useState<RawDataType[]>([]),
@@ -42,6 +43,8 @@ function Dashboard({ user }: DashboardProps) {
       buscaCnpj: "",
       DI: 0.1,
       varCota: 0,
+      daysBack: 60,
+      daysForward: 0,
     });
 
   useEffect(() => {
@@ -55,25 +58,32 @@ function Dashboard({ user }: DashboardProps) {
 
   useEffect(() => {
     const getData = async () => {
+      const loadingToast = toast.loading("Fetching data...");
       try {
         const encodedParam = encodeURIComponent(user.cnpj);
         const newData = await ax.get(
           `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
         );
         console.log(newData);
-        let finalData = newData.data.slice(-60, -1);
+        let finalData = newData.data.slice(controlForm.daysBack * -1, -1);
         finalData = finalData.map((cE: RawDataType) => {
           const convDate = new Date(cE.DT_COMPTC);
           return { ...cE, DT_COMPTC: convDate };
         });
         setData(finalData);
+        toast.success("Done.");
+        toast.dismiss(loadingToast);
         console.log("Here after setData(newData);");
         return;
       } catch (err) {
         console.log(err);
+        toast.error("Sorry. We had a problem handling the request.");
+        toast.dismiss(loadingToast);
       }
     };
-    getData();
+    if (!data[0]) {
+      getData();
+    }
     return;
   }, []);
 
@@ -143,7 +153,7 @@ function Dashboard({ user }: DashboardProps) {
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
       );
       console.log(newData);
-      let finalData = newData.data.slice(-60, -1);
+      let finalData = newData.data.slice(controlForm.daysBack * -1, -1);
       finalData = finalData.map((cE: RawDataType) => {
         const convDate = new Date(cE.DT_COMPTC);
         return { ...cE, DT_COMPTC: convDate };
@@ -159,16 +169,22 @@ function Dashboard({ user }: DashboardProps) {
   }
 
   return (
-    <section className="flex flex-col gap-4 min-w-full text-sm md:grid md:grid-cols-12">
+    <section className="flex flex-col gap-4 min-w-full text-sm lg:grid lg:grid-cols-12">
       <div id="controls" className="col-span-4 px-4 lg:px-6">
-        <h2 className="font-bold text-xl text-center py-6 underline md:py-12">
+        <h2 className="font-bold text-xl text-center py-6 underline lg:py-12">
           Control section
         </h2>
         <form id="controlForm" onSubmit={handleControlFormSubmit}>
-          <div className="flex flex-row gap-4">
-            <div className="flex flex-col gap-4 font-semibold">
+          <div className="flex flex-row justify-center gap-4">
+            <div className="flex flex-col gap-1 font-semibold">
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ to show
+              </label>
+              <label htmlFor="daysBack" className="h-8">
+                Days back
+              </label>
+              <label htmlFor="daysForward" className="h-8">
+                Days forward
               </label>
               <label htmlFor="DI" className="h-8">
                 DI
@@ -177,7 +193,7 @@ function Dashboard({ user }: DashboardProps) {
                 Quota variation (%)
               </label>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
               <div className="h-8">
                 <input
                   type="text"
@@ -185,6 +201,26 @@ function Dashboard({ user }: DashboardProps) {
                   name="buscaCnpj"
                   className="rounded-md border-2 border-black px-2"
                   value={controlForm.buscaCnpj}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="daysBack"
+                  name="daysBack"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.daysBack}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="daysForward"
+                  name="daysForward"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.daysForward}
                   onChange={handleControlFormChange}
                 ></input>
               </div>
@@ -238,7 +274,7 @@ function Dashboard({ user }: DashboardProps) {
         </form>
       </div>
       <div className="col-start-5 col-span-12">
-        <div className="flex justify-around items-center">
+        <div className="flex justify-around items-end">
           <div className="w-1/3 md:pl-2" onClick={togglePessimistic}>
             <OptionButtonRed>Forecast - 1 std</OptionButtonRed>
           </div>
@@ -334,13 +370,13 @@ function Dashboard({ user }: DashboardProps) {
           </ResponsiveContainer>
         </div>
       </div>
-      <div className="pt-8 pb-4 flex flex-col items-center col-span-12 md:grid-rows-1 md:grid-cols-12 md:grid">
+      <div className="pt-8 pb-4 flex flex-col items-center col-span-12 lg:grid-rows-1 lg:grid-cols-12 lg:grid">
         <div className="flex justify-center items-center col-span-3">
-          <p className="font-bold inline underline text-xl px-4">
+          <p className="font-bold inline underline text-2xl px-4">
             Expectations:
           </p>
         </div>
-        <div className="my-4 col-span-9 flex flex-col items-center justify-around md:flex-row">
+        <div className="my-4 col-span-9 flex flex-col items-center justify-around md:flex-row md:flex-wrap lg:flex-nowrap">
           <PredictCard time={"Week"} />
           <PredictCard time={"Month"} />
           <PredictCard time={"Three Months"} />

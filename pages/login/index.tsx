@@ -15,12 +15,13 @@ export default function LoginPage() {
   // css - classes
   const mainClass =
       "min-h-screen px-16 pt-12 text-lg flex flex-col justify-around md:grid md:grid-rows-5 md:pb-8 md:pt-2",
-    h1Class = "font-bold py-auto text-5xl flex justify-center items-end",
+    h1Class =
+      "font-bold py-auto text-5xl flex justify-center items-end font-serif",
     formClass =
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "indent-1",
-    inputClass = "rounded-md";
+    inputClass = "rounded-md px-2";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -65,7 +66,7 @@ export default function LoginPage() {
             onChange={handleChange}
           ></input>
         </div>
-        <div className="w-32">
+        <div className="w-32 text-center">
           <ButtonIndigo>Log in</ButtonIndigo>
         </div>
       </form>
