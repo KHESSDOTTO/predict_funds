@@ -1,5 +1,14 @@
 import { ReactNode } from "react";
 
+interface SideBarProps {
+  showSideBar: boolean;
+  setShowSideBar: Function;
+}
+
+interface HeaderProps {
+  user: UserType;
+}
+
 interface ButtonProps {
   children: ReactNode;
 }
@@ -31,4 +40,4 @@ interface RawDataType {
   CAPTC_LIQ?: number;
 }
 
-export type { ButtonProps, UserType, RawDataType };
+export type { ButtonProps, UserType, RawDataType, SideBarProps, HeaderProps };

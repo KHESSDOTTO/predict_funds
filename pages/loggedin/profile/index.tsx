@@ -45,7 +45,9 @@ export default function ProfilePage({ user }: any) {
     <div className="min-h-screen">
       <Header user={user}></Header>
       <main className="flex flex-col items-center py-8 md:py-16 lg:py-12">
-        <h1 className="text-3xl font-bold mb-4 font-serif">Profile</h1>
+        <h1 className="text-4xl font-bold mb-4 font-serif px-4 pb-2 lg:px-32 lg:border-b lg:border-black">
+          Profile
+        </h1>
         <section id="userInfos" className="flex py-8 gap-4">
           <div className="flex flex-col font-semibold gap-8 lg:gap-6">
             <label htmlFor="username">Username:</label>
@@ -72,13 +74,15 @@ export default function ProfilePage({ user }: any) {
                 value={form.username}
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 italic">
               <input
                 type="text"
                 id="email"
                 name="email"
+                style={{ color: "rgb(125, 125, 125" }}
                 className={inputClass}
                 value={form.email}
+                disabled
               />
             </div>
             <div className="flex gap-2">
