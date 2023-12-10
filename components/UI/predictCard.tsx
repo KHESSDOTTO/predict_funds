@@ -21,11 +21,11 @@ function PredictCard(props: PredictCardProps) {
   // Formatação:
   let pClass = "text-indigo-900 underline text-xl",
     divClass1 =
-      "rounded-sm flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-500 cursor-pointer text-gray-800 hover:text-indigo-900 hover:transition-all hover:bg-indigo-300/40 from-indigo-400/30";
+      "rounded-md flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-500 cursor-pointer text-gray-800 hover:text-indigo-900 transition-all hover:text-yellow-800 hover:bg-indigo-400/30 from-indigo-300/20";
   if (total < 0) {
     pClass = "text-red-800  underline text-xl";
     divClass1 =
-      "rounded-sm flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-800 cursor-pointer text-gray-800 hover:text-indigo-900 hover:transition-all hover:bg-indigo-300/40 from-red-900/30";
+      "rounded-md flex flex-col justify-center items-center border-2 border-gray-700 box-shadow bg-gradient-to-b to-white font-bold w-72 m-4 shadow-md shadow-indigo-800 cursor-pointer text-gray-800 hover:text-indigo-900 transition-all hover:bg-indigo-300/40 from-red-900/30";
   }
 
   return (

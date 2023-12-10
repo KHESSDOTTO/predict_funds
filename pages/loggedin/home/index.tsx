@@ -34,7 +34,7 @@ export default function LoggedInHome({ user }: any) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen bg-gradient-to-b from-gray-100 to-gray-400 relative min-h-screen md:bg-gradient-to-r">
+    <div className="min-h-screen min-w-screen bg-gradient-to-t from-gray-100 to-gray-300 relative min-h-screen md:bg-gradient-to-r">
       <Header user={user} />
       <Dashboard user={user} />
       <div className="flex justify-end px-4 pb-4">
