@@ -21,7 +21,7 @@ export default function LoginPage() {
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "indent-1",
-    inputClass = "rounded-md px-2";
+    inputClass = "rounded-md px-2 border border-gray-400";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });

@@ -21,7 +21,7 @@ export default function SignUpPage() {
       "text-center font-bold text-5xl flex flex-col justify-center font-serif py-4 md:text-left md:mx-4 md:indent-8 md:w-10/12 lg:indent-24",
     formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col gap-2",
-    inputClass = "rounded-md border border-gray-400";
+    inputClass = "rounded-md border border-gray-400 px-1";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let newVal = e.target.value;
@@ -125,7 +125,7 @@ export default function SignUpPage() {
         </div>
         <div className={divClass}>
           <label htmlFor="cnpj" className="indent-2">
-            CNPJ (somente números)
+            CNPJ
           </label>
           <input
             className={inputClass}
@@ -134,7 +134,7 @@ export default function SignUpPage() {
             type="text"
             value={form.cnpj}
             onChange={handleChange}
-            placeholder="  xx.xxx.xxx/xxxx-xx"
+            placeholder=" xx.xxx.xxx/xxxx-xx"
           ></input>
         </div>
         <div className={divClass}>
@@ -148,7 +148,7 @@ export default function SignUpPage() {
             type="email"
             value={form.email}
             onChange={handleChange}
-            placeholder="  example@ex.com"
+            placeholder=" example@ex.com"
           ></input>
         </div>
         <div className={divClass}>

@@ -10,7 +10,7 @@ import { ax } from "@/database/axios.config";
 
 export default function ProfilePage({ user }: any) {
   const router = useRouter(),
-    inputClass = "rounded-md px-1 border-2 border-black box-border",
+    inputClass = "rounded-sm px-1 border-2 border-gray-400 box-border",
     [form, setForm] = useState({
       username: user.username,
       cnpj: user.cnpj,
