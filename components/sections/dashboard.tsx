@@ -168,17 +168,17 @@ function Dashboard({ user }: DashboardProps) {
   }
 
   return (
-    <section className="flex flex-col gap-4 min-w-full text-sm lg:grid lg:grid-cols-12">
+    <section className="flex flex-col gap-4 min-w-full text-sm lg:grid lg:grid-cols-12 lg:gap-0">
       <div
         id="controls"
-        className="col-span-4 px-1 mx-1 border-2 border-gray-400 mt-4 mb-2 py-4 rounded-lg bg-gray-300 box-shadow shadow-sm shadow-black lg:mx-2 lg:my-8 lg:h-[350px] lg:px-6 lg:mb-0"
+        className="col-span-5 px-4 mx-4 border-2 border-gray-400 mt-4 mb-2 py-4 rounded-sm bg-gray-300 box-shadow shadow-sm shadow-black lg:mx-12 lg:mt-14 lg:h-[330px] lg:mb-4 lg:px-6 lg:w-fit lg:h-fit"
       >
         <h2 className="font-bold text-2xl text-center underline pb-4 lg:pb-6">
           Control section
         </h2>
         <form id="controlForm" onSubmit={handleControlFormSubmit}>
           <div className="flex flex-row justify-center gap-4">
-            <div className="flex flex-col gap-1 font-semibold">
+            <div className="flex flex-col gap-1 font-semibold lg:gap-0">
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ to show
               </label>
@@ -195,7 +195,7 @@ function Dashboard({ user }: DashboardProps) {
                 Quota variation (%)
               </label>
             </div>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 lg:gap-0">
               <div className="h-8">
                 <input
                   type="text"
@@ -270,12 +270,12 @@ function Dashboard({ user }: DashboardProps) {
               </div>
             </div>
           </div>
-          <div className="text-center mt-6">
+          <div className="text-center mt-6 lg:mt-4">
             <ButtonIndigo>Update</ButtonIndigo>
           </div>
         </form>
       </div>
-      <div className="col-start-5 col-span-12">
+      <div className="col-start-6 col-span-12">
         <div className="flex justify-around items-end">
           <div className="w-1/3 md:pl-2" onClick={togglePessimistic}>
             <OptionButtonRed>Forecast - 1 std</OptionButtonRed>
