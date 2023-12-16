@@ -287,7 +287,7 @@ function Dashboard({ user }: DashboardProps) {
             <OptionButtonGreen>Forecast + 1 std</OptionButtonGreen>
           </div>
         </div>
-        <div className="bg-gray-900 py-4 pl-8 pr-2 rounded-xl">
+        <div className="bg-gray-900 py-4 pl-2 pr-2 rounded-xl lg:pl-8">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -331,7 +331,7 @@ function Dashboard({ user }: DashboardProps) {
               />
               <YAxis
                 tick={{ fill: "rgb(230, 230, 230)" }}
-                tickFormatter={(num) => `R$${num.toFixed(2)}`}
+                tickFormatter={(num) => `R$${String(num.toFixed(2) / 1000)}K`}
                 width={100}
               />
               <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
