@@ -4,7 +4,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import Dashboard from "@/components/sections/dashboard";
+import Dashboard from "@/components/sections/netFunding/dashboard/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 import { ax } from "@/database/axios.config";
@@ -37,7 +37,7 @@ export default function LoggedInHome({ user }: any) {
     <div className="min-h-screen min-w-screen bg-gradient-to-t relative min-h-screen md:bg-gradient-to-l">
       <Header user={user} />
       <Dashboard user={user} />
-      <div className="flex justify-end px-4 pb-4">
+      <div className="flex justify-center px-4 pb-4 lg:justify-end">
         <div onClick={handleLogout} className="w-fit">
           <ButtonRed>Log Out</ButtonRed>
         </div>
