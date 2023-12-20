@@ -1,10 +1,12 @@
+import { RawDataType } from "@/utils/types";
 import { useEffect, useState } from "react";
 
 interface PredictCardProps {
   time: string;
+  data: RawDataType[];
 }
 
-function PredictCard(props: PredictCardProps) {
+function PredictCard({ time, data }: PredictCardProps) {
   // console.log(props.data);
   // console.log(props.data[0].netFunding);
   const [total, setTotal] = useState(0);
@@ -45,7 +47,7 @@ function PredictCard(props: PredictCardProps) {
           />
           <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
         </svg>
-        <h2 className="text-lg">Total - {props.time}</h2>
+        <h2 className="text-lg">Total - {time}</h2>
       </div>
       <div className="flex justify-center items-center py-6">
         <p className={pClass}>Expected: R$ {total}</p>

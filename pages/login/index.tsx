@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
+import BackLink from "@/components/UI/backLink";
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -16,12 +17,12 @@ export default function LoginPage() {
   const mainClass =
       "min-h-screen px-16 pt-12 text-lg flex flex-col justify-around md:grid md:grid-rows-5 md:pb-8 md:pt-2",
     h1Class =
-      "font-bold py-auto text-5xl flex justify-center items-end font-serif",
+      "font-bold py-auto text-5xl flex flex-col justify-end items-center font-serif",
     formClass =
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
-    labelClass = "indent-1",
-    inputClass = "rounded-md px-2 border border-gray-400";
+    labelClass = "text-center lg:text-left lg:indent-1",
+    inputClass = "rounded-xl px-2";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,44 +42,47 @@ export default function LoginPage() {
   }
 
   return (
-    <main className={mainClass}>
-      <h1 className={h1Class}>Login</h1>
-      <form className={formClass} onSubmit={handleSubmit}>
-        <div className={divClass}>
-          <label className={labelClass}>Usuário</label>
-          <input
-            className={inputClass}
-            id="username"
-            name="username"
-            type="text"
-            value={form.username}
-            onChange={handleChange}
-          ></input>
+    <>
+      <BackLink />
+      <main className={mainClass}>
+        <h1 className={h1Class}>Login</h1>
+        <form className={formClass} onSubmit={handleSubmit}>
+          <div className={divClass}>
+            <label className={labelClass}>Usuário</label>
+            <input
+              className={inputClass}
+              id="username"
+              name="username"
+              type="text"
+              value={form.username}
+              onChange={handleChange}
+            ></input>
+          </div>
+          <div className={divClass}>
+            <label className={labelClass}>Senha</label>
+            <input
+              className={inputClass}
+              id="password"
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+            ></input>
+          </div>
+          <div className="w-32 text-center">
+            <ButtonIndigo>Log in</ButtonIndigo>
+          </div>
+        </form>
+        <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
+          <p className="italic text-sm text-center">Não tem uma conta?</p>
+          <Link
+            href={"/signup"}
+            className="transition-all duration-200 text-indigo-700 font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
+          >
+            Sign Up
+          </Link>
         </div>
-        <div className={divClass}>
-          <label className={labelClass}>Senha</label>
-          <input
-            className={inputClass}
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-          ></input>
-        </div>
-        <div className="w-32 text-center">
-          <ButtonIndigo>Log in</ButtonIndigo>
-        </div>
-      </form>
-      <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
-        <p className="italic text-sm text-center">Não tem uma conta?</p>
-        <Link
-          href={"/signup"}
-          className="text-indigo-700 font-semibold w-fit hover:underline hover:text-base hover:text-indigo-600 transition-all"
-        >
-          Sign Up
-        </Link>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

@@ -40,4 +40,27 @@ interface RawDataType {
   CAPTC_LIQ?: number;
 }
 
-export type { ButtonProps, UserType, RawDataType, SideBarProps, HeaderProps };
+type UserContextType = {
+  user: UserType | null;
+  cenarios: RawDataType[] | null;
+  setUser: (newUser: UserType) => void;
+  setCenarios: (newData: RawDataType[]) => void;
+};
+
+interface NetFundingDashboardControlFormType {
+  buscaCnpj: string;
+  DI: number;
+  varCota: number;
+  daysBack: number;
+  daysForward: number;
+}
+
+export type {
+  ButtonProps,
+  UserType,
+  RawDataType,
+  SideBarProps,
+  HeaderProps,
+  UserContextType,
+  NetFundingDashboardControlFormType,
+};
