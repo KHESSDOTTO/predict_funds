@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from "react";
-import type { RawDataType, UserContextType, UserType } from "@/utils/types";
+import type { CenarioType, UserContextType, UserType } from "@/utils/types";
 import type { ReactNode } from "react";
 
 export const UserContext = createContext<UserContextType>({
@@ -11,7 +11,7 @@ export const UserContext = createContext<UserContextType>({
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
-  const [cenarios, setCenarios] = useState<RawDataType[]>([]);
+  const [cenarios, setCenarios] = useState<CenarioType[]>([]);
   return (
     <UserContext.Provider value={{ user, cenarios, setUser, setCenarios }}>
       {children}
