@@ -40,12 +40,12 @@ interface RawDataType {
   CAPTC_LIQ?: number;
 }
 
-type UserContextType = {
+interface UserContextType {
   user: UserType | null;
-  cenarios: RawDataType[] | null;
-  setUser: (newUser: UserType) => void;
-  setCenarios: (newData: RawDataType[]) => void;
-};
+  cenarios: CenarioType[];
+  setUser: (newUser: UserType | null) => void;
+  setCenarios: (newData: CenarioType[]) => void;
+}
 
 interface NetFundingDashboardControlFormType {
   buscaCnpj: string;
@@ -53,6 +53,11 @@ interface NetFundingDashboardControlFormType {
   varCota: number;
   daysBack: number;
   daysForward: number;
+}
+
+interface CenarioType {
+  params: NetFundingDashboardControlFormType;
+  data: RawDataType[];
 }
 
 export type {
@@ -63,4 +68,5 @@ export type {
   HeaderProps,
   UserContextType,
   NetFundingDashboardControlFormType,
+  CenarioType,
 };

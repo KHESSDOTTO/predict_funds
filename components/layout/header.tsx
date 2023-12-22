@@ -1,4 +1,3 @@
-import { UserType } from "@/utils/types";
 import Link from "next/link";
 import { HeaderProps } from "@/utils/types";
 import { useState } from "react";
