@@ -100,7 +100,7 @@ export default function ControlSection({
   return (
     <div
       id="controls"
-      className="col-span-5 px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-300/70 box-shadow shadow-md shadow-black lg:mx-12 lg:mt-12 lg:mb-4 lg:px-6 lg:w-fit lg:h-fit"
+      className="col-span-5 px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:mx-12 lg:mt-12 lg:mb-4 lg:px-6 lg:w-fit lg:h-fit lg:bg-gray-200"
     >
       <h2 className="font-bold text-2xl text-center underline pb-4 lg:pb-6">
         Control section

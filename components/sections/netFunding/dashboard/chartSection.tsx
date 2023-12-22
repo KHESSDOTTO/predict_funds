@@ -18,6 +18,7 @@ import OptionButtonGreen from "../../../UI/optionButtonGreen";
 import OptionButtonIndigo from "../../../UI/optionButtonIndigo";
 import OptionButtonRed from "../../../UI/optionButtonRed";
 import { RawDataType } from "@/utils/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
   showNetFunding: boolean;
@@ -159,7 +160,7 @@ CustomTootipProps) {
   if (active && label && payload) {
     return (
       <div className="bg-black/30 text-white p-2 rounded-md shadow-indigo-700 shadow-md">
-        <h4 className="font-semibold">{format(label, "d, MMM")}</h4>
+        <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         {/* {showPessimistic && (
           <p>Less 1std: R${payload[0].payload.std1Less.toFixed(2)}mln</p>
         )} */}

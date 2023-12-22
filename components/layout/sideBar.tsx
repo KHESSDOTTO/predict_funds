@@ -1,5 +1,6 @@
 import { SideBarProps } from "@/utils/types";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 function SideBar({ showSideBar, setShowSideBar }: SideBarProps) {
   const [containerClass, setContainerClass] = useState(
@@ -34,14 +35,20 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarProps) {
             <h2 className="font-bold">My Products</h2>
             <ul className="text-sm list-disc">
               <li className="flex gap-4 items-end cursor-pointer">
-                <h3>Future Net Funding</h3>
+                <Link href={"/loggedin/home"}>
+                  <h3>Future Net Funding</h3>
+                </Link>
                 <div className="text-xs flex gap-2 text-blue-200">
-                  <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
-                    Simulate
-                  </span>
-                  <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
-                    Cenarios
-                  </span>
+                  <Link href={"/loggedin/home"}>
+                    <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
+                      Simulate
+                    </span>
+                  </Link>
+                  <Link href={"/loggedin/my_cenarios"}>
+                    <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
+                      Cenarios
+                    </span>
+                  </Link>
                 </div>
               </li>
             </ul>
@@ -49,9 +56,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarProps) {
           <div>
             <h2 className="font-bold">Other Products</h2>
             <ul className="text-sm">
-              <li className="cursor-pointer">
-                Optimize Fixed Income Portfolio
-              </li>
+              <li className="cursor-pointer">Soon...</li>
             </ul>
           </div>
         </div>
