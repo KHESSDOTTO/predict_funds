@@ -56,6 +56,7 @@ interface NetFundingDashboardControlFormType {
 }
 
 interface CenarioType {
+  id: string;
   params: NetFundingDashboardControlFormType;
   data: RawDataType[];
 }

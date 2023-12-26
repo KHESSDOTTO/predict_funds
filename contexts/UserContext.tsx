@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 import type { CenarioType, UserContextType, UserType } from "@/utils/types";
 import type { ReactNode } from "react";
 

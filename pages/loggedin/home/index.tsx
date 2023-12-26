@@ -29,6 +29,7 @@ export default function LoggedInHome({ user }: any) {
     try {
       await ax.post("/user/logout");
       userContext.setUser(null);
+      userContext.setCenarios([]);
       toast.success("Logged out.");
       router.push("/");
     } catch (err) {
