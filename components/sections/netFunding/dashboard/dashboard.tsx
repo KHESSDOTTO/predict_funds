@@ -61,7 +61,7 @@ export default function Dashboard({ user }: DashboardProps) {
   function saveCenario() {
     userContext.setCenarios([
       ...userContext.cenarios,
-      { params: controlForm, data: data },
+      { id: Math.random().toString(), params: controlForm, data: data },
     ]);
     toast.success("Saved cenario!");
     return;
