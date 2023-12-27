@@ -100,13 +100,13 @@ export default function ControlSection({
   return (
     <div
       id="controls"
-      className="col-span-5 px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:mx-12 lg:mt-12 lg:mb-0 lg:px-6 lg:w-fit lg:h-fit lg:bg-gray-200"
+      className="px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:w-fit lg:h-fit lg:px-16"
     >
       <h2 className="font-bold text-2xl text-center underline pb-4 lg:pb-6">
         Control section
       </h2>
       <form id="controlForm" onSubmit={handleControlFormSubmit}>
-        <div className="flex flex-row justify-center gap-4">
+        <div className="flex flex-row justify-center gap-4 lg:gap-16">
           <div className="flex flex-col gap-1 font-semibold lg:gap-0">
             <label htmlFor="buscaCnpj" className="h-8">
               CNPJ to show

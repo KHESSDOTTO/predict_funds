@@ -46,7 +46,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
   }
 
   return (
-    <div className="col-start-6 col-span-12">
+    <div className="w-screen">
       {/* <div className="flex justify-around items-end">
         <div className="w-1/3 md:pl-2" onClick={togglePessimistic}>
           <OptionButtonRed>Forecast - 1 std</OptionButtonRed>
@@ -156,7 +156,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
         </ResponsiveContainer>
       </div>
       <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
-        Variação - Cota
+        Valor - Cota
       </h1>
       <div className="bg-gray-900 pt-4 lg:rounded-xl box-shadow shadow-md shadow-indigo-900 lg:shadow-sm lg:pl-8">
         <ResponsiveContainer height={300}>
@@ -166,12 +166,12 @@ export default function ChartSection({ data }: ChartSectionProps) {
                 <stop
                   offset="10%"
                   stopColor="rgb(200, 200, 100)"
-                  stopOpacity={0.9}
+                  stopOpacity={0.4}
                 />
                 <stop
                   offset="90%"
                   stopColor="rgb(200, 200, 100)"
-                  stopOpacity={0.7}
+                  stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
@@ -190,6 +190,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
               tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
               width={70}
               fontSize={12}
+              domain={["dataMin - 10", "dataMax + 10"]}
             />
             <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
             {showNetFunding && (
@@ -197,6 +198,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
                 type="monotone"
                 dataKey="VL_QUOTA"
                 stroke="rgb(150, 150, 75)"
+                strokeWidth={2}
                 fill="url(#customYellow)"
               ></Area>
             )}
