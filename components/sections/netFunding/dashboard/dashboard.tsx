@@ -92,7 +92,7 @@ export default function Dashboard({ user }: DashboardProps) {
           </button>
         </Link>
       </div>
-      <PredictCardsSection data={data} />
+      {/* <PredictCardsSection data={data} /> */}
     </section>
   );
 }

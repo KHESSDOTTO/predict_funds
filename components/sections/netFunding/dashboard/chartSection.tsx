@@ -156,7 +156,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
         </ResponsiveContainer>
       </div>
       <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
-        Valor - Cota
+        Value - Quota
       </h1>
       <div className="bg-gray-900 pt-4 lg:rounded-xl box-shadow shadow-md shadow-indigo-900 lg:shadow-sm lg:pl-8">
         <ResponsiveContainer height={300}>
