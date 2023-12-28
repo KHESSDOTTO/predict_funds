@@ -68,7 +68,7 @@ export default function Dashboard({ user }: DashboardProps) {
   }
 
   return (
-    <section className="flex flex-col gap-4 min-w-full text-sm lg:grid lg:grid-cols-12 lg:gap-0">
+    <section className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
       <ControlSection
         data={data}
         setData={setData}
@@ -78,7 +78,7 @@ export default function Dashboard({ user }: DashboardProps) {
       <ChartSection data={data} />
       <div
         id="cenariosBtnSection"
-        className="flex justify-center items-center col-span-12 gap-4 mt-[-5px] lg:col-start-6 lg:mt-2"
+        className="flex justify-center items-center col-span-12 gap-4 mt-[-5px] lg:mt-2"
       >
         <button
           onClick={saveCenario}
@@ -92,7 +92,7 @@ export default function Dashboard({ user }: DashboardProps) {
           </button>
         </Link>
       </div>
-      <PredictCardsSection data={data} />
+      {/* <PredictCardsSection data={data} /> */}
     </section>
   );
 }

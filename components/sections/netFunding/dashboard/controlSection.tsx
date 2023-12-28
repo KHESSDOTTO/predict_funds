@@ -98,111 +98,214 @@ export default function ControlSection({
   }
 
   return (
-    <div
-      id="controls"
-      className="col-span-5 px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:mx-12 lg:mt-12 lg:mb-4 lg:px-6 lg:w-fit lg:h-fit lg:bg-gray-200"
-    >
-      <h2 className="font-bold text-2xl text-center underline pb-4 lg:pb-6">
-        Control section
-      </h2>
-      <form id="controlForm" onSubmit={handleControlFormSubmit}>
-        <div className="flex flex-row justify-center gap-4">
-          <div className="flex flex-col gap-1 font-semibold lg:gap-0">
-            <label htmlFor="buscaCnpj" className="h-8">
-              CNPJ to show
-            </label>
-            <label htmlFor="daysBack" className="h-8">
-              Days back
-            </label>
-            <label htmlFor="daysForward" className="h-8">
-              Days forward
-            </label>
-            <label htmlFor="DI" className="h-8">
-              DI
-            </label>
-            <label htmlFor="varCota" className="h-8">
-              Quota variation (%)
-            </label>
+    <>
+      <div className="w-screen hidden lg:block">
+        <h1 className="my-4 font-semibold text-2xl text-center border-b-2 border-black mx-[32vw] lg:indent-6 lg:mx-8 lg:text-left">
+          Control Section
+        </h1>
+      </div>
+      <div
+        id="controls"
+        className="px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:w-fit lg:h-fit lg:mt-2"
+      >
+        <h1 className="font-bold text-2xl text-center underline pb-4 lg:pb-6 lg:hidden">
+          Control section
+        </h1>
+        <form
+          id="controlFormMobile"
+          className="lg:hidden"
+          onSubmit={handleControlFormSubmit}
+        >
+          <div className="flex flex-row justify-center gap-4 lg:gap-16">
+            <div className="flex flex-col gap-1 font-semibold lg:gap-0">
+              <label htmlFor="buscaCnpj" className="h-8">
+                CNPJ to show
+              </label>
+              <label htmlFor="daysBack" className="h-8">
+                Days back
+              </label>
+              <label htmlFor="daysForward" className="h-8">
+                Days forward
+              </label>
+              <label htmlFor="DI" className="h-8">
+                DI
+              </label>
+              <label htmlFor="varCota" className="h-8">
+                Quota variation (%)
+              </label>
+            </div>
+            <div className="flex flex-col gap-1 lg:gap-0">
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="buscaCnpj"
+                  name="buscaCnpj"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.buscaCnpj}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="daysBack"
+                  name="daysBack"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.daysBack}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="h-8">
+                <input
+                  type="text"
+                  id="daysForward"
+                  name="daysForward"
+                  className="rounded-md border-2 border-black px-2"
+                  value={controlForm.daysForward}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="flex h-8 gap-4 text-sm">
+                <span className="range-value w-12">
+                  {(controlForm.DI * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="DI"
+                  name="DI"
+                  min={0.01}
+                  max={0.2}
+                  step={0.0025}
+                  className="indigo-500"
+                  value={controlForm.DI}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="flex h-8 gap-4">
+                <span
+                  className="range-value w-12 text-sm"
+                  style={{
+                    color:
+                      controlForm.varCota < 0
+                        ? "red"
+                        : controlForm.varCota == 0
+                        ? ""
+                        : "green",
+                  }}
+                >
+                  {(controlForm.varCota * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="varCota"
+                  name="varCota"
+                  min={-0.99}
+                  max={1.5}
+                  step={0.01}
+                  className="indigo-500"
+                  value={controlForm.varCota}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col gap-1 lg:gap-0">
-            <div className="h-8">
+          <div className="text-center mt-6 lg:mt-4">
+            <ButtonIndigo>Update</ButtonIndigo>
+          </div>
+        </form>
+        <form
+          id="controlFormDesk"
+          className="hidden lg:block"
+          onSubmit={handleControlFormSubmit}
+        >
+          <div className="flex flex-row justify-center lg:gap-8 lg:flex-wrap">
+            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+              <label htmlFor="buscaCnpj">CNPJ to show</label>
               <input
                 type="text"
                 id="buscaCnpj"
                 name="buscaCnpj"
-                className="rounded-md border-2 border-black px-2"
+                className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
                 value={controlForm.buscaCnpj}
                 onChange={handleControlFormChange}
               ></input>
             </div>
-            <div className="h-8">
+            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+              <label htmlFor="daysBack">Days back</label>
               <input
                 type="text"
                 id="daysBack"
                 name="daysBack"
-                className="rounded-md border-2 border-black px-2"
+                className="border-b-2 rounded-t-sm border-black px-2 text-center w-28 bg-transparent focus:outline-none"
                 value={controlForm.daysBack}
                 onChange={handleControlFormChange}
               ></input>
             </div>
-            <div className="h-8">
+            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+              <label htmlFor="daysForward">Days forward</label>
               <input
                 type="text"
                 id="daysForward"
                 name="daysForward"
-                className="rounded-md border-2 border-black px-2"
+                className="border-b-2 rounded-t-sm border-black text-center w-28 bg-transparent focus:outline-none"
                 value={controlForm.daysForward}
                 onChange={handleControlFormChange}
               ></input>
             </div>
-            <div className="flex h-8 gap-4 text-sm">
-              <span className="range-value w-12">
-                {(controlForm.DI * 100).toFixed(2)}%
-              </span>
-              <input
-                type="range"
-                id="DI"
-                name="DI"
-                min={0.01}
-                max={0.2}
-                step={0.0025}
-                className="indigo-500"
-                value={controlForm.DI}
-                onChange={handleControlFormChange}
-              ></input>
+            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+              <label htmlFor="DI">DI</label>
+              <div className="flex gap-4 text-sm">
+                <span className="range-value w-8">
+                  {(controlForm.DI * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="DI"
+                  name="DI"
+                  min={0.01}
+                  max={0.2}
+                  step={0.0025}
+                  className="indigo-500"
+                  value={controlForm.DI}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
             </div>
-            <div className="flex h-8 gap-4">
-              <span
-                className="range-value w-12 text-sm"
-                style={{
-                  color:
-                    controlForm.varCota < 0
-                      ? "red"
-                      : controlForm.varCota == 0
-                      ? ""
-                      : "green",
-                }}
-              >
-                {(controlForm.varCota * 100).toFixed(2)}%
-              </span>
-              <input
-                type="range"
-                id="varCota"
-                name="varCota"
-                min={-0.99}
-                max={1.5}
-                step={0.01}
-                className="indigo-500"
-                value={controlForm.varCota}
-                onChange={handleControlFormChange}
-              ></input>
+            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+              <label htmlFor="varCota">Quota variation (%)</label>
+              <div className="flex gap-4">
+                <span
+                  className="range-value w-8 text-sm"
+                  style={{
+                    color:
+                      controlForm.varCota < 0
+                        ? "red"
+                        : controlForm.varCota == 0
+                        ? ""
+                        : "green",
+                  }}
+                >
+                  {(controlForm.varCota * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="varCota"
+                  name="varCota"
+                  min={-0.99}
+                  max={1.5}
+                  step={0.01}
+                  className="indigo-500"
+                  value={controlForm.varCota}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+            </div>
+            <div className="flex justify-center items-center mt-[-15px]">
+              <ButtonIndigo>Update</ButtonIndigo>
             </div>
           </div>
-        </div>
-        <div className="text-center mt-6 lg:mt-4">
-          <ButtonIndigo>Update</ButtonIndigo>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 }

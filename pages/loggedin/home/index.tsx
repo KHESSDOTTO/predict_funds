@@ -43,7 +43,7 @@ export default function LoggedInHome({ user }: any) {
       <Header user={user} />
       <Dashboard user={user} />
       <div className="flex justify-center px-4 pb-4 lg:justify-end">
-        <div onClick={handleLogout} className="w-fit">
+        <div onClick={handleLogout} className="mt-8 w-fit">
           <ButtonRed>Log Out</ButtonRed>
         </div>
       </div>
