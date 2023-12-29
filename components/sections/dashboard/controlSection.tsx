@@ -1,4 +1,4 @@
-import ButtonIndigo from "../../../UI/buttonIndigo";
+import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
