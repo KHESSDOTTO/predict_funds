@@ -78,7 +78,7 @@ export default function Dashboard({ user }: DashboardProps) {
       <ChartSection data={data} />
       <div
         id="cenariosBtnSection"
-        className="flex justify-center items-center col-span-12 gap-4 mt-[-5px] lg:mt-2"
+        className="flex gap-4 mt-[-5px] justify-center items-center border-gray-500 lg:border-t-2 lg:w-10/12 lg:pt-2 lg:mt-4"
       >
         <button
           onClick={saveCenario}
@@ -86,13 +86,12 @@ export default function Dashboard({ user }: DashboardProps) {
         >
           + Save Cenario
         </button>
-        <Link href={"/loggedin/my_cenarios"} className="lg:absolute lg:right-2">
+        <Link href={"/loggedin/my_cenarios"} className="lg:right-2">
           <button className="text-red-600 px-1 transition-all duration-100 hover:text-red-400">
             Go to Cenarios
           </button>
         </Link>
       </div>
-      {/* <PredictCardsSection data={data} /> */}
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import { RawDataType } from "@/utils/types";
-import PredictCard from "../../../UI/predictCard";
+import PredictCard from "../../UI/predictCard";
 
 interface PredictCardsSectionProps {
   data: RawDataType[];

@@ -4,7 +4,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import toast from "react-hot-toast";
-import Dashboard from "@/components/sections/netFunding/dashboard/dashboard";
+import Dashboard from "@/components/sections/dashboard/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 import { ax } from "@/database/axios.config";
