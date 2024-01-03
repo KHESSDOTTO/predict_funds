@@ -6,7 +6,7 @@ interface PredListPropsType {
 
 export default function PredList({ title }: PredListPropsType) {
   return (
-    <div className="h-full w-full bg-white/90 p-2 border-b-2 border-black lg:rounded-md lg:border-2 relative">
+    <div className="h-full w-full pb-16 bg-white/90 p-2 border-b-2 border-black relative lg:rounded-md lg:border-2 lg:pb-2">
       {title && (
         <h2 className="font-bold border-t border-b mb-1 text-center border-black text-base py-1">
           {title}
@@ -44,7 +44,7 @@ export default function PredList({ title }: PredListPropsType) {
           + Add Prediction
         </button>
       </div>
-      <div className="absolute bottom-2 w-full text-center">
+      <div className="absolute bottom-2 w-full ml-[-8px] text-center">
         <ButtonIndigo>Save</ButtonIndigo>
       </div>
     </div>
