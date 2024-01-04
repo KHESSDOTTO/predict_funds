@@ -47,17 +47,17 @@ interface UserContextType {
   setCenarios: (newData: CenarioType[]) => void;
 }
 
-interface NetFundingDashboardControlFormType {
+interface DashboardControlFormType {
   buscaCnpj: string;
   DI: number;
   varCota: number;
-  daysBack: number;
-  daysForward: number;
+  weeksBack: number;
+  weeksForward: number;
 }
 
 interface CenarioType {
   id: string;
-  params: NetFundingDashboardControlFormType;
+  params: DashboardControlFormType;
   data: RawDataType[];
 }
 
@@ -68,6 +68,6 @@ export type {
   SideBarProps,
   HeaderProps,
   UserContextType,
-  NetFundingDashboardControlFormType,
+  DashboardControlFormType,
   CenarioType,
 };

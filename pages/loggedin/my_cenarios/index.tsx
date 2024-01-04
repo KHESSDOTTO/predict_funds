@@ -21,11 +21,12 @@ export default function MyCenarios() {
           <div className="border-2 border-black rounded-lg shadow-md shadow-black py-2 px-4 flex flex-col justify-around items-center lg:flex-row">
             <p>DI: {cE.params.DI}</p>
             <p>CNPJ: {cE.params.buscaCnpj}</p>
-            <p>daysBack: {cE.params.daysBack}</p>
-            <p>daysForward: {cE.params.daysForward}</p>
+            <p>weeksBack: {cE.params.weeksBack}</p>
+            <p>weeksForward: {cE.params.weeksForward}</p>
             <p>varCota: {cE.params.varCota}</p>
             <p>DT_COMPTC1: {cE.data[0].DT_COMPTC.toString()}</p>
-            <p>CAPTC_LIQ1: {cE.data[0].CAPTC_LIQ}</p>
+            <p>CAPTC_LIQ1: R$ {cE.data[0].CAPTC_LIQ}</p>
+            <p>VL_QUOTA1: R$ {cE.data[0].VL_QUOTA}</p>
             <button
               id={cE.id}
               className="bg-red-700 text-white rounded-md border-black border py-1 px-2"

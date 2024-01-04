@@ -6,7 +6,7 @@ interface PredListPropsType {
 
 export default function PredList({ title }: PredListPropsType) {
   return (
-    <div className="h-full w-full bg-white/90 p-2 border-b-2 border-black lg:rounded-md lg:border-2 relative">
+    <div className="h-full w-full pb-16 bg-white/90 p-2 border-b-2 border-black relative lg:rounded-md lg:border-2 lg:pb-2">
       {title && (
         <h2 className="font-bold border-t border-b mb-1 text-center border-black text-base py-1">
           {title}
@@ -15,14 +15,14 @@ export default function PredList({ title }: PredListPropsType) {
       <table className="w-full border-b border-gray-300">
         <thead className="border-b-2 border-black">
           <tr>
-            <th>Period</th>
-            <th>Number of periods</th>
+            <th>Back / Forward</th>
+            <th>Number of weeks</th>
             <th>Value</th>
           </tr>
         </thead>
         <tbody>
           <tr className="text-center border-b border-gray-300">
-            <td className="p-0">Week</td>
+            <td className="p-0">Backward</td>
             <td className="p-0">1</td>
             <td className="p-0">500000</td>
             <td className="text-red-800 p-1 text-base align-middle p-0">
@@ -30,7 +30,7 @@ export default function PredList({ title }: PredListPropsType) {
             </td>
           </tr>
           <tr className="text-center border-b border-gray-300">
-            <td className="p-0">Month</td>
+            <td className="p-0">Forward</td>
             <td className="p-0">3</td>
             <td className="p-0">-3000</td>
             <td className="text-red-800 p-0 text-base">
@@ -40,11 +40,11 @@ export default function PredList({ title }: PredListPropsType) {
         </tbody>
       </table>
       <div className="flex justify-center items-center mt-2">
-        <button className="text-indigo-800 text-xs font-semibold hover:underline">
+        <button className="text-indigo-800 text-xs font-semibold hover:underline hover:text-indigo-600">
           + Add Prediction
         </button>
       </div>
-      <div className="absolute bottom-2 w-full text-center">
+      <div className="absolute bottom-2 w-full ml-[-8px] text-center">
         <ButtonIndigo>Save</ButtonIndigo>
       </div>
     </div>

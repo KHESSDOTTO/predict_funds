@@ -1,10 +1,9 @@
 import { ax } from "@/database/axios.config";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { RawDataType, UserType } from "@/utils/types";
+import { DashboardControlFormType, RawDataType, UserType } from "@/utils/types";
 import ControlSection from "./controlSection";
 import ChartSection from "./chartSection";
-import PredictCardsSection from "./predictCardsSection";
 import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
 
@@ -17,12 +16,12 @@ export default function Dashboard({ user }: DashboardProps) {
   console.log(user);
   const userContext = useContext(UserContext);
   const [data, setData] = useState<RawDataType[]>([]),
-    [controlForm, setControlForm] = useState({
+    [controlForm, setControlForm] = useState<DashboardControlFormType>({
       buscaCnpj: "",
       DI: 0.1,
       varCota: 0,
-      daysBack: 60,
-      daysForward: 0,
+      weeksBack: 8,
+      weeksForward: 0,
     });
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function Dashboard({ user }: DashboardProps) {
           `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
         );
         console.log(newData);
-        let finalData = newData.data.slice(controlForm.daysBack * -1, -1);
+        let finalData = newData.data.slice(controlForm.weeksBack * -7, -1);
         finalData = finalData.map((cE: RawDataType) => {
           const convDate = new Date(cE.DT_COMPTC);
           return { ...cE, DT_COMPTC: convDate };

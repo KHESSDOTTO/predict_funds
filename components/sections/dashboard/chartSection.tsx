@@ -30,7 +30,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
         Net Funding
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 box-shadow shadow-md shadow-indigo-900 lg:shadow-sm lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 ml-4 shadow-md shadow-indigo-900/80 lg:w-[60%] lg:rounded-xl">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -44,30 +44,6 @@ export default function ChartSection({ data }: ChartSectionProps) {
                     offset="60%"
                     stopColor="rgb(180, 180, 255)"
                     stopOpacity={0.75}
-                  />
-                </linearGradient>
-                <linearGradient id="customRed" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="10%"
-                    stopColor="rgb(255, 200, 200)"
-                    stopOpacity={0.9}
-                  />
-                  <stop
-                    offset="90%"
-                    stopColor="rgb(255, 200, 200)"
-                    stopOpacity={0.3}
-                  />
-                </linearGradient>
-                <linearGradient id="customGreen" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="10%"
-                    stopColor="rgb(240, 255, 240)"
-                    stopOpacity={0.9}
-                  />
-                  <stop
-                    offset="90%"
-                    stopColor="rgb(240, 255, 240)"
-                    stopOpacity={0.2}
                   />
                 </linearGradient>
               </defs>
@@ -106,7 +82,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
         Value - Quota
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 box-shadow shadow-md shadow-indigo-900 lg:shadow-sm lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 ml-4 box-shadow shadow-md shadow-indigo-900/80 lg:w-[60%] lg:rounded-xl">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -153,7 +129,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Value Quota" />
+          <PredList title="Value Quota (history)" />
         </div>
       </div>
     </div>

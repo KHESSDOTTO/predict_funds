@@ -2,15 +2,15 @@ import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
-import type { NetFundingDashboardControlFormType } from "@/utils/types";
+import type { DashboardControlFormType } from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 
 interface ControlSectionProps {
   data: RawDataType[];
   setData: Dispatch<SetStateAction<RawDataType[]>>;
-  controlForm: NetFundingDashboardControlFormType;
-  setControlForm: Dispatch<SetStateAction<NetFundingDashboardControlFormType>>;
+  controlForm: DashboardControlFormType;
+  setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
 }
 
 export default function ControlSection({
@@ -82,7 +82,7 @@ export default function ControlSection({
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
       );
       console.log(newData);
-      let finalData = newData.data.slice(controlForm.daysBack * -1, -1);
+      let finalData = newData.data.slice(controlForm.weeksBack * -7, -1);
       finalData = finalData.map((cE: RawDataType) => {
         const convDate = new Date(cE.DT_COMPTC);
         return { ...cE, DT_COMPTC: convDate };
@@ -121,11 +121,11 @@ export default function ControlSection({
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ to show
               </label>
-              <label htmlFor="daysBack" className="h-8">
-                Days back
+              <label htmlFor="weeksBack" className="h-8">
+                Weeks back
               </label>
-              <label htmlFor="daysForward" className="h-8">
-                Days forward
+              <label htmlFor="weeksForward" className="h-8">
+                Weeks forward
               </label>
               <label htmlFor="DI" className="h-8">
                 DI
@@ -148,20 +148,20 @@ export default function ControlSection({
               <div className="h-8">
                 <input
                   type="text"
-                  id="daysBack"
-                  name="daysBack"
+                  id="weeksBack"
+                  name="weeksBack"
                   className="rounded-md border-2 border-black px-2"
-                  value={controlForm.daysBack}
+                  value={controlForm.weeksBack}
                   onChange={handleControlFormChange}
                 ></input>
               </div>
               <div className="h-8">
                 <input
                   type="text"
-                  id="daysForward"
-                  name="daysForward"
+                  id="weeksForward"
+                  name="weeksForward"
                   className="rounded-md border-2 border-black px-2"
-                  value={controlForm.daysForward}
+                  value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
                 ></input>
               </div>
@@ -231,24 +231,24 @@ export default function ControlSection({
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="daysBack">Days back</label>
+              <label htmlFor="weeksBack">Weeks back</label>
               <input
                 type="text"
-                id="daysBack"
-                name="daysBack"
+                id="weeksBack"
+                name="weeksBack"
                 className="border-b-2 rounded-t-sm border-black px-2 text-center w-28 bg-transparent focus:outline-none"
-                value={controlForm.daysBack}
+                value={controlForm.weeksBack}
                 onChange={handleControlFormChange}
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="daysForward">Days forward</label>
+              <label htmlFor="weeksForward">Weeks forward</label>
               <input
                 type="text"
-                id="daysForward"
-                name="daysForward"
+                id="weeksForward"
+                name="weeksForward"
                 className="border-b-2 rounded-t-sm border-black text-center w-28 bg-transparent focus:outline-none"
-                value={controlForm.daysForward}
+                value={controlForm.weeksForward}
                 onChange={handleControlFormChange}
               ></input>
             </div>
