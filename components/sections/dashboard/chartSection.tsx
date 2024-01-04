@@ -129,7 +129,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Value Quota" />
+          <PredList title="Value Quota (history)" />
         </div>
       </div>
     </div>
