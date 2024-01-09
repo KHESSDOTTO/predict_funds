@@ -2,9 +2,10 @@ import ButtonIndigo from "@/components/UI/buttonIndigo";
 
 interface PredListPropsType {
   title: string;
+  onlyBack: boolean;
 }
 
-export default function PredList({ title }: PredListPropsType) {
+export default function PredList({ title, onlyBack }: PredListPropsType) {
   return (
     <div className="h-full w-full pb-16 bg-white/90 p-2 border-b-2 border-black relative lg:rounded-md lg:border-2 lg:pb-2">
       {title && (
@@ -30,7 +31,7 @@ export default function PredList({ title }: PredListPropsType) {
             </td>
           </tr>
           <tr className="text-center border-b border-gray-300">
-            <td className="p-0">Forward</td>
+            <td className="p-0">{onlyBack ? "Backward" : "Forward"}</td>
             <td className="p-0">3</td>
             <td className="p-0">-3000</td>
             <td className="text-red-800 p-0 text-base">

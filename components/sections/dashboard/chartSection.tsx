@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { RawDataType } from "@/utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PredList from "./predList";
+import { useEffect, useState } from "react";
 
 interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
 
@@ -24,13 +25,68 @@ interface ChartSectionProps {
 }
 
 export default function ChartSection({ data }: ChartSectionProps) {
+  const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([0, 100]),
+    [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
+    [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
+    [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
+
+  // Margin to aply to find the domain of the Yaxis on the charts
+  const margin = 0.1;
+
+  useEffect(() => {
+    if (data.length === 0) {
+      return;
+    }
+    // Calculating minimum and maximum values of net funding and value quota for the data received
+    // const minValueNF = data.reduce((minObj, currObj) => {
+    //   return currObj["CAPTC_LIQ"] < minObj["CAPTC_LIQ"] ? currObj : minObj;
+    // }, data[0])["CAPTC_LIQ"];
+    // const maxValueNF = data.reduce((maxObj, currObj) => {
+    //   return currObj["CAPTC_LIQ"] > maxObj["CAPTC_LIQ"] ? currObj : maxObj;
+    // }, data[0])["CAPTC_LIQ"];
+    const minValueVQ = data.reduce((minObj, currObj) => {
+      return currObj["VL_QUOTA"] < minObj["VL_QUOTA"] ? currObj : minObj;
+    }, data[0])["VL_QUOTA"];
+    const maxValueVQ = data.reduce((maxObj, currObj) => {
+      return currObj["VL_QUOTA"] > maxObj["VL_QUOTA"] ? currObj : maxObj;
+    }, data[0])["VL_QUOTA"];
+
+    // Domain of the Yaxis
+    // const minValYaxisNF = minValueNF * (1 - margin),
+    //   maxValYaxisNF = maxValueNF * (1 + margin);
+    const minValYaxisVQ = minValueVQ * (1 - margin),
+      maxValYaxisVQ = maxValueVQ * (1 + margin);
+    // setDomainYaxisNF([minValYaxisNF, maxValYaxisNF]);
+    setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
+
+    // Calculate Y axis ticks values
+    // For Net Funding chart
+    // const ticksQntYaxisNF = 5;
+    // const ticksIntervalYaxisNF =
+    //   (maxValYaxisNF - minValYaxisNF) / (ticksQntYaxisNF - 1);
+    // const newTicksYaxisNF = Array.from(
+    //   { length: ticksQntYaxisNF },
+    //   (_, index) => minValYaxisNF + ticksIntervalYaxisNF * index
+    // );
+    // setTicksYaxisNF(newTicksYaxisNF);
+    // For Value Quota chart
+    const ticksQntYaxisVQ = 5;
+    const ticksIntervalYaxisVQ =
+      (maxValYaxisVQ - minValYaxisVQ) / (ticksQntYaxisVQ - 1);
+    const newTicksYaxisVQ = Array.from(
+      { length: ticksQntYaxisVQ },
+      (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
+    );
+    setTicksYaxisVQ(newTicksYaxisVQ);
+  }, [data]);
+
   return (
     <div className="w-screen">
       <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
         Net Funding
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 ml-4 shadow-md shadow-indigo-900/80 lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-md lg:w-[60%] lg:rounded-xl">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -58,9 +114,11 @@ export default function ChartSection({ data }: ChartSectionProps) {
                 }}
               />
               <YAxis
+                // ticks={ticksYaxisNF}
                 tick={{ fill: "rgb(230, 230, 230)" }}
                 tickFormatter={(num) => `R$${String(num.toFixed(2) / 1000)} k`}
-                width={70}
+                // domain={domainYaxisNF}
+                width={65}
                 fontSize={12}
               />
               <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
@@ -75,14 +133,14 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Net Funding" />
+          <PredList title="Net Funding" onlyBack={false} />
         </div>
       </div>
       <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
         Value - Quota
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 ml-4 box-shadow shadow-md shadow-indigo-900/80 lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm lg:w-[60%] lg:rounded-xl">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -110,11 +168,12 @@ export default function ChartSection({ data }: ChartSectionProps) {
                 }}
               />
               <YAxis
+                ticks={ticksYaxisVQ}
                 tick={{ fill: "rgb(230, 230, 230)" }}
                 tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
-                width={70}
+                width={65}
                 fontSize={12}
-                domain={["dataMin - 10", "dataMax + 10"]}
+                domain={domainYaxisVQ}
               />
               <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
               <Area
@@ -129,7 +188,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Value Quota (history)" />
+          <PredList title="Value Quota (history)" onlyBack={true} />
         </div>
       </div>
     </div>
@@ -146,7 +205,7 @@ CustomTootipProps) {
   console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
-      <div className="bg-black/80 text-white p-2 rounded-md shadow-indigo-700 shadow-sm">
+      <div className="bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm">
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         {/* {showPessimistic && (
           <p>Less 1std: R${payload[0].payload.std1Less.toFixed(2)}mln</p>
