@@ -275,7 +275,7 @@ export default function ControlSection({
               <label htmlFor="varCota">Quota variation (%)</label>
               <div className="flex gap-4">
                 <span
-                  className="range-value w-8 text-sm"
+                  className="range-value w-10 text-sm"
                   style={{
                     color:
                       controlForm.varCota < 0
