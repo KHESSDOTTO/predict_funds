@@ -86,7 +86,7 @@ export default function ChartSection({ data }: ChartSectionProps) {
         Net Funding
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-md lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-md lg:w-[60%] lg:rounded-xl lg:h-[312px]">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -133,14 +133,19 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Net Funding" onlyBack={false} />
+          <PredList
+            title="Net Funding"
+            onlyBack={false}
+            data={data}
+            varName={"CAPTC_LIQ"}
+          />
         </div>
       </div>
       <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
         Value - Quota
       </h1>
       <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm lg:w-[60%] lg:rounded-xl">
+        <div className="bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm lg:w-[60%] lg:rounded-xl lg:h-[312px]">
           <ResponsiveContainer height={300}>
             <AreaChart data={data}>
               <defs>
@@ -188,7 +193,12 @@ export default function ChartSection({ data }: ChartSectionProps) {
           </ResponsiveContainer>
         </div>
         <div className="lg:w-[40%] lg:mr-4">
-          <PredList title="Value Quota (history)" onlyBack={true} />
+          <PredList
+            title="Value Quota (history)"
+            onlyBack={true}
+            data={data}
+            varName={"VL_QUOTA"}
+          />
         </div>
       </div>
     </div>
