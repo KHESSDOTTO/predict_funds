@@ -31,7 +31,7 @@ interface RawDataType {
   DT_COMPTC: Date;
   CNPJ_FUNDO: string;
   VL_QUOTA: number;
-  VL_TOTAL?: number; // Use "?" for optional fields
+  VL_TOTAL?: number;
   CAPTC_DIA?: number;
   NR_COTST?: number;
   TP_FUNDO: string;
