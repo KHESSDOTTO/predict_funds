@@ -53,7 +53,7 @@ export default function ProfilePage({ user }: any) {
           Profile
         </h1>
         <section id="userInfos" className="relative">
-          <div className="flex py-8 gap-4">
+          <form className="flex py-8 gap-4">
             <div className="flex flex-col font-semibold gap-8 lg:gap-6">
               <label htmlFor="username">Username:</label>
               <label htmlFor="email" className="">
@@ -123,7 +123,7 @@ export default function ProfilePage({ user }: any) {
                 />
               </div>
             </div>
-          </div>
+          </form>
           <div className="flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:cursor-pointer lg:absolute lg:py-4 lg:border-l-2 hover:border-yellow-700 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[40%] lg:text-base">
             Save
           </div>
