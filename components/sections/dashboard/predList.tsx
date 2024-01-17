@@ -6,7 +6,12 @@ interface PredListPropsType {
   title: string;
   onlyBack: boolean;
   data: RawDataType[];
-  varName: string;
+  varName:
+    | "VL_QUOTA"
+    | "CAPTC_DIA"
+    | "VL_PATRIM_LIQ"
+    | "RESG_DIA"
+    | "CAPTC_LIQ";
 }
 
 export default function PredList({
@@ -19,6 +24,12 @@ export default function PredList({
     { id: 1, direction: "backward", numPer: 8 },
     { id: 2, direction: "backward", numPer: 4 },
   ]);
+
+  const formatter = new Intl.NumberFormat("de-DE", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   const [newRow, setNewRow] = useState({
     id: 10 * Math.random(),
@@ -80,7 +91,16 @@ export default function PredList({
               <tr className="text-center border-b border-gray-300">
                 <td className="p-0">{cE.direction}</td>
                 <td className="p-0">{cE.numPer}</td>
-                <td className="p-0">Yet to finish - KD</td>
+                <td className="p-0">
+                  {data[data.length - 7 * cE.numPer] &&
+                  cE.direction === "backward"
+                    ? data[data.length - 7 * cE.numPer][varName] != undefined
+                      ? formatter.format(
+                          data[data.length - 7 * cE.numPer][varName]
+                        )
+                      : "-"
+                    : "-"}
+                </td>
                 <td className="text-red-800 p-1 text-base align-middle p-0">
                   <button
                     className="hover:text-red-600"
@@ -126,7 +146,7 @@ export default function PredList({
         onClick={handleShowAddRow}
       >
         <button className="text-indigo-800 text-xs font-semibold hover:underline hover:text-indigo-600">
-          + Add Prediction
+          + Add Row
         </button>
       </div>
       <div className="absolute bottom-2 w-full ml-[-8px] text-center">

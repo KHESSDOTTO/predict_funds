@@ -32,11 +32,11 @@ interface RawDataType {
   CNPJ_FUNDO: string;
   VL_QUOTA: number;
   VL_TOTAL?: number;
-  CAPTC_DIA?: number;
+  CAPTC_DIA: number;
   NR_COTST?: number;
   TP_FUNDO: string;
-  VL_PATRIM_LIQ?: number;
-  RESG_DIA?: number;
+  VL_PATRIM_LIQ: number;
+  RESG_DIA: number;
   CAPTC_LIQ: number;
 }
 

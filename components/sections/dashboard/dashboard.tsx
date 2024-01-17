@@ -33,7 +33,12 @@ export default function Dashboard({ user }: DashboardProps) {
           `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
         );
         console.log(newData);
-        let finalData = newData.data.slice(controlForm.weeksBack * -7, -1);
+        let finalData = newData.data.slice(
+          controlForm.weeksBack * -7,
+          newData.data.length
+        );
+        console.log(finalData.length);
+        console.log(finalData);
         finalData = finalData.map((cE: RawDataType) => {
           const convDate = new Date(cE.DT_COMPTC);
           return { ...cE, DT_COMPTC: convDate };
