@@ -1,7 +1,7 @@
 import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/layout/header";
 import ButtonRed from "@/components/UI/buttonRed";
@@ -10,7 +10,7 @@ import { ax } from "@/database/axios.config";
 
 export default function ProfilePage({ user }: any) {
   const router = useRouter(),
-    inputClass = "rounded-sm px-1 border-2 border-gray-400 box-border",
+    inputClass = "rounded-sm px-1 shadow-sm shadow-gray-600",
     [form, setForm] = useState({
       username: user.username,
       cnpj: user.cnpj,
@@ -30,6 +30,10 @@ export default function ProfilePage({ user }: any) {
     return;
   }, []);
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
   async function handleLogout() {
     try {
       await ax.post("/user/logout");
@@ -45,77 +49,87 @@ export default function ProfilePage({ user }: any) {
     <div className="min-h-screen">
       <Header user={user}></Header>
       <main className="flex flex-col items-center py-8 md:py-16 lg:py-12">
-        <h1 className="text-4xl font-bold mb-4 font-serif px-4 pb-2 lg:px-32 lg:border-b lg:border-black">
+        <h1 className="text-4xl font-bold mb-2 mt-6 font-serif px-4 pb-2 lg:px-32 lg:border-b lg:border-black lg:mt-0">
           Profile
         </h1>
-        <section id="userInfos" className="flex py-8 gap-4">
-          <div className="flex flex-col font-semibold gap-8 lg:gap-6">
-            <label htmlFor="username">Username:</label>
-            <label htmlFor="email" className="pt-1">
-              Email:
-            </label>
-            <label htmlFor="address" className="pt-1">
-              Address:
-            </label>
-            <label htmlFor="cnpj" className="pt-1">
-              CNPJ:
-            </label>
-            <label htmlFor="contactPhone" className="pt-1">
-              Phone:
-            </label>
-          </div>
-          <div className="flex flex-col gap-8 lg:gap-6">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="username"
-                name="username"
-                className={inputClass}
-                value={form.username}
-              />
+        <section id="userInfos" className="relative">
+          <form className="flex py-8 gap-4">
+            <div className="flex flex-col font-semibold gap-8 lg:gap-6">
+              <label htmlFor="username">Username:</label>
+              <label htmlFor="email" className="">
+                Email:
+              </label>
+              <label htmlFor="address" className="">
+                Address:
+              </label>
+              <label htmlFor="cnpj" className="">
+                CNPJ:
+              </label>
+              <label htmlFor="contactPhone" className="">
+                Phone:
+              </label>
             </div>
-            <div className="flex gap-2 italic">
-              <input
-                type="text"
-                id="email"
-                name="email"
-                style={{ color: "rgb(125, 125, 125" }}
-                className={inputClass}
-                value={form.email}
-                disabled
-              />
+            <div className="flex flex-col gap-8 lg:gap-6">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  className={inputClass}
+                  value={form.username}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex gap-2 italic">
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  style={{ color: "rgb(125, 125, 125" }}
+                  className={inputClass}
+                  value={form.email}
+                  onChange={handleChange}
+                  disabled
+                />
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  className={inputClass}
+                  value={form.address}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="cnpj"
+                  name="cnpj"
+                  className={inputClass}
+                  value={form.cnpj}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  id="contactPhone"
+                  name="contactPhone"
+                  className={inputClass}
+                  value={"+" + form.contactPhone}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="address"
-                name="address"
-                className={inputClass}
-                value={form.address}
-              />
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="cnpj"
-                name="cnpj"
-                className={inputClass}
-                value={form.cnpj}
-              />
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                id="contactPhone"
-                name="contactPhone"
-                className={inputClass}
-                value={"+" + form.contactPhone}
-              />
-            </div>
+          </form>
+          <div className="flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:cursor-pointer lg:absolute lg:py-4 lg:border-l-2 hover:border-yellow-700 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[40%] lg:text-base">
+            Save
           </div>
         </section>
-        <div className="flex flex-col justify-center items-center gap-8 pt-2 lg:flex-row lg:gap-24">
-          <div className="text-indigo-800 transition-all underline hover:text-indigo-600 hover:cursor-pointer hover:text-yellow-600 hover:duration-300">
+        <div className="flex flex-col justify-center items-center gap-8 pt-2 lg:flex-row">
+          <div className="text-indigo-800 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300">
             Redefinir Senha
           </div>
           <div onClick={handleLogout}>
