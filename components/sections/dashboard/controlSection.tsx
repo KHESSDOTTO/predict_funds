@@ -119,7 +119,7 @@ export default function ControlSection({
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
             <div className="flex flex-col gap-1 font-semibold lg:gap-0">
               <label htmlFor="buscaCnpj" className="h-8">
-                CNPJ to show
+                CNPJ
               </label>
               <label htmlFor="weeksBack" className="h-8">
                 Weeks back
@@ -220,7 +220,7 @@ export default function ControlSection({
         >
           <div className="flex flex-row justify-center lg:gap-8 lg:flex-wrap">
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="buscaCnpj">CNPJ to show</label>
+              <label htmlFor="buscaCnpj">CNPJ</label>
               <input
                 type="text"
                 id="buscaCnpj"

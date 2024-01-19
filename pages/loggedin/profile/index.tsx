@@ -85,11 +85,11 @@ export default function ProfilePage({ user }: any) {
                   type="text"
                   id="email"
                   name="email"
-                  style={{ color: "rgb(125, 125, 125" }}
+                  // style={{ color: "rgb(125, 125, 125" }}
                   className={inputClass}
                   value={form.email}
                   onChange={handleChange}
-                  disabled
+                  // disabled
                 />
               </div>
               <div className="flex gap-2">
@@ -124,7 +124,7 @@ export default function ProfilePage({ user }: any) {
               </div>
             </div>
           </form>
-          <div className="flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:cursor-pointer lg:absolute lg:py-4 lg:border-l-2 hover:border-yellow-700 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[40%] lg:text-base">
+          <div className="flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[25%] lg:text-base">
             Save
           </div>
         </section>
