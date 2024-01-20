@@ -199,9 +199,9 @@ export default function ControlSection({
                   type="range"
                   id="varCota"
                   name="varCota"
-                  min={-0.99}
-                  max={1.5}
-                  step={0.01}
+                  min={-0.2}
+                  max={0.2}
+                  step={0.005}
                   className="indigo-500"
                   value={controlForm.varCota}
                   onChange={handleControlFormChange}
@@ -291,9 +291,9 @@ export default function ControlSection({
                   type="range"
                   id="varCota"
                   name="varCota"
-                  min={-0.99}
-                  max={1.5}
-                  step={0.01}
+                  min={-0.2}
+                  max={0.2}
+                  step={0.005}
                   className="indigo-500"
                   value={controlForm.varCota}
                   onChange={handleControlFormChange}
