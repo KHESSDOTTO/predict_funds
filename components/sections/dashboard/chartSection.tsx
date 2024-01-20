@@ -21,9 +21,10 @@ interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
 
 interface ChartSectionProps {
   data: RawDataType[];
+  wPredList: boolean;
 }
 
-export default function ChartSection({ data }: ChartSectionProps) {
+export default function ChartSection({ data, wPredList }: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
 
@@ -58,124 +59,152 @@ export default function ChartSection({ data }: ChartSectionProps) {
   }, [data]);
 
   return (
-    <div className="w-screen">
-      <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
-        Net Funding
-      </h1>
-      <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-md lg:w-[60%] lg:rounded-xl lg:h-[312px]">
-          <ResponsiveContainer height={300}>
-            <AreaChart data={data}>
-              <defs>
-                <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="40%"
-                    stopColor="rgb(180, 180, 255)"
-                    stopOpacity={0.85}
-                  />
-                  <stop
-                    offset="60%"
-                    stopColor="rgb(180, 180, 255)"
-                    stopOpacity={0.75}
-                  />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="DT_COMPTC"
-                tick={{ fill: "rgb(230, 230, 230)" }}
-                height={30}
-                fontSize={12}
-                tickLine={false}
-                tickFormatter={(DT_COMPTC) => {
-                  return format(DT_COMPTC, `dd/MM/yy`);
-                }}
+    <div
+      className={`${wPredList ? "w-screen" : "w-full flex gap-4 flex-wrap"}`}
+    >
+      <div className={` ${wPredList ? "" : "px-2 w-[47.5%]"}`}>
+        <h1
+          className={`my-4 ${
+            wPredList ? "font-semibold text-lg" : "text-md w-10/12"
+          } text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left`}
+        >
+          Net Funding
+        </h1>
+        <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
+          <div
+            className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
+              wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
+            } lg:rounded-xl`}
+          >
+            <ResponsiveContainer height={wPredList ? 300 : 150}>
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="40%"
+                      stopColor="rgb(180, 180, 255)"
+                      stopOpacity={0.85}
+                    />
+                    <stop
+                      offset="60%"
+                      stopColor="rgb(180, 180, 255)"
+                      stopOpacity={0.75}
+                    />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="DT_COMPTC"
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  height={30}
+                  fontSize={12}
+                  tickLine={false}
+                  tickFormatter={(DT_COMPTC) => {
+                    return format(DT_COMPTC, `dd/MM/yy`);
+                  }}
+                />
+                <YAxis
+                  // ticks={ticksYaxisNF}
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  tickFormatter={(num) =>
+                    `R$${String(num.toFixed(2) / 1000)} k`
+                  }
+                  // domain={domainYaxisNF}
+                  width={65}
+                  fontSize={12}
+                />
+                <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
+                <Area
+                  type="monotone"
+                  dataKey="CAPTC_LIQ"
+                  stroke="rgb(100, 0, 120)"
+                  fill="url(#customIndigo)"
+                ></Area>
+                <Tooltip content={<CustomTooltipIndigo />} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+          {wPredList && (
+            <div className="lg:w-[40%] lg:mr-4">
+              <PredList
+                title="Net Funding"
+                onlyBack={false}
+                data={data}
+                varName={"CAPTC_LIQ"}
               />
-              <YAxis
-                // ticks={ticksYaxisNF}
-                tick={{ fill: "rgb(230, 230, 230)" }}
-                tickFormatter={(num) => `R$${String(num.toFixed(2) / 1000)} k`}
-                // domain={domainYaxisNF}
-                width={65}
-                fontSize={12}
-              />
-              <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
-              <Area
-                type="monotone"
-                dataKey="CAPTC_LIQ"
-                stroke="rgb(100, 0, 120)"
-                fill="url(#customIndigo)"
-              ></Area>
-              <Tooltip content={<CustomTooltipIndigo />} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="lg:w-[40%] lg:mr-4">
-          <PredList
-            title="Net Funding"
-            onlyBack={false}
-            data={data}
-            varName={"CAPTC_LIQ"}
-          />
+            </div>
+          )}
         </div>
       </div>
-      <h1 className="my-4 font-semibold text-lg text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left">
-        Value - Quota
-      </h1>
-      <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
-        <div className="bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm lg:w-[60%] lg:rounded-xl lg:h-[312px]">
-          <ResponsiveContainer height={300}>
-            <AreaChart data={data}>
-              <defs>
-                <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="10%"
-                    stopColor="rgb(200, 200, 100)"
-                    stopOpacity={0.4}
-                  />
-                  <stop
-                    offset="90%"
-                    stopColor="rgb(200, 200, 100)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="DT_COMPTC"
-                tick={{ fill: "rgb(230, 230, 230)" }}
-                height={30}
-                fontSize={12}
-                tickLine={false}
-                tickFormatter={(DT_COMPTC) => {
-                  return format(DT_COMPTC, `dd/MM/yy`);
-                }}
+      <div className={` ${wPredList ? "" : "px-2 w-[47.5%]"}`}>
+        <h1
+          className={`my-4 ${
+            wPredList ? "font-semibold text-lg" : "text-md w-10/12"
+          } text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left`}
+        >
+          Value - Quota
+        </h1>
+        <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
+          <div
+            className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
+              wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
+            } lg:rounded-xl`}
+          >
+            <ResponsiveContainer height={wPredList ? 300 : 150}>
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="10%"
+                      stopColor="rgb(200, 200, 100)"
+                      stopOpacity={0.4}
+                    />
+                    <stop
+                      offset="90%"
+                      stopColor="rgb(200, 200, 100)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="DT_COMPTC"
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  height={30}
+                  fontSize={12}
+                  tickLine={false}
+                  tickFormatter={(DT_COMPTC) => {
+                    return format(DT_COMPTC, `dd/MM/yy`);
+                  }}
+                />
+                <YAxis
+                  ticks={ticksYaxisVQ}
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
+                  width={65}
+                  fontSize={12}
+                  domain={domainYaxisVQ}
+                />
+                <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
+                <Area
+                  type="monotone"
+                  dataKey="VL_QUOTA"
+                  stroke="rgb(150, 150, 75)"
+                  strokeWidth={2}
+                  fill="url(#customYellow)"
+                ></Area>
+                <Tooltip content={<CustomTooltipYellow />} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+          {wPredList && (
+            <div className="lg:w-[40%] lg:mr-4">
+              <PredList
+                title="Value Quota (history)"
+                onlyBack={true}
+                data={data}
+                varName={"VL_QUOTA"}
               />
-              <YAxis
-                ticks={ticksYaxisVQ}
-                tick={{ fill: "rgb(230, 230, 230)" }}
-                tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
-                width={65}
-                fontSize={12}
-                domain={domainYaxisVQ}
-              />
-              <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
-              <Area
-                type="monotone"
-                dataKey="VL_QUOTA"
-                stroke="rgb(150, 150, 75)"
-                strokeWidth={2}
-                fill="url(#customYellow)"
-              ></Area>
-              <Tooltip content={<CustomTooltipYellow />} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="lg:w-[40%] lg:mr-4">
-          <PredList
-            title="Value Quota (history)"
-            onlyBack={true}
-            data={data}
-            varName={"VL_QUOTA"}
-          />
+            </div>
+          )}
         </div>
       </div>
     </div>
