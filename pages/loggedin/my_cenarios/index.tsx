@@ -1,7 +1,10 @@
+import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
 import ChartSection from "@/components/sections/dashboard/chartSection";
 import { UserContext } from "@/contexts/UserContext";
 import { useContext } from "react";
+import * as XLSX from "xlsx";
+import toast from "react-hot-toast";
 
 export default function MyCenarios() {
   const { user, cenarios, setCenarios } = useContext(UserContext);
@@ -11,6 +14,39 @@ export default function MyCenarios() {
       return cE.id != e.currentTarget.id;
     });
     setCenarios(updatedCenarios);
+  }
+
+  function exportCenarios() {
+    if (cenarios.length === 0) {
+      toast.error("No cenarios were saved to export.");
+      return;
+    }
+    const workbook = XLSX.utils.book_new();
+    cenarios.forEach((cenario, i) => {
+      const ws_name = "Cenario " + (i + 1);
+      const colsToHide = ["TP_FUNDO", "_id"];
+      const paramsArray = Object.entries(cenario.params).map(([cK, cV]) => [
+        cK,
+        cV,
+      ]);
+      const dataKeys = Object.keys(cenario.data[0]);
+      const dataHeader = dataKeys.filter((cE) => {
+        return !colsToHide.includes(cE);
+      });
+      const dataArray = cenario.data.map((dataRow) => {
+        const result = Object.entries(dataRow).map(([cK, cV]) => {
+          if (!colsToHide.includes(cK)) {
+            return cV;
+          }
+          return false;
+        });
+        return result.filter((cE) => cE !== false);
+      });
+      const data = [...paramsArray, [], dataHeader, ...dataArray];
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
+    });
+    XLSX.writeFile(workbook, "export-cenarios.xlsx");
   }
 
   return (
@@ -27,7 +63,7 @@ export default function MyCenarios() {
           return (
             <div
               key={cE.id.toString()}
-              className="border-2 border-black rounded-lg shadow-md shadow-gray-400 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:items-start lg:w-[60%] lg:mb-6"
+              className="border-2 border-black rounded-lg bg-white/90 shadow-md shadow-gray-400 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:items-start lg:w-[60%] lg:mb-6"
             >
               <h2 className="text-lg font-semibold my-2 indent-1 w-2/3 pl-1 border-b border-black lg:indent-2 lg:w-11/12">
                 Cenario {cI + 1}
@@ -80,6 +116,11 @@ export default function MyCenarios() {
           </div>
         )}
       </section>
+      <footer className="bg-black flex justify-center items-center py-4 sticky bottom-0 w-full">
+        <div onClick={exportCenarios}>
+          <ButtonGreen>Export</ButtonGreen>
+        </div>
+      </footer>
     </div>
   );
 }
