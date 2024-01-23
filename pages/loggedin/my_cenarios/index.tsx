@@ -2,12 +2,49 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
 import ChartSection from "@/components/sections/dashboard/chartSection";
 import { UserContext } from "@/contexts/UserContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 
 export default function MyCenarios() {
   const { user, cenarios, setCenarios } = useContext(UserContext);
+  const [footerPosition, setFooterPosition] = useState("absolute");
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  const updateFooterPosition = () => {
+    if (footerRef.current) {
+      const footerHeight = footerRef.current.clientHeight;
+      const atBottom =
+        window.scrollY + window.innerHeight - 20 >=
+        document.documentElement.scrollHeight;
+      const contentTooShort =
+        window.innerHeight >= document.body.offsetHeight - footerHeight;
+
+      if (atBottom) {
+        setFooterPosition("absolute");
+      } else if (contentTooShort) {
+        setFooterPosition("absolute");
+      } else {
+        setFooterPosition("sticky");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      updateFooterPosition();
+    };
+    window.addEventListener("scroll", handleScroll);
+    const resizeObserver = new ResizeObserver(() => {
+      updateFooterPosition();
+    });
+    resizeObserver.observe(document.body);
+    updateFooterPosition();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   function excludeCenario(e: React.MouseEvent<HTMLButtonElement>) {
     const updatedCenarios = cenarios.filter((cE) => {
@@ -50,7 +87,7 @@ export default function MyCenarios() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
       {user && <Header user={user} />}
       <h1 className="text-center text-2xl font-semibold underline py-6">
         My Cenarios
@@ -116,7 +153,10 @@ export default function MyCenarios() {
           </div>
         )}
       </section>
-      <footer className="bg-black flex justify-center items-center py-4 sticky bottom-0 w-full">
+      <footer
+        ref={footerRef}
+        className={`bg-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+      >
         <div onClick={exportCenarios}>
           <ButtonGreen>Export</ButtonGreen>
         </div>
