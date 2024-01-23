@@ -86,12 +86,12 @@ export default function Dashboard({ user }: DashboardProps) {
       >
         <button
           onClick={saveCenario}
-          className="text-indigo-800 drop-shadow-md border-indigo-500 px-1 transition-all duration-200 hover:text-indigo-500 hover:border-b-2 hover:drop-shadow-xl lg:ml-8"
+          className="text-indigo-800 px-1 transition-all duration-200 hover:text-indigo-500 lg:ml-8"
         >
           + Save Cenario
         </button>
         <Link href={"/loggedin/my_cenarios"} className="lg:right-2">
-          <button className="text-red-600 px-1 transition-all duration-100 hover:text-red-400">
+          <button className="text-red-700 px-1 transition-all duration-100 hover:text-red-500">
             Go to Cenarios
           </button>
         </Link>

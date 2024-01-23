@@ -71,7 +71,7 @@ export default function PredList({
   }
 
   return (
-    <div className="h-full w-full pb-16 bg-white/90 p-2 border-b-2 border-black relative lg:rounded-md lg:border-2 lg:overflow-y-scroll">
+    <div className="h-full w-full pb-16 bg-white p-2 border-b border-black relative lg:rounded-md lg:border-2">
       {title && (
         <h2 className="font-bold border-t border-b mb-1 text-center border-black text-base py-1">
           {title}

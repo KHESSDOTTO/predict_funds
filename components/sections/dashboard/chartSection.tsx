@@ -60,17 +60,21 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
 
   return (
     <div
-      className={`${wPredList ? "w-screen" : "w-full flex gap-4 flex-wrap"}`}
+      className={`${
+        wPredList ? "w-screen" : "w-full flex gap-0 flex-wrap lg:gap-4"
+      }`}
     >
-      <div className={` ${wPredList ? "" : "px-2 w-[47.5%]"}`}>
+      <div className={` ${wPredList ? "" : "px-2 lg:w-[47.5%]"}`}>
         <h1
           className={`my-4 ${
-            wPredList ? "font-semibold text-lg" : "text-md w-10/12"
-          } text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left`}
+            wPredList
+              ? "text-lg mx-[32vw] font-semibold"
+              : "text-md w-9/12 mx-auto lg:font-normal"
+          } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Net Funding
         </h1>
-        <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
+        <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
             className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
               wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
@@ -135,15 +139,17 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
           )}
         </div>
       </div>
-      <div className={` ${wPredList ? "" : "px-2 w-[47.5%]"}`}>
+      <div className={` ${wPredList ? "" : "px-2 lg:w-[47.5%]"}`}>
         <h1
           className={`my-4 ${
-            wPredList ? "font-semibold text-lg" : "text-md w-10/12"
-          } text-center border-b border-black mx-[32vw] lg:indent-2 lg:mx-4 lg:text-left`}
+            wPredList
+              ? "text-lg mx-[32vw] font-semibold"
+              : "text-md w-9/12 mx-auto lg:font-normal"
+          } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Value - Quota
         </h1>
-        <div className="flex flex-col lg:flex-row gap-2 lg:gap-4">
+        <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
             className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
               wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
