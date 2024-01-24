@@ -99,13 +99,6 @@ async function doLogin(clientInfo: {
         path: "/",
       });
       delete user._doc.passwordHash;
-      if (!user.emailConfirm) {
-        return {
-          ok: false,
-          status: 500,
-          msg: "Account not yet confirmed",
-        };
-      }
       return {
         ok: true,
         status: 200,
@@ -151,6 +144,29 @@ async function doConfirmEmail(userId: string) {
       msg: `Error: ${err}`,
     };
   }
+}
+
+// Edita informações do usuário com exceção da senha
+async function doUpdateUserInfoNoPwd(
+  userId: string,
+  clientInfo: {
+    username: string;
+    email: string;
+    cnpj: string;
+    address: string;
+    contactPhone: string;
+  }
+) {
+  return true;
+}
+
+// Edita a senha do usuário (editar ou "Esqueceu sua senha")
+async function doUpdateUserPwd(
+  userId: string,
+  changeId: string,
+  newPwd: string
+) {
+  return true;
 }
 
 export { doCreateUser, doLogin, doConfirmEmail };
