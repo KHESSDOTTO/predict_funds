@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import { getUserCnpjById } from "@/database/functions/userFunctions";
+// import { getUserCnpjById } from "@/database/functions/userFunctions";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -19,22 +19,22 @@ export default function PwdChangePage({
   const [cnpj, setCnpj] = useState("");
   const inputClass = "rounded-lg border border-black";
 
-  useEffect(() => {
-    async function getCnpj() {
-      try {
-        const cnpj = await getUserCnpjById(userId);
-        if (!cnpj) {
-          return;
-        }
-        setCnpj(cnpj);
-      } catch (err) {
-        console.log(err);
-        return;
-      }
-    }
-    getCnpj();
-    return;
-  }, []);
+  // useEffect(() => {
+  //   async function getCnpj() {
+  //     try {
+  //       const cnpj = await getUserCnpjById(userId);
+  //       if (!cnpj) {
+  //         return;
+  //       }
+  //       setCnpj(cnpj);
+  //     } catch (err) {
+  //       console.log(err);
+  //       return;
+  //     }
+  //   }
+  //   getCnpj();
+  //   return;
+  // }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPwdChangeForm({ ...pwdChangeForm, [e.target.name]: e.target.value });
