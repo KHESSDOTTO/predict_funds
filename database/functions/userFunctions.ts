@@ -221,8 +221,10 @@ async function doUpdateUserInfoNoPwd(
     pwd?: string;
   }
 ) {
+  console.log("clientInfo");
+  console.log(clientInfo);
   try {
-    if (clientInfo.pwd) {
+    if (clientInfo.pwd && clientInfo.pwd !== "") {
       const user = await UserModel.findOne({ username: clientInfo.username });
       if (!user) {
         return { ok: false, status: 500, msg: "User not found." };

@@ -60,10 +60,12 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     }
     try {
       const loading = toast.loading("Updating...");
+      setTimeout(() => {
+        toast.dismiss(loading);
+      }, 3000);
       const updUser = await ax.post(`/user/edit/${user._id}`, form);
       console.log(updUser);
       toast.success("Informations updated!");
-      toast.dismiss(loading);
     } catch (err) {
       console.log(err);
       toast.error("An error occured when trying to update the informations.");
@@ -85,7 +87,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       const loading = toast.loading("Updating...");
       setTimeout(() => {
         toast.dismiss(loading);
-      }, 5000);
+      }, 3000);
       const updUser = await ax.post(`/user/edit/${user._id}`, formData);
       console.log(updUser);
       toast.success("Informations updated!");
