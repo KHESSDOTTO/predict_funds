@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { HeaderProps } from "@/utils/types";
+import { HeaderPropsType } from "@/utils/types";
 import { useState } from "react";
 import SideBar from "./sideBar";
 
-function Header({ user }: HeaderProps) {
+function Header({ user }: HeaderPropsType) {
+  // For the sideBar component to work properly, it should be placed inside a container that has position: relative.
+
   const [showSideBar, setShowSideBar] = useState(false);
   let { username, cnpj } = user;
   if (!user) {

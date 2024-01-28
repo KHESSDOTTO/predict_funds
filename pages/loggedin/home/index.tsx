@@ -9,8 +9,13 @@ import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 import { ax } from "@/database/axios.config";
 import { UserContext } from "@/contexts/UserContext";
+import { UserType } from "@/utils/types";
 
-export default function LoggedInHome({ user }: any) {
+interface LoggedInHomePropsType {
+  user: UserType;
+}
+
+export default function LoggedInHome({ user }: LoggedInHomePropsType) {
   const router = useRouter();
   const userContext = useContext(UserContext);
 

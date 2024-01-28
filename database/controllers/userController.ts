@@ -3,6 +3,39 @@ import UserModel from "../models/userModel";
 import { generateToken } from "../../utils/jwt.config";
 import { serialize } from "cookie";
 import transporter from "@/utils/transporter.config";
+import { v4 as uuidv4 } from "uuid";
+
+// Cria um novo changeId e insere no usuário indicado
+async function createChangeId(userId: string) {
+  try {
+    const newChangeId = uuidv4();
+    const updUser = UserModel.findByIdAndUpdate(
+      userId,
+      {
+        changeId: newChangeId,
+      },
+      {
+        new: true,
+      }
+    );
+    return updUser;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+// Obter cnpj do cliente pelo id
+async function getUserCnpjById(userId: string) {
+  try {
+    const user = await UserModel.findById(userId);
+    const cnpj: string = user._doc.cnpj;
+    return cnpj;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
 
 // Enviar email de confirmação da conta/email
 async function sendConfirmEmail(userId: string, email: string) {
@@ -16,6 +49,36 @@ async function sendConfirmEmail(userId: string, email: string) {
         : "https://predict-funds.vercel.app/api/user/account-confirm"
     }/${userId}>CLICK HERE</a>`,
   });
+}
+
+// Envia e-mail de alteração de senha
+async function sendPwdUpdateEmail(userId: string, changeId: string) {
+  // Terminar - falta realizar busca pelo user usando userId e pegar infos cadastradas de CNPJ e endereço de e-mail
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return false;
+    }
+    console.log(user);
+    console.log(user._doc);
+    const { email, cnpj } = user._doc;
+    console.log(email);
+    console.log(cnpj);
+    transporter.sendMail({
+      from: process.env.EMAIL_ADDRESS,
+      to: email,
+      subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
+      html: `<p>Click here to change your password:<p> <a href=${
+        process.env.NODE_ENV == "development"
+          ? `http://localhost:3000/api/user/change-pwd/${userId}/${changeId}`
+          : `https://predict-funds.vercel.app/api/user/change-pwd/${userId}/${changeId}`
+      }/${userId}>CLICK HERE</a>`,
+    });
+    console.log("E-mail sent!");
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
 // Signup
@@ -157,16 +220,78 @@ async function doUpdateUserInfoNoPwd(
     contactPhone: string;
   }
 ) {
-  return true;
+  try {
+    const updUser = await UserModel.findByIdAndUpdate(
+      userId,
+      {
+        ...clientInfo,
+      },
+      {
+        new: true,
+      }
+    );
+    return { ok: true, status: 200, msg: updUser };
+  } catch (err) {
+    console.log(err);
+    return { ok: false, status: 500, msg: err };
+  }
 }
 
 // Edita a senha do usuário (editar ou "Esqueceu sua senha")
-async function doUpdateUserPwd(
-  userId: string,
-  changeId: string,
-  newPwd: string
-) {
-  return true;
-}
+// async function doUpdateUserPwd(
+//   userId: string,
+//   changeId: string,
+//   newPwdForm: {
+//     newPwd: string;
+//     confirmNewPwd: string;
+//   }
+// ) {
+//   const { newPwd, confirmNewPwd } = newPwdForm;
+//   try {
+//     const user = await UserModel.findById(userId);
 
-export { doCreateUser, doLogin, doConfirmEmail };
+//     if (changeId !== user.changeId) {
+//       return { ok: false, status: 500, msg: "Wrong changeId." };
+//     }
+
+//     if (
+//       !newPwd ||
+//       !newPwd.match(
+//         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
+//       ) ||
+//       newPwd !== confirmNewPwd
+//     ) {
+//       return {
+//         ok: false,
+//         status: 500,
+//         msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
+// or password didn't match the required format",
+//       };
+//     }
+
+//     const SALT_ROUNDS = 10;
+//     const salt = await bcrypt.genSalt(SALT_ROUNDS);
+//     const hashedPassword = await bcrypt.hash(newPwd, salt);
+
+//     const done = await UserModel.findByIdAndUpdate(userId, {
+//       passwordHash: hashedPassword,
+//     });
+//     if (!done) {
+//       return { ok: false, status: 500, msg: "Something went wrong." };
+//     }
+//     return { ok: true, status: 200, msg: "Password updated." };
+//   } catch (err) {
+//     return { ok: false, status: 500, msg: err };
+//   }
+// }
+
+export {
+  createChangeId,
+  doCreateUser,
+  doLogin,
+  doConfirmEmail,
+  doUpdateUserInfoNoPwd,
+  // doUpdateUserPwd,
+  sendPwdUpdateEmail,
+  getUserCnpjById,
+};

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect, disconnect } from "@/database/database.config";
+import { doUpdateUserInfoNoPwd } from "@/database/controllers/userController";
 
 async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = req.query;
@@ -11,7 +12,7 @@ async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   }
   try {
     await connect();
-    const confirmation = await doUpdateUserInfoNoPwd(userId);
+    const confirmation = await doUpdateUserInfoNoPwd(userId, req.body);
     await disconnect();
     return res.status(confirmation.status).send(confirmation.msg);
   } catch (err) {
