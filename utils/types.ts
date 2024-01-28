@@ -1,15 +1,15 @@
 import { ReactNode } from "react";
 
-interface SideBarProps {
+interface SideBarPropsType {
   showSideBar: boolean;
   setShowSideBar: Function;
 }
 
-interface HeaderProps {
+interface HeaderPropsType {
   user: UserType;
 }
 
-interface ButtonProps {
+interface ButtonPropsType {
   children: ReactNode;
 }
 
@@ -22,6 +22,7 @@ interface UserType {
   cnpj: string;
   contactPhone: string;
   products: string[]; // Assuming products are represented by their ObjectId
+  changeId: string;
   createdAt: Date;
   emailConfirm: boolean;
   isActive: boolean;
@@ -62,11 +63,11 @@ interface CenarioType {
 }
 
 export type {
-  ButtonProps,
+  ButtonPropsType,
   UserType,
   RawDataType,
-  SideBarProps,
-  HeaderProps,
+  SideBarPropsType,
+  HeaderPropsType,
   UserContextType,
   DashboardControlFormType,
   CenarioType,

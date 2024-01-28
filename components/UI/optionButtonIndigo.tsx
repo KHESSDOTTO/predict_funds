@@ -1,6 +1,6 @@
-import { ButtonProps } from "@/utils/types";
+import { ButtonPropsType } from "@/utils/types";
 
-function OptionButtonIndigo(props: ButtonProps) {
+function OptionButtonIndigo(props: ButtonPropsType) {
   const btnClass =
     "rounded-sm flex justify-center flex-col items-center border-b box-shadow font-bold py-2 px-4 w-64 mt-2 w-full hover:text-indigo-900 transition-all hover:bg-gradient-to-t hover:from-indigo-200/70 hover:to-transparent";
   return <button className={btnClass}>{props.children}</button>;

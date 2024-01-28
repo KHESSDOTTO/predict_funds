@@ -18,6 +18,7 @@
     "cookie": "^0.5.0",
     "csstype": "^3.0.10",
     "date-fns": "^2.30.0",
+    "fs": "0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.2",
     "next": "latest",
@@ -27,6 +28,7 @@
     "react-dom": "latest",
     "react-hot-toast": "^2.4.1",
     "recharts": "^2.9.0",
+    "uuid": "^9.0.1",
     "xlsx": "^0.18.5",
     "xslx": "^1.0.0"
   },
@@ -38,6 +40,7 @@
     "@types/nodemailer": "^6.4.11",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/uuid": "^9.0.8",
     "autoprefixer": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",

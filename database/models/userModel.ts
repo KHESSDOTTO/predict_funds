@@ -26,6 +26,7 @@ const UserSchema = new Schema({
     unique: false,
     required: true,
   },
+  changeId: { type: String, required: false, unique: false },
   products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   createdAt: { type: Date, default: Date.now() },
   emailConfirm: { type: Boolean, default: false },
