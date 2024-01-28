@@ -8,10 +8,6 @@ import ButtonRed from "@/components/UI/buttonRed";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 import { UserType } from "@/utils/types";
-import {
-  createChangeId,
-  sendPwdUpdateEmail,
-} from "@/database/controllers/userController";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
 
 interface ProfilePagePropsType {
@@ -77,15 +73,25 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   async function handleSubmitEmailChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setShowModal(false);
+    const confirmFormData = new FormData(e.currentTarget);
+    const confirmFormValues = Object.fromEntries(confirmFormData.entries());
+    const formData = { ...form, ...confirmFormValues };
+    console.log("formData:", formData);
     try {
+      if (!confirmFormValues.pwd) {
+        toast.error("Insert a password.");
+        return;
+      }
       const loading = toast.loading("Updating...");
-      const updUser = await ax.post(`/user/edit/${user._id}`, form);
+      setTimeout(() => {
+        toast.dismiss(loading);
+      }, 5000);
+      const updUser = await ax.post(`/user/edit/${user._id}`, formData);
       console.log(updUser);
       toast.success("Informations updated!");
-      toast.dismiss(loading);
     } catch (err) {
       console.log(err);
-      toast.error("An error occured when trying to update the informations.");
+      toast.error("An error occurred when trying to update the information.");
     }
   }
 

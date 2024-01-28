@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import ButtonIndigo from "../UI/buttonIndigo";
 import ButtonGreen from "../UI/buttonGreen";
 
 interface PwdConfirmModalPropsType {
@@ -22,7 +21,7 @@ export default function PwdConfirmModal({
   const [containerClass, setContainerClass] = useState(
     `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
   );
-  const [pwdForm, setPwdForm] = useState({ newPwd: "" });
+  const [pwdForm, setPwdForm] = useState({ pwd: "" });
 
   useEffect(() => {
     if (showModal) {
@@ -81,9 +80,9 @@ export default function PwdConfirmModal({
             <input
               className="rounded-md text-black px-2"
               type="password"
-              name="newPwd"
-              id="newPwd"
-              value={pwdForm.newPwd}
+              name="pwd"
+              id="pwd"
+              value={pwdForm.pwd}
               onChange={handleChange}
             />
           </div>

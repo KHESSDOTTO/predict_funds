@@ -4,7 +4,7 @@ import {
   createChangeId,
   // doUpdateUserPwd,
   sendPwdUpdateEmail,
-} from "@/database/controllers/userController";
+} from "@/database/functions/userFunctions";
 
 // async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
 //   const { userId, changeId } = req.query;

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { doConfirmEmail } from "@/database/controllers/userController";
+import { doConfirmEmail } from "@/database/functions/userFunctions";
 import { connect, disconnect } from "@/database/database.config";
 
 async function EmailAccountConfirm(req: NextApiRequest, res: NextApiResponse) {

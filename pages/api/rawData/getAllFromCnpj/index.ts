@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { GetAllRawDataFromCnpj } from "@/database/controllers/rawDataController";
+import { GetAllRawDataFromCnpj } from "@/database/functions/rawDataFunctions";
 import { connect, disconnect } from "@/database/database.config";
 import { verifyToken } from "@/utils/jwt.config";
 

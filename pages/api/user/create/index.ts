@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { doCreateUser } from "@/database/controllers/userController";
+import { doCreateUser } from "@/database/functions/userFunctions";
 import { connect, disconnect } from "@/database/database.config";
 
 async function CreateUser(req: NextApiRequest, res: NextApiResponse) {

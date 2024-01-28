@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect, disconnect } from "@/database/database.config";
-import { doUpdateUserInfoNoPwd } from "@/database/controllers/userController";
+import { doUpdateUserInfoNoPwd } from "@/database/functions/userFunctions";
 
 async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = req.query;

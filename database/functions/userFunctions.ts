@@ -218,9 +218,21 @@ async function doUpdateUserInfoNoPwd(
     cnpj: string;
     address: string;
     contactPhone: string;
+    pwd?: string;
   }
 ) {
   try {
+    if (clientInfo.pwd) {
+      const user = await UserModel.findOne({ username: clientInfo.username });
+      if (!user) {
+        return { ok: false, status: 500, msg: "User not found." };
+      }
+      const match = await bcrypt.compare(clientInfo.pwd, user.passwordHash);
+      if (!match) {
+        return { ok: false, status: 500, msg: "Passwords didn't match." };
+      }
+    }
+    delete clientInfo.pwd;
     const updUser = await UserModel.findByIdAndUpdate(
       userId,
       {
@@ -238,52 +250,52 @@ async function doUpdateUserInfoNoPwd(
 }
 
 // Edita a senha do usuário (editar ou "Esqueceu sua senha")
-// async function doUpdateUserPwd(
-//   userId: string,
-//   changeId: string,
-//   newPwdForm: {
-//     newPwd: string;
-//     confirmNewPwd: string;
-//   }
-// ) {
-//   const { newPwd, confirmNewPwd } = newPwdForm;
-//   try {
-//     const user = await UserModel.findById(userId);
+async function doUpdateUserPwd(
+  userId: string,
+  changeId: string,
+  newPwdForm: {
+    newPwd: string;
+    confirmNewPwd: string;
+  }
+) {
+  const { newPwd, confirmNewPwd } = newPwdForm;
+  try {
+    const user = await UserModel.findById(userId);
 
-//     if (changeId !== user.changeId) {
-//       return { ok: false, status: 500, msg: "Wrong changeId." };
-//     }
+    if (changeId !== user.changeId) {
+      return { ok: false, status: 500, msg: "Wrong changeId." };
+    }
 
-//     if (
-//       !newPwd ||
-//       !newPwd.match(
-//         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
-//       ) ||
-//       newPwd !== confirmNewPwd
-//     ) {
-//       return {
-//         ok: false,
-//         status: 500,
-//         msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
-// or password didn't match the required format",
-//       };
-//     }
+    if (
+      !newPwd ||
+      !newPwd.match(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
+      ) ||
+      newPwd !== confirmNewPwd
+    ) {
+      return {
+        ok: false,
+        status: 500,
+        msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
+or password didn't match the required format",
+      };
+    }
 
-//     const SALT_ROUNDS = 10;
-//     const salt = await bcrypt.genSalt(SALT_ROUNDS);
-//     const hashedPassword = await bcrypt.hash(newPwd, salt);
+    const SALT_ROUNDS = 10;
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(newPwd, salt);
 
-//     const done = await UserModel.findByIdAndUpdate(userId, {
-//       passwordHash: hashedPassword,
-//     });
-//     if (!done) {
-//       return { ok: false, status: 500, msg: "Something went wrong." };
-//     }
-//     return { ok: true, status: 200, msg: "Password updated." };
-//   } catch (err) {
-//     return { ok: false, status: 500, msg: err };
-//   }
-// }
+    const done = await UserModel.findByIdAndUpdate(userId, {
+      passwordHash: hashedPassword,
+    });
+    if (!done) {
+      return { ok: false, status: 500, msg: "Something went wrong." };
+    }
+    return { ok: true, status: 200, msg: "Password updated." };
+  } catch (err) {
+    return { ok: false, status: 500, msg: err };
+  }
+}
 
 export {
   createChangeId,
@@ -291,7 +303,7 @@ export {
   doLogin,
   doConfirmEmail,
   doUpdateUserInfoNoPwd,
-  // doUpdateUserPwd,
+  doUpdateUserPwd,
   sendPwdUpdateEmail,
   getUserCnpjById,
 };

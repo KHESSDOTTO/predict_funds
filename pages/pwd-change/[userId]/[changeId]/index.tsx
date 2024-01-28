@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import { getUserCnpjById } from "@/database/controllers/userController";
+import { getUserCnpjById } from "@/database/functions/userFunctions";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 

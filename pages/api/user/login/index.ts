@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { doLogin } from "@/database/controllers/userController";
+import { doLogin } from "@/database/functions/userFunctions";
 import { connect, disconnect } from "@/database/database.config";
 
 async function Login(req: NextApiRequest, res: NextApiResponse) {
