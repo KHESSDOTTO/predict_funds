@@ -6,7 +6,7 @@ import transporter from "@/utils/transporter.config";
 import { v4 as uuidv4 } from "uuid";
 
 // Cria um novo changeId e insere no usuário indicado
-async function createChangeId(userId: string) {
+async function insertUpdateChangeId(userId: string) {
   try {
     const newChangeId = uuidv4();
     const updUser = UserModel.findByIdAndUpdate(
@@ -39,6 +39,7 @@ async function getUserCnpjById(userId: string) {
 
 // Enviar email de confirmação da conta/email
 async function sendConfirmEmail(userId: string, email: string) {
+  console.log(transporter);
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,
     to: email,
@@ -53,7 +54,7 @@ async function sendConfirmEmail(userId: string, email: string) {
 
 // Envia e-mail de alteração de senha
 async function sendPwdUpdateEmail(userId: string, changeId: string) {
-  // Terminar - falta realizar busca pelo user usando userId e pegar infos cadastradas de CNPJ e endereço de e-mail
+  console.log(transporter);
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -61,7 +62,7 @@ async function sendPwdUpdateEmail(userId: string, changeId: string) {
     }
     console.log(user);
     console.log(user._doc);
-    const { email, cnpj } = user._doc;
+    const { email, cnpj } = user;
     console.log(email);
     console.log(cnpj);
     transporter.sendMail({
@@ -300,7 +301,7 @@ or password didn't match the required format",
 }
 
 export {
-  createChangeId,
+  insertUpdateChangeId,
   doCreateUser,
   doLogin,
   doConfirmEmail,
