@@ -21,7 +21,7 @@ interface UserType {
   address: string;
   cnpj: string;
   contactPhone: string;
-  products: string[]; // Assuming products are represented by their ObjectId
+  products: string[];
   changeId: string;
   createdAt: Date;
   emailConfirm: boolean;

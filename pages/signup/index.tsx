@@ -96,6 +96,7 @@ export default function SignUpPage() {
       );
       return;
     }
+    const loading = toast.loading("Creating user...");
     try {
       await ax.post("/user/create", { ...clone });
       toast.success("User created successfully!");
@@ -106,6 +107,7 @@ export default function SignUpPage() {
         "Error creating the user. Please, check the informations provided."
       );
     }
+    toast.dismiss(loading);
   }
 
   return (

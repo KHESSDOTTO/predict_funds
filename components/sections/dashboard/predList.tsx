@@ -1,6 +1,7 @@
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface PredListPropsType {
   title: string;
@@ -21,8 +22,8 @@ export default function PredList({
   varName,
 }: PredListPropsType) {
   const [predRows, setPredRows] = useState([
-    { id: 1, direction: "backward", numPer: 8 },
-    { id: 2, direction: "backward", numPer: 4 },
+    { id: uuidv4(), direction: "backward", numPer: 8 },
+    { id: uuidv4(), direction: "backward", numPer: 4 },
   ]);
 
   const formatter = new Intl.NumberFormat("de-DE", {
@@ -32,7 +33,7 @@ export default function PredList({
   });
 
   const [newRow, setNewRow] = useState({
-    id: 10 * Math.random(),
+    id: uuidv4(),
     direction: "backward",
     numPer: 8,
   });
@@ -57,7 +58,7 @@ export default function PredList({
     setPredRows(newPredRows);
     setShowAddRow(false);
     setNewRow({
-      id: 10 * Math.random(),
+      id: uuidv4(),
       direction: "backward",
       numPer: 8,
     });

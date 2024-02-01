@@ -32,29 +32,32 @@ export default function Dashboard({ user }: DashboardProps) {
         const newData = await ax.get(
           `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
         );
+        console.log("Complete data:");
         console.log(newData);
         let finalData = newData.data.slice(
           controlForm.weeksBack * -7,
           newData.data.length
         );
+        console.log("Length of sliced data:");
         console.log(finalData.length);
+        console.log("Sliced data:");
         console.log(finalData);
         finalData = finalData.map((cE: RawDataType) => {
           const convDate = new Date(cE.DT_COMPTC);
           return { ...cE, DT_COMPTC: convDate };
         });
+        console.log("Final data after mapping to convert date:");
+        console.log(finalData);
         setData(finalData);
         toast.success("Done.");
-        toast.dismiss(loadingToast);
         console.log("Here after setData(newData);");
         console.log("user from context");
         console.log(userContext.user);
-        return;
       } catch (err) {
         console.log(err);
         toast.error("Sorry. We had a problem handling the request.");
-        toast.dismiss(loadingToast);
       }
+      toast.dismiss(loadingToast);
     };
     if (!data[0]) {
       getData();

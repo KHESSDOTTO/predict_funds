@@ -6,7 +6,7 @@ import transporter from "@/utils/transporter.config";
 import { v4 as uuidv4 } from "uuid";
 
 // Cria um novo changeId e insere no usuário indicado
-async function createChangeId(userId: string) {
+async function insertUpdateChangeId(userId: string) {
   try {
     const newChangeId = uuidv4();
     const updUser = UserModel.findByIdAndUpdate(
@@ -39,6 +39,7 @@ async function getUserCnpjById(userId: string) {
 
 // Enviar email de confirmação da conta/email
 async function sendConfirmEmail(userId: string, email: string) {
+  console.log(transporter);
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,
     to: email,
@@ -53,7 +54,7 @@ async function sendConfirmEmail(userId: string, email: string) {
 
 // Envia e-mail de alteração de senha
 async function sendPwdUpdateEmail(userId: string, changeId: string) {
-  // Terminar - falta realizar busca pelo user usando userId e pegar infos cadastradas de CNPJ e endereço de e-mail
+  console.log(transporter);
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -61,7 +62,7 @@ async function sendPwdUpdateEmail(userId: string, changeId: string) {
     }
     console.log(user);
     console.log(user._doc);
-    const { email, cnpj } = user._doc;
+    const { email, cnpj } = user;
     console.log(email);
     console.log(cnpj);
     transporter.sendMail({
@@ -70,9 +71,9 @@ async function sendPwdUpdateEmail(userId: string, changeId: string) {
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
       html: `<p>Click here to change your password:<p> <a href=${
         process.env.NODE_ENV == "development"
-          ? `http://localhost:3000/api/user/change-pwd/${userId}/${changeId}`
-          : `https://predict-funds.vercel.app/api/user/change-pwd/${userId}/${changeId}`
-      }/${userId}>CLICK HERE</a>`,
+          ? `http://localhost:3000/pwd-change/${userId}/${changeId}`
+          : `https://predict-funds.vercel.app/pwd-change/${userId}/${changeId}`
+      }>CLICK HERE</a>`,
     });
     console.log("E-mail sent!");
   } catch (err) {
@@ -279,7 +280,7 @@ async function doUpdateUserPwd(
         ok: false,
         status: 500,
         msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
-or password didn't match the required format",
+or password didn't match the required format.",
       };
     }
 
@@ -289,6 +290,7 @@ or password didn't match the required format",
 
     const done = await UserModel.findByIdAndUpdate(userId, {
       passwordHash: hashedPassword,
+      changeId: "",
     });
     if (!done) {
       return { ok: false, status: 500, msg: "Something went wrong." };
@@ -300,7 +302,7 @@ or password didn't match the required format",
 }
 
 export {
-  createChangeId,
+  insertUpdateChangeId,
   doCreateUser,
   doLogin,
   doConfirmEmail,

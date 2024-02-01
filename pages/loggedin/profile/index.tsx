@@ -79,15 +79,12 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     const confirmFormValues = Object.fromEntries(confirmFormData.entries());
     const formData = { ...form, ...confirmFormValues };
     console.log("formData:", formData);
+    if (!confirmFormValues.pwd) {
+      toast.error("Insert a password.");
+      return;
+    }
+    const loading = toast.loading("Updating...");
     try {
-      if (!confirmFormValues.pwd) {
-        toast.error("Insert a password.");
-        return;
-      }
-      const loading = toast.loading("Updating...");
-      setTimeout(() => {
-        toast.dismiss(loading);
-      }, 3000);
       const updUser = await ax.post(`/user/edit/${user._id}`, formData);
       console.log(updUser);
       toast.success("Informations updated!");
@@ -95,23 +92,20 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       console.log(err);
       toast.error("An error occurred when trying to update the information.");
     }
+    toast.dismiss(loading);
   }
 
-  // async function handleChangePwd() {
-  //   try {
-  //     const addChangeId = await createChangeId(user._id);
-  //     const sendChangePwdEmail = await sendPwdUpdateEmail(
-  //       user._id,
-  //       addChangeId.changeId
-  //     );
-  //     console.log(addChangeId);
-  //     console.log(sendChangePwdEmail);
-  //     toast.success(`Sent e-mail for changing password to ${user.email}.`);
-  //   } catch (err) {
-  //     console.log(err);
-  //     toast.error("An error occured when trying to update the informations.");
-  //   }
-  // }
+  async function handleChangePwd() {
+    const loading = toast.loading("Sending e-mail...");
+    try {
+      await ax.post("/user/change-pwd-email", { _id: user._id });
+      toast.success(`Sent e-mail for changing password to ${user.email}.`);
+    } catch (err) {
+      console.log(err);
+      toast.error("An error occured when trying to update the informations.");
+    }
+    toast.dismiss(loading);
+  }
 
   return (
     <div className="min-h-screen relative">
@@ -196,7 +190,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
         <div className="flex flex-col justify-center items-center gap-8 pt-2 lg:flex-row">
           <div
             className="text-indigo-800 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300"
-            // onClick={handleChangePwd}
+            onClick={handleChangePwd}
           >
             Redefinir Senha
           </div>

@@ -1,26 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect, disconnect } from "@/database/database.config";
-import { doUpdateUserPwd } from "@/database/functions/userFunctions";
+import {
+  insertUpdateChangeId,
+  sendPwdUpdateEmail,
+} from "@/database/functions/userFunctions";
+import UserModel from "@/database/models/userModel";
 
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
-  const { userId, changeId } = req.query;
   if (req.method !== "POST") {
     return res.status(500).send("Only post method accepted on this endpoint.");
-  }
-  if (typeof userId !== "string") {
-    return res.status(500).send("Something went wrong with the user id.");
-  }
-  if (typeof changeId !== "string") {
-    return res.status(500).send("Wrong format of changeId.");
   }
   if (!req.body) {
     return res.status(500).send("No body was sent with the request.");
   }
   try {
     await connect();
-    const confirmation = await doUpdateUserPwd(userId, changeId, req.body);
+    const user = await UserModel.findOne({ ...req.body });
+    if (!user) {
+      return res.status(500).send("No user was found.");
+    }
+    const updUser = await insertUpdateChangeId(user._id);
+    await sendPwdUpdateEmail(updUser._id, updUser.changeId);
     await disconnect();
-    return res.status(confirmation.status).send(confirmation.msg);
+    return res.status(200).send("Sent e-mail.");
   } catch (err) {
     console.log(err);
     return res.status(500).send(`Error: ${err}`);

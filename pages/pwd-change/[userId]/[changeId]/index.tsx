@@ -1,59 +1,63 @@
+import ButtonGreen from "@/components/UI/buttonGreen";
+import { ax } from "@/database/axios.config";
 import type { GetServerSideProps } from "next";
-// import { getUserCnpjById } from "@/database/functions/userFunctions";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface PwdChangePagePropsType {
   userId: string;
   changeId: string;
+  user: {
+    _id?: string;
+    username?: string;
+    email?: string;
+    address?: string;
+    cnpj?: string;
+    contactPhone?: string;
+    products?: string[];
+    changeId?: string;
+    createdAt?: Date;
+    emailConfirm?: boolean;
+    isActive?: boolean;
+  };
 }
 
 export default function PwdChangePage({
   userId,
   changeId,
+  user,
 }: PwdChangePagePropsType) {
   const [pwdChangeForm, setPwdChangeForm] = useState({
     newPwd: "",
     confirmNewPwd: "",
   });
-  const [cnpj, setCnpj] = useState("");
-  const inputClass = "rounded-lg border border-black";
-
-  // useEffect(() => {
-  //   async function getCnpj() {
-  //     try {
-  //       const cnpj = await getUserCnpjById(userId);
-  //       if (!cnpj) {
-  //         return;
-  //       }
-  //       setCnpj(cnpj);
-  //     } catch (err) {
-  //       console.log(err);
-  //       return;
-  //     }
-  //   }
-  //   getCnpj();
-  //   return;
-  // }, []);
+  const inputClass = "rounded-lg border border-black px-2";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPwdChangeForm({ ...pwdChangeForm, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (pwdChangeForm.newPwd !== pwdChangeForm.confirmNewPwd) {
       toast.error("Password and password confirm doesn't match.");
       return false;
     }
-    toast.success("Password updated.");
-    return;
+    const loading = toast.loading("Updating...");
+    try {
+      await ax.post(`/user/change-pwd/${userId}/${changeId}`, pwdChangeForm);
+      toast.success("Password updated.");
+    } catch (err) {
+      console.log(err);
+      toast.error("An error occured when trying to update your password.");
+    }
+    toast.dismiss(loading);
   }
 
   return (
     <div className="flex flex-col items-center gap-8 min-h-screen justify-center">
-      <h1 className="text-xl font-semibold py-2 border-b mx-[25%] border-black">
-        Change your password - CNPJ: {cnpj && <span>cnpj</span>}
+      <h1 className="text-xl font-semibold py-2 px-4 border-b mx-[25%] border-black">
+        Change your password - CNPJ: {user.cnpj}
       </h1>
       <form
         id="pwdChangeForm"
@@ -82,11 +86,8 @@ export default function PwdChangePage({
             onChange={handleChange}
           ></input>
         </div>
-        <button
-          type="submit"
-          className="transition-all duration-300 font-semibold text-indigo-700 border-b-2 border-indigo-700 px-2 hover:text-yellow-700 hover:border-yellow-700"
-        >
-          Save
+        <button className="transition-all font-semibold p-1 border-b border-black hover:text-yellow-700 hover:border-yellow-700">
+          Update
         </button>
       </form>
     </div>
@@ -104,10 +105,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     userId = context.params.userId;
     changeId = context.params.changeId;
   }
+  let user = {};
+  try {
+    const response = await ax.get(`/user/getById/${userId}`);
+    user = response.data;
+  } catch (err) {
+    console.log("Error fetching the data (user):");
+    console.log(err);
+  }
   return {
     props: {
       userId,
       changeId,
+      user,
     },
   };
 };
