@@ -22,7 +22,7 @@ export default function LoginPage() {
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "text-center lg:text-left lg:indent-1",
-    inputClass = "rounded-xl px-2";
+    inputClass = "rounded-xl px-2 shadow-md shadow-gray-400/50";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,6 +30,7 @@ export default function LoginPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const loading = toast.loading("Logging in...");
     try {
       const response = await ax.post("/user/login", form);
       console.log(response);
@@ -39,6 +40,7 @@ export default function LoginPage() {
       console.log(err);
       toast.error("Couldn't complete the log in.");
     }
+    toast.dismiss(loading);
   }
 
   return (

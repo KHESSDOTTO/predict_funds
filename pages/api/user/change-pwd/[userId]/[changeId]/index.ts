@@ -4,14 +4,17 @@ import { doUpdateUserPwd } from "@/database/functions/userFunctions";
 
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId, changeId } = req.query;
+  if (req.method !== "POST") {
+    return res.status(500).send("Only post method accepted on this endpoint.");
+  }
   if (typeof userId !== "string") {
     return res.status(500).send("Something went wrong with the user id.");
   }
-  if (!req.body) {
-    return res.status(500).send("No body was sent with the request.");
-  }
   if (typeof changeId !== "string") {
     return res.status(500).send("Wrong format of changeId.");
+  }
+  if (!req.body) {
+    return res.status(500).send("No body was sent with the request.");
   }
   try {
     await connect();

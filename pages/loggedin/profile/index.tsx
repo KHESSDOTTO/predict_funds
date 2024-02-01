@@ -79,15 +79,12 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     const confirmFormValues = Object.fromEntries(confirmFormData.entries());
     const formData = { ...form, ...confirmFormValues };
     console.log("formData:", formData);
+    if (!confirmFormValues.pwd) {
+      toast.error("Insert a password.");
+      return;
+    }
+    const loading = toast.loading("Updating...");
     try {
-      if (!confirmFormValues.pwd) {
-        toast.error("Insert a password.");
-        return;
-      }
-      const loading = toast.loading("Updating...");
-      setTimeout(() => {
-        toast.dismiss(loading);
-      }, 3000);
       const updUser = await ax.post(`/user/edit/${user._id}`, formData);
       console.log(updUser);
       toast.success("Informations updated!");
@@ -95,20 +92,19 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       console.log(err);
       toast.error("An error occurred when trying to update the information.");
     }
+    toast.dismiss(loading);
   }
 
   async function handleChangePwd() {
+    const loading = toast.loading("Sending e-mail...");
     try {
-      const loading = toast.loading("Sending e-mail...");
-      setTimeout(() => {
-        toast.dismiss(loading);
-      }, 3000);
       await ax.post("/user/change-pwd-email", { _id: user._id });
       toast.success(`Sent e-mail for changing password to ${user.email}.`);
     } catch (err) {
       console.log(err);
       toast.error("An error occured when trying to update the informations.");
     }
+    toast.dismiss(loading);
   }
 
   return (

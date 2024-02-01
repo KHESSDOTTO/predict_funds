@@ -71,9 +71,9 @@ async function sendPwdUpdateEmail(userId: string, changeId: string) {
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
       html: `<p>Click here to change your password:<p> <a href=${
         process.env.NODE_ENV == "development"
-          ? `http://localhost:3000/api/user/change-pwd/${userId}/${changeId}`
-          : `https://predict-funds.vercel.app/api/user/change-pwd/${userId}/${changeId}`
-      }/${userId}>CLICK HERE</a>`,
+          ? `http://localhost:3000/pwd-change/${userId}/${changeId}`
+          : `https://predict-funds.vercel.app/pwd-change/${userId}/${changeId}`
+      }>CLICK HERE</a>`,
     });
     console.log("E-mail sent!");
   } catch (err) {
@@ -280,7 +280,7 @@ async function doUpdateUserPwd(
         ok: false,
         status: 500,
         msg: "Error occured. Either password and password confirm didn't match, or there is no password, \
-or password didn't match the required format",
+or password didn't match the required format.",
       };
     }
 
@@ -290,6 +290,7 @@ or password didn't match the required format",
 
     const done = await UserModel.findByIdAndUpdate(userId, {
       passwordHash: hashedPassword,
+      changeId: "",
     });
     if (!done) {
       return { ok: false, status: 500, msg: "Something went wrong." };

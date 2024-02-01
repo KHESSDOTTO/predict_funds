@@ -7,6 +7,9 @@ import {
 import UserModel from "@/database/models/userModel";
 
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    return res.status(500).send("Only post method accepted on this endpoint.");
+  }
   if (!req.body) {
     return res.status(500).send("No body was sent with the request.");
   }

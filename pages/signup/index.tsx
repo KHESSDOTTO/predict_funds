@@ -86,7 +86,6 @@ export default function SignUpPage() {
     const clone = {
       ...form,
       contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
-      cnpj: form.cnpj.replaceAll(/[-/\.]/gm, ""),
     };
     if (clone.password !== clone.passwordConfirm) {
       console.log(
@@ -97,6 +96,7 @@ export default function SignUpPage() {
       );
       return;
     }
+    const loading = toast.loading("Creating user...");
     try {
       await ax.post("/user/create", { ...clone });
       toast.success("User created successfully!");
@@ -107,6 +107,7 @@ export default function SignUpPage() {
         "Error creating the user. Please, check the informations provided."
       );
     }
+    toast.dismiss(loading);
   }
 
   return (

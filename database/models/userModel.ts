@@ -14,7 +14,7 @@ const UserSchema = new Schema({
   cnpj: {
     type: String,
     trim: true,
-    match: /^[0-9]{14}$/gm,
+    match: /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/gm,
     unique: true,
     sparse: true,
     required: true,
