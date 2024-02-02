@@ -21,10 +21,10 @@ interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
 
 interface ChartSectionProps {
   data: RawDataType[];
-  wPredList: boolean;
+  smallV: boolean;
 }
 
-export default function ChartSection({ data, wPredList }: ChartSectionProps) {
+export default function ChartSection({ data, smallV }: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
 
@@ -61,15 +61,15 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
   return (
     <div
       className={`${
-        wPredList ? "w-screen" : "w-full flex gap-0 flex-wrap lg:gap-4"
+        smallV ? "w-full flex gap-0 flex-wrap lg:gap-4 flex-col" : "w-screen"
       }`}
     >
-      <div className={` ${wPredList ? "" : "px-2 lg:w-[47.5%]"}`}>
+      <div className={` ${smallV ? "px-2 lg:w-[47.5%]" : ""}`}>
         <h1
           className={`my-4 ${
-            wPredList
-              ? "text-lg mx-[32vw] font-semibold"
-              : "text-md w-9/12 mx-auto lg:font-normal"
+            smallV
+              ? "text-md w-9/12 mx-auto lg:font-normal"
+              : "text-lg mx-[32vw] font-semibold"
           } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Net Funding
@@ -77,10 +77,10 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
             className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
-              wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
+              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={wPredList ? 300 : 150}>
+            <ResponsiveContainer height={smallV ? 150 : 300} minWidth={250}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
@@ -127,8 +127,8 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          {wPredList && (
-            <div className="lg:w-[40%] lg:mr-4">
+          {!smallV && (
+            <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
               <PredList
                 title="Net Funding"
                 onlyBack={false}
@@ -139,12 +139,12 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
           )}
         </div>
       </div>
-      <div className={` ${wPredList ? "" : "px-2 lg:w-[47.5%]"}`}>
+      <div className={` ${smallV ? "px-2 lg:w-[47.5%]" : ""}`}>
         <h1
           className={`my-4 ${
-            wPredList
-              ? "text-lg mx-[32vw] font-semibold"
-              : "text-md w-9/12 mx-auto lg:font-normal"
+            smallV
+              ? "text-md w-9/12 mx-auto lg:font-normal"
+              : "text-lg mx-[32vw] font-semibold"
           } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Value - Quota
@@ -152,10 +152,10 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
             className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
-              wPredList ? "lg:w-[60%] lg:h-[312px]" : "lg:w-full lg:h-[160px]"
+              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={wPredList ? 300 : 150}>
+            <ResponsiveContainer height={smallV ? 150 : 300}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
@@ -201,8 +201,8 @@ export default function ChartSection({ data, wPredList }: ChartSectionProps) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          {wPredList && (
-            <div className="lg:w-[40%] lg:mr-4">
+          {!smallV && (
+            <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
               <PredList
                 title="Value Quota (history)"
                 onlyBack={true}

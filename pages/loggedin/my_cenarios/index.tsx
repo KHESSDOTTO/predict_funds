@@ -132,7 +132,7 @@ export default function MyCenarios() {
                   </ul>
                 </div>
                 <div className=" lg:block lg:w-full">
-                  <ChartSection data={cE.data} wPredList={false} />
+                  <ChartSection data={cE.data} smallV={true} />
                 </div>
                 <button
                   id={cE.id}

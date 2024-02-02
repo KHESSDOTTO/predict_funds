@@ -11,7 +11,7 @@ interface SendEmailModalProsType {
 }
 
 interface ChangePwdFormType {
-  field?: "username" | "email";
+  field?: "username" | "email" | "";
   username: string;
   email: string;
 }
@@ -26,12 +26,17 @@ export default function SendEmailModal({
     `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
   );
   const [changePwdForm, setChangePwdForm] = useState<ChangePwdFormType>({
-    field: "username",
+    field: "",
     username: "",
     email: "",
   });
+  const [showUsernameInput, setShowUsernameInput] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const labelClass = "text-white lg:py-1";
 
   useEffect(() => {
+    console.log("Object.keys(changePwdForm)");
+    console.log(Object.keys(changePwdForm));
     if (showModal) {
       setContainerClass(
         `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-100 z-20`
@@ -49,6 +54,14 @@ export default function SendEmailModal({
       | React.ChangeEvent<HTMLSelectElement>
   ) {
     setChangePwdForm({ ...changePwdForm, [e.target.name]: e.target.value });
+    if (e.target.name === "field" && e.target.value === "username") {
+      setShowUsernameInput(true);
+      setShowEmailInput(false);
+    }
+    if (e.target.name === "field" && e.target.value === "email") {
+      setShowEmailInput(true);
+      setShowUsernameInput(false);
+    }
   }
 
   function handleClose() {
@@ -56,15 +69,14 @@ export default function SendEmailModal({
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const loading = toast.loading("Loading...");
     try {
-      e.preventDefault();
-      const loading = toast.loading("Loading...");
-      setTimeout(() => {
-        toast.dismiss(loading);
-      }, 4000);
       const { field } = changePwdForm;
+      console.log("field");
+      console.log(field);
       const arrToFindUser = Object.entries(changePwdForm).filter(([cK, cV]) => {
-        return cK != field && cK != "field";
+        return cK == field;
       });
       const infoToFindUser = Object.fromEntries(arrToFindUser);
       console.log("infoToFindUser");
@@ -76,6 +88,7 @@ export default function SendEmailModal({
       console.log(err);
       toast.error("An error occured while handling your request.");
     }
+    toast.dismiss(loading);
   }
 
   return (
@@ -108,9 +121,12 @@ export default function SendEmailModal({
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col justify-center items-center gap-8"
+          className="flex flex-col justify-center items-center gap-8 text-black"
         >
           <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
+            <label htmlFor="field" className={labelClass}>
+              Information to send e-mail
+            </label>
             <select
               className="text-center bg-white border border-gray-500 w-fit rounded-md my-1"
               name="field"
@@ -118,7 +134,7 @@ export default function SendEmailModal({
               value={changePwdForm.field}
               onChange={handleChange}
             >
-              <option></option>
+              <option value="" selected></option>
               {Object.keys(changePwdForm).map((cE) => {
                 if (cE === "field") {
                   return <></>;
@@ -127,28 +143,32 @@ export default function SendEmailModal({
               })}
             </select>
           </div>
-          <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
-            <label className="py-1">Username</label>
-            <input
-              className="rounded-md text-black px-2"
-              type="text"
-              name="username"
-              id="username"
-              value={changePwdForm.username}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
-            <label className="py-1">E-mail</label>
-            <input
-              className="rounded-md text-black px-2"
-              type="text"
-              name="email"
-              id="email"
-              value={changePwdForm.email}
-              onChange={handleChange}
-            />
-          </div>
+          {showUsernameInput && (
+            <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
+              <label className={labelClass}>Username</label>
+              <input
+                className="rounded-md text-black px-2"
+                type="text"
+                name="username"
+                id="username"
+                value={changePwdForm.username}
+                onChange={handleChange}
+              />
+            </div>
+          )}
+          {showEmailInput && (
+            <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
+              <label className={labelClass}>E-mail</label>
+              <input
+                className="rounded-md text-black px-2"
+                type="text"
+                name="email"
+                id="email"
+                value={changePwdForm.email}
+                onChange={handleChange}
+              />
+            </div>
+          )}
           <div className="mt-4 lg:mt-0">
             <ButtonGreen>{textBtn}</ButtonGreen>
           </div>

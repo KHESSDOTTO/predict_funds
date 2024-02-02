@@ -82,7 +82,7 @@ export default function Dashboard({ user }: DashboardProps) {
         controlForm={controlForm}
         setControlForm={setControlForm}
       />
-      <ChartSection data={data} wPredList={true} />
+      <ChartSection data={data} smallV={false} />
       <div
         id="cenariosBtnSection"
         className="flex gap-4 mt-[-5px] justify-center items-center border-gray-500 lg:border-t-2 lg:w-10/12 lg:pt-2 lg:mt-4"
