@@ -108,7 +108,7 @@ export default function ControlSection({
         id="controls"
         className="px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:w-fit lg:h-fit lg:mt-2"
       >
-        <h1 className="font-bold text-2xl text-center underline pb-4 lg:pb-6 lg:hidden">
+        <h1 className="font-bold text-2xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
         </h1>
         <form

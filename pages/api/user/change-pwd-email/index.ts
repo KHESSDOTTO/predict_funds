@@ -6,7 +6,7 @@ import {
 } from "@/database/functions/userFunctions";
 import UserModel from "@/database/models/userModel";
 
-async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
+async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(500).send("Only post method accepted on this endpoint.");
   }
@@ -15,6 +15,8 @@ async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   }
   try {
     await connect();
+    console.log("req.body");
+    console.log(req.body);
     const user = await UserModel.findOne({ ...req.body });
     if (!user) {
       return res.status(500).send("No user was found.");
@@ -29,4 +31,4 @@ async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default UpdateUserPwd;
+export default SendPwdUpdateEmail;

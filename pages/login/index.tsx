@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import BackLink from "@/components/UI/backLink";
+import SendEmailModal from "@/components/modals/sendEmailModal";
 
 export default function LoginPage() {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ export default function LoginPage() {
       password: "",
     }),
     router = useRouter();
+  const [showModal, setShowModal] = useState(false);
 
   // css - classes
   const mainClass =
@@ -43,14 +45,24 @@ export default function LoginPage() {
     toast.dismiss(loading);
   }
 
+  async function sendPwdChangeEmail() {
+    setShowModal(true);
+  }
+
   return (
-    <>
+    <div className="relative">
+      <SendEmailModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        title="Enter your information to receive the password recovery e-mail"
+        textBtn="Send e-mail"
+      />
       <BackLink />
       <main className={mainClass}>
         <h1 className={h1Class}>Login</h1>
         <form className={formClass} onSubmit={handleSubmit}>
           <div className={divClass}>
-            <label className={labelClass}>Usuário</label>
+            <label className={labelClass}>Username</label>
             <input
               className={inputClass}
               id="username"
@@ -61,7 +73,7 @@ export default function LoginPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label className={labelClass}>Senha</label>
+            <label className={labelClass}>Password</label>
             <input
               className={inputClass}
               id="password"
@@ -75,16 +87,29 @@ export default function LoginPage() {
             <ButtonIndigo>Log in</ButtonIndigo>
           </div>
         </form>
-        <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
-          <p className="italic text-sm text-center">Não tem uma conta?</p>
-          <Link
-            href={"/signup"}
-            className="transition-all duration-200 text-indigo-700 font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
-          >
-            Sign Up
-          </Link>
+        <div>
+          <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
+            <p className="italic text-sm text-center">Forgot my password: </p>
+            <button
+              className="transition-all duration-200 italic font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
+              onClick={sendPwdChangeEmail}
+            >
+              Send password recovery e-mail
+            </button>
+          </div>
+          <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
+            <p className="italic text-sm text-center">
+              Don't have an account yet?
+            </p>
+            <Link
+              href={"/signup"}
+              className="transition-all duration-200 text-indigo-700 font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
+            >
+              Sign Up
+            </Link>
+          </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }
