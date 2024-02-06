@@ -5,13 +5,14 @@ import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
+import type { RawDataType } from "@/utils/types";
 
 export default function MyCenarios() {
   const { user, cenarios, setCenarios } = useContext(UserContext);
   const [footerPosition, setFooterPosition] = useState("absolute");
   const footerRef = useRef<HTMLDivElement>(null);
 
-  const updateFooterPosition = () => {
+  function updateFooterPosition() {
     if (footerRef.current) {
       const footerHeight = footerRef.current.clientHeight;
       const atBottom =
@@ -28,7 +29,7 @@ export default function MyCenarios() {
         setFooterPosition("sticky");
       }
     }
-  };
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,17 +67,28 @@ export default function MyCenarios() {
         cK,
         cV,
       ]);
-      const dataKeys = Object.keys(cenario.data[0]);
-      const dataHeader = dataKeys.filter((cE) => {
-        return !colsToHide.includes(cE);
-      });
+      const dataHeader: (keyof RawDataType)[] = [
+        "DT_COMPTC",
+        "CNPJ_FUNDO",
+        "VL_TOTAL",
+        "VL_PATRIM_LIQ",
+        "NR_COTST",
+        "VL_QUOTA",
+        "CAPTC_DIA",
+        "RESG_DIA",
+        "CAPTC_LIQ",
+      ];
       const dataArray = cenario.data.map((dataRow) => {
-        const result = Object.entries(dataRow).map(([cK, cV]) => {
-          if (!colsToHide.includes(cK)) {
+        const orderedDataRow = dataHeader.map((key) => {
+          return [key, dataRow[key]];
+        });
+        const result = orderedDataRow.map(([cK, cV]) => {
+          if (typeof cK == "string" && !colsToHide.includes(cK)) {
             return cV;
           }
           return false;
         });
+
         return result.filter((cE) => cE !== false);
       });
       const data = [...paramsArray, [], dataHeader, ...dataArray];

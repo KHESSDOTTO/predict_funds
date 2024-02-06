@@ -61,7 +61,9 @@ export default function ChartSection({ data, smallV }: ChartSectionProps) {
   return (
     <div
       className={`${
-        smallV ? "w-full flex gap-0 flex-wrap lg:gap-4 flex-col" : "w-screen"
+        smallV
+          ? "w-full flex gap-0 flex-wrap flex-col lg:gap-4 lg:flex-row"
+          : "w-screen"
       }`}
     >
       <div className={` ${smallV ? "px-2 lg:w-[47.5%]" : ""}`}>
@@ -74,7 +76,7 @@ export default function ChartSection({ data, smallV }: ChartSectionProps) {
         >
           Net Funding
         </h1>
-        <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
+        <div className="flex flex-col gap-2 lg:flex-row lg:gap-2">
           <div
             className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
               smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"

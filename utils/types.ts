@@ -35,7 +35,7 @@ interface RawDataType {
   VL_TOTAL?: number;
   CAPTC_DIA: number;
   NR_COTST?: number;
-  TP_FUNDO: string;
+  TP_FUNDO?: string;
   VL_PATRIM_LIQ: number;
   RESG_DIA: number;
   CAPTC_LIQ: number;
