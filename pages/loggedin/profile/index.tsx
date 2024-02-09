@@ -1,7 +1,7 @@
 import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/layout/header";
 import ButtonRed from "@/components/UI/buttonRed";
@@ -25,6 +25,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       address: user.address,
     });
   const [showModal, setShowModal] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const titleModal = "Confirm your password to change the e-mail";
 
   useEffect(() => {
@@ -52,17 +53,24 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     }
   }
 
+  function handleSubmitOutside() {
+    const fakeSubmitEvent: React.FormEvent<HTMLFormElement> = {
+      ...new Event("submit", { bubbles: true, cancelable: true }),
+      currentTarget: formRef.current,
+      target: formRef.current,
+      preventDefault: () => {},
+    } as unknown as React.FormEvent<HTMLFormElement>;
+    handleSubmitNoEmail(fakeSubmitEvent);
+  }
+
   async function handleSubmitNoEmail(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (user.email != form.email) {
       setShowModal(true);
       return;
     }
+    const loading = toast.loading("Updating...");
     try {
-      const loading = toast.loading("Updating...");
-      setTimeout(() => {
-        toast.dismiss(loading);
-      }, 3000);
       const updUser = await ax.post(`/user/edit/${user._id}`, form);
       console.log(updUser);
       toast.success("Informations updated!");
@@ -70,6 +78,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       console.log(err);
       toast.error("An error occured when trying to update the informations.");
     }
+    toast.dismiss(loading);
   }
 
   async function handleSubmitEmailChange(e: React.FormEvent<HTMLFormElement>) {
@@ -122,7 +131,11 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           Profile
         </h1>
         <section id="userInfos" className="relative">
-          <form className="flex py-8 gap-4" onSubmit={handleSubmitNoEmail}>
+          <form
+            ref={formRef}
+            className="flex py-8 gap-4"
+            onSubmit={handleSubmitNoEmail}
+          >
             <div className="flex flex-col font-semibold gap-8 lg:gap-6">
               <label htmlFor="username">Username:</label>
               <label htmlFor="email">Email:</label>
@@ -182,11 +195,14 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                 />
               </div>
             </div>
-            <div className="flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[25%] lg:text-base">
+            <div className="hidden lg:flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[25%] lg:text-base">
               <button type="submit">Save</button>
             </div>
           </form>
         </section>
+        <div className="flex justify-center items-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:hidden">
+          <button onClick={handleSubmitOutside}>Save</button>
+        </div>
         <div className="flex flex-col justify-center items-center gap-8 pt-2 lg:flex-row">
           <div
             className="text-indigo-800 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300"

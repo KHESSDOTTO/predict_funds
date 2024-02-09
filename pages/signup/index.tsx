@@ -18,12 +18,15 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
+      "bg-gray-900 text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
     h1Class =
       "text-center font-bold text-5xl mt-6 flex justify-center items-center gap-4 font-serif py-4 lg:mx-16 lg:w-10/12 lg:justify-start lg:mt-4",
     formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
-    divClass = "flex flex-col gap-2",
-    inputClass = "rounded-md border border-gray-400 px-1";
+    divClass = "flex flex-col",
+    inputClass =
+      "rounded-md border border-gray-400 px-1 shadow-white/30 shadow-lg";
+  const lgTextShadow = { textShadow: "2px 2px 1px rgba(200,200,200,0.4)" };
+  const smTextShadow = { textShadow: "2px 3px 3px rgba(0,0,0,0.9)" };
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let newVal = e.target.value;
@@ -112,14 +115,14 @@ export default function SignUpPage() {
 
   return (
     <>
-      <BackLink />
+      <BackLink color="white" />
       <main className={mainClass}>
-        <h1 className={h1Class}>Sign up</h1>
+        <h1 className={h1Class} style={lgTextShadow}>
+          Sign up
+        </h1>
         <form className={formClass} onSubmit={handleSubmit}>
           <div className={divClass}>
-            <label htmlFor="username" className="indent-2">
-              Nome de usuário
-            </label>
+            <label htmlFor="username">Nome de usuário</label>
             <input
               className={inputClass}
               id="username"
@@ -130,9 +133,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="cnpj" className="indent-2">
-              CNPJ
-            </label>
+            <label htmlFor="cnpj">CNPJ</label>
             <input
               className={inputClass}
               id="cnpj"
@@ -144,9 +145,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="email" className="indent-2">
-              E-mail
-            </label>
+            <label htmlFor="email">E-mail</label>
             <input
               className={inputClass}
               id="email"
@@ -158,7 +157,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="contactPhone" className="indent-2">
+            <label htmlFor="contactPhone">
               Telefone de contato{" "}
               <small className="italic">
                 (com DD e código país: Brasil "+55")
@@ -175,9 +174,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="address" className="indent-2">
-              Endereço
-            </label>
+            <label htmlFor="address">Endereço</label>
             <input
               className={inputClass}
               id="address"
@@ -188,7 +185,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="password" className="indent-2">
+            <label htmlFor="password">
               Senha{" "}
               <small className="italic">
                 (mínimo 8 dígitos: incluir letras maíusculas, minúsculas,
@@ -205,9 +202,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="passwordConfirm" className="indent-2">
-              Confirmar Senha
-            </label>
+            <label htmlFor="passwordConfirm">Confirmar Senha</label>
             <input
               className={inputClass}
               id="passwordConfirm"
