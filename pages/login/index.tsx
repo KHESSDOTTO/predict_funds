@@ -57,7 +57,7 @@ export default function LoginPage() {
         title="Enter your information to receive the password recovery e-mail"
         textBtn="Send e-mail"
       />
-      <BackLink />
+      <BackLink color="black" />
       <main className={mainClass}>
         <h1 className={h1Class}>Login</h1>
         <form className={formClass} onSubmit={handleSubmit}>
