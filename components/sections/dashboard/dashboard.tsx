@@ -29,14 +29,19 @@ export default function Dashboard({ user }: DashboardProps) {
       const loadingToast = toast.loading("Fetching data...");
       try {
         const encodedParam = encodeURIComponent(user.cnpj);
-        const newData = await ax.get(
+        const historicData = await ax.get(
           `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
         );
-        console.log("Complete data:");
-        console.log(newData);
-        let finalData = newData.data.slice(
+        const predictions = await ax.get(
+          `/prediction/getFromCnpj?cnpj=${encodedParam}`
+        );
+        console.log("Complete historic data:");
+        console.log(historicData);
+        console.log("Predictions:");
+        console.log(predictions);
+        let finalData = historicData.data.slice(
           controlForm.weeksBack * -7,
-          newData.data.length
+          historicData.data.length
         );
         console.log("Length of sliced data:");
         console.log(finalData.length);
@@ -50,7 +55,7 @@ export default function Dashboard({ user }: DashboardProps) {
         console.log(finalData);
         setData(finalData);
         toast.success("Done.");
-        console.log("Here after setData(newData);");
+        console.log("Here after setData(historicData);");
         console.log("user from context");
         console.log(userContext.user);
       } catch (err) {

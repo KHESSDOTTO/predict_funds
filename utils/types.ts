@@ -5,6 +5,32 @@ interface SideBarPropsType {
   setShowSideBar: Function;
 }
 
+interface PredictionsType {
+  _id: string;
+  CNPJ_FUNDO: string;
+  "-5.0": number;
+  "-4.5": number;
+  "-4.0": number;
+  "-3.5": number;
+  "-3.0": number;
+  "-2.5": number;
+  "-2.0": number;
+  "-1.5": number;
+  "-1.0": number;
+  "-0.5": number;
+  "0.0": number;
+  "0.5": number;
+  "1.0": number;
+  "1.5": number;
+  "2.0": number;
+  "2.5": number;
+  "3.0": number;
+  "3.5": number;
+  "4.0": number;
+  "4.5": number;
+  "5.0": number;
+}
+
 interface HeaderPropsType {
   user: UserType;
 }
@@ -59,7 +85,7 @@ interface DashboardControlFormType {
 interface CenarioType {
   id: string;
   params: DashboardControlFormType;
-  data: RawDataType[];
+  historicData: RawDataType[];
 }
 
 export type {

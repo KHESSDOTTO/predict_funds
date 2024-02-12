@@ -78,7 +78,7 @@ export default function MyCenarios() {
         "RESG_DIA",
         "CAPTC_LIQ",
       ];
-      const dataArray = cenario.data.map((dataRow) => {
+      const dataArray = cenario.historicData.map((dataRow) => {
         const orderedDataRow = dataHeader.map((key) => {
           return [key, dataRow[key]];
         });
@@ -144,7 +144,7 @@ export default function MyCenarios() {
                   </ul>
                 </div>
                 <div className=" lg:block lg:w-full">
-                  <ChartSection data={cE.data} smallV={true} />
+                  <ChartSection data={cE.historicData} smallV={true} />
                 </div>
                 <button
                   id={cE.id}

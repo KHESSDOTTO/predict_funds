@@ -25,7 +25,13 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
             }
             let allRawData = [];
             if (typeof req.query.cnpj == "string") {
-              allRawData = await GetAllRawDataFromCnpj(req.query.cnpj);
+              const response = await GetAllRawDataFromCnpj(req.query.cnpj);
+              if (!response) {
+                return res
+                  .status(204)
+                  .json(`No data found for CNPJ: ${req.query.cnpj}`);
+              }
+              allRawData = response;
             }
             console.log(allRawData);
             await disconnect();
@@ -38,7 +44,7 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
         return res.status(500).json({ message: "No logged in user." });
       }
     } catch (err) {
-      console.error(err); // Log the error message
+      console.error(err);
       await disconnect();
       return res.status(500).json({ error: err });
     }

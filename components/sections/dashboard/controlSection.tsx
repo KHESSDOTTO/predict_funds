@@ -143,6 +143,7 @@ export default function ControlSection({
                   className="rounded-md border-2 border-black px-2"
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
+                  disabled
                 ></input>
               </div>
               <div className="h-8">
@@ -228,6 +229,7 @@ export default function ControlSection({
                 className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
                 value={controlForm.buscaCnpj}
                 onChange={handleControlFormChange}
+                disabled
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
