@@ -7,7 +7,6 @@ async function connect() {
     if (process.env.MONGODB_URI) {
       const dbConnect = await mongoose.connect(process.env.MONGODB_URI);
       console.log(`Connected to db: ${dbConnect.connection.name}`);
-      // console.log(`Connection: ${dbConnect}`);
     } else {
       console.log("MONGODB_URI is undefined.");
     }

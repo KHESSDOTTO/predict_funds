@@ -28,12 +28,12 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
               const response = await GetAllRawDataFromCnpj(req.query.cnpj);
               if (!response) {
                 return res
-                  .status(204)
+                  .status(500)
                   .json(`No data found for CNPJ: ${req.query.cnpj}`);
               }
               allRawData = response;
             }
-            console.log(allRawData);
+            // console.log(allRawData);
             await disconnect();
             return res.status(200).json(allRawData);
           }

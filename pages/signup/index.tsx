@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
-import Link from "next/link";
 import BackLink from "@/components/UI/backLink";
 
 export default function SignUpPage() {

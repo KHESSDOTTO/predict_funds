@@ -13,7 +13,7 @@ import {
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
 import { format } from "date-fns";
-import { RawDataType } from "@/utils/types";
+import { PredictionsType, RawDataType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
 
@@ -22,14 +22,23 @@ interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
 interface ChartSectionProps {
   data: RawDataType[];
   smallV: boolean;
+  // predictions: PredictionsType[];
 }
 
-export default function ChartSection({ data, smallV }: ChartSectionProps) {
+export default function ChartSection({
+  data,
+  smallV,
+}: // predictions,
+ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
 
   // Margin to aply to find the domain of the Yaxis on the charts
   const margin = 0.1;
+
+  // console.log("Inside Dashboard.ChartSection: ");
+  // console.log("predictions");
+  // console.log(predictions);
 
   useEffect(() => {
     if (data.length === 0) {
@@ -41,12 +50,10 @@ export default function ChartSection({ data, smallV }: ChartSectionProps) {
     const maxValueVQ = data.reduce((maxObj, currObj) => {
       return currObj["VL_QUOTA"] > maxObj["VL_QUOTA"] ? currObj : maxObj;
     }, data[0])["VL_QUOTA"];
-
     // Domain of the Yaxis
     const minValYaxisVQ = minValueVQ * (1 - margin),
       maxValYaxisVQ = maxValueVQ * (1 + margin);
     setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
-
     // For Value Quota chart
     const ticksQntYaxisVQ = 5;
     const ticksIntervalYaxisVQ =

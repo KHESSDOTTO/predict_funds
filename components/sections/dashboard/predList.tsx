@@ -89,7 +89,10 @@ export default function PredList({
         <tbody>
           {predRows.map((cE) => {
             return (
-              <tr className="text-center border-b border-gray-300">
+              <tr
+                className="text-center border-b border-gray-300"
+                key={cE.id.toString()}
+              >
                 <td className="p-0">{cE.direction}</td>
                 <td className="p-0">{cE.numPer}</td>
                 <td className="p-0">
