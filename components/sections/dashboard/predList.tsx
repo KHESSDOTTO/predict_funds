@@ -72,13 +72,15 @@ export default function PredList({
   }
 
   return (
-    <div className="h-full w-full pb-16 bg-white border border-t-2 border-b-2 border-black relative rounded-md lg:border-2">
+    <div className="text-black h-full w-full pb-16 bg-gradient-to-b from-white/90 to-gray-100 border-black relative rounded-xl shadow-md shadow-indigo-800 lg:from-white lg:to-white/90 lg:from-60%">
       {title && (
-        <h2 className="font-bold border-b mb-1 text-center border-black text-base py-1">
-          {title}
-        </h2>
+        <div className="flex justify-center w-full">
+          <h2 className="font-bold text-lg mb-4 text-center border-black text-base py-1 px-4 border-b">
+            {title}
+          </h2>
+        </div>
       )}
-      <table className="w-full border-b border-gray-300">
+      <table className="w-full border-gray-300">
         <thead className="border-b-2 border-black">
           <tr>
             <th>Back / Forward</th>
@@ -89,7 +91,10 @@ export default function PredList({
         <tbody>
           {predRows.map((cE) => {
             return (
-              <tr className="text-center border-b border-gray-300">
+              <tr
+                className="text-center border-b border-black/20"
+                key={cE.id.toString()}
+              >
                 <td className="p-0">{cE.direction}</td>
                 <td className="p-0">{cE.numPer}</td>
                 <td className="p-0">
@@ -153,7 +158,7 @@ export default function PredList({
       <div className="absolute bottom-2 w-full ml-[-8px] text-center">
         <div className="flex justify-center">
           <div onClick={handleAddRow} className="w-fit">
-            <ButtonIndigo>Save</ButtonIndigo>
+            <ButtonIndigo shadowColor="black">Save</ButtonIndigo>
           </div>
         </div>
       </div>

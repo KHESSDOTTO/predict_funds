@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { doCreateUser } from "@/database/functions/userFunctions";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 
 async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -9,13 +9,13 @@ async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
     const newUser = await doCreateUser(req.body);
-    await disconnect();
+    // await disconnect();
     if (newUser) {
       return res.status(newUser.status).json(newUser.msg);
     }
     return res.status(500).json("newUser returned null/falsy.");
   } catch (err) {
-    await disconnect();
+    // await disconnect();
     return res.status(500).json(err);
   }
 }

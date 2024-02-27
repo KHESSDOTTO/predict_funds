@@ -211,7 +211,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
             Redefinir Senha
           </div>
           <div onClick={handleLogout}>
-            <ButtonRed>Log out</ButtonRed>
+            <ButtonRed shadowColor="white">Log out</ButtonRed>
           </div>
         </div>
       </main>

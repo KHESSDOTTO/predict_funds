@@ -44,12 +44,12 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
   }
 
   return (
-    <div className="min-h-screen min-w-screen bg-gradient-to-t relative min-h-screen md:bg-gradient-to-l">
+    <div className="min-h-screen min-w-screen relative min-h-screen bg-[rgb(0,10,30)]">
       <Header user={user} />
       <Dashboard user={user} />
-      <div className="flex justify-center px-4 pb-4 lg:justify-end">
+      <div className="flex justify-center px-4 pb-4 lg:justify-center">
         <div onClick={handleLogout} className="mt-8 w-fit">
-          <ButtonRed>Log Out</ButtonRed>
+          <ButtonRed shadowColor="white/50">Log Out</ButtonRed>
         </div>
       </div>
     </div>

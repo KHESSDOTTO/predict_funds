@@ -2,20 +2,23 @@ import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
-import type { DashboardControlFormType } from "@/utils/types";
+import type { DashboardControlFormType, PredictionsType } from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
+import { addWeeks } from "date-fns";
 
 interface ControlSectionProps {
   data: RawDataType[];
-  setData: Dispatch<SetStateAction<RawDataType[]>>;
+  setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;
+  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
   controlForm: DashboardControlFormType;
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
 }
 
 export default function ControlSection({
   data,
-  setData,
+  setHistoricData,
+  setPredictionData,
   controlForm,
   setControlForm,
 }: ControlSectionProps) {
@@ -78,16 +81,52 @@ export default function ControlSection({
     const loadingToast = toast.loading("Fetching data...");
     try {
       const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
-      const newData = await ax.get(
+      const newHistoricData = await ax.get(
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
       );
-      console.log(newData);
-      let finalData = newData.data.slice(controlForm.weeksBack * -7, -1);
-      finalData = finalData.map((cE: RawDataType) => {
+      const responsePreds = await ax.get(
+        `/prediction/getFromCnpj?cnpj=${encodedParam}`
+      );
+      console.log(newHistoricData);
+      const slicedHistoricData = newHistoricData.data.slice(
+        controlForm.weeksBack * -7,
+        -1
+      );
+      let finalHistoricData = slicedHistoricData.map((cE: RawDataType) => {
         const convDate = new Date(cE.DT_COMPTC);
         return { ...cE, DT_COMPTC: convDate };
       });
-      setData(finalData);
+      setHistoricData(finalHistoricData);
+      let finalPredictionData: PredictionsType[] = [];
+      if (responsePreds && responsePreds.data && finalHistoricData) {
+        finalPredictionData.push({
+          // including last date shown in historic (current date)
+          DT_COMPTC: finalHistoricData[finalHistoricData.length - 1].DT_COMPTC,
+          CNPJ_FUNDO:
+            finalHistoricData[finalHistoricData.length - 1].CNPJ_FUNDO,
+          CAPTC_LIQ: finalHistoricData[finalHistoricData.length - 1].CAPTC_LIQ,
+        });
+        console.log("Number(controlForm.varCota).toFixed(1).toString()");
+        console.log((controlForm.varCota * 100).toFixed(1).toString());
+        finalPredictionData.push({
+          // including prediction for 4 weeks based on the varCota of the controlForm
+          DT_COMPTC: addWeeks(
+            finalHistoricData[finalHistoricData.length - 1].DT_COMPTC,
+            4
+          ),
+          CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+          CAPTC_LIQ:
+            responsePreds.data[
+              (controlForm.varCota * 100).toFixed(1).toString()
+            ],
+        });
+      }
+      console.log("Final prediction data:");
+      console.log(finalPredictionData);
+      if (finalPredictionData) {
+        setPredictionData(finalPredictionData);
+        toast.success("Done.");
+      }
       toast.success("Done.");
       toast.dismiss(loadingToast);
     } catch (err) {
@@ -99,14 +138,14 @@ export default function ControlSection({
 
   return (
     <>
-      <div className="w-screen hidden lg:block">
-        <h1 className="my-4 font-semibold text-2xl text-center border-b-2 border-black mx-[32vw] lg:indent-6 lg:mx-8 lg:text-left">
+      <div className="w-screen hidden text-white/90 lg:block">
+        <h1 className="my-4 font-semibold text-2xl text-center border-b border-white/90 pb-2 mx-[32vw] lg:indent-6 lg:mx-8 lg:text-left">
           Control Section
         </h1>
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 border border-gray-400 mt-6 py-4 rounded-sm bg-gray-100 box-shadow shadow-md shadow-black lg:w-fit lg:h-fit lg:mt-2"
+        className="px-4 mx-4 bg-gradient-to-b from-white to-gray-100 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-800 lg:w-fit lg:h-fit lg:mt-2 lg:to-white/80"
       >
         <h1 className="font-bold text-2xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
@@ -140,9 +179,10 @@ export default function ControlSection({
                   type="text"
                   id="buscaCnpj"
                   name="buscaCnpj"
-                  className="rounded-md border-2 border-black px-2"
+                  className="rounded-md border-2 border-black px-2 bg-white"
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
+                  disabled
                 ></input>
               </div>
               <div className="h-8">
@@ -209,8 +249,8 @@ export default function ControlSection({
               </div>
             </div>
           </div>
-          <div className="text-center mt-6 lg:mt-4">
-            <ButtonIndigo>Update</ButtonIndigo>
+          <div className="text-center mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
+            <ButtonIndigo shadowColor="black">Update</ButtonIndigo>
           </div>
         </form>
         <form
@@ -228,6 +268,7 @@ export default function ControlSection({
                 className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
                 value={controlForm.buscaCnpj}
                 onChange={handleControlFormChange}
+                disabled
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
@@ -242,14 +283,17 @@ export default function ControlSection({
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="weeksForward">Weeks forward</label>
+              <label htmlFor="weeksForward">
+                Weeks forward <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 id="weeksForward"
                 name="weeksForward"
-                className="border-b-2 rounded-t-sm border-black text-center w-28 bg-transparent focus:outline-none"
+                className="border-b-2 rounded-t-sm border-black text-center w-28 bg-transparent text-gray-900 italic focus:outline-none"
                 value={controlForm.weeksForward}
                 onChange={handleControlFormChange}
+                disabled
               ></input>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
@@ -291,8 +335,8 @@ export default function ControlSection({
                   type="range"
                   id="varCota"
                   name="varCota"
-                  min={-0.2}
-                  max={0.2}
+                  min={-0.05}
+                  max={0.05}
                   step={0.005}
                   className="indigo-500"
                   value={controlForm.varCota}
@@ -301,7 +345,7 @@ export default function ControlSection({
               </div>
             </div>
             <div className="flex justify-center items-center mt-[-15px]">
-              <ButtonIndigo>Update</ButtonIndigo>
+              <ButtonIndigo shadowColor="black">Update</ButtonIndigo>
             </div>
           </div>
         </form>

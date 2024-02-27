@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { GetAllRawDataFromCnpj } from "@/database/functions/rawDataFunctions";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 import { verifyToken } from "@/utils/jwt.config";
 
 async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
@@ -25,21 +25,27 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
             }
             let allRawData = [];
             if (typeof req.query.cnpj == "string") {
-              allRawData = await GetAllRawDataFromCnpj(req.query.cnpj);
+              const response = await GetAllRawDataFromCnpj(req.query.cnpj);
+              if (!response) {
+                return res
+                  .status(500)
+                  .json(`No data found for CNPJ: ${req.query.cnpj}`);
+              }
+              allRawData = response;
             }
-            console.log(allRawData);
-            await disconnect();
+            // console.log(allRawData);
+            // await disconnect();
             return res.status(200).json(allRawData);
           }
-          await disconnect();
+          // await disconnect();
           return res.status(500).json({ message: "Something went wrong." });
         }
-        await disconnect();
+        // await disconnect();
         return res.status(500).json({ message: "No logged in user." });
       }
     } catch (err) {
-      console.error(err); // Log the error message
-      await disconnect();
+      console.error(err);
+      // await disconnect();
       return res.status(500).json({ error: err });
     }
   }

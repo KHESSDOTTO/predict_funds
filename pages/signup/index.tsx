@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
-import Link from "next/link";
 import BackLink from "@/components/UI/backLink";
 
 export default function SignUpPage() {
@@ -18,14 +17,14 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "bg-gray-900 text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg md:grid md:grid-rows-6 md:justify-stretch md:px-16",
+      "bg-[rgb(20,30,50)] text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-16",
     h1Class =
-      "text-center font-bold text-5xl mt-6 flex justify-center items-center gap-4 font-serif py-4 lg:mx-16 lg:w-10/12 lg:justify-start lg:mt-4",
+      "mx-16 text-center text-6xl mt-6 px-0 border-b flex border-white justify-center items-center py-4 lg:mx-12 lg:w-10/12 lg:justify-start lg:mt-4 lg:px-8 lg:border-b-2",
     formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col",
     inputClass =
-      "rounded-md border border-gray-400 px-1 shadow-white/30 shadow-lg";
-  const lgTextShadow = { textShadow: "2px 2px 1px rgba(200,200,200,0.4)" };
+      "rounded-md border border-gray-400 px-1 shadow-white/30 shadow-sm";
+  const lgTextShadow = { textShadow: "1px 1px 2px gray" };
   const smTextShadow = { textShadow: "2px 3px 3px rgba(0,0,0,0.9)" };
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -122,7 +121,7 @@ export default function SignUpPage() {
         </h1>
         <form className={formClass} onSubmit={handleSubmit}>
           <div className={divClass}>
-            <label htmlFor="username">Nome de usuário</label>
+            <label htmlFor="username">Username</label>
             <input
               className={inputClass}
               id="username"
@@ -158,9 +157,9 @@ export default function SignUpPage() {
           </div>
           <div className={divClass}>
             <label htmlFor="contactPhone">
-              Telefone de contato{" "}
+              Contact phone{" "}
               <small className="italic">
-                (com DD e código país: Brasil "+55")
+                (With country code: Brasil "+55")
               </small>
             </label>
             <input
@@ -186,10 +185,10 @@ export default function SignUpPage() {
           </div>
           <div className={divClass}>
             <label htmlFor="password">
-              Senha{" "}
+              Password{" "}
               <small className="italic">
-                (mínimo 8 dígitos: incluir letras maíusculas, minúsculas,
-                números e caracteres especiais)
+                (At least 8 digits: include lowercase and uppercase letters,
+                numbers and special characters)
               </small>
             </label>
             <input
@@ -202,7 +201,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="passwordConfirm">Confirmar Senha</label>
+            <label htmlFor="passwordConfirm">Confirm Password</label>
             <input
               className={inputClass}
               id="passwordConfirm"
@@ -212,8 +211,8 @@ export default function SignUpPage() {
               onChange={handleChange}
             ></input>
           </div>
-          <div className="self-center">
-            <ButtonIndigo>Create user</ButtonIndigo>
+          <div className="self-center mt-2">
+            <ButtonIndigo shadowColor="white">Create user</ButtonIndigo>
           </div>
         </form>
       </main>
