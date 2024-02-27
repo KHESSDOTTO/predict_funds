@@ -87,7 +87,7 @@ export default function PwdConfirmModal({
             />
           </div>
           <div className="mt-4 lg:mt-0">
-            <ButtonGreen>{textBtn}</ButtonGreen>
+            <ButtonGreen shadowColor="none">{textBtn}</ButtonGreen>
           </div>
         </form>
       </div>
