@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 import { doUpdateUserPwd } from "@/database/functions/userFunctions";
 
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
@@ -19,7 +19,7 @@ async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
     const confirmation = await doUpdateUserPwd(userId, changeId, req.body);
-    await disconnect();
+    // await disconnect();
     return res.status(confirmation.status).send(confirmation.msg);
   } catch (err) {
     console.log(err);

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 import UserModel from "@/database/models/userModel";
 
 async function GetUserById(req: NextApiRequest, res: NextApiResponse) {
@@ -11,7 +11,7 @@ async function GetUserById(req: NextApiRequest, res: NextApiResponse) {
     await connect();
     const user = await UserModel.findById(userId);
     delete user.passwordHash;
-    await disconnect();
+    // await disconnect();
     return res.status(200).json(user);
   } catch (err) {
     console.log(err);
