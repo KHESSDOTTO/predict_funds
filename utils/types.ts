@@ -39,6 +39,7 @@ interface HeaderPropsType {
 
 interface ButtonPropsType {
   children: ReactNode;
+  shadowColor: string;
 }
 
 interface UserType {
@@ -88,6 +89,7 @@ interface CenarioType {
   id: string;
   params: DashboardControlFormType;
   historicData: RawDataType[];
+  predictionData: PredictionsType[];
 }
 
 export type {

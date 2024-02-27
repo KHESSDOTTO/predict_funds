@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HeaderPropsType } from "@/utils/types";
 import { useState } from "react";
 import SideBar from "./sideBar";
+import DisconnectBtn from "../UI/disconnectBtn";
 
 function Header({ user }: HeaderPropsType) {
   // For the sideBar component to work properly, it should be placed inside a container that has position: relative.
@@ -118,6 +119,7 @@ function Header({ user }: HeaderPropsType) {
             </p>
           </div>
         </div>
+        <DisconnectBtn />
       </header>
     </>
   );

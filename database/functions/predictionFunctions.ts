@@ -9,6 +9,12 @@ async function getPredictionsByCnpj(cnpj: string) {
     if (!prediction4Weeks) {
       return false;
     }
+    for (let key in prediction4Weeks) {
+      if (typeof prediction4Weeks[key] === "number") {
+        prediction4Weeks[key] = Number(prediction4Weeks[key].toFixed(2));
+      }
+    }
+
     return prediction4Weeks;
   } catch (err) {
     console.log(err);

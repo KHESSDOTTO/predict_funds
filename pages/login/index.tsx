@@ -17,14 +17,14 @@ export default function LoginPage() {
 
   // css - classes
   const mainClass =
-      "min-h-screen px-16 pt-12 text-lg flex flex-col justify-around md:grid md:grid-rows-5 md:pb-8 md:pt-2",
+      "min-h-screen px-16 pt-12 text-lg flex flex-col justify-around lg:grid lg:grid-rows-5 lg:pb-8 lg:pt-6",
     h1Class =
-      "font-bold py-auto text-5xl flex flex-col justify-end items-center font-serif",
+      "font-bold py-auto text-5xl flex flex-col justify-end items-center lg:text-6xl",
     formClass =
-      "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 md:pt-16",
+      "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 lg:pt-8",
     divClass = "flex flex-col gap-2 align-center justify-center w-72",
     labelClass = "text-center lg:text-left lg:indent-1",
-    inputClass = "rounded-xl px-2 shadow-md shadow-gray-400/50";
+    inputClass = "rounded-xl px-2 shadow-md shadow-gray-400/50 text-black";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -50,7 +50,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative">
+    <div className="relative bg-[rgb(0,10,30)] text-white">
       <SendEmailModal
         showModal={showModal}
         setShowModal={setShowModal}
@@ -84,17 +84,17 @@ export default function LoginPage() {
             ></input>
           </div>
           <div className="w-32 text-center">
-            <ButtonIndigo>Log in</ButtonIndigo>
+            <ButtonIndigo shadowColor="white">Log in</ButtonIndigo>
           </div>
         </form>
         <div>
           <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
-            <p className="italic text-sm text-center">Forgot my password: </p>
+            {/* <p className="italic text-sm text-center">Forgot my password: </p> */}
             <button
-              className="transition-all duration-200 italic font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
+              className="transition-all duration-200 italic font-semibold w-fit hover:underline hover:text-yellow-800 hover:underline hover:text-indigo-600 lg:mt-2"
               onClick={sendPwdChangeEmail}
             >
-              Send password recovery e-mail
+              Forgot Password
             </button>
           </div>
           <div className="flex flex-col justify-end pb-4 items-center text-sm italic text-center md:pb-4">
@@ -103,7 +103,7 @@ export default function LoginPage() {
             </p>
             <Link
               href={"/signup"}
-              className="transition-all duration-200 text-indigo-700 font-semibold w-fit hover:underline hover:text-yellow-700 hover:underline hover:text-indigo-600"
+              className="transition-all duration-200 text-indigo-300 font-semibold w-fit hover:underline hover:text-yellow-800 hover:underline hover:text-indigo-600"
             >
               Sign Up
             </Link>

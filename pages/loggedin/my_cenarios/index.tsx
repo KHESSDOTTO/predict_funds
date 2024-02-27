@@ -6,6 +6,7 @@ import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 import type { RawDataType } from "@/utils/types";
+import ButtonRed from "@/components/UI/buttonRed";
 
 export default function MyCenarios() {
   const { user, cenarios, setCenarios } = useContext(UserContext);
@@ -47,7 +48,7 @@ export default function MyCenarios() {
     };
   }, []);
 
-  function excludeCenario(e: React.MouseEvent<HTMLButtonElement>) {
+  function excludeCenario(e: React.MouseEvent<HTMLDivElement>) {
     const updatedCenarios = cenarios.filter((cE) => {
       return cE.id != e.currentTarget.id;
     });
@@ -67,7 +68,15 @@ export default function MyCenarios() {
         cK,
         cV,
       ]);
-      const dataHeader: (keyof RawDataType)[] = [
+
+      // <Adjusting_predictions>
+      const predsArray: any = [];
+      cenario.predictionData.slice(1).forEach((cE) => {
+        const predsSubArray = Object.entries(cE).map(([cK, cV]) => [cK, cV]);
+        predsArray.push(...predsSubArray);
+      });
+      // </Adjusting_predictions>
+      const historicDataHeader: (keyof RawDataType)[] = [
         "DT_COMPTC",
         "CNPJ_FUNDO",
         "VL_TOTAL",
@@ -78,8 +87,8 @@ export default function MyCenarios() {
         "RESG_DIA",
         "CAPTC_LIQ",
       ];
-      const dataArray = cenario.historicData.map((dataRow) => {
-        const orderedDataRow = dataHeader.map((key) => {
+      const historicDataArray = cenario.historicData.map((dataRow) => {
+        const orderedDataRow = historicDataHeader.map((key) => {
           return [key, dataRow[key]];
         });
         const result = orderedDataRow.map(([cK, cV]) => {
@@ -91,7 +100,17 @@ export default function MyCenarios() {
 
         return result.filter((cE) => cE !== false);
       });
-      const data = [...paramsArray, [], dataHeader, ...dataArray];
+      const data = [
+        ["Params"],
+        ...paramsArray,
+        [],
+        ["Prediction"],
+        ...predsArray,
+        [],
+        ["Historic"],
+        historicDataHeader,
+        ...historicDataArray,
+      ];
       const worksheet = XLSX.utils.aoa_to_sheet(data);
       XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
     });
@@ -99,26 +118,35 @@ export default function MyCenarios() {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-[rgb(10,20,50)] text-white">
       {user && <Header user={user} />}
-      <h1 className="text-center text-3xl font-semibold py-6">My Cenarios</h1>
+      <div className="flex justify-center lg:hidden">
+        <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white lg:mb-12 lg:text-5xl lg:px-16">
+          My Cenarios
+        </h1>
+      </div>
+      <h1 className="hidden text-3xl font-semibold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:text-5xl lg:px-16 lg:mx-20">
+        My Cenarios
+      </h1>
       <section
         id="cenarios"
-        className="mb-8 flex flex-col gap-6 lg:justify-center lg:items-center lg:gap-0"
+        className="mb-8 flex flex-col gap-6 lg:justify-center lg:items-center lg:gap-0 text-black"
       >
         {cenarios?.map((cE, cI) => {
           return (
             <div
               key={cE.id.toString()}
-              className="border-2 border-black rounded-lg bg-white/80 shadow-md shadow-gray-400 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:items-start lg:w-[60%] lg:mb-6"
+              className="border-black rounded-3xl bg-white/90 shadow-lg shadow-indigo-500 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-16"
             >
-              <h2 className="text-lg font-semibold my-2 indent-1 w-2/3 pl-1 border-b border-black lg:indent-2 lg:w-11/12">
+              <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-2 lg:w-11/12">
                 Cenario {cI + 1}
               </h2>
-              <div className="flex flex-col items-center w-full justify-between text-sm">
-                <div className="lg:flex lg:flex-row">
-                  <h3 className="font-bold mx-4 hidden lg:block">Params:</h3>
-                  <ul className="lg:flex gap-4 lg:flex-wrap">
+              <div className="flex flex-col items-center w-full justify-between text-sm lg:flex-row">
+                <div className="lg:flex lg:flex-wrap border-gray-400/80 lg:border-r lg:py-6 lg:pr-4">
+                  <h3 className="font-bold mx-4 hidden lg:block lg:mx-0 lg:mb-2">
+                    Params:
+                  </h3>
+                  <ul className="lg:flex gap-4 lg:flex-col lg:gap-1 lg:ml-2">
                     <li>
                       DI:<span className="font-bold"> {cE.params.DI}</span>
                     </li>
@@ -144,15 +172,26 @@ export default function MyCenarios() {
                   </ul>
                 </div>
                 <div className=" lg:block lg:w-full">
-                  <ChartSection data={cE.historicData} smallV={true} />
+                  <ChartSection
+                    data={cE.historicData}
+                    smallV={true}
+                    predictions={cE.predictionData}
+                  />
                 </div>
-                <button
+                <div
                   id={cE.id}
-                  className="mt-4 transition-all bg-gradient-to-b from-red-700 to-red-500 text-white rounded-md border-black border py-1 px-2 shadow-sm shadow-black hover:from-red-800 hover:to-red-500 hover:text-yellow-500"
+                  className="mt-6 lg:hidden"
                   onClick={excludeCenario}
                 >
-                  Delete
-                </button>
+                  <ButtonRed shadowColor="black">Delete</ButtonRed>
+                </div>
+              </div>
+              <div
+                id={cE.id}
+                className="hidden mt-6 lg:flex lg:justify-center lg:w-full"
+                onClick={excludeCenario}
+              >
+                <ButtonRed shadowColor="black">Delete</ButtonRed>
               </div>
             </div>
           );
@@ -168,7 +207,7 @@ export default function MyCenarios() {
         className={`bg-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
       >
         <div onClick={exportCenarios}>
-          <ButtonGreen>Export</ButtonGreen>
+          <ButtonGreen shadowColor="black">Export</ButtonGreen>
         </div>
       </footer>
     </div>

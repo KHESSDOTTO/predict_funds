@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 import { getPredictionsByCnpj } from "@/database/functions/predictionFunctions";
 
 async function GetAllPredictionsByCnpj(
@@ -20,7 +20,7 @@ async function GetAllPredictionsByCnpj(
     try {
       await connect();
       const predictions4Weeks = await getPredictionsByCnpj(req.query.cnpj);
-      await disconnect();
+      // await disconnect();
       if (!predictions4Weeks) {
         return res.status(204).send("No predictions were found for this CNPJ.");
       }
@@ -29,7 +29,7 @@ async function GetAllPredictionsByCnpj(
       return res.status(200).json(predictions4Weeks);
     } catch (err) {
       console.error(err);
-      await disconnect();
+      // await disconnect();
       return res.status(500).json({ error: err });
     }
   }

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 import {
   insertUpdateChangeId,
   sendPwdUpdateEmail,
@@ -23,7 +23,7 @@ async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
     }
     const updUser = await insertUpdateChangeId(user._id);
     await sendPwdUpdateEmail(updUser._id, updUser.changeId);
-    await disconnect();
+    // await disconnect();
     return res.status(200).send("Sent e-mail.");
   } catch (err) {
     console.log(err);

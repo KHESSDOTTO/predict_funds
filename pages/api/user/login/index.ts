@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { doLogin } from "@/database/functions/userFunctions";
-import { connect, disconnect } from "@/database/database.config";
+import { connect } from "@/database/database.config";
 
 async function Login(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     try {
       await connect();
       const user = await doLogin(req.body);
-      await disconnect();
+      // await disconnect();
       if (user) {
         if (user.ok && user.authCookie) {
           return res
@@ -20,11 +20,11 @@ async function Login(req: NextApiRequest, res: NextApiResponse) {
       }
       return res.status(500).json("user returned null/falsy.");
     } catch (err) {
-      await disconnect();
+      // await disconnect();
       return res.status(500).json(err);
     }
   }
-  disconnect();
+  // disconnect();
   return res.status(400).send("Only POST method accepted at this endpoint.");
 }
 

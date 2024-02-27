@@ -22,39 +22,45 @@ interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
 interface ChartSectionProps {
   data: RawDataType[];
   smallV: boolean;
-  // predictions: PredictionsType[];
+  predictions: PredictionsType[];
 }
 
 export default function ChartSection({
   data,
   smallV,
-}: // predictions,
-ChartSectionProps) {
+  predictions,
+}: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
-    [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
+    [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
+    [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
+    [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
+    [unifiedData, setUnifiedData] = useState<(RawDataType | PredictionsType)[]>(
+      [...data]
+    ),
+    [gradientOffset, setGradientOffset] = useState(1);
 
   // Margin to aply to find the domain of the Yaxis on the charts
   const margin = 0.1;
 
-  // console.log("Inside Dashboard.ChartSection: ");
-  // console.log("predictions");
-  // console.log(predictions);
+  console.log("Inside Dashboard.ChartSection: ");
+  console.log("predictions");
+  console.log(predictions);
 
-  useEffect(() => {
-    if (data.length === 0) {
-      return;
-    }
+  function adjustValueQuotaChartAxis() {
+    // Defining domain values for axis of Value Quota Chart
     const minValueVQ = data.reduce((minObj, currObj) => {
       return currObj["VL_QUOTA"] < minObj["VL_QUOTA"] ? currObj : minObj;
     }, data[0])["VL_QUOTA"];
     const maxValueVQ = data.reduce((maxObj, currObj) => {
       return currObj["VL_QUOTA"] > maxObj["VL_QUOTA"] ? currObj : maxObj;
     }, data[0])["VL_QUOTA"];
+
     // Domain of the Yaxis
     const minValYaxisVQ = minValueVQ * (1 - margin),
       maxValYaxisVQ = maxValueVQ * (1 + margin);
     setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
-    // For Value Quota chart
+
+    // Ticks for Value Quota chart
     const ticksQntYaxisVQ = 5;
     const ticksIntervalYaxisVQ =
       (maxValYaxisVQ - minValYaxisVQ) / (ticksQntYaxisVQ - 1);
@@ -62,24 +68,86 @@ ChartSectionProps) {
       { length: ticksQntYaxisVQ },
       (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
     );
+    console.log("before setTicksYaxisVQ");
     setTicksYaxisVQ(newTicksYaxisVQ);
-  }, [data]);
+  }
+
+  function adjustNetFundingChartAxis() {
+    // Defining values for domain/axis in Net Funding Chart
+    let maxAbsValueNF = data.reduce((maxAbsObj, currObj) => {
+      return Math.abs(currObj["CAPTC_LIQ"] ?? 0) >
+        (maxAbsObj["CAPTC_LIQ"] ? Math.abs(maxAbsObj["CAPTC_LIQ"]) : 0)
+        ? currObj
+        : maxAbsObj;
+    }, data[0])["CAPTC_LIQ"];
+
+    // Value of prediction to compare with highest absolute value of historic data.
+    const absValuePred = predictions[0].CAPTC_LIQ
+      ? Math.abs(predictions[0].CAPTC_LIQ)
+      : 0;
+    if (maxAbsValueNF) {
+      // Defyning domain.
+      maxAbsValueNF =
+        absValuePred > Math.abs(maxAbsValueNF)
+          ? Number(Math.abs(absValuePred).toFixed(2))
+          : Number(Math.abs(maxAbsValueNF).toFixed(2));
+      console.log("maxAbsValueNF");
+      console.log(maxAbsValueNF);
+      const start = -maxAbsValueNF * (1 + margin);
+      const end = maxAbsValueNF * (1 + margin);
+      setDomainYaxisNF([start, end]);
+
+      // Defyning Ticks
+      const distance = end - start;
+      const numTicks = 5;
+      const ticksInterval = distance / (numTicks - 1);
+      const newTicksYaxisVQ = Array.from(
+        { length: numTicks },
+        (_, index) => start + ticksInterval * index
+      );
+      setTicksYaxisNF(newTicksYaxisVQ);
+      return true;
+    }
+    return false;
+  }
+
+  function unifyData() {
+    // Unifying data
+    const newUnifiedData = [...data, predictions[1]];
+    const newGradientOffset =
+      (newUnifiedData.length - 1) / newUnifiedData.length;
+    setUnifiedData(newUnifiedData);
+    setGradientOffset(newGradientOffset);
+  }
+
+  useEffect(() => {
+    if (data.length === 0 || predictions.length === 0) {
+      return;
+    }
+    adjustValueQuotaChartAxis();
+    if (adjustNetFundingChartAxis()) {
+      unifyData();
+    }
+  }, [data, predictions]);
 
   return (
     <div
       className={`${
         smallV
-          ? "w-full flex gap-0 flex-wrap flex-col lg:gap-4 lg:flex-row"
+          ? "w-full flex gap-0 flex-wrap flex-col lg:gap-2 lg:flex-row"
           : "w-screen"
-      }`}
+      } text-white`}
     >
-      <div className={` ${smallV ? "px-2 lg:w-[47.5%]" : ""}`}>
+      <div
+        id="NetFundingDiv"
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : ""}`}
+      >
         <h1
           className={`my-4 ${
             smallV
-              ? "text-md w-9/12 mx-auto lg:font-normal"
-              : "text-lg mx-[32vw] font-semibold"
-          } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
+              ? "text-md w-9/12 mx-auto text-black border-black"
+              : "text-lg mx-[32vw] text-white/90 border-white/50"
+          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Net Funding
         </h1>
@@ -90,18 +158,36 @@ ChartSectionProps) {
             } lg:rounded-xl`}
           >
             <ResponsiveContainer height={smallV ? 150 : 300} minWidth={250}>
-              <AreaChart data={data}>
+              <AreaChart data={unifiedData}>
                 <defs>
-                  <linearGradient id="customIndigo" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
-                      offset="40%"
-                      stopColor="rgb(180, 180, 255)"
+                      offset={gradientOffset * 0.98}
+                      stopColor="rgb(150, 130, 200)"
                       stopOpacity={0.85}
                     />
                     <stop
-                      offset="60%"
-                      stopColor="rgb(180, 180, 255)"
-                      stopOpacity={0.75}
+                      offset={gradientOffset * 1.02}
+                      stopColor="white"
+                      stopOpacity={1}
+                    />
+                  </linearGradient>
+                  <linearGradient
+                    id="customIndigoDark"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                  >
+                    <stop
+                      offset={gradientOffset * 0.98}
+                      stopColor="rgb(120, 50, 150)"
+                      stopOpacity={1}
+                    />
+                    <stop
+                      offset={gradientOffset * 1.02}
+                      stopColor="white"
+                      stopOpacity={1}
                     />
                   </linearGradient>
                 </defs>
@@ -116,12 +202,12 @@ ChartSectionProps) {
                   }}
                 />
                 <YAxis
-                  // ticks={ticksYaxisNF}
+                  ticks={ticksYaxisNF}
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   tickFormatter={(num) =>
-                    `R$${String(num.toFixed(2) / 1000)} k`
+                    `R$${String((num / 1000).toFixed(0))} k`
                   }
-                  // domain={domainYaxisNF}
+                  domain={domainYaxisNF}
                   width={65}
                   fontSize={12}
                 />
@@ -129,7 +215,7 @@ ChartSectionProps) {
                 <Area
                   type="monotone"
                   dataKey="CAPTC_LIQ"
-                  stroke="rgb(100, 0, 120)"
+                  stroke="url(#customIndigoDark)"
                   fill="url(#customIndigo)"
                 ></Area>
                 <Tooltip content={<CustomTooltipIndigo />} />
@@ -148,13 +234,16 @@ ChartSectionProps) {
           )}
         </div>
       </div>
-      <div className={` ${smallV ? "px-2 lg:w-[47.5%]" : ""}`}>
+      <div
+        id="ValueQuotaDiv"
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : ""}`}
+      >
         <h1
           className={`my-4 ${
             smallV
-              ? "text-md w-9/12 mx-auto lg:font-normal"
-              : "text-lg mx-[32vw] font-semibold"
-          } text-center border-b border-black lg:indent-2 lg:mx-4 lg:text-left`}
+              ? "text-md w-9/12 mx-auto text-black border-black"
+              : "text-lg mx-[32vw] text-white/90 border-white/50"
+          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Value - Quota
         </h1>
@@ -169,14 +258,14 @@ ChartSectionProps) {
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
                     <stop
-                      offset="10%"
+                      offset="30%"
                       stopColor="rgb(200, 200, 100)"
-                      stopOpacity={0.4}
+                      stopOpacity={1}
                     />
                     <stop
-                      offset="90%"
+                      offset="70%"
                       stopColor="rgb(200, 200, 100)"
-                      stopOpacity={0.1}
+                      stopOpacity={0.75}
                     />
                   </linearGradient>
                 </defs>
@@ -203,7 +292,7 @@ ChartSectionProps) {
                   type="monotone"
                   dataKey="VL_QUOTA"
                   stroke="rgb(150, 150, 75)"
-                  strokeWidth={2}
+                  strokeWidth={1}
                   fill="url(#customYellow)"
                 ></Area>
                 <Tooltip content={<CustomTooltipYellow />} />
@@ -232,6 +321,7 @@ function CustomTooltipIndigo({ active, payload, label }: CustomTootipProps) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm">
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
+        {label > new Date() ? "I am biggerrrr" : ""}
         <p>
           Net Funding: R$
           {payload[0].payload.CAPTC_LIQ.toFixed(2).toLocaleString("en-US")}
