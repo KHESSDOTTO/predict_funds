@@ -321,7 +321,6 @@ function CustomTooltipIndigo({ active, payload, label }: CustomTootipProps) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm">
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
-        {label > new Date() ? "I am biggerrrr" : ""}
         <p>
           Net Funding: R$
           {payload[0].payload.CAPTC_LIQ.toFixed(2).toLocaleString("en-US")}
