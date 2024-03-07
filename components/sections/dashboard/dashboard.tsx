@@ -11,7 +11,7 @@ import ControlSection from "./controlSection";
 import ChartSection from "./chartSection";
 import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
-import { addWeeks } from "date-fns";
+import { addWeeks, addDays, getDay } from "date-fns";
 import { AxiosResponse } from "axios";
 
 interface DashboardProps {
@@ -45,7 +45,7 @@ export default function Dashboard({ user }: DashboardProps) {
         let slicedHistoricData = [];
         if (responseHistoric.data) {
           slicedHistoricData = responseHistoric.data.slice(
-            controlForm.weeksBack * -7,
+            controlForm.weeksBack * -5 - 1,
             responseHistoric.data.length
           );
         }
@@ -82,18 +82,30 @@ export default function Dashboard({ user }: DashboardProps) {
             CAPTC_LIQ:
               finalHistoricData[finalHistoricData.length - 1].CAPTC_LIQ,
           });
-          finalPredictionData.push({
-            // including prediction for 4 weeks based on the varCota of the controlForm
-            DT_COMPTC: addWeeks(
-              finalHistoricData[finalHistoricData.length - 1].DT_COMPTC,
-              4
-            ),
-            CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
-            CAPTC_LIQ:
-              responsePreds.data[
-                (controlForm.varCota * 100).toFixed(1).toString()
-              ],
-          });
+
+          for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
+            const lastDate =
+              finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
+            if (!lastDate) {
+              break;
+            }
+            let newDate = lastDate;
+            const dayOfWeek = getDay(lastDate);
+            if (dayOfWeek === 5) {
+              newDate = addDays(lastDate, 3);
+            } else {
+              newDate = addDays(lastDate, 1);
+            }
+            finalPredictionData.push({
+              // including prediction for 4 weeks based on the varCota of the controlForm
+              DT_COMPTC: newDate,
+              CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+              CAPTC_LIQ:
+                responsePreds.data[
+                  (controlForm.varCota * 100).toFixed(1).toString()
+                ],
+            });
+          }
         }
         console.log("Final prediction data:");
         console.log(finalPredictionData);

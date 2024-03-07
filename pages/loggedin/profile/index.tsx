@@ -16,7 +16,8 @@ interface ProfilePagePropsType {
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
   const router = useRouter(),
-    inputClass = "rounded-sm px-1 shadow-sm shadow-gray-600",
+    inputClass =
+      "rounded-sm px-2 shadow-sm shadow-gray-600 text-black lg:w-[60vw]",
     [form, setForm] = useState({
       username: user.username,
       cnpj: user.cnpj,
@@ -117,7 +118,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-black to-[rgb(10,50,50)] lg:to-[rgb(10,50,80)] text-white">
       <Header user={user}></Header>
       <PwdConfirmModal
         showModal={showModal}
@@ -127,91 +128,93 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
         handleSubmitPwdConfirmForm={handleSubmitEmailChange}
       />
       <main className="flex flex-col items-center py-8 md:py-16 lg:py-12">
-        <h1 className="text-4xl font-bold mb-2 mt-6 font-serif px-4 pb-2 lg:px-32 lg:border-b lg:border-black lg:mt-0">
+        <h1 className="text-3xl font-bold my-6 font-serif px-4 pb-2 lg:w-[90vw] border-b lg:border-white lg:mt-0 lg:mb-12">
           Profile
         </h1>
-        <section id="userInfos" className="relative">
-          <form
-            ref={formRef}
-            className="flex py-8 gap-4"
-            onSubmit={handleSubmitNoEmail}
-          >
-            <div className="flex flex-col font-semibold gap-8 lg:gap-6">
-              <label htmlFor="username">Username:</label>
-              <label htmlFor="email">Email:</label>
-              <label htmlFor="address">Address:</label>
-              <label htmlFor="cnpj">CNPJ:</label>
-              <label htmlFor="contactPhone">Phone:</label>
-            </div>
-            <div className="flex flex-col gap-8 lg:gap-6">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  className={inputClass}
-                  value={form.username}
-                  onChange={handleChange}
-                />
+        <div className="flex flex-col items-center lg:items-start">
+          <section id="userInfos" className="relative lg:px-16">
+            <form
+              ref={formRef}
+              className="flex py-8 gap-4 lg:gap-12"
+              onSubmit={handleSubmitNoEmail}
+            >
+              <div className="flex flex-col gap-8 lg:gap-12 lg:items-end">
+                <label htmlFor="username">Username:</label>
+                <label htmlFor="email">Email:</label>
+                <label htmlFor="address">Address:</label>
+                <label htmlFor="cnpj">CNPJ:</label>
+                <label htmlFor="contactPhone">Phone:</label>
               </div>
-              <div className="flex gap-2 italic">
-                <input
-                  type="text"
-                  id="email"
-                  name="email"
-                  className={inputClass}
-                  value={form.email}
-                  onChange={handleChange}
-                />
+              <div className="flex flex-col gap-8 lg:gap-12">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    className={inputClass}
+                    value={form.username}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex gap-2 italic">
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    className={inputClass}
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="address"
+                    name="address"
+                    className={inputClass}
+                    value={form.address}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="cnpj"
+                    name="cnpj"
+                    className={inputClass}
+                    value={form.cnpj}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="contactPhone"
+                    name="contactPhone"
+                    className={inputClass}
+                    value={form.contactPhone}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  id="address"
-                  name="address"
-                  className={inputClass}
-                  value={form.address}
-                  onChange={handleChange}
-                />
+              <div className="hidden lg:flex text-lg justify-center mb-4 underline font-semibold transition-all duration-500 hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-24 lg:border-l-2 lg:border-white lg:no-underline lg:px-2 lg:right-[-30px] lg:bottom-[10%] lg:text-base">
+                <button type="submit">Save</button>
               </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  id="cnpj"
-                  name="cnpj"
-                  className={inputClass}
-                  value={form.cnpj}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  id="contactPhone"
-                  name="contactPhone"
-                  className={inputClass}
-                  value={form.contactPhone}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="hidden lg:flex text-lg justify-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:border-black lg:no-underline lg:px-2 lg:right-[-100px] lg:bottom-[25%] lg:text-base">
-              <button type="submit">Save</button>
-            </div>
-          </form>
-        </section>
-        <div className="flex justify-center items-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:hidden">
-          <button onClick={handleSubmitOutside}>Save</button>
-        </div>
-        <div className="flex flex-col justify-center items-center gap-8 pt-2 lg:flex-row">
-          <div
-            className="text-indigo-800 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300"
-            onClick={handleChangePwd}
-          >
-            Redefinir Senha
+            </form>
+          </section>
+          <div className="flex justify-center items-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:hidden">
+            <button onClick={handleSubmitOutside}>Save</button>
           </div>
-          <div onClick={handleLogout}>
-            <ButtonRed shadowColor="white">Log out</ButtonRed>
+          <div className="flex flex-col w-[100vw] justify-center items-center gap-8 pt-2 lg:flex-row lg:absolute lg:bottom-12 lg:left-0">
+            <div
+              className="text-indigo-100 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300 hover:-translate-y-px"
+              onClick={handleChangePwd}
+            >
+              Redefinir Senha
+            </div>
+            <div onClick={handleLogout}>
+              <ButtonRed shadowColor="white">Log out</ButtonRed>
+            </div>
           </div>
         </div>
       </main>

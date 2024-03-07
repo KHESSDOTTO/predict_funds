@@ -13,6 +13,7 @@ function generateToken(user: {
   createdAt: Date;
   emailConfirm: Boolean;
   isActive: Boolean;
+  cnpjs: string[];
 }) {
   let signature: string;
   if (process.env.TOKEN_SIGN_SECRET) {
@@ -31,6 +32,7 @@ function generateToken(user: {
     emailConfirm,
     isActive,
     createdAt,
+    cnpjs,
   } = user;
   return jwt.sign(
     {
@@ -43,6 +45,7 @@ function generateToken(user: {
       emailConfirm,
       isActive,
       createdAt,
+      cnpjs,
     },
     signature,
     {

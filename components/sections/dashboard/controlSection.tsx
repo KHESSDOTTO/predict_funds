@@ -1,11 +1,12 @@
 import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
 import type { DashboardControlFormType, PredictionsType } from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
-import { addWeeks } from "date-fns";
+import { addWeeks, addDays, getDay } from "date-fns";
+import { UserContext } from "@/contexts/UserContext";
 
 interface ControlSectionProps {
   data: RawDataType[];
@@ -22,6 +23,9 @@ export default function ControlSection({
   controlForm,
   setControlForm,
 }: ControlSectionProps) {
+  const userContext = useContext(UserContext);
+  const user = userContext.user;
+
   useEffect(() => {
     if (data[0]) {
       setControlForm({
@@ -31,7 +35,9 @@ export default function ControlSection({
     }
   }, [data]);
 
-  function handleControlFormChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleControlFormChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
     let newVal = e.target.value;
     if (e.target.name === "buscaCnpj") {
       const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
@@ -89,7 +95,7 @@ export default function ControlSection({
       );
       console.log(newHistoricData);
       const slicedHistoricData = newHistoricData.data.slice(
-        controlForm.weeksBack * -7,
+        controlForm.weeksBack * -5 - 1,
         -1
       );
       let finalHistoricData = slicedHistoricData.map((cE: RawDataType) => {
@@ -108,18 +114,29 @@ export default function ControlSection({
         });
         console.log("Number(controlForm.varCota).toFixed(1).toString()");
         console.log((controlForm.varCota * 100).toFixed(1).toString());
-        finalPredictionData.push({
-          // including prediction for 4 weeks based on the varCota of the controlForm
-          DT_COMPTC: addWeeks(
-            finalHistoricData[finalHistoricData.length - 1].DT_COMPTC,
-            4
-          ),
-          CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
-          CAPTC_LIQ:
-            responsePreds.data[
-              (controlForm.varCota * 100).toFixed(1).toString()
-            ],
-        });
+        for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
+          const lastDate =
+            finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
+          if (!lastDate) {
+            break;
+          }
+          let newDate = lastDate;
+          const dayOfWeek = getDay(lastDate);
+          if (dayOfWeek === 5) {
+            newDate = addDays(lastDate, 3);
+          } else {
+            newDate = addDays(lastDate, 1);
+          }
+          finalPredictionData.push({
+            // including prediction for 4 weeks based on the varCota of the controlForm
+            DT_COMPTC: newDate,
+            CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+            CAPTC_LIQ:
+              responsePreds.data[
+                (controlForm.varCota * 100).toFixed(1).toString()
+              ],
+          });
+        }
       }
       console.log("Final prediction data:");
       console.log(finalPredictionData);
@@ -175,7 +192,7 @@ export default function ControlSection({
             </div>
             <div className="flex flex-col gap-1 lg:gap-0">
               <div className="h-8">
-                <input
+                {/* <input
                   type="text"
                   id="buscaCnpj"
                   name="buscaCnpj"
@@ -183,7 +200,20 @@ export default function ControlSection({
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
                   disabled
-                ></input>
+                ></input> */}
+                <select
+                  id="buscaCnpj"
+                  name="buscaCnpj"
+                  value={controlForm.buscaCnpj}
+                  onChange={handleControlFormChange}
+                  className="rounded-md border-2 border-black bg-white"
+                >
+                  {user &&
+                    user.cnpjs &&
+                    user.cnpjs.map((cE) => {
+                      return <option value={cE}>{cE}</option>;
+                    })}
+                </select>
               </div>
               <div className="h-8">
                 <input
@@ -261,7 +291,7 @@ export default function ControlSection({
           <div className="flex flex-row justify-center lg:gap-8 lg:flex-wrap">
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
               <label htmlFor="buscaCnpj">CNPJ</label>
-              <input
+              {/* <input
                 type="text"
                 id="buscaCnpj"
                 name="buscaCnpj"
@@ -269,7 +299,20 @@ export default function ControlSection({
                 value={controlForm.buscaCnpj}
                 onChange={handleControlFormChange}
                 disabled
-              ></input>
+              ></input> */}
+              <select
+                id="buscaCnpj"
+                name="buscaCnpj"
+                value={controlForm.buscaCnpj}
+                onChange={handleControlFormChange}
+                className="border-b-2 rounded-t-sm border-black text-center w-40 bg-transparent focus:outline-none"
+              >
+                {user &&
+                  user.cnpjs &&
+                  user.cnpjs.map((cE) => {
+                    return <option value={cE}>{cE}</option>;
+                  })}
+              </select>
             </div>
             <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
               <label htmlFor="weeksBack">Weeks back</label>

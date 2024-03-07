@@ -16,8 +16,14 @@ import { format } from "date-fns";
 import { PredictionsType, RawDataType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
+import {
+  generateYaxisDomainBasedOnMaxAbs,
+  generateYaxisTicksBasedOnMaxAbs,
+} from "@/utils/functions";
 
-interface CustomTootipProps extends TooltipProps<ValueType, NameType> {}
+interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
+  data?: (RawDataType | PredictionsType)[];
+}
 
 interface ChartSectionProps {
   data: RawDataType[];
@@ -30,6 +36,7 @@ export default function ChartSection({
   smallV,
   predictions,
 }: ChartSectionProps) {
+  const numWeekPreds = 4; // Mudar para melhores práticas -> controle por formulário de controle
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
@@ -40,7 +47,7 @@ export default function ChartSection({
     [gradientOffset, setGradientOffset] = useState(1);
 
   // Margin to aply to find the domain of the Yaxis on the charts
-  const margin = 0.1;
+  const margin = 0.05;
 
   console.log("Inside Dashboard.ChartSection: ");
   console.log("predictions");
@@ -91,21 +98,30 @@ export default function ChartSection({
         absValuePred > Math.abs(maxAbsValueNF)
           ? Number(Math.abs(absValuePred).toFixed(2))
           : Number(Math.abs(maxAbsValueNF).toFixed(2));
-      console.log("maxAbsValueNF");
-      console.log(maxAbsValueNF);
-      const start = -maxAbsValueNF * (1 + margin);
-      const end = maxAbsValueNF * (1 + margin);
-      setDomainYaxisNF([start, end]);
+      // console.log("maxAbsValueNF");
+      // console.log(maxAbsValueNF);
+      // const start = -maxAbsValueNF * (1 + margin);
+      // const end = maxAbsValueNF * (1 + margin);
+      const newDomain = generateYaxisDomainBasedOnMaxAbs(maxAbsValueNF);
+      if (newDomain) {
+        setDomainYaxisNF(newDomain);
+      }
 
       // Defyning Ticks
-      const distance = end - start;
-      const numTicks = 5;
-      const ticksInterval = distance / (numTicks - 1);
-      const newTicksYaxisVQ = Array.from(
-        { length: numTicks },
-        (_, index) => start + ticksInterval * index
-      );
-      setTicksYaxisNF(newTicksYaxisVQ);
+      // const distance = end - start;
+      // const numTicks = 5;
+      // const ticksInterval = distance / (numTicks - 1);
+      // const newTicksYaxisNF = Array.from(
+      //   { length: numTicks },
+      //   (_, index) => start + ticksInterval * index
+      // );
+      // setTicksYaxisNF(newTicksYaxisNF);
+      const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
+      console.log("newYaxisNFTicks");
+      console.log(newYaxisNFTicks);
+      if (newYaxisNFTicks) {
+        setTicksYaxisNF(newYaxisNFTicks);
+      }
       return true;
     }
     return false;
@@ -113,9 +129,9 @@ export default function ChartSection({
 
   function unifyData() {
     // Unifying data
-    const newUnifiedData = [...data, predictions[1]];
+    const newUnifiedData = [...data, ...predictions.slice(1)];
     const newGradientOffset =
-      (newUnifiedData.length - 1) / newUnifiedData.length;
+      (newUnifiedData.length - numWeekPreds * 5) / newUnifiedData.length;
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
   }
@@ -162,12 +178,12 @@ export default function ChartSection({
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
-                      offset={gradientOffset * 0.98}
+                      offset={gradientOffset * 0.95}
                       stopColor="rgb(150, 130, 200)"
                       stopOpacity={0.85}
                     />
                     <stop
-                      offset={gradientOffset * 1.02}
+                      offset={gradientOffset * 1.1}
                       stopColor="white"
                       stopOpacity={1}
                     />
@@ -207,18 +223,29 @@ export default function ChartSection({
                   tickFormatter={(num) =>
                     `R$${String((num / 1000).toFixed(0))} k`
                   }
+                  tickCount={11}
                   domain={domainYaxisNF}
                   width={65}
                   fontSize={12}
                 />
-                <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
+                <CartesianGrid
+                  // vertical={false}
+                  stroke="rgb(170, 150, 255)"
+                  strokeWidth={0.3}
+                />
+                {/* <CartesianGrid
+                  horizontal={false}
+                  stroke="rgb(170, 150, 255)"
+                  strokeDasharray="1 4"
+                  opacity={0.5}
+                /> */}
                 <Area
                   type="monotone"
                   dataKey="CAPTC_LIQ"
                   stroke="url(#customIndigoDark)"
                   fill="url(#customIndigo)"
                 ></Area>
-                <Tooltip content={<CustomTooltipIndigo />} />
+                <Tooltip content={<CustomTooltipIndigo data={unifiedData} />} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -287,7 +314,12 @@ export default function ChartSection({
                   fontSize={12}
                   domain={domainYaxisVQ}
                 />
-                <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" />
+                {/* <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" /> */}
+                <CartesianGrid
+                  // vertical={false}
+                  stroke="rgb(170, 150, 255)"
+                  strokeWidth={0.3}
+                />
                 <Area
                   type="monotone"
                   dataKey="VL_QUOTA"
@@ -315,12 +347,32 @@ export default function ChartSection({
   );
 }
 
-function CustomTooltipIndigo({ active, payload, label }: CustomTootipProps) {
-  console.log(JSON.stringify(payload));
+function CustomTooltipIndigo({
+  active,
+  payload,
+  label,
+  data,
+}: CustomTootipProps) {
+  // console.log(JSON.stringify(payload));
+  // Identify preictions to differentiate on the chart
+  // <IdentificandoPredsLabels>
+  const numPreds = 4;
+  const predsElements = data?.slice(data.length - numPreds * 5, data.length);
+  const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
+  // </IdentificandoPredsLabels>
+  let tooltipClass =
+    "bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm";
+  const isPrediction = predsDates?.includes(label);
+  if (isPrediction) {
+    tooltipClass =
+      "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
+  }
   if (active && label && payload) {
     return (
-      <div className="bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm">
-        <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
+      <div className={tooltipClass}>
+        {isPrediction && <h3 className="font-semibold mb-1">Prediction</h3>}
+        {!isPrediction && <h3 className="font-semibold ">Historic</h3>}
+        <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
           Net Funding: R$
           {payload[0].payload.CAPTC_LIQ.toFixed(2).toLocaleString("en-US")}
