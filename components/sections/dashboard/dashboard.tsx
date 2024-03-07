@@ -11,7 +11,7 @@ import ControlSection from "./controlSection";
 import ChartSection from "./chartSection";
 import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
-import { addWeeks, addDays, getDay } from "date-fns";
+import { subWeeks, addDays, getDay } from "date-fns";
 import { AxiosResponse } from "axios";
 
 interface DashboardProps {
@@ -32,87 +32,118 @@ export default function Dashboard({ user }: DashboardProps) {
       weeksForward: 4,
     });
 
+  async function getHistoricData(encodedParam: string) {
+    try {
+      const responseHistoric = await ax.get(
+        `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
+      );
+      console.log("Complete historic data:");
+      console.log(responseHistoric);
+      let slicedHistoricData: RawDataType[] = [];
+      if (responseHistoric.data) {
+        // slicedHistoricData = responseHistoric.data.slice(
+        //   controlForm.weeksBack * -5 - 1,
+        //   responseHistoric.data.length
+        // );
+        const adjHistoricData: RawDataType[] = responseHistoric.data.map(
+          (cE: RawDataType) => {
+            const convDate = new Date(cE.DT_COMPTC);
+            return { ...cE, DT_COMPTC: convDate };
+          }
+        );
+        const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
+          return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
+        }, new Date("2020-01-01T00:00:00Z"));
+        console.log("higherDate");
+        console.log(higherDate);
+        console.log("cutDate");
+        console.log(subWeeks(higherDate, controlForm.weeksBack));
+
+        slicedHistoricData = adjHistoricData.filter((cE) => {
+          return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
+        });
+      }
+      console.log("Length of sliced data:");
+      console.log(slicedHistoricData.length);
+      console.log("Sliced data:");
+      console.log(slicedHistoricData);
+      console.log("Final historic data after mapping to convert date:");
+      console.log(slicedHistoricData);
+      setHistoricData(slicedHistoricData);
+      return slicedHistoricData;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async function getPredictions(
+    encodedParam: string,
+    slicedHistoricData: RawDataType[]
+  ) {
+    let responsePreds: AxiosResponse<any, any> | undefined;
+    responsePreds = await ax.get(
+      `/prediction/getFromCnpj?cnpj=${encodedParam}`
+    );
+    console.log("Predictions:");
+    console.log(responsePreds);
+    let finalPredictionData: PredictionsType[] = [];
+    if (responsePreds && responsePreds.data && slicedHistoricData) {
+      finalPredictionData.push({
+        // including last date shown in historic (current date)
+        DT_COMPTC: slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC,
+        CNPJ_FUNDO:
+          slicedHistoricData[slicedHistoricData.length - 1].CNPJ_FUNDO,
+        CAPTC_LIQ: slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ,
+      });
+
+      for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
+        const lastDate =
+          finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
+        if (!lastDate) {
+          break;
+        }
+        let newDate = lastDate;
+        const dayOfWeek = getDay(lastDate);
+        if (dayOfWeek === 5) {
+          newDate = addDays(lastDate, 3);
+        } else {
+          newDate = addDays(lastDate, 1);
+        }
+        finalPredictionData.push({
+          // including prediction for 4 weeks based on the varCota of the controlForm
+          DT_COMPTC: newDate,
+          CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+          CAPTC_LIQ:
+            responsePreds.data[
+              (controlForm.varCota * 100).toFixed(1).toString()
+            ],
+        });
+      }
+    }
+    console.log("Final prediction data:");
+    console.log(finalPredictionData);
+    if (finalPredictionData) {
+      setPredictionData(finalPredictionData);
+    }
+    return finalPredictionData;
+  }
+
   useEffect(() => {
     async function getData() {
       const loadingToast = toast.loading("Fetching data...");
+      const encodedParam = encodeURIComponent(user.cnpj);
       try {
-        const encodedParam = encodeURIComponent(user.cnpj);
-        const responseHistoric = await ax.get(
-          `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
-        );
-        console.log("Complete historic data:");
-        console.log(responseHistoric);
-        let slicedHistoricData = [];
-        if (responseHistoric.data) {
-          slicedHistoricData = responseHistoric.data.slice(
-            controlForm.weeksBack * -5 - 1,
-            responseHistoric.data.length
-          );
-        }
-        console.log("Length of sliced data:");
-        console.log(slicedHistoricData.length);
-        console.log("Sliced data:");
-        console.log(slicedHistoricData);
-        let finalHistoricData: RawDataType[] = [];
+        const slicedHistoricData = await getHistoricData(encodedParam);
+        let predictions: PredictionsType[] = [];
         if (slicedHistoricData) {
-          finalHistoricData = slicedHistoricData.map((cE: RawDataType) => {
-            const convDate = new Date(cE.DT_COMPTC);
-            return { ...cE, DT_COMPTC: convDate };
-          });
+          predictions = await getPredictions(encodedParam, slicedHistoricData);
         }
-        console.log("Final historic data after mapping to convert date:");
-        console.log(finalHistoricData);
-        setHistoricData(finalHistoricData);
-        let responsePreds: AxiosResponse<any, any> | undefined;
-        // setTimeout(async () => {
-        //   try {
-        responsePreds = await ax.get(
-          `/prediction/getFromCnpj?cnpj=${encodedParam}`
-        );
-        console.log("Predictions:");
-        console.log(responsePreds);
-        let finalPredictionData: PredictionsType[] = [];
-        if (responsePreds && responsePreds.data && finalHistoricData) {
-          finalPredictionData.push({
-            // including last date shown in historic (current date)
-            DT_COMPTC:
-              finalHistoricData[finalHistoricData.length - 1].DT_COMPTC,
-            CNPJ_FUNDO:
-              finalHistoricData[finalHistoricData.length - 1].CNPJ_FUNDO,
-            CAPTC_LIQ:
-              finalHistoricData[finalHistoricData.length - 1].CAPTC_LIQ,
-          });
-
-          for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
-            const lastDate =
-              finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
-            if (!lastDate) {
-              break;
-            }
-            let newDate = lastDate;
-            const dayOfWeek = getDay(lastDate);
-            if (dayOfWeek === 5) {
-              newDate = addDays(lastDate, 3);
-            } else {
-              newDate = addDays(lastDate, 1);
-            }
-            finalPredictionData.push({
-              // including prediction for 4 weeks based on the varCota of the controlForm
-              DT_COMPTC: newDate,
-              CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
-              CAPTC_LIQ:
-                responsePreds.data[
-                  (controlForm.varCota * 100).toFixed(1).toString()
-                ],
-            });
-          }
+        if (predictions) {
+          toast.success("Done.");
+        } else {
+          toast.error("Something went wrong.");
         }
-        console.log("Final prediction data:");
-        console.log(finalPredictionData);
-        if (finalPredictionData) {
-          setPredictionData(finalPredictionData);
-        }
-        toast.success("Done.");
       } catch (err) {
         console.log(err);
         toast.error("Sorry. We had a problem fetching the data.");
