@@ -26,6 +26,16 @@ const UserSchema = new Schema({
     unique: false,
     required: true,
   },
+  cnpjs: [
+    {
+      type: String,
+      trim: true,
+      match: /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/gm,
+      unique: true,
+      sparse: true,
+      required: true,
+    },
+  ],
   changeId: { type: String, required: false, unique: false },
   products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   createdAt: { type: Date, default: Date.now() },

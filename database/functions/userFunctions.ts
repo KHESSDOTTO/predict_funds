@@ -91,6 +91,7 @@ async function doCreateUser(clientInfo: {
   password: string;
   contactPhone: string;
   passwordConfirm: string;
+  cnpjs: string[];
 }) {
   const SALT_ROUNDS = 10;
   const { password, passwordConfirm } = clientInfo;

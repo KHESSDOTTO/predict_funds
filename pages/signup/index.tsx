@@ -88,6 +88,7 @@ export default function SignUpPage() {
     const clone = {
       ...form,
       contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
+      cnpjs: [form.cnpj],
     };
     if (clone.password !== clone.passwordConfirm) {
       console.log(

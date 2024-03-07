@@ -71,10 +71,12 @@ export default function MyCenarios() {
 
       // <Adjusting_predictions>
       const predsArray: any = [];
-      cenario.predictionData.slice(1).forEach((cE) => {
-        const predsSubArray = Object.entries(cE).map(([cK, cV]) => [cK, cV]);
-        predsArray.push(...predsSubArray);
-      });
+      cenario.predictionData
+        .slice(cenario.predictionData.length - 1)
+        .forEach((cE) => {
+          const predsSubArray = Object.entries(cE).map(([cK, cV]) => [cK, cV]);
+          predsArray.push(...predsSubArray);
+        });
       // </Adjusting_predictions>
       const historicDataHeader: (keyof RawDataType)[] = [
         "DT_COMPTC",
@@ -118,14 +120,14 @@ export default function MyCenarios() {
   }
 
   return (
-    <div className="min-h-screen relative bg-[rgb(10,20,50)] text-white">
+    <div className="min-h-screen relative bg-[rgb(0,10,20)] lg:bg-gradient-to-br lg:from-[rgb(0,10,20)] lg:to-[rgba(0,30,100,0.8)] text-white/90">
       {user && <Header user={user} />}
       <div className="flex justify-center lg:hidden">
-        <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white lg:mb-12 lg:text-5xl lg:px-16">
+        <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
           My Cenarios
         </h1>
       </div>
-      <h1 className="hidden text-3xl font-semibold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:text-5xl lg:px-16 lg:mx-20">
+      <h1 className="hidden text-3xl font-semibold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:px-4 lg:mx-16">
         My Cenarios
       </h1>
       <section
@@ -188,7 +190,7 @@ export default function MyCenarios() {
               </div>
               <div
                 id={cE.id}
-                className="hidden mt-6 lg:flex lg:justify-center lg:w-full"
+                className="hidden my-2 lg:flex lg:justify-start lg:mx-12 lg:w-full"
                 onClick={excludeCenario}
               >
                 <ButtonRed shadowColor="black">Delete</ButtonRed>

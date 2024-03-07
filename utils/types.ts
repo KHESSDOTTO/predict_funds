@@ -55,6 +55,7 @@ interface UserType {
   createdAt: Date;
   emailConfirm: boolean;
   isActive: boolean;
+  cnpjs: string[];
 }
 
 interface RawDataType {
