@@ -46,6 +46,9 @@ export default function ControlSection({
             return { ...cE, DT_COMPTC: convDate };
           }
         );
+        adjHistoricData.sort(
+          (a, b) => a.DT_COMPTC.getTime() - b.DT_COMPTC.getTime()
+        );
         const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
           return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
         }, new Date("2020-01-01T00:00:00Z"));
