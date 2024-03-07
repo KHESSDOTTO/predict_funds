@@ -211,6 +211,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
+                  interval={6}
                   fontSize={12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
@@ -300,6 +301,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
+                  interval={6}
                   fontSize={12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
