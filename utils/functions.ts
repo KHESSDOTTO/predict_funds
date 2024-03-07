@@ -13,7 +13,8 @@ function generateYaxisTicksBasedOnMaxAbs(
     while (times > 10) {
       times = times - 10;
     }
-    const newMaxValueTick = times == 2 ? 500000 : maxValueTick * 2;
+    let newMaxValueTick = times == 2 ? 500000 : maxValueTick + 500000;
+    if (times == 1) newMaxValueTick = 200000;
     return generateYaxisTicksBasedOnMaxAbs(
       maxAbs,
       newMaxValueTick,
@@ -47,7 +48,8 @@ function generateYaxisDomainBasedOnMaxAbs(
     while (times > 10) {
       times = times - 10;
     }
-    const newMaxValueTick = times == 2 ? 500000 : maxValueTick * 2;
+    let newMaxValueTick = times == 2 ? 500000 : maxValueTick + 500000;
+    if (times == 1) newMaxValueTick = 200000;
     return generateYaxisDomainBasedOnMaxAbs(maxAbs, newMaxValueTick, times + 1);
   }
 
