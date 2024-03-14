@@ -185,7 +185,9 @@ export default function MyCenarios() {
                   className="mt-6 lg:hidden"
                   onClick={excludeCenario}
                 >
-                  <ButtonRed shadowColor="black">Delete</ButtonRed>
+                  <ButtonRed shadowColor="black" shadowSize="md">
+                    Delete
+                  </ButtonRed>
                 </div>
               </div>
               <div
@@ -193,7 +195,9 @@ export default function MyCenarios() {
                 className="hidden my-2 lg:flex lg:justify-start lg:mx-12 lg:w-full"
                 onClick={excludeCenario}
               >
-                <ButtonRed shadowColor="black">Delete</ButtonRed>
+                <ButtonRed shadowColor="black" shadowSize="md">
+                  Delete
+                </ButtonRed>
               </div>
             </div>
           );
@@ -209,7 +213,9 @@ export default function MyCenarios() {
         className={`bg-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
       >
         <div onClick={exportCenarios}>
-          <ButtonGreen shadowColor="black">Export</ButtonGreen>
+          <ButtonGreen shadowSize="none" shadowColor="black">
+            Export
+          </ButtonGreen>
         </div>
       </footer>
     </div>

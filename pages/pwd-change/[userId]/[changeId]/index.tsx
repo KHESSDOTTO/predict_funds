@@ -1,4 +1,3 @@
-import ButtonGreen from "@/components/UI/buttonGreen";
 import { ax } from "@/database/axios.config";
 import type { GetServerSideProps } from "next";
 import { useState } from "react";

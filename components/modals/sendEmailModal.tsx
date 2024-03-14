@@ -170,7 +170,9 @@ export default function SendEmailModal({
             </div>
           )}
           <div className="mt-4 lg:mt-0">
-            <ButtonGreen shadowColor="none">{textBtn}</ButtonGreen>
+            <ButtonGreen shadowSize="md" shadowColor="none">
+              {textBtn}
+            </ButtonGreen>
           </div>
         </form>
       </div>

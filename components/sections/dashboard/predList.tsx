@@ -1,30 +1,35 @@
 import ButtonIndigo from "@/components/UI/buttonIndigo";
-import { RawDataType } from "@/utils/types";
-import { useState } from "react";
+import { PredictionsType, RawDataType } from "@/utils/types";
+import { addWeeks, subWeeks } from "date-fns";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 interface PredListPropsType {
   title: string;
   onlyBack: boolean;
   data: RawDataType[];
-  varName:
-    | "VL_QUOTA"
-    | "CAPTC_DIA"
-    | "VL_PATRIM_LIQ"
-    | "RESG_DIA"
-    | "CAPTC_LIQ";
+  predictions: PredictionsType[];
+  varName: "VL_QUOTA" | "CAPTC_LIQ";
 }
 
 export default function PredList({
   title,
   onlyBack,
   data,
+  predictions,
   varName,
 }: PredListPropsType) {
   const [predRows, setPredRows] = useState([
     { id: uuidv4(), direction: "backward", numPer: 8 },
     { id: uuidv4(), direction: "backward", numPer: 4 },
   ]);
+  const [lastHistoricDate, setLastHistoricDate] = useState(new Date());
+
+  useEffect(() => {
+    if (data[data.length - 1]) {
+      setLastHistoricDate(data[data.length - 1].DT_COMPTC);
+    }
+  }, [data, predictions]);
 
   const formatter = new Intl.NumberFormat("de-DE", {
     style: "decimal",
@@ -38,6 +43,36 @@ export default function PredList({
     numPer: 8,
   });
   const [showAddRow, setShowAddRow] = useState(false);
+
+  function formatValue(
+    direction: string,
+    varName: string,
+    currEntryBack: Record<string, any> | undefined,
+    currEntryFront: Record<string, any> | undefined,
+    formatter: Intl.NumberFormat
+  ): string {
+    console.log("currEntryBack");
+    console.log(currEntryBack);
+    console.log("currEntryFront");
+    console.log(currEntryFront);
+    if (direction === "backward" && currEntryBack) {
+      const value = currEntryBack[varName];
+      if (typeof value === "number") {
+        return formatter.format(value);
+      }
+    } else if (
+      direction === "forward" &&
+      currEntryFront &&
+      varName !== "VL_QUOTA"
+    ) {
+      const value = currEntryFront[varName];
+      if (typeof value === "number") {
+        return formatter.format(value);
+      }
+    }
+
+    return "-";
+  }
 
   function handleShowAddRow() {
     setShowAddRow(true);
@@ -90,6 +125,45 @@ export default function PredList({
         </thead>
         <tbody>
           {predRows.map((cE) => {
+            let tgtDate = lastHistoricDate;
+            console.log("tgtDate");
+            console.log(tgtDate);
+            let entriesBack = data;
+            console.log("entriesBack");
+            console.log(entriesBack);
+            let entriesFront = predictions;
+            console.log("entriesFront");
+            console.log(entriesFront);
+
+            if (cE.direction === "backward") {
+              tgtDate = subWeeks(lastHistoricDate, cE.numPer);
+              console.log("newTgtDate");
+              console.log(tgtDate);
+              entriesBack = entriesBack.filter((cE, cI) => {
+                return cE.DT_COMPTC.getTime() == tgtDate.getTime();
+              });
+              console.log("entryBackFilter");
+              console.log(entriesBack);
+            }
+
+            if (cE.direction === "forward") {
+              tgtDate = addWeeks(lastHistoricDate, cE.numPer);
+              console.log("newTgtDate");
+              console.log(tgtDate);
+              entriesFront = entriesFront.filter((cE) => {
+                return (
+                  cE.DT_COMPTC &&
+                  cE.DT_COMPTC.getTime() == tgtDate.getTime() &&
+                  cE.CAPTC_LIQ
+                );
+              });
+              console.log("entryFrontFilter");
+              console.log(entriesFront);
+            }
+
+            const currEntryBack = entriesBack[0];
+            const currEntryFront = entriesFront[0];
+
             return (
               <tr
                 className="text-center border-b border-black/20"
@@ -98,14 +172,21 @@ export default function PredList({
                 <td className="p-0">{cE.direction}</td>
                 <td className="p-0">{cE.numPer}</td>
                 <td className="p-0">
-                  {data[data.length - 7 * cE.numPer] &&
+                  {/* {data[data.length - 7 * cE.numPer] &&
                   cE.direction === "backward"
                     ? data[data.length - 7 * cE.numPer][varName] != undefined
                       ? formatter.format(
                           data[data.length - 7 * cE.numPer][varName]
                         )
                       : "-"
-                    : "-"}
+                    : "-"} */}
+                  {formatValue(
+                    cE.direction,
+                    varName,
+                    currEntryBack,
+                    currEntryFront,
+                    formatter
+                  )}
                 </td>
                 <td className="text-red-800 p-1 text-base align-middle p-0">
                   <button
@@ -158,7 +239,9 @@ export default function PredList({
       <div className="absolute bottom-2 w-full ml-[-8px] text-center">
         <div className="flex justify-center">
           <div onClick={handleAddRow} className="w-fit">
-            <ButtonIndigo shadowColor="black">Save</ButtonIndigo>
+            <ButtonIndigo shadowSize="md" shadowColor="black">
+              Save
+            </ButtonIndigo>
           </div>
         </div>
       </div>

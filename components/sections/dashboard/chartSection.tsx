@@ -36,7 +36,6 @@ export default function ChartSection({
   smallV,
   predictions,
 }: ChartSectionProps) {
-  const numWeekPreds = 4; // Mudar para melhores práticas -> controle por formulário de controle
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
@@ -48,10 +47,6 @@ export default function ChartSection({
 
   // Margin to aply to find the domain of the Yaxis on the charts
   const margin = 0.05;
-
-  console.log("Inside Dashboard.ChartSection: ");
-  console.log("predictions");
-  console.log(predictions);
 
   function adjustValueQuotaChartAxis() {
     // Defining domain values for axis of Value Quota Chart
@@ -81,6 +76,7 @@ export default function ChartSection({
 
   function adjustNetFundingChartAxis() {
     // Defining values for domain/axis in Net Funding Chart
+    // Max absolute value in historic data
     let maxAbsValueNF = data.reduce((maxAbsObj, currObj) => {
       return Math.abs(currObj["CAPTC_LIQ"] ?? 0) >
         (maxAbsObj["CAPTC_LIQ"] ? Math.abs(maxAbsObj["CAPTC_LIQ"]) : 0)
@@ -98,24 +94,11 @@ export default function ChartSection({
         absValuePred > Math.abs(maxAbsValueNF)
           ? Number(Math.abs(absValuePred).toFixed(2))
           : Number(Math.abs(maxAbsValueNF).toFixed(2));
-      // console.log("maxAbsValueNF");
-      // console.log(maxAbsValueNF);
-      // const start = -maxAbsValueNF * (1 + margin);
-      // const end = maxAbsValueNF * (1 + margin);
+
       const newDomain = generateYaxisDomainBasedOnMaxAbs(maxAbsValueNF);
       if (newDomain) {
         setDomainYaxisNF(newDomain);
       }
-
-      // Defyning Ticks
-      // const distance = end - start;
-      // const numTicks = 5;
-      // const ticksInterval = distance / (numTicks - 1);
-      // const newTicksYaxisNF = Array.from(
-      //   { length: numTicks },
-      //   (_, index) => start + ticksInterval * index
-      // );
-      // setTicksYaxisNF(newTicksYaxisNF);
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
       console.log("newYaxisNFTicks");
       console.log(newYaxisNFTicks);
@@ -129,9 +112,10 @@ export default function ChartSection({
 
   function unifyData() {
     // Unifying data
-    const newUnifiedData = [...data, ...predictions.slice(1)];
+    const newUnifiedData = [...data, ...predictions.slice(1)]; // Slice to exclude last data present in historic
     const newGradientOffset =
-      (newUnifiedData.length - numWeekPreds * 5) / newUnifiedData.length;
+      (newUnifiedData.length - predictions.slice(1).length) /
+      newUnifiedData.length;
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
   }
@@ -234,12 +218,6 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                {/* <CartesianGrid
-                  horizontal={false}
-                  stroke="rgb(170, 150, 255)"
-                  strokeDasharray="1 4"
-                  opacity={0.5}
-                /> */}
                 <Area
                   type="monotone"
                   dataKey="CAPTC_LIQ"
@@ -256,6 +234,7 @@ export default function ChartSection({
                 title="Net Funding"
                 onlyBack={false}
                 data={data}
+                predictions={predictions}
                 varName={"CAPTC_LIQ"}
               />
             </div>
@@ -273,7 +252,8 @@ export default function ChartSection({
               : "text-lg mx-[32vw] text-white/90 border-white/50"
           } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
-          Value - Quota
+          Value - Quota (
+          <span className="italic text-sm text-white/90">historic</span>)
         </h1>
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
@@ -339,6 +319,7 @@ export default function ChartSection({
                 title="Value Quota (history)"
                 onlyBack={true}
                 data={data}
+                predictions={predictions}
                 varName={"VL_QUOTA"}
               />
             </div>
