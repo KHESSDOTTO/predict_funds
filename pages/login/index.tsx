@@ -84,7 +84,9 @@ export default function LoginPage() {
             ></input>
           </div>
           <div className="w-32 text-center">
-            <ButtonIndigo shadowColor="white">Log in</ButtonIndigo>
+            <ButtonIndigo shadowSize="md" shadowColor="white">
+              Log in
+            </ButtonIndigo>
           </div>
         </form>
         <div>

@@ -160,6 +160,7 @@ export default function Dashboard({ user }: DashboardProps) {
   }, []);
 
   function saveCenario() {
+    const userContext = useContext(UserContext);
     userContext.setCenarios([
       ...userContext.cenarios,
       {
@@ -181,6 +182,7 @@ export default function Dashboard({ user }: DashboardProps) {
         setPredictionData={setPredictionData}
         controlForm={controlForm}
         setControlForm={setControlForm}
+        saveCenario={saveCenario}
       />
       <div className="lg:mb-2"></div>
       <ChartSection

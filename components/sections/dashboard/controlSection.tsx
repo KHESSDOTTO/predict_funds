@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 import type { DashboardControlFormType, PredictionsType } from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
-import { subWeeks, addDays, getDay } from "date-fns";
+import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 
@@ -15,6 +15,7 @@ interface ControlSectionProps {
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
   controlForm: DashboardControlFormType;
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
+  saveCenario: Function;
 }
 
 export default function ControlSection({
@@ -95,12 +96,15 @@ export default function ControlSection({
         CAPTC_LIQ: slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ,
       });
 
-      for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
-        const lastDate =
-          finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
-        if (!lastDate) {
-          break;
-        }
+      let lastDate =
+        slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Última data do histórico para começar o loop
+      const endPredDate = addWeeks(lastDate, 4); // Última data da predição de 4 semanas
+      while (lastDate < endPredDate) {
+        // const lastDate =
+        //   finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
+        // if (!lastDate) {
+        //   break;
+        // }
         let newDate = lastDate;
         const dayOfWeek = getDay(lastDate);
         if (dayOfWeek === 5) {
@@ -117,6 +121,7 @@ export default function ControlSection({
               (controlForm.varCota * 100).toFixed(1).toString()
             ],
         });
+        lastDate = newDate;
       }
     }
     console.log("Final prediction data:");
@@ -214,7 +219,7 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-b from-white to-gray-100 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-800 lg:w-fit lg:h-fit lg:mt-2 lg:to-white/80"
+        className="px-4 mx-4 bg-gradient-to-b from-white from-15% to-white/50 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-800 lg:w-fit lg:h-fit lg:mt-2 lg:to-white/80"
       >
         <h1 className="font-bold text-2xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
@@ -332,7 +337,9 @@ export default function ControlSection({
             </div>
           </div>
           <div className="text-center mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
-            <ButtonIndigo shadowColor="black">Update</ButtonIndigo>
+            <ButtonIndigo shadowSize="md" shadowColor="black">
+              Update
+            </ButtonIndigo>
           </div>
         </form>
         <form
@@ -440,7 +447,9 @@ export default function ControlSection({
               </div>
             </div>
             <div className="flex justify-center items-center mt-[-15px]">
-              <ButtonIndigo shadowColor="black">Update</ButtonIndigo>
+              <ButtonIndigo shadowSize="md" shadowColor="black">
+                Update
+              </ButtonIndigo>
             </div>
           </div>
         </form>

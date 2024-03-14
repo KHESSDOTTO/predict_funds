@@ -213,7 +213,9 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className="self-center mt-2">
-            <ButtonIndigo shadowColor="white">Create user</ButtonIndigo>
+            <ButtonIndigo shadowSize="md" shadowColor="white">
+              Create user
+            </ButtonIndigo>
           </div>
         </form>
       </main>

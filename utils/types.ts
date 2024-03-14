@@ -40,6 +40,7 @@ interface HeaderPropsType {
 interface ButtonPropsType {
   children: ReactNode;
   shadowColor: string;
+  shadowSize: string;
 }
 
 interface UserType {

@@ -49,7 +49,9 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
       <Dashboard user={user} />
       <div className="flex justify-center px-4 pb-4 lg:justify-center">
         <div onClick={handleLogout} className="mt-8 w-fit">
-          <ButtonRed shadowColor="white/50">Log Out</ButtonRed>
+          <ButtonRed shadowColor="white" shadowSize="sm">
+            Log Out
+          </ButtonRed>
         </div>
       </div>
     </div>
