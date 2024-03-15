@@ -252,8 +252,11 @@ export default function ChartSection({
               : "text-lg mx-[32vw] text-white/90 border-white/50"
           } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
-          Value - Quota (
-          <span className="italic text-sm text-white/90">historic</span>)
+          Value - Quota
+          <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
+            {" "}
+            (historic)
+          </span>
         </h1>
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div

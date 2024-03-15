@@ -53,6 +53,7 @@ export default function MyCenarios() {
       return cE.id != e.currentTarget.id;
     });
     setCenarios(updatedCenarios);
+    toast.success("Removed cenario.");
   }
 
   function exportCenarios() {

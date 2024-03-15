@@ -8,6 +8,7 @@ import { ax } from "@/database/axios.config";
 import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
+import type { MouseEventHandler } from "react";
 
 interface ControlSectionProps {
   data: RawDataType[];
@@ -15,7 +16,7 @@ interface ControlSectionProps {
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
   controlForm: DashboardControlFormType;
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
-  saveCenario: Function;
+  saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
 }
 
 export default function ControlSection({
@@ -24,6 +25,7 @@ export default function ControlSection({
   setPredictionData,
   controlForm,
   setControlForm,
+  saveCenario,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
@@ -336,10 +338,16 @@ export default function ControlSection({
               </div>
             </div>
           </div>
-          <div className="text-center mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
+          <div className="text-center relative mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
             <ButtonIndigo shadowSize="md" shadowColor="black">
               Update
             </ButtonIndigo>
+            <div
+              onClick={saveCenario}
+              className="absolute right-0 bottom-1 lg:right-40 text-xs text-indigo-800 px-1 transition-all duration-200 border-indigo-900 hover:text-indigo-600 lg:border-b lg:ml-8 lg:hover:border-indigo-600"
+            >
+              + Save Cenario
+            </div>
           </div>
         </form>
         <form
@@ -446,10 +454,16 @@ export default function ControlSection({
                 ></input>
               </div>
             </div>
-            <div className="flex justify-center items-center mt-[-15px]">
+            <div className="flex justify-center relative items-center mt-[-15px] w-full">
               <ButtonIndigo shadowSize="md" shadowColor="black">
                 Update
               </ButtonIndigo>
+              <div
+                onClick={saveCenario}
+                className="absolute right-40 text-indigo-900 px-1 transition-all duration-200 border-indigo-900 hover:text-indigo-600 lg:border-b lg:ml-8 lg:hover:border-indigo-600 hover:cursor-pointer"
+              >
+                + Save Cenario
+              </div>
             </div>
           </div>
         </form>

@@ -160,7 +160,6 @@ export default function Dashboard({ user }: DashboardProps) {
   }, []);
 
   function saveCenario() {
-    const userContext = useContext(UserContext);
     userContext.setCenarios([
       ...userContext.cenarios,
       {
