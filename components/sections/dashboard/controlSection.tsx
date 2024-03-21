@@ -2,7 +2,11 @@ import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useContext, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
-import type { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import type {
+  CadastroFundosType,
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
@@ -17,6 +21,8 @@ interface ControlSectionProps {
   controlForm: DashboardControlFormType;
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
   saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
 }
 
 export default function ControlSection({
@@ -26,6 +32,8 @@ export default function ControlSection({
   controlForm,
   setControlForm,
   saveCenario,
+  setIsLoading,
+  setRegistration,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
@@ -134,6 +142,20 @@ export default function ControlSection({
     return finalPredictionData;
   }
 
+  async function selRegistration(encodedParam: string) {
+    try {
+      const registration = await ax.get(
+        `/cadastroFundos/getByCnpj?cnpj=${encodedParam}`
+      );
+      if (registration) {
+        return registration.data;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return false;
+  }
+
   useEffect(() => {
     if (data[0]) {
       setControlForm({
@@ -194,7 +216,19 @@ export default function ControlSection({
     e.preventDefault();
     const loadingToast = toast.loading("Fetching data...");
     const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
+
     try {
+      // Registration fetching
+      setIsLoading(true);
+      const newRegistration = await selRegistration(encodedParam);
+      setRegistration(newRegistration);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+
+    try {
+      // Historic and Predictions fetching
       const slicedHistoricData = await getHistoricData(encodedParam);
       let predictions: PredictionsType[] = [];
       if (slicedHistoricData) {
@@ -251,15 +285,6 @@ export default function ControlSection({
             </div>
             <div className="flex flex-col gap-1 lg:gap-0">
               <div className="h-8">
-                {/* <input
-                  type="text"
-                  id="buscaCnpj"
-                  name="buscaCnpj"
-                  className="rounded-md border-2 border-black px-2 bg-white"
-                  value={controlForm.buscaCnpj}
-                  onChange={handleControlFormChange}
-                  disabled
-                ></input> */}
                 <select
                   id="buscaCnpj"
                   name="buscaCnpj"
@@ -344,7 +369,7 @@ export default function ControlSection({
             </ButtonIndigo>
             <div
               onClick={saveCenario}
-              className="absolute right-0 bottom-1 lg:right-40 text-xs text-indigo-800 px-1 transition-all duration-200 border-indigo-900 hover:text-indigo-600 lg:border-b lg:ml-8 lg:hover:border-indigo-600"
+              className="absolute right-0 bottom-1 lg:right-40 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
             >
               + Save Cenario
             </div>
@@ -460,7 +485,7 @@ export default function ControlSection({
               </ButtonIndigo>
               <div
                 onClick={saveCenario}
-                className="absolute right-40 text-indigo-900 px-1 transition-all duration-200 border-indigo-900 hover:text-indigo-600 lg:border-b lg:ml-8 lg:hover:border-indigo-600 hover:cursor-pointer"
+                className="absolute right-40 bottom-0 text-yellow-700 font-semibold px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>

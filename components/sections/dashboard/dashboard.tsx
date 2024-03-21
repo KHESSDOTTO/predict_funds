@@ -2,6 +2,7 @@ import { ax } from "@/database/axios.config";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
+  CadastroFundosType,
   DashboardControlFormType,
   PredictionsType,
   RawDataType,
@@ -13,6 +14,8 @@ import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
 import { subWeeks, addDays, getDay } from "date-fns";
 import { AxiosResponse } from "axios";
+import RegistrationInfos from "./registrationInfos";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface DashboardProps {
   user: UserType;
@@ -23,6 +26,10 @@ export default function Dashboard({ user }: DashboardProps) {
   console.log(user);
   const userContext = useContext(UserContext);
   const [historicData, setHistoricData] = useState<RawDataType[]>([]),
+    [isLoading, setIsLoading] = useState(true),
+    [registration, setRegistration] = useState<CadastroFundosType | false>(
+      false
+    ),
     [predictionData, setPredictionData] = useState<PredictionsType[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       buscaCnpj: "",
@@ -84,61 +91,83 @@ export default function Dashboard({ user }: DashboardProps) {
     encodedParam: string,
     slicedHistoricData: RawDataType[]
   ) {
-    let responsePreds: AxiosResponse<any, any> | undefined;
-    responsePreds = await ax.get(
-      `/prediction/getFromCnpj?cnpj=${encodedParam}`
-    );
-    console.log("Predictions:");
-    console.log(responsePreds);
-    let finalPredictionData: PredictionsType[] = [];
-    if (responsePreds && responsePreds.data && slicedHistoricData) {
-      finalPredictionData.push({
-        // including last date shown in historic (current date)
-        DT_COMPTC: slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC,
-        CNPJ_FUNDO:
-          slicedHistoricData[slicedHistoricData.length - 1].CNPJ_FUNDO,
-        CAPTC_LIQ: slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ,
-      });
-
-      for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
-        const lastDate =
-          finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
-        if (!lastDate) {
-          break;
-        }
-        let newDate = lastDate;
-        const dayOfWeek = getDay(lastDate);
-        if (dayOfWeek === 5) {
-          newDate = addDays(lastDate, 3);
-        } else {
-          newDate = addDays(lastDate, 1);
-        }
+    try {
+      let responsePreds: AxiosResponse<any, any> | undefined;
+      responsePreds = await ax.get(
+        `/prediction/getFromCnpj?cnpj=${encodedParam}`
+      );
+      console.log("Predictions:");
+      console.log(responsePreds);
+      let finalPredictionData: PredictionsType[] = [];
+      if (responsePreds && responsePreds.data && slicedHistoricData) {
         finalPredictionData.push({
-          // including prediction for 4 weeks based on the varCota of the controlForm
-          DT_COMPTC: newDate,
-          CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+          // including last date shown in historic (current date)
+          DT_COMPTC:
+            slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC,
+          CNPJ_FUNDO:
+            slicedHistoricData[slicedHistoricData.length - 1].CNPJ_FUNDO,
           CAPTC_LIQ:
-            responsePreds.data[
-              (controlForm.varCota * 100).toFixed(1).toString()
-            ],
+            slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ,
         });
+
+        for (let i = 1; i <= controlForm.weeksForward * 5; i++) {
+          const lastDate =
+            finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
+          if (!lastDate) {
+            break;
+          }
+          let newDate = lastDate;
+          const dayOfWeek = getDay(lastDate);
+          if (dayOfWeek === 5) {
+            newDate = addDays(lastDate, 3);
+          } else {
+            newDate = addDays(lastDate, 1);
+          }
+          finalPredictionData.push({
+            // including prediction for 4 weeks based on the varCota of the controlForm
+            DT_COMPTC: newDate,
+            CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
+            CAPTC_LIQ:
+              responsePreds.data[
+                (controlForm.varCota * 100).toFixed(1).toString()
+              ],
+          });
+        }
       }
+      console.log("Final prediction data:");
+      console.log(finalPredictionData);
+      if (finalPredictionData) {
+        setPredictionData(finalPredictionData);
+      }
+      return finalPredictionData;
+    } catch (err) {
+      console.log(err);
+      return false;
     }
-    console.log("Final prediction data:");
-    console.log(finalPredictionData);
-    if (finalPredictionData) {
-      setPredictionData(finalPredictionData);
-    }
-    return finalPredictionData;
   }
 
+  async function selRegistration(encodedParam: string) {
+    try {
+      const registration = await ax.get(
+        `/cadastroFundos/getByCnpj?cnpj=${encodedParam}`
+      );
+      if (registration) {
+        return registration.data;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return false;
+  }
+
+  // Get historic data and predictions
   useEffect(() => {
     async function getData() {
       const loadingToast = toast.loading("Fetching data...");
       const encodedParam = encodeURIComponent(user.cnpj);
       try {
         const slicedHistoricData = await getHistoricData(encodedParam);
-        let predictions: PredictionsType[] = [];
+        let predictions: PredictionsType[] | false = [];
         if (slicedHistoricData) {
           predictions = await getPredictions(encodedParam, slicedHistoricData);
         }
@@ -156,6 +185,22 @@ export default function Dashboard({ user }: DashboardProps) {
     if (!historicData[0]) {
       getData();
     }
+    return;
+  }, []);
+
+  // Get registration
+  useEffect(() => {
+    async function getRegistration() {
+      const encodedParam = encodeURIComponent(user.cnpj);
+      try {
+        const registration = await selRegistration(encodedParam);
+        setRegistration(registration);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getRegistration();
     return;
   }, []);
 
@@ -182,7 +227,10 @@ export default function Dashboard({ user }: DashboardProps) {
         controlForm={controlForm}
         setControlForm={setControlForm}
         saveCenario={saveCenario}
+        setIsLoading={setIsLoading}
+        setRegistration={setRegistration}
       />
+      <RegistrationInfos isLoading={isLoading} registration={registration} />
       <div className="lg:mb-2"></div>
       <ChartSection
         data={historicData}
