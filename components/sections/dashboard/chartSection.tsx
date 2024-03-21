@@ -146,7 +146,7 @@ export default function ChartSection({
           className={`my-4 ${
             smallV
               ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/50"
+              : "text-lg mx-[32vw] text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Net Funding
@@ -249,7 +249,7 @@ export default function ChartSection({
           className={`my-4 ${
             smallV
               ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/50"
+              : "text-lg mx-[32vw] text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
           Value - Quota
