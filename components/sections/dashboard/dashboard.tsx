@@ -15,7 +15,6 @@ import { UserContext } from "@/contexts/UserContext";
 import { subWeeks, addDays, getDay } from "date-fns";
 import { AxiosResponse } from "axios";
 import RegistrationInfos from "./registrationInfos";
-import ClipLoader from "react-spinners/ClipLoader";
 
 interface DashboardProps {
   user: UserType;

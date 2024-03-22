@@ -32,7 +32,7 @@ const UserSchema = new Schema(
         type: String,
         trim: true,
         match: /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/gm,
-        unique: true,
+        unique: false,
         sparse: true,
         required: true,
       },
