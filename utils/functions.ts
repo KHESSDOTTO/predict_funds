@@ -9,31 +9,32 @@ function generateYaxisTicksBasedOnMaxAbs(
   console.log("maxAbs");
   console.log(maxAbs);
 
-  if (maxAbs > maxValueTick) {
-    while (times > 10) {
-      times = times - 10;
+  if (maxAbs <= maxValueTick || times > 50) {
+    // Prevent infinite recursion by limiting times
+    const minTick = -maxValueTick;
+    const maxTick = maxValueTick;
+    const step = (maxTick - minTick) / (numTicks - 1);
+
+    for (let i = 0; i < numTicks; i++) {
+      ticks.push(minTick + step * i);
     }
-    let newMaxValueTick = times == 2 ? 500000 : maxValueTick + 500000;
-    if (times == 1) newMaxValueTick = 200000;
-    return generateYaxisTicksBasedOnMaxAbs(
-      maxAbs,
-      newMaxValueTick,
-      numTicks,
-      times + 1
-    );
+
+    console.log("ticks");
+    console.log(ticks);
+    return ticks;
   }
 
-  const minTick = -maxValueTick;
-  const maxTick = maxValueTick;
-  const step = (maxTick - minTick) / (numTicks - 1);
+  let newMaxValueTick = maxValueTick;
+  if (times == 1) newMaxValueTick = 200000;
+  else if (times == 2) newMaxValueTick = 500000;
+  else newMaxValueTick += 500000;
 
-  for (let i = 0; i < numTicks; i++) {
-    ticks.push(minTick + step * i);
-  }
-
-  console.log("ticks");
-  console.log(ticks);
-  return ticks;
+  return generateYaxisTicksBasedOnMaxAbs(
+    maxAbs,
+    newMaxValueTick,
+    numTicks,
+    times + 1
+  );
 }
 
 function generateYaxisDomainBasedOnMaxAbs(
@@ -41,24 +42,22 @@ function generateYaxisDomainBasedOnMaxAbs(
   maxValueTick = 100000,
   times = 1
 ) {
-  console.log("maxAbs");
-  console.log(maxAbs);
+  if (maxAbs <= maxValueTick || times > 50) {
+    // Prevent infinite recursion
+    const minTick = -maxValueTick;
+    const maxTick = maxValueTick;
 
-  if (maxAbs > maxValueTick) {
-    while (times > 10) {
-      times = times - 10;
-    }
-    let newMaxValueTick = times == 2 ? 500000 : maxValueTick + 500000;
-    if (times == 1) newMaxValueTick = 200000;
-    return generateYaxisDomainBasedOnMaxAbs(maxAbs, newMaxValueTick, times + 1);
+    const domain = [minTick, maxTick];
+    return domain;
   }
 
-  const minTick = -maxValueTick;
-  const maxTick = maxValueTick;
+  // Adjust newMaxValueTick based on the current attempt (times)
+  let newMaxValueTick = maxValueTick;
+  if (times == 1) newMaxValueTick = 200000;
+  else if (times == 2) newMaxValueTick = 500000;
+  else newMaxValueTick += 500000; // Simplify the logic for increasing maxValueTick
 
-  const domain = [minTick, maxTick];
-
-  return domain;
+  return generateYaxisDomainBasedOnMaxAbs(maxAbs, newMaxValueTick, times + 1);
 }
 
 export { generateYaxisTicksBasedOnMaxAbs, generateYaxisDomainBasedOnMaxAbs };
