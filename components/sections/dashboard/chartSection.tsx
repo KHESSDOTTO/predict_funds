@@ -63,7 +63,7 @@ export default function ChartSection({
     setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
 
     // Ticks for Value Quota chart
-    const ticksQntYaxisVQ = 5;
+    const ticksQntYaxisVQ = 7;
     const ticksIntervalYaxisVQ =
       (maxValYaxisVQ - minValYaxisVQ) / (ticksQntYaxisVQ - 1);
     const newTicksYaxisVQ = Array.from(
@@ -153,7 +153,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-2">
           <div
-            className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
               smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
             } lg:rounded-xl`}
           >
@@ -260,7 +260,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
-            className={`bg-gray-900 pt-4 mx-2 box-shadow shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
               smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
             } lg:rounded-xl`}
           >

@@ -28,7 +28,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
   return (
     <div className={containerClass}>
       <div
-        className={`bg-black/90 pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
+        className={`bg-black pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
         onMouseLeave={handleMouseLeave}
       >
         <div>

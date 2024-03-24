@@ -121,7 +121,7 @@ export default function MyCenarios() {
   }
 
   return (
-    <div className="min-h-screen relative bg-[rgb(0,10,20)] lg:bg-gradient-to-br lg:from-[rgb(0,10,20)] lg:to-[rgba(0,30,100,0.8)] text-white/90">
+    <div className="min-h-screen relative bg-gradient-to-br from-black from-30% to-[rgba(0,30,100,0.8)] text-white/90">
       {user && <Header user={user} />}
       <div className="flex justify-center lg:hidden">
         <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
@@ -211,7 +211,7 @@ export default function MyCenarios() {
       </section>
       <footer
         ref={footerRef}
-        className={`bg-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+        className={`bg-gradient-to-b from-black/30 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
       >
         <div onClick={exportCenarios}>
           <ButtonGreen shadowSize="none" shadowColor="black">
