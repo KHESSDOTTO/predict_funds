@@ -238,9 +238,9 @@ export default function Dashboard({ user }: DashboardProps) {
       />
       <div
         id="cenariosBtnSection"
-        className="flex flex-wrap gap-4 mt-[-5px] justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4"
+        className="flex flex-wrap gap-4 mt-[-5px] px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0"
       >
-        <div className="w-full border-gray-100/50 shadow-lg h-2 shadow-white lg:border-b-2"></div>
+        <div className="w-full border-white/90 mb-1 shadow-lg h-2 shadow-white lg:border-b-2"></div>
         <button
           onClick={saveCenario}
           className="text-indigo-300 px-1 transition-all duration-300 border-indigo-300 hover:text-indigo-500 lg:border-b lg:ml-8 lg:hover:border-indigo-500 hover:-translate-y-px"

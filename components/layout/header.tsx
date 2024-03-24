@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HeaderPropsType } from "@/utils/types";
 import { useState } from "react";
-import SideBar from "./sideBar";
+import SideBar from "../modals/sideBarHeaderModal";
 import DisconnectBtn from "../UI/disconnectBtn";
 
 function Header({ user }: HeaderPropsType) {

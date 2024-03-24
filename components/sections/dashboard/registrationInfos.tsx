@@ -54,41 +54,41 @@ export default function RegistrationInfos({
   isLoading,
 }: RegistrationInfosPropsType) {
   const fieldsToShow: CadastroFundosKey[] = [
-    "CNPJ_FUNDO",
+    // "CNPJ_FUNDO",
     "DENOM_SOCIAL",
-    "TP_FUNDO",
-    "CLASSE",
+    // "TP_FUNDO",
+    // "CLASSE",
     "CLASSE_ANBIMA",
-    "SIT",
-    "DT_CONST",
-    "DT_REG",
-    "RENTAB_FUNDO",
-    "CONDOM",
-    "CD_CVM",
-    "FUNDO_COTAS",
-    "PUBLICO_ALVO",
+    // "SIT",
+    // "DT_CONST",
+    // "DT_REG",
+    // "RENTAB_FUNDO",
+    // "CONDOM",
+    // "CD_CVM",
+    // "FUNDO_COTAS",
+    // "PUBLICO_ALVO",
   ];
 
   const titlesOfFields = [
-    "CNPJ",
+    // "CNPJ",
     "Fund Name",
-    "Type",
-    "Class",
+    // "Type",
+    // "Class",
     "ANBIMA Class",
-    "Situation",
-    "Constitution date",
-    "Registration date",
-    "Fund Rentability",
-    "Open/Closed",
-    "CVM registration",
-    "Fund of Funds",
-    "Target Public",
+    // "Situation",
+    // "Constitution date",
+    // "Registration date",
+    // "Fund Rentability",
+    // "Open/Closed",
+    // "CVM registration",
+    // "Fund of Funds",
+    // "Target Public",
   ];
 
   return (
     <div
       id="registrationInfos"
-      className="my-4 text-white flex flex-col items-center w-full bg-gradient-to-b from-transparent to-indigo-900/40 shadow-md shadow-indigo-800/30 py-6 lg:items-start lg:mb-4 lg:mt-6"
+      className="my-4 text-white flex flex-col items-center w-full py-6 lg:items-start lg:mb-2 lg:mt-6"
     >
       <h1 className="my-4 text-lg mx-[32vw] text-white/90 border-white/90 font-semibold text-center border-b lg:pb-2 lg:indent-4 lg:mx-2 lg:text-left lg:w-[98%]">
         Fund Infos.

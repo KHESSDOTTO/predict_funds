@@ -255,9 +255,9 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-b from-white from-15% to-white/50 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-800 lg:w-fit lg:h-fit lg:mt-2 lg:to-white/80"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:w-fit lg:h-fit lg:mt-2"
       >
-        <h1 className="font-bold text-2xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
+        <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
         </h1>
         <form
@@ -266,7 +266,7 @@ export default function ControlSection({
           onSubmit={handleControlFormSubmit}
         >
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
-            <div className="flex flex-col gap-1 font-semibold lg:gap-0">
+            <div className="flex flex-col gap-1 font-semibold lg:gap-0 text-sm">
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ
               </label>
@@ -314,9 +314,10 @@ export default function ControlSection({
                   type="text"
                   id="weeksForward"
                   name="weeksForward"
-                  className="rounded-md border-2 border-black px-2"
+                  className="rounded-md border-2 border-black px-2 italic"
                   value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
+                  disabled
                 ></input>
               </div>
               <div className="flex h-8 gap-4 text-sm">
@@ -353,8 +354,8 @@ export default function ControlSection({
                   type="range"
                   id="varCota"
                   name="varCota"
-                  min={-0.2}
-                  max={0.2}
+                  min={-0.05}
+                  max={0.05}
                   step={0.005}
                   className="indigo-500"
                   value={controlForm.varCota}

@@ -107,10 +107,10 @@ export default function PredList({
   }
 
   return (
-    <div className="text-black h-full w-full pb-16 bg-gradient-to-b from-white/90 to-gray-100 border-black relative rounded-xl shadow-md shadow-indigo-800 lg:from-white lg:to-white/90 lg:from-60%">
+    <div className="text-black h-full w-full pb-16 bg-gradient-to-br from-white from-15% to-white/30 border-black relative rounded-xl shadow-md shadow-indigo-900">
       {title && (
         <div className="flex justify-center w-full">
-          <h2 className="font-bold text-lg mb-4 text-center border-black text-base py-1 px-4 border-b">
+          <h2 className="font-bold mb-4 text-center border-black text-base py-1 px-4 border-b">
             {title}
           </h2>
         </div>
