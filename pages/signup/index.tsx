@@ -17,11 +17,11 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "bg-[rgb(20,30,50)] text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 text-lg lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-16",
+      "bg-gradient-to-br from-[rgb(30,50,70)] from-30% to-black text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-12",
     h1Class =
-      "mx-16 text-center text-6xl mt-6 px-0 border-b flex border-white justify-center items-center py-4 lg:mx-12 lg:w-10/12 lg:justify-start lg:mt-4 lg:px-8 lg:border-b-2",
-    formClass = "px-4 py-2 flex flex-col justify-around gap-4 md:row-span-5",
-    divClass = "flex flex-col",
+      "mx-16 text-center text-4xl mt-6 border-b flex border-white justify-center items-center py-4 lg:w-10/12 lg:justify-start lg:mt-4 lg:px-4 lg:border-b-2 lg:text-4xl",
+    formClass = "px-10 py-2 flex flex-col justify-around gap-4 md:row-span-5",
+    divClass = "flex flex-col gap-1",
     inputClass =
       "rounded-md border border-gray-400 px-1 shadow-white/30 shadow-sm text-black";
   const lgTextShadow = { textShadow: "1px 1px 2px gray" };
@@ -173,7 +173,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className={divClass}>
-            <label htmlFor="address">Endereço</label>
+            <label htmlFor="address">Address</label>
             <input
               className={inputClass}
               id="address"
@@ -211,7 +211,7 @@ export default function SignUpPage() {
               onChange={handleChange}
             ></input>
           </div>
-          <div className="self-center mt-2">
+          <div className="self-center mt-6">
             <ButtonIndigo shadowSize="md" shadowColor="white">
               Create user
             </ButtonIndigo>

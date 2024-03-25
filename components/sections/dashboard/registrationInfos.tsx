@@ -88,7 +88,7 @@ export default function RegistrationInfos({
   return (
     <div
       id="registrationInfos"
-      className="my-4 text-white flex flex-col items-center w-full py-6 lg:items-start lg:mb-2 lg:mt-6"
+      className="mt-4 text-white flex flex-col items-center w-full lg:items-start"
     >
       <h1 className="my-4 text-lg mx-[32vw] text-white/90 border-white/90 font-semibold text-center border-b lg:pb-2 lg:indent-4 lg:mx-2 lg:text-left lg:w-[98%]">
         Fund Infos.
