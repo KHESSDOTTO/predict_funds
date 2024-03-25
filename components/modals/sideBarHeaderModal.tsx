@@ -40,12 +40,12 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
               </Link>
               <div className="text-xs flex gap-2 text-blue-200">
                 <Link href={"/loggedin/home"}>
-                  <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
+                  <span className="transition-all cursor-pointer hover:text-yellow-600">
                     Simulate
                   </span>
                 </Link>
                 <Link href={"/loggedin/my_cenarios"}>
-                  <span className="transition-all cursor-pointer hover:text-yellow-600 hover:underline">
+                  <span className="transition-all cursor-pointer hover:text-yellow-600">
                     Cenarios
                   </span>
                 </Link>

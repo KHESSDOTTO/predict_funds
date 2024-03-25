@@ -486,7 +486,7 @@ export default function ControlSection({
               </ButtonIndigo>
               <div
                 onClick={saveCenario}
-                className="absolute right-40 bottom-0 text-yellow-700 font-semibold px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
+                className="absolute right-40 bottom-0 text-yellow-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-800  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>
