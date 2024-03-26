@@ -132,9 +132,10 @@ export default function SendEmailModal({
               name="field"
               id="field"
               value={changePwdForm.field}
+              defaultValue={""}
               onChange={handleChange}
             >
-              <option value="" selected></option>
+              <option value=""></option>
               {Object.keys(changePwdForm).map((cE) => {
                 if (cE === "field") {
                   return <></>;
@@ -144,7 +145,7 @@ export default function SendEmailModal({
             </select>
           </div>
           {showUsernameInput && (
-            <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
+            <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
               <label className={labelClass}>Username</label>
               <input
                 className="rounded-md text-black px-2"
@@ -157,7 +158,7 @@ export default function SendEmailModal({
             </div>
           )}
           {showEmailInput && (
-            <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
+            <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
               <label className={labelClass}>E-mail</label>
               <input
                 className="rounded-md text-black px-2"
