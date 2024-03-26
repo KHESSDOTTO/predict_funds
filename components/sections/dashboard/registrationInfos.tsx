@@ -94,11 +94,14 @@ export default function RegistrationInfos({
         Fund Infos.
       </h1>
       {!isLoading && registration ? (
-        <ul className="italic text-white/80 flex flex-col gap-1 px-12 lg:ml-12">
+        <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-12 lg:px-2">
           {fieldsToShow.map((cE, cI) => {
             return (
               <li>
-                {titlesOfFields[cI]}: {registration[cE]}
+                <span className="font-semibold text-white -ml-2">
+                  {titlesOfFields[cI]}
+                </span>
+                : <span className="indent-2">{registration[cE]}</span>
               </li>
             );
           })}

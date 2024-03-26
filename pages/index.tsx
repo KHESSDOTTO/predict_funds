@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Home() {
   const lgTextShadow = { textShadow: "2px 3px 3px rgba(200,200,200,0.9)" };
@@ -13,7 +11,8 @@ export default function Home() {
           className="font-bold text-5xl text-center font-serif border-black py-2 px-4"
           style={lgTextShadow}
         >
-          PREDICT
+          <span className="hidden lg:block">P R E D I C T</span>
+          <span className="lg:hidden">PREDICT</span>
         </h1>
         <div className="flex flex-col gap-8 w-10/12 items-center text-xl font-semibold justify-around h-fit lg:relative lg:top-16 lg:gap-10">
           <Link

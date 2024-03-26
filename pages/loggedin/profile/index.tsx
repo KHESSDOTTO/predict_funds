@@ -119,7 +119,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
 
   return (
     <div className="bg-black">
-      <div className="min-h-screen relative bg-gradient-to-br from-black to-green-900/80 from-30% text-white">
+      <div className="min-h-screen relative bg-gradient-to-br from-black to-green-900 from-25% text-white">
         <Header user={user}></Header>
         <PwdConfirmModal
           showModal={showModal}
