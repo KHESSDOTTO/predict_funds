@@ -17,7 +17,7 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "bg-gradient-to-br from-[rgb(30,50,70)] from-30% to-black text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-12",
+      "bg-gradient-to-br from-black via-[rgb(30,50,70)] from-25% lg:from-0% to-black text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-12",
     h1Class =
       "mx-16 text-center text-4xl mt-6 border-b flex border-white justify-center items-center py-4 lg:w-10/12 lg:justify-start lg:mt-4 lg:px-4 lg:border-b-2 lg:text-4xl",
     formClass = "px-10 py-2 flex flex-col justify-around gap-4 md:row-span-5",

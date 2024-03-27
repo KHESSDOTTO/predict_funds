@@ -98,10 +98,10 @@ export default function RegistrationInfos({
           {fieldsToShow.map((cE, cI) => {
             return (
               <li>
-                <span className="font-semibold text-white -ml-2">
+                <span className="font-semibold text-white -ml-1">
                   {titlesOfFields[cI]}
                 </span>
-                : <span className="indent-2">{registration[cE]}</span>
+                : {registration[cE]}
               </li>
             );
           })}

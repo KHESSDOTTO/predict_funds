@@ -182,9 +182,12 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                       type="text"
                       id="cnpj"
                       name="cnpj"
-                      className={inputClass}
+                      className={
+                        inputClass + " bg-gray-400 italic w-[197.33px]"
+                      }
                       value={form.cnpj}
                       onChange={handleChange}
+                      disabled
                     />
                   </div>
                   <div className="flex gap-2">
