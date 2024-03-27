@@ -20,31 +20,32 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
     }
   }, [showSideBar]);
 
-  function handleMouseLeave() {
+  function handleClickOutside(e: React.MouseEvent) {
     console.log("Mouse left");
-    setShowSideBar(false);
+    if (e.target === e.currentTarget) {
+      setShowSideBar(false);
+    }
   }
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass} onClick={handleClickOutside}>
       <div
-        className={`bg-black pointer-event-none sticky z-30 h-96 w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
-        onMouseLeave={handleMouseLeave}
+        className={`bg-black pointer-event-none sticky z-30 h-[70vh] w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
       >
         <div>
           <h2 className="font-bold">My Products</h2>
           <ul className="text-sm list-disc">
-            <li className="flex gap-4 items-end cursor-pointer">
-              <Link href={"/loggedin/home"}>
+            <li className="flex gap-4 items-end">
+              <Link href={"/loggedin/home"} className="cursor-pointer">
                 <h3>Future Net Funding</h3>
               </Link>
               <div className="text-xs flex gap-2 text-blue-200">
-                <Link href={"/loggedin/home"}>
-                  <span className="transition-all cursor-pointer hover:text-yellow-600">
+                <Link href={"/loggedin/home"} className="cursor-pointer">
+                  <span className="transition-all hover:text-yellow-600">
                     Simulate
                   </span>
                 </Link>
-                <Link href={"/loggedin/my_cenarios"}>
+                <Link href={"/loggedin/my_cenarios"} className="cursor-pointer">
                   <span className="transition-all cursor-pointer hover:text-yellow-600">
                     Cenarios
                   </span>

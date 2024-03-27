@@ -19,7 +19,7 @@ export default function LoginPage() {
   const mainClass =
       "min-h-screen px-16 pt-12 flex flex-col justify-center lg:pb-8 lg:pt-6 lg:grid lg:grid-cols-10",
     h1Class =
-      "py-auto text-4xl flex flex-col justify-end items-center mt-8 -mb-8 lg:-mb-4",
+      "py-auto text-4xl flex flex-col justify-end items-center mt-8 -mb-8",
     formClass =
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 lg:pt-8",
     divClass = "flex flex-col gap-1 align-center justify-center w-72",
@@ -53,8 +53,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="w-full h-full absolute top-0 left-0 bg-landing z-0"></div>
-      <div className="relative bg-transparent from-black/80 to-indigo-900 lg:bg-gradient-to-r lg:from-1% lg:to-transparent text-white z-1">
+      <div className="w-full h-full absolute top-0 left-0 bg-login z-0"></div>
+      <div className="text-white z-1 relative bg-gradient-to-b from-black via-black/70 to-transparent lg:via-transparent lg:bg-gradient-to-r lg:from-25% lg:to-transparent lg:animate-fadeIn-l-r">
         <SendEmailModal
           showModal={showModal}
           setShowModal={setShowModal}

@@ -13,16 +13,27 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         landing: "url('/bg_landing.webp')",
+        login: "url('/bg_login.webp')",
       },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        slideIn: {
+          "0%": { transform: "translateX(-10%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
+        fadeInLeftToRight: {
+          "0%": { opacity: "0", transform: "translateX(-10%)" },
+          "100%": { opacity: "1", transform: "translateX(0%)" },
+        },
       },
       // Define the animation utility using the keyframes
       animation: {
-        fadeIn: "fadeIn 0.5s ease-out forwards",
+        fadeIn: "fadeIn 0.25s ease-out forwards",
+        slideIn: "fadeIn 0.25s ease-out forwards",
+        "fadeIn-l-r": "fadeInLeftToRight 0.5s ease-out forwards",
       },
     },
   },
