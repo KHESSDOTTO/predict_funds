@@ -181,11 +181,11 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  interval={6}
+                  interval={smallV ? 8 : 6}
                   fontSize={12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
-                    return format(DT_COMPTC, `dd/MM/yy`);
+                    return format(DT_COMPTC, `dd/MM`);
                   }}
                 />
                 <YAxis
@@ -283,11 +283,11 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  interval={6}
+                  interval={smallV ? 12 : 6}
                   fontSize={12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
-                    return format(DT_COMPTC, `dd/MM/yy`);
+                    return format(DT_COMPTC, `dd/MM`);
                   }}
                 />
                 <YAxis
