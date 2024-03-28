@@ -283,14 +283,14 @@ export default function ControlSection({
                 Quota variation (%)
               </label>
             </div>
-            <div className="flex flex-col gap-1 lg:gap-0">
+            <div className="flex flex-col items-stretch gap-1 lg:gap-0">
               <div className="h-8">
                 <select
                   id="buscaCnpj"
                   name="buscaCnpj"
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
-                  className="rounded-md border-2 border-black bg-white"
+                  className="rounded-md border-2 border-black bg-white w-full"
                 >
                   {user &&
                     user.cnpjs &&
@@ -304,7 +304,7 @@ export default function ControlSection({
                   type="text"
                   id="weeksBack"
                   name="weeksBack"
-                  className="rounded-md border-2 border-black px-2"
+                  className="rounded-md border-2 border-black px-2 w-full"
                   value={controlForm.weeksBack}
                   onChange={handleControlFormChange}
                 ></input>
@@ -314,7 +314,7 @@ export default function ControlSection({
                   type="text"
                   id="weeksForward"
                   name="weeksForward"
-                  className="rounded-md border-2 border-black px-2 italic"
+                  className="rounded-md border-2 border-black px-2 italic w-full"
                   value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
                   disabled

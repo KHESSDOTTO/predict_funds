@@ -53,8 +53,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="w-full h-full absolute top-0 left-0 bg-login z-0"></div>
-      <div className="text-white z-1 relative bg-gradient-to-b from-black via-black/70 to-transparent lg:via-transparent lg:bg-gradient-to-r lg:from-25% lg:to-transparent lg:animate-fadeIn-l-r">
+      <div className="w-full h-full absolute top-0 left-0 bg-landing lg:bg-login z-0"></div>
+      <div className="text-white z-1 relative bg-transparent animate-fadeIn-l-r lg:from-black lg:bg-gradient-to-r lg:via-transparent lg:from-30% lg:to-transparent">
         <SendEmailModal
           showModal={showModal}
           setShowModal={setShowModal}

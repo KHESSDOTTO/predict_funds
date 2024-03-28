@@ -11,11 +11,11 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
   useEffect(() => {
     if (showSideBar) {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-100 z-20`
+        `transition-all duration-100 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-100 z-20`
       );
     } else {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-0 -z-10`
+        `transition-all duration-100 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-screen opacity-0 -z-10`
       );
     }
   }, [showSideBar]);
@@ -36,9 +36,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
           <h2 className="font-bold">My Products</h2>
           <ul className="text-sm list-disc">
             <li className="flex gap-4 items-end">
-              <Link href={"/loggedin/home"} className="cursor-pointer">
-                <h3>Future Net Funding</h3>
-              </Link>
+              <h3>Future Net Funding</h3>
               <div className="text-xs flex gap-2 text-blue-200">
                 <Link href={"/loggedin/home"} className="cursor-pointer">
                   <span className="transition-all hover:text-yellow-600">
@@ -57,7 +55,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
         <div>
           <h2 className="font-bold">Other Products</h2>
           <ul className="text-sm">
-            <li className="cursor-pointer">Soon...</li>
+            <li>Soon...</li>
           </ul>
         </div>
       </div>

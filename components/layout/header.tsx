@@ -26,7 +26,7 @@ function Header({ user }: HeaderPropsType) {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="w-5 h-5 md:w-6 md:h-6 md:gap-2 hover:text-base transition-all hover:text-yellow-600 hover:cursor-pointer"
+          className="w-5 h-5 md:w-6 md:h-6 md:gap-2 hover:text-base hover:text-yellow-600 transition-all"
           onMouseEnter={handleSideBar}
         >
           <path
