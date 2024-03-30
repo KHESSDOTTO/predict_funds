@@ -8,7 +8,7 @@ export default function BackLink({ color }: BackLinkPropsType) {
   return (
     <Link
       href={"/"}
-      className={`text-sm flex items-end font-semibold font-serif absolute top-2 left-2 transition-all text-${color} lg:left-4 hover:text-yellow-700 hover:underline`}
+      className={`z-10 text-sm flex items-end font-semibold font-serif absolute top-2 left-2 transition-all text-${color} lg:left-4 hover:text-yellow-700 hover:underline`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
