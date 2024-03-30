@@ -8,7 +8,7 @@ export default function Home() {
     <main className="bg-landing bg-cover z-0 relative">
       <div className="z-0 hidden lg:block bg-gradient-to-l from-black via-black/10 absolute top-0 left-0 h-full w-[50%]"></div>
       <div className="z-0 hidden lg:block bg-gradient-to-r from-black via-black/10 absolute top-0 left-[50%] h-full w-[50%]"></div>
-      <div className="text-white flex min-h-screen flex-col items-center justify-around p-8 z-20 lg:p-16 lg:p-16">
+      <div className="text-white flex min-h-screen flex-col items-center justify-around p-8 z-20 lg:p-16 lg:p-16 animate-fadeIn-l-r lg:animate-fadeIn">
         <h1
           className="font-bold text-5xl text-center font-serif border-black py-2 px-4 z-20"
           style={lgTextShadow}
