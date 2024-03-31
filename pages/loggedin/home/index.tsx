@@ -32,9 +32,9 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
 
   async function handleLogout() {
     try {
-      await ax.post("/user/logout");
       userContext.setUser(null);
       userContext.setCenarios([]);
+      await ax.post("/user/logout");
       toast.success("Logged out.");
       router.push("/");
     } catch (err) {
