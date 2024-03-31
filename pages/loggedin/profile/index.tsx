@@ -1,7 +1,7 @@
 import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Header from "@/components/layout/header";
 import ButtonRed from "@/components/UI/buttonRed";
@@ -9,14 +9,17 @@ import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 import { UserType } from "@/utils/types";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
+import { UserContext } from "@/contexts/UserContext";
 
 interface ProfilePagePropsType {
   user: UserType;
 }
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
-  const router = useRouter(),
-    inputClass =
+  const router = useRouter();
+  const userContext = useContext(UserContext);
+
+  const inputClass =
       "rounded-sm px-2 shadow-sm shadow-gray-600 text-black lg:w-[60vw]",
     [form, setForm] = useState({
       username: user.username,
@@ -45,6 +48,8 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
 
   async function handleLogout() {
     try {
+      userContext.setUser(null);
+      userContext.setCenarios([]);
       await ax.post("/user/logout");
       toast.success("Logged out.");
       router.push("/");

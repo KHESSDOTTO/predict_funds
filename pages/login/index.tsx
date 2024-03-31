@@ -54,14 +54,19 @@ export default function LoginPage() {
   return (
     <>
       <div className="w-full h-full absolute top-0 left-0 bg-landing lg:bg-login z-0"></div>
-      <div className="text-white z-1 relative bg-transparent animate-fadeIn-l-r lg:from-black lg:bg-gradient-to-r lg:via-transparent lg:from-30% lg:to-transparent">
+      <div className="lg:hidden">
+        <BackLink color="white" />
+      </div>
+      <div className="text-white z-1 relative bg-transparent animate-fadeIn lg:animate-fadeIn-l-r lg:from-black lg:bg-gradient-to-r lg:via-transparent lg:from-30% lg:to-transparent">
         <SendEmailModal
           showModal={showModal}
           setShowModal={setShowModal}
           title="Enter your information to receive the password recovery e-mail"
           textBtn="Send e-mail"
         />
-        <BackLink color="white" />
+        <div className="hidden lg:block">
+          <BackLink color="white" />
+        </div>
         <main className={mainClass}>
           <div className="flex flex-col justify-around items-center lg:col-start-1 lg:ml-24 lg:col-span-2 min-h-[95vh] lg:pt-12 lg:pb-8 lg:pt-6">
             <h1 className={h1Class} style={smTextShadow}>
