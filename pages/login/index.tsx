@@ -57,7 +57,7 @@ export default function LoginPage() {
       <div className="lg:hidden">
         <BackLink color="white" />
       </div>
-      <div className="text-white z-1 relative bg-transparent animate-fadeIn lg:animate-fadeIn-l-r lg:from-black lg:bg-gradient-to-r lg:via-transparent lg:from-30% lg:to-transparent">
+      <div className="text-white z-1 relative bg-transparent animate-fadeIn lg:animate-fadeIn-l-r lg:from-black lg:bg-gradient-to-r lg:via-transparent lg:from-20% lg:to-transparent">
         <SendEmailModal
           showModal={showModal}
           setShowModal={setShowModal}
