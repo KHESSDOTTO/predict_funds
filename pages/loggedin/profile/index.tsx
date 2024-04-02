@@ -123,8 +123,8 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   }
 
   return (
-    <div className="bg-black">
-      <div className="min-h-screen relative bg-gradient-to-br from-black to-green-900 from-25% text-white">
+    <>
+      <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-black to-green-900 from-25% text-white">
         <Header user={user}></Header>
         <PwdConfirmModal
           showModal={showModal}
@@ -187,9 +187,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                       type="text"
                       id="cnpj"
                       name="cnpj"
-                      className={
-                        inputClass + " bg-gray-400 italic w-[197.33px]"
-                      }
+                      className={inputClass + " bg-gray-400 italic w-full"}
                       value={form.cnpj}
                       onChange={handleChange}
                       disabled
@@ -230,7 +228,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           </div>
         </main>
       </div>
-    </div>
+    </>
   );
 }
 
