@@ -25,7 +25,10 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
             }
             let allRawData = [];
             if (typeof req.query.cnpj == "string") {
-              const response = await GetAllRawDataFromCnpj(req.query.cnpj);
+              const response = await GetAllRawDataFromCnpj(
+                req.query.cnpj,
+                req.query.baseDate
+              );
               if (!response) {
                 return res
                   .status(500)

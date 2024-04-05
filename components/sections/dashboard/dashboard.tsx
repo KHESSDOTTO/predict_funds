@@ -31,6 +31,7 @@ export default function Dashboard({ user }: DashboardProps) {
     ),
     [predictionData, setPredictionData] = useState<PredictionsType[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
+      baseDate: "2023-11-24T03:00:00Z",
       buscaCnpj: "",
       varNF: 0,
       varCotistas: 0,

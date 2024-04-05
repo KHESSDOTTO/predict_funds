@@ -124,6 +124,7 @@ interface UserContextType {
 }
 
 interface DashboardControlFormType {
+  baseDate: string;
   buscaCnpj: string;
   varNF: number;
   varCotistas: number;

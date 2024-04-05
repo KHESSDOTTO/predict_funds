@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
 import { useContext, useEffect } from "react";
@@ -38,11 +39,16 @@ export default function ControlSection({
   const userContext = useContext(UserContext);
   const user = userContext.user;
   const arrWeeksPreds = [4];
+  const arrBaseDates = [
+    "2023-11-24T03:00:00Z",
+    "2023-12-29T03:00:00Z",
+    "2024-01-26T03:00:00Z",
+  ];
 
-  async function getHistoricData(encodedParam: string) {
+  async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
       const responseHistoric = await ax.get(
-        `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
+        `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
       console.log("Complete historic data:");
       console.log(responseHistoric);
@@ -230,7 +236,10 @@ export default function ControlSection({
 
     try {
       // Historic and Predictions fetching
-      const slicedHistoricData = await getHistoricData(encodedParam);
+      const slicedHistoricData = await getHistoricData(
+        encodedParam,
+        controlForm.baseDate
+      );
       let predictions: PredictionsType[] = [];
       if (slicedHistoricData) {
         predictions = await getPredictions(encodedParam, slicedHistoricData);
@@ -256,7 +265,7 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:w-fit lg:h-fit lg:mt-2"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[65vw] lg:w-fit lg:h-fit lg:mt-2"
       >
         <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
@@ -268,6 +277,9 @@ export default function ControlSection({
         >
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
             <div className="flex flex-col gap-1 font-semibold max-w-24 lg:gap-0 text-sm">
+              <label htmlFor="baseDate" className="h-8">
+                Base Date
+              </label>
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ
               </label>
@@ -297,6 +309,23 @@ export default function ControlSection({
               </label>
             </div>
             <div className="flex flex-col items-stretch gap-1 lg:gap-0">
+              <div className="h-8">
+                <select
+                  id="baseDate"
+                  name="baseDate"
+                  value={controlForm.baseDate}
+                  onChange={handleControlFormChange}
+                  className="rounded-md border-2 border-black px-1 bg-white w-full"
+                >
+                  {arrBaseDates.map((cE) => {
+                    return (
+                      <option value={cE}>
+                        {format(new Date(cE), "dd/MM/yyyy")}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
               <div className="h-8">
                 <select
                   id="buscaCnpj"
@@ -433,6 +462,24 @@ export default function ControlSection({
           onSubmit={handleControlFormSubmit}
         >
           <div className="flex flex-row justify-center gap-y-6 lg:flex-wrap">
+            <div className="flex flex-col font-semibold items-center w-[30%]">
+              <label htmlFor="baseDate">Base Date</label>
+              <select
+                id="baseDate"
+                name="baseDate"
+                value={controlForm.baseDate}
+                onChange={handleControlFormChange}
+                className="border-b-2 rounded-t-sm border-black text-center w-40 bg-transparent focus:outline-none"
+              >
+                {arrBaseDates.map((cE) => {
+                  return (
+                    <option value={cE}>
+                      {format(new Date(cE), "dd/MM/yyyy")}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
             <div className="flex flex-col font-semibold items-center w-[30%]">
               <label htmlFor="buscaCnpj">CNPJ</label>
               <select
