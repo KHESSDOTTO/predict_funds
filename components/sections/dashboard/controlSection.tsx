@@ -265,7 +265,7 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[65vw] lg:w-fit lg:h-fit lg:mt-2"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[70vw] lg:w-fit lg:h-fit lg:mt-2"
       >
         <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section

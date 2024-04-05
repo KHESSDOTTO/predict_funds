@@ -40,10 +40,10 @@ export default function Dashboard({ user }: DashboardProps) {
       weeksForward: 4,
     });
 
-  async function getHistoricData(encodedParam: string) {
+  async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
       const responseHistoric = await ax.get(
-        `/rawData/getAllFromCnpj?cnpj=${encodedParam}`
+        `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
       console.log("Complete historic data:");
       console.log(responseHistoric);
@@ -167,7 +167,10 @@ export default function Dashboard({ user }: DashboardProps) {
       const loadingToast = toast.loading("Fetching data...");
       const encodedParam = encodeURIComponent(user.cnpj);
       try {
-        const slicedHistoricData = await getHistoricData(encodedParam);
+        const slicedHistoricData = await getHistoricData(
+          encodedParam,
+          controlForm.baseDate
+        );
         let predictions: PredictionsType[] | false = [];
         if (slicedHistoricData) {
           predictions = await getPredictions(encodedParam, slicedHistoricData);
