@@ -37,6 +37,7 @@ export default function ControlSection({
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
+  const arrWeeksPreds = [4, 8, 12];
 
   async function getHistoricData(encodedParam: string) {
     try {
@@ -255,7 +256,7 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:w-fit lg:h-fit lg:mt-2"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:w-fit lg:h-fit lg:mt-2"
       >
         <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
@@ -266,7 +267,7 @@ export default function ControlSection({
           onSubmit={handleControlFormSubmit}
         >
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
-            <div className="flex flex-col gap-1 font-semibold lg:gap-0 text-sm">
+            <div className="flex flex-col gap-1 font-semibold max-w-24 lg:gap-0 text-sm">
               <label htmlFor="buscaCnpj" className="h-8">
                 CNPJ
               </label>
@@ -276,11 +277,23 @@ export default function ControlSection({
               <label htmlFor="weeksForward" className="h-8">
                 Weeks forward
               </label>
-              <label htmlFor="DI" className="h-8">
-                DI
+              <label
+                htmlFor="varNF"
+                className="h-8 whitespace-nowrap overflow-scroll"
+              >
+                N. Funding var (%)
               </label>
-              <label htmlFor="varCota" className="h-8">
-                Quota variation (%)
+              <label
+                htmlFor="varCotistas overflow-scroll"
+                className="h-8 whitespace-nowrap overflow-scroll"
+              >
+                Shareholders var (%)
+              </label>
+              <label
+                htmlFor="varCota"
+                className="h-8 whitespace-nowrap overflow-scroll"
+              >
+                Quota var (%)
               </label>
             </div>
             <div className="flex flex-col items-stretch gap-1 lg:gap-0">
@@ -290,7 +303,7 @@ export default function ControlSection({
                   name="buscaCnpj"
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
-                  className="rounded-md border-2 border-black bg-white w-full"
+                  className="rounded-md border-2 border-black px-1 bg-white w-full"
                 >
                   {user &&
                     user.cnpjs &&
@@ -310,29 +323,67 @@ export default function ControlSection({
                 ></input>
               </div>
               <div className="h-8">
-                <input
-                  type="text"
+                <select
                   id="weeksForward"
                   name="weeksForward"
-                  className="rounded-md border-2 border-black px-2 italic w-full"
+                  className="rounded-md border-2 border-black px-1 w-full"
                   value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
-                  disabled
-                ></input>
+                >
+                  {arrWeeksPreds.map((cE) => {
+                    return <option value={cE}>{cE}</option>;
+                  })}
+                </select>
               </div>
               <div className="flex h-8 gap-4 text-sm">
-                <span className="range-value w-12">
-                  {(controlForm.DI * 100).toFixed(2)}%
+                <span
+                  className="range-value w-12 text-sm"
+                  style={{
+                    color:
+                      controlForm.varNF < 0
+                        ? "darkred"
+                        : controlForm.varNF == 0
+                        ? ""
+                        : "darkgreen",
+                  }}
+                >
+                  {(controlForm.varNF * 100).toFixed(2)}%
                 </span>
                 <input
                   type="range"
-                  id="DI"
-                  name="DI"
-                  min={0.01}
-                  max={0.2}
-                  step={0.0025}
+                  id="varNF"
+                  name="varNF"
+                  min={-0.1}
+                  max={0.1}
+                  step={0.01}
                   className="indigo-500"
-                  value={controlForm.DI}
+                  value={controlForm.varNF}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+              <div className="flex h-8 gap-4 text-sm">
+                <span
+                  className="range-value w-12 text-sm"
+                  style={{
+                    color:
+                      controlForm.varCotistas < 0
+                        ? "darkred"
+                        : controlForm.varCotistas == 0
+                        ? ""
+                        : "darkgreen",
+                  }}
+                >
+                  {(controlForm.varCotistas * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="varCotistas"
+                  name="varCotistas"
+                  min={-0.1}
+                  max={0.1}
+                  step={0.01}
+                  className="indigo-500"
+                  value={controlForm.varCotistas}
                   onChange={handleControlFormChange}
                 ></input>
               </div>
@@ -342,10 +393,10 @@ export default function ControlSection({
                   style={{
                     color:
                       controlForm.varCota < 0
-                        ? "red"
+                        ? "darkred"
                         : controlForm.varCota == 0
                         ? ""
-                        : "green",
+                        : "darkgreen",
                   }}
                 >
                   {(controlForm.varCota * 100).toFixed(2)}%
@@ -381,18 +432,9 @@ export default function ControlSection({
           className="hidden lg:block"
           onSubmit={handleControlFormSubmit}
         >
-          <div className="flex flex-row justify-center lg:gap-8 lg:flex-wrap">
-            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+          <div className="flex flex-row justify-center gap-y-6 lg:flex-wrap">
+            <div className="flex flex-col font-semibold items-center w-[30%]">
               <label htmlFor="buscaCnpj">CNPJ</label>
-              {/* <input
-                type="text"
-                id="buscaCnpj"
-                name="buscaCnpj"
-                className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
-                value={controlForm.buscaCnpj}
-                onChange={handleControlFormChange}
-                disabled
-              ></input> */}
               <select
                 id="buscaCnpj"
                 name="buscaCnpj"
@@ -407,51 +449,90 @@ export default function ControlSection({
                   })}
               </select>
             </div>
-            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+            <div className="flex flex-col font-semibold items-center w-[30%]">
               <label htmlFor="weeksBack">Weeks back</label>
               <input
                 type="text"
                 id="weeksBack"
                 name="weeksBack"
-                className="border-b-2 rounded-t-sm border-black px-2 text-center w-28 bg-transparent focus:outline-none"
+                className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
                 value={controlForm.weeksBack}
                 onChange={handleControlFormChange}
               ></input>
             </div>
-            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="weeksForward">
-                Weeks forward <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
+            <div className="flex flex-col font-semibold items-center w-[30%]">
+              <label htmlFor="weeksForward">Weeks forward</label>
+              <select
                 id="weeksForward"
                 name="weeksForward"
-                className="border-b-2 rounded-t-sm border-black text-center w-28 bg-transparent text-gray-900 italic focus:outline-none"
+                className="border-b-2 rounded-t-sm border-black text-center pl-4 w-40 bg-transparent text-gray-900 focus:outline-none"
                 value={controlForm.weeksForward}
                 onChange={handleControlFormChange}
-                disabled
-              ></input>
+              >
+                {arrWeeksPreds.map((cE) => {
+                  return <option value={cE}>{cE}</option>;
+                })}
+              </select>
             </div>
-            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
-              <label htmlFor="DI">DI</label>
+            <div className="flex flex-col font-semibold items-center w-[30%]">
+              <label htmlFor="varNF">% Net Funding</label>
               <div className="flex gap-4 text-sm">
-                <span className="range-value w-8">
-                  {(controlForm.DI * 100).toFixed(2)}%
+                <span
+                  className="range-value w-10 text-sm"
+                  style={{
+                    color:
+                      controlForm.varNF < 0
+                        ? "darkred"
+                        : controlForm.varNF == 0
+                        ? ""
+                        : "darkgreen",
+                  }}
+                >
+                  {(controlForm.varNF * 100).toFixed(2)}%
                 </span>
                 <input
                   type="range"
-                  id="DI"
-                  name="DI"
-                  min={0.01}
-                  max={0.2}
-                  step={0.0025}
+                  id="varNF"
+                  name="varNF"
+                  min={-0.1}
+                  max={0.1}
+                  step={0.01}
                   className="indigo-500"
-                  value={controlForm.DI}
+                  value={controlForm.varNF}
                   onChange={handleControlFormChange}
                 ></input>
               </div>
             </div>
-            <div className="flex flex-col gap-1 font-semibold items-center w-1/6">
+            <div className="flex flex-col font-semibold items-center w-[30%]">
+              <label htmlFor="varCotistas">% Shareholders var</label>
+              <div className="flex gap-4 text-sm">
+                <span
+                  className="range-value w-10 text-sm"
+                  style={{
+                    color:
+                      controlForm.varCotistas < 0
+                        ? "darkred"
+                        : controlForm.varCotistas == 0
+                        ? ""
+                        : "darkgreen",
+                  }}
+                >
+                  {(controlForm.varCotistas * 100).toFixed(2)}%
+                </span>
+                <input
+                  type="range"
+                  id="varCotistas"
+                  name="varCotistas"
+                  min={-0.1}
+                  max={0.1}
+                  step={0.01}
+                  className="indigo-500"
+                  value={controlForm.varCotistas}
+                  onChange={handleControlFormChange}
+                ></input>
+              </div>
+            </div>
+            <div className="flex flex-col font-semibold items-center w-[30%]">
               <label htmlFor="varCota">Quota variation (%)</label>
               <div className="flex gap-4">
                 <span
@@ -459,10 +540,10 @@ export default function ControlSection({
                   style={{
                     color:
                       controlForm.varCota < 0
-                        ? "red"
+                        ? "darkred"
                         : controlForm.varCota == 0
                         ? ""
-                        : "green",
+                        : "darkgreen",
                   }}
                 >
                   {(controlForm.varCota * 100).toFixed(2)}%
@@ -480,13 +561,13 @@ export default function ControlSection({
                 ></input>
               </div>
             </div>
-            <div className="flex justify-center relative items-center mt-[-15px] w-full">
+            <div className="flex justify-center relative items-center w-full">
               <ButtonIndigo shadowSize="md" shadowColor="black">
                 Update
               </ButtonIndigo>
               <div
                 onClick={saveCenario}
-                className="absolute right-40 bottom-0 text-yellow-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-800  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
+                className="absolute right-40 bottom-0 text-indigo-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-900  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>

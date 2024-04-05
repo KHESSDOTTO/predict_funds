@@ -125,7 +125,8 @@ interface UserContextType {
 
 interface DashboardControlFormType {
   buscaCnpj: string;
-  DI: number;
+  varNF: number;
+  varCotistas: number;
   varCota: number;
   weeksBack: number;
   weeksForward: number;

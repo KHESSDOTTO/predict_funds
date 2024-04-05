@@ -32,7 +32,8 @@ export default function Dashboard({ user }: DashboardProps) {
     [predictionData, setPredictionData] = useState<PredictionsType[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       buscaCnpj: "",
-      DI: 0.1,
+      varNF: 0,
+      varCotistas: 0,
       varCota: 0,
       weeksBack: 8,
       weeksForward: 4,
