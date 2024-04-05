@@ -37,7 +37,7 @@ export default function ControlSection({
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
-  const arrWeeksPreds = [4, 8, 12];
+  const arrWeeksPreds = [4];
 
   async function getHistoricData(encodedParam: string) {
     try {
@@ -475,7 +475,7 @@ export default function ControlSection({
               </select>
             </div>
             <div className="flex flex-col font-semibold items-center w-[30%]">
-              <label htmlFor="varNF">% Net Funding</label>
+              <label htmlFor="varNF">% Net Funding var</label>
               <div className="flex gap-4 text-sm">
                 <span
                   className="range-value w-10 text-sm"
