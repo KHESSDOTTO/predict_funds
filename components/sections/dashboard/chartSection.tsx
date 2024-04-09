@@ -86,7 +86,7 @@ export default function ChartSection({
 
     // Value of prediction to compare with highest absolute value of historic data.
     const absValuePred = predictions[0].CAPTC_LIQ
-      ? Math.abs(predictions[0].CAPTC_LIQ)
+      ? Math.abs(Number(predictions[0].CAPTC_LIQ))
       : 0;
     if (maxAbsValueNF) {
       // Defyning domain.
@@ -370,7 +370,7 @@ function CustomTooltipIndigo({
 }
 
 function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
-  console.log(JSON.stringify(payload));
+  // console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-md shadow-yellow-700 shadow-sm">

@@ -12,8 +12,8 @@ async function GetAllRawDataFromCnpj(cnpj: string, baseDate: string) {
       cE._doc = { ...cE._doc, DT_COMPTC: addHours(cE._doc.DT_COMPTC, 3) };
       return cE;
     });
-    console.log("finalResult");
-    console.log(finalResult);
+    // console.log("finalResult");
+    // console.log(finalResult);
     return finalResult;
   } catch (err) {
     console.log(err);

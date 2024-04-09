@@ -14,9 +14,9 @@ import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 import type { MouseEventHandler } from "react";
+import { arrBaseDates } from "@/utils/globalVars";
 
 interface ControlSectionProps {
-  data: RawDataType[];
   setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
   controlForm: DashboardControlFormType;
@@ -27,7 +27,6 @@ interface ControlSectionProps {
 }
 
 export default function ControlSection({
-  data,
   setHistoricData,
   setPredictionData,
   controlForm,
@@ -39,11 +38,7 @@ export default function ControlSection({
   const userContext = useContext(UserContext);
   const user = userContext.user;
   const arrWeeksPreds = [4];
-  const arrBaseDates = [
-    "2023-11-24T03:00:00Z",
-    "2023-12-29T03:00:00Z",
-    "2024-01-26T03:00:00Z",
-  ];
+  const baseDates = arrBaseDates;
 
   async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
@@ -51,13 +46,9 @@ export default function ControlSection({
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
       console.log("Complete historic data:");
-      console.log(responseHistoric);
+      // console.log(responseHistoric);
       let slicedHistoricData: RawDataType[] = [];
       if (responseHistoric.data) {
-        // slicedHistoricData = responseHistoric.data.slice(
-        //   controlForm.weeksBack * -5 - 1,
-        //   responseHistoric.data.length
-        // );
         const adjHistoricData: RawDataType[] = responseHistoric.data.map(
           (cE: RawDataType) => {
             const convDate = new Date(cE.DT_COMPTC);
@@ -70,21 +61,21 @@ export default function ControlSection({
         const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
           return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
         }, new Date("2020-01-01T00:00:00Z"));
-        console.log("higherDate");
-        console.log(higherDate);
-        console.log("cutDate");
-        console.log(subWeeks(higherDate, controlForm.weeksBack));
+        // console.log("higherDate");
+        // console.log(higherDate);
+        // console.log("cutDate");
+        // console.log(subWeeks(higherDate, controlForm.weeksBack));
 
         slicedHistoricData = adjHistoricData.filter((cE) => {
           return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
         });
       }
-      console.log("Length of sliced data:");
-      console.log(slicedHistoricData.length);
-      console.log("Sliced data:");
-      console.log(slicedHistoricData);
-      console.log("Final historic data after mapping to convert date:");
-      console.log(slicedHistoricData);
+      // console.log("Length of sliced data:");
+      // console.log(slicedHistoricData.length);
+      // console.log("Sliced data:");
+      // console.log(slicedHistoricData);
+      // console.log("Final historic data after mapping to convert date:");
+      // console.log(slicedHistoricData);
       setHistoricData(slicedHistoricData);
       return slicedHistoricData;
     } catch (err) {
@@ -94,15 +85,19 @@ export default function ControlSection({
   }
 
   async function getPredictions(
-    encodedParam: string,
+    cnpj: string,
     slicedHistoricData: RawDataType[]
   ) {
     let responsePreds: AxiosResponse<any, any> | undefined;
-    responsePreds = await ax.get(
-      `/prediction/getFromCnpj?cnpj=${encodedParam}`
-    );
-    console.log("Predictions:");
-    console.log(responsePreds);
+    // responsePreds = await ax.get(
+    //   `/prediction/getFromCnpj?cnpj=${encodedParam}`
+    // );
+    responsePreds = await ax.post(`/prediction/getWithBaseDate`, {
+      ...controlForm,
+      buscaCnpj: cnpj,
+    });
+    // console.log("Predictions:");
+    // console.log(responsePreds);
     let finalPredictionData: PredictionsType[] = [];
     if (responsePreds && responsePreds.data && slicedHistoricData) {
       finalPredictionData.push({
@@ -114,8 +109,8 @@ export default function ControlSection({
       });
 
       let lastDate =
-        slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Última data do histórico para começar o loop
-      const endPredDate = addWeeks(lastDate, 4); // Última data da predição de 4 semanas
+        slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
+      const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
       while (lastDate < endPredDate) {
         // const lastDate =
         //   finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
@@ -133,16 +128,13 @@ export default function ControlSection({
           // including prediction for 4 weeks based on the varCota of the controlForm
           DT_COMPTC: newDate,
           CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
-          CAPTC_LIQ:
-            responsePreds.data[
-              (controlForm.varCota * 100).toFixed(1).toString()
-            ],
+          CAPTC_LIQ: responsePreds.data.CAPTC_LIQ,
         });
         lastDate = newDate;
       }
     }
-    console.log("Final prediction data:");
-    console.log(finalPredictionData);
+    // console.log("Final prediction data:");
+    // console.log(finalPredictionData);
     if (finalPredictionData) {
       setPredictionData(finalPredictionData);
     }
@@ -163,58 +155,108 @@ export default function ControlSection({
     return false;
   }
 
+  // Updates the controlForm with the logged in users CNPJ, initially.
   useEffect(() => {
-    if (data[0]) {
+    if (user) {
       setControlForm({
         ...controlForm,
-        buscaCnpj: data[0].CNPJ_FUNDO ? data[0].CNPJ_FUNDO : "",
+        buscaCnpj: user.cnpj ? user.cnpj : "",
       });
     }
-  }, [data]);
+  }, [user]);
+
+  // Get historic data and predictions
+  useEffect(() => {
+    async function getData() {
+      if (!user) return; // won't execute if there is no logged in user
+      const loadingToast = toast.loading("Fetching data...");
+      const encodedParam = encodeURIComponent(user.cnpj);
+      try {
+        const slicedHistoricData = await getHistoricData(
+          encodedParam,
+          controlForm.baseDate
+        );
+        let predictions: PredictionsType[] | false = [];
+        if (slicedHistoricData) {
+          predictions = await getPredictions(user.cnpj, slicedHistoricData);
+        }
+        if (predictions) {
+          toast.success("Done.");
+        } else {
+          toast.error("Something went wrong.");
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Sorry. We had a problem fetching the data.");
+      }
+      toast.dismiss(loadingToast);
+    }
+    // Calling the function defined above
+    getData();
+    return;
+  }, [user]);
+
+  // Get registration
+  useEffect(() => {
+    async function getRegistration() {
+      if (!user) return;
+      const encodedParam = encodeURIComponent(user.cnpj);
+      try {
+        const registration = await selRegistration(encodedParam);
+        setRegistration(registration);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    // Calling the function defined above
+    getRegistration();
+    return;
+  }, [user]);
 
   function handleControlFormChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
-    if (e.target.name === "buscaCnpj") {
-      const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
-        lenNum = cnpjNum.length,
-        len = e.target.value.length,
-        specialChars = [".", "/", "-"];
-      if (!specialChars.includes(e.target.value[len - 2])) {
-        switch (lenNum) {
-          case 3:
-            newVal =
-              e.target.value.slice(0, lenNum - 1) +
-              "." +
-              e.target.value.slice(lenNum - 1, lenNum);
-            break;
-          case 6:
-            newVal =
-              e.target.value.slice(0, lenNum) +
-              "." +
-              e.target.value.slice(lenNum, lenNum + 1);
-            break;
-          case 9:
-            newVal =
-              e.target.value.slice(0, lenNum + 1) +
-              "/" +
-              e.target.value.slice(lenNum + 1, lenNum + 2);
-            break;
-          case 13:
-            newVal =
-              e.target.value.slice(0, lenNum + 2) +
-              "-" +
-              e.target.value.slice(lenNum + 2, lenNum + 3);
-            break;
-          case 15:
-            newVal = e.target.value.slice(0, len - 1);
-            break;
-          default:
-            break;
-        }
-      }
-    }
+    // if (e.target.name === "buscaCnpj") {
+    //   const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
+    //     lenNum = cnpjNum.length,
+    //     len = e.target.value.length,
+    //     specialChars = [".", "/", "-"];
+    //   if (!specialChars.includes(e.target.value[len - 2])) {
+    //     switch (lenNum) {
+    //       case 3:
+    //         newVal =
+    //           e.target.value.slice(0, lenNum - 1) +
+    //           "." +
+    //           e.target.value.slice(lenNum - 1, lenNum);
+    //         break;
+    //       case 6:
+    //         newVal =
+    //           e.target.value.slice(0, lenNum) +
+    //           "." +
+    //           e.target.value.slice(lenNum, lenNum + 1);
+    //         break;
+    //       case 9:
+    //         newVal =
+    //           e.target.value.slice(0, lenNum + 1) +
+    //           "/" +
+    //           e.target.value.slice(lenNum + 1, lenNum + 2);
+    //         break;
+    //       case 13:
+    //         newVal =
+    //           e.target.value.slice(0, lenNum + 2) +
+    //           "-" +
+    //           e.target.value.slice(lenNum + 2, lenNum + 3);
+    //         break;
+    //       case 15:
+    //         newVal = e.target.value.slice(0, len - 1);
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // }
     setControlForm({ ...controlForm, [e.target.name]: newVal });
     return;
   }
@@ -242,7 +284,10 @@ export default function ControlSection({
       );
       let predictions: PredictionsType[] = [];
       if (slicedHistoricData) {
-        predictions = await getPredictions(encodedParam, slicedHistoricData);
+        predictions = await getPredictions(
+          controlForm.buscaCnpj,
+          slicedHistoricData
+        );
       }
       if (predictions) {
         toast.success("Done.");
@@ -317,7 +362,7 @@ export default function ControlSection({
                   onChange={handleControlFormChange}
                   className="rounded-md border-2 border-black px-1 bg-white w-full"
                 >
-                  {arrBaseDates.map((cE) => {
+                  {baseDates.map((cE) => {
                     return (
                       <option value={cE}>
                         {format(new Date(cE), "dd/MM/yyyy")}
@@ -471,7 +516,7 @@ export default function ControlSection({
                 onChange={handleControlFormChange}
                 className="border-b-2 rounded-t-sm border-black text-center w-40 bg-transparent focus:outline-none"
               >
-                {arrBaseDates.map((cE) => {
+                {baseDates.map((cE) => {
                   return (
                     <option value={cE}>
                       {format(new Date(cE), "dd/MM/yyyy")}
@@ -614,7 +659,7 @@ export default function ControlSection({
               </ButtonIndigo>
               <div
                 onClick={saveCenario}
-                className="absolute right-40 bottom-0 text-indigo-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-900  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
+                className="absolute right-40 bottom-0 text-indigo-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-800  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>
