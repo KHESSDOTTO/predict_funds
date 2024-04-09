@@ -24,8 +24,8 @@ async function GetAllPredictionsByCnpj(
       if (!predictions4Weeks) {
         return res.status(204).send("No predictions were found for this CNPJ.");
       }
-      console.log("predictions4Weeks:");
-      console.log(predictions4Weeks);
+      // console.log("predictions4Weeks:");
+      // console.log(predictions4Weeks);
       return res.status(200).json(predictions4Weeks);
     } catch (err) {
       console.error(err);

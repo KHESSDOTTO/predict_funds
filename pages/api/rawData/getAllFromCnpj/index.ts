@@ -24,12 +24,20 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                 user.cnpj.slice(12, 14);
             }
             let allRawData = [];
-            if (typeof req.query.cnpj == "string") {
-              const response = await GetAllRawDataFromCnpj(req.query.cnpj);
+            if (
+              typeof req.query.cnpj == "string" &&
+              typeof req.query.baseDate == "string"
+            ) {
+              const response = await GetAllRawDataFromCnpj(
+                req.query.cnpj,
+                req.query.baseDate
+              );
               if (!response) {
                 return res
                   .status(500)
-                  .json(`No data found for CNPJ: ${req.query.cnpj}`);
+                  .json(
+                    `No data found for CNPJ: ${req.query.cnpj} on baseDate: ${req.query.baseDate}`
+                  );
               }
               allRawData = response;
             }

@@ -26,7 +26,9 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
       router.push("/login");
       return;
     }
-    userContext.setUser(user);
+    if (!userContext.user) {
+      userContext.setUser(user);
+    }
     return;
   }, []);
 

@@ -139,7 +139,7 @@ export default function MyCenarios() {
           return (
             <div
               key={cE.id.toString()}
-              className="border-black rounded-3xl bg-white/90 shadow-lg shadow-indigo-500 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-16"
+              className="border-black rounded-2xl bg-white/90 shadow-lg shadow-indigo-500 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-16"
             >
               <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-2 lg:w-11/12">
                 Cenario {cI + 1}
@@ -151,11 +151,25 @@ export default function MyCenarios() {
                   </h3>
                   <ul className="lg:flex gap-4 lg:flex-col lg:gap-1 lg:ml-2">
                     <li>
-                      DI:<span className="font-bold"> {cE.params.DI}</span>
+                      Var. Quota:
+                      <span className="font-bold">
+                        {" "}
+                        {cE.params.varCota * 100}%
+                      </span>
                     </li>
                     <li>
-                      Var. Cota:
-                      <span className="font-bold"> {cE.params.varCota}</span>
+                      Var. Sharehold.:
+                      <span className="font-bold">
+                        {" "}
+                        {cE.params.varCotistas * 100}%
+                      </span>
+                    </li>
+                    <li>
+                      Var. Net Fund.:
+                      <span className="font-bold">
+                        {" "}
+                        {cE.params.varNF * 100}%
+                      </span>
                     </li>
                     <li>
                       CNPJ:

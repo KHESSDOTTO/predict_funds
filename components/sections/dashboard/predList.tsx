@@ -51,10 +51,10 @@ export default function PredList({
     currEntryFront: Record<string, any> | undefined,
     formatter: Intl.NumberFormat
   ): string {
-    console.log("currEntryBack");
-    console.log(currEntryBack);
-    console.log("currEntryFront");
-    console.log(currEntryFront);
+    // console.log("currEntryBack");
+    // console.log(currEntryBack);
+    // console.log("currEntryFront");
+    // console.log(currEntryFront);
     if (direction === "backward" && currEntryBack) {
       const value = currEntryBack[varName];
       if (typeof value === "number") {
@@ -126,30 +126,30 @@ export default function PredList({
         <tbody>
           {predRows.map((cE) => {
             let tgtDate = lastHistoricDate;
-            console.log("tgtDate");
-            console.log(tgtDate);
+            // console.log("tgtDate");
+            // console.log(tgtDate);
             let entriesBack = data;
-            console.log("entriesBack");
-            console.log(entriesBack);
+            // console.log("entriesBack");
+            // console.log(entriesBack);
             let entriesFront = predictions;
-            console.log("entriesFront");
-            console.log(entriesFront);
+            // console.log("entriesFront");
+            // console.log(entriesFront);
 
             if (cE.direction === "backward") {
               tgtDate = subWeeks(lastHistoricDate, cE.numPer);
-              console.log("newTgtDate");
-              console.log(tgtDate);
+              // console.log("newTgtDate");
+              // console.log(tgtDate);
               entriesBack = entriesBack.filter((cE, cI) => {
                 return cE.DT_COMPTC.getTime() == tgtDate.getTime();
               });
-              console.log("entryBackFilter");
-              console.log(entriesBack);
+              // console.log("entryBackFilter");
+              // console.log(entriesBack);
             }
 
             if (cE.direction === "forward") {
               tgtDate = addWeeks(lastHistoricDate, cE.numPer);
-              console.log("newTgtDate");
-              console.log(tgtDate);
+              // console.log("newTgtDate");
+              // console.log(tgtDate);
               entriesFront = entriesFront.filter((cE) => {
                 return (
                   cE.DT_COMPTC &&
@@ -157,8 +157,8 @@ export default function PredList({
                   cE.CAPTC_LIQ
                 );
               });
-              console.log("entryFrontFilter");
-              console.log(entriesFront);
+              // console.log("entryFrontFilter");
+              // console.log(entriesFront);
             }
 
             const currEntryBack = entriesBack[0];

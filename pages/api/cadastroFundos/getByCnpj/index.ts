@@ -15,13 +15,13 @@ async function GetByCnpj(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
     const cadastro = await getCadastroByCnpj(req.query.cnpj);
-    console.log("cadastro");
-    console.log(cadastro);
+    // console.log("cadastro");
+    // console.log(cadastro);
     if (!cadastro) {
       return res.status(204).send("");
     }
-    console.log("cadastro:");
-    console.log(cadastro);
+    // console.log("cadastro:");
+    // console.log(cadastro);
     return res.status(200).json(cadastro);
   } catch (err) {
     console.error(err);
