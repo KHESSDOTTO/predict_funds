@@ -506,8 +506,8 @@ export default function ControlSection({
           className="hidden lg:block"
           onSubmit={handleControlFormSubmit}
         >
-          <div className="flex flex-row justify-center gap-y-6 lg:flex-wrap">
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+          <div className="flex flex-row justify-center gap-y-4 lg:flex-wrap">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="baseDate">Base Date</label>
               <select
                 id="baseDate"
@@ -525,7 +525,7 @@ export default function ControlSection({
                 })}
               </select>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="buscaCnpj">CNPJ</label>
               <select
                 id="buscaCnpj"
@@ -541,7 +541,7 @@ export default function ControlSection({
                   })}
               </select>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="weeksBack">Weeks back</label>
               <input
                 type="text"
@@ -552,7 +552,7 @@ export default function ControlSection({
                 onChange={handleControlFormChange}
               ></input>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="weeksForward">Weeks forward</label>
               <select
                 id="weeksForward"
@@ -566,7 +566,7 @@ export default function ControlSection({
                 })}
               </select>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="varNF">% Net Funding var</label>
               <div className="flex gap-4 text-sm">
                 <span
@@ -595,7 +595,7 @@ export default function ControlSection({
                 ></input>
               </div>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="varCotistas">% Shareholders var</label>
               <div className="flex gap-4 text-sm">
                 <span
@@ -624,7 +624,7 @@ export default function ControlSection({
                 ></input>
               </div>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[30%]">
+            <div className="flex flex-col font-semibold items-center w-[33%]">
               <label htmlFor="varCota">Quota variation (%)</label>
               <div className="flex gap-4">
                 <span
@@ -653,7 +653,7 @@ export default function ControlSection({
                 ></input>
               </div>
             </div>
-            <div className="flex justify-center relative items-center w-full">
+            <div className="flex justify-center relative items-center w-full mt-6">
               <ButtonIndigo shadowSize="md" shadowColor="black">
                 Update
               </ButtonIndigo>
