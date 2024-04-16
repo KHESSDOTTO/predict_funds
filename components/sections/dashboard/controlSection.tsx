@@ -310,7 +310,7 @@ export default function ControlSection({
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[70vw] lg:w-fit lg:h-fit lg:mt-2"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[95vw] lg:w-fit lg:h-fit lg:mt-2 lg:bg-none lg:shadow-none lg:text-white"
       >
         <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
           Control section
@@ -503,163 +503,182 @@ export default function ControlSection({
         </form>
         <form
           id="controlFormDesk"
-          className="hidden lg:block"
+          className="hidden lg:block lg:border-red-500"
           onSubmit={handleControlFormSubmit}
         >
-          <div className="flex flex-row justify-center gap-y-4 lg:flex-wrap">
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="baseDate">Base Date</label>
-              <select
-                id="baseDate"
-                name="baseDate"
-                value={controlForm.baseDate}
-                onChange={handleControlFormChange}
-                className="border-b-2 rounded-t-sm border-black text-center w-40 bg-transparent focus:outline-none"
-              >
-                {baseDates.map((cE) => {
-                  return (
-                    <option value={cE}>
-                      {format(new Date(cE), "dd/MM/yyyy")}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="buscaCnpj">CNPJ</label>
-              <select
-                id="buscaCnpj"
-                name="buscaCnpj"
-                value={controlForm.buscaCnpj}
-                onChange={handleControlFormChange}
-                className="border-b-2 rounded-t-sm border-black text-center w-40 bg-transparent focus:outline-none"
-              >
-                {user &&
-                  user.cnpjs &&
-                  user.cnpjs.map((cE) => {
-                    return <option value={cE}>{cE}</option>;
-                  })}
-              </select>
-            </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="weeksBack">Weeks back</label>
-              <input
-                type="text"
-                id="weeksBack"
-                name="weeksBack"
-                className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none"
-                value={controlForm.weeksBack}
-                onChange={handleControlFormChange}
-              ></input>
-            </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="weeksForward">Weeks forward</label>
-              <select
-                id="weeksForward"
-                name="weeksForward"
-                className="border-b-2 rounded-t-sm border-black text-center pl-4 w-40 bg-transparent text-gray-900 focus:outline-none"
-                value={controlForm.weeksForward}
-                onChange={handleControlFormChange}
-              >
-                {arrWeeksPreds.map((cE) => {
-                  return <option value={cE}>{cE}</option>;
-                })}
-              </select>
-            </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="varNF">% Net Funding var</label>
-              <div className="flex gap-4 text-sm">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varNF < 0
-                        ? "darkred"
-                        : controlForm.varNF == 0
-                        ? ""
-                        : "darkgreen",
-                  }}
-                >
-                  {(controlForm.varNF * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varNF"
-                  name="varNF"
-                  min={-0.1}
-                  max={0.1}
-                  step={0.01}
-                  className="indigo-500"
-                  value={controlForm.varNF}
-                  onChange={handleControlFormChange}
-                ></input>
+          <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
+            <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">
+              <span className="mr-4">Config.: </span>
+              <div className="flex flex-col justify-start gap-4 border-red-500 w-fit items-center">
+                <div className="flex flex-col font-semibold items-center gap-1 border-white">
+                  <label htmlFor="baseDate" className="whitespace-nowrap">
+                    Base Date
+                  </label>
+                  <select
+                    id="baseDate"
+                    name="baseDate"
+                    value={controlForm.baseDate}
+                    onChange={handleControlFormChange}
+                    className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                  >
+                    {baseDates.map((cE) => {
+                      return (
+                        <option value={cE}>
+                          {format(new Date(cE), "dd/MM/yyyy")}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="buscaCnpj">CNPJ</label>
+                  <select
+                    id="buscaCnpj"
+                    name="buscaCnpj"
+                    value={controlForm.buscaCnpj}
+                    onChange={handleControlFormChange}
+                    className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                  >
+                    {user &&
+                      user.cnpjs &&
+                      user.cnpjs.map((cE) => {
+                        return <option value={cE}>{cE}</option>;
+                      })}
+                  </select>
+                </div>
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="weeksBack">Weeks back</label>
+                  <input
+                    type="text"
+                    id="weeksBack"
+                    name="weeksBack"
+                    className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none lg:bg-gradient-to-r from-white/80 via-white to-white/80 lg:rounded-md lg:text-black"
+                    value={controlForm.weeksBack}
+                    onChange={handleControlFormChange}
+                  ></input>
+                </div>
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="weeksForward">Weeks forward</label>
+                  <select
+                    id="weeksForward"
+                    name="weeksForward"
+                    className="border-b-2 rounded-t-sm border-black text-center pl-4 w-40 bg-transparent text-black focus:outline-none lg:bg-gradient-to-r from-white/80 via-white to-white/80 lg:rounded-md"
+                    value={controlForm.weeksForward}
+                    onChange={handleControlFormChange}
+                  >
+                    {arrWeeksPreds.map((cE) => {
+                      return <option value={cE}>{cE}</option>;
+                    })}
+                  </select>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="varCotistas">% Shareholders var</label>
-              <div className="flex gap-4 text-sm">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varCotistas < 0
-                        ? "darkred"
-                        : controlForm.varCotistas == 0
-                        ? ""
-                        : "darkgreen",
-                  }}
-                >
-                  {(controlForm.varCotistas * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varCotistas"
-                  name="varCotistas"
-                  min={-0.1}
-                  max={0.1}
-                  step={0.01}
-                  className="indigo-500"
-                  value={controlForm.varCotistas}
-                  onChange={handleControlFormChange}
-                ></input>
+            <div className="flex flex-row justify-start gap-6 border-blue-500 items-start">
+              <span className="mr-6">Params: </span>
+              <div className="flex flex-col justify-start gap-4 border-red-500 w-fit items-center">
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="varNF">% Net Funding var</label>
+                  <div className="flex gap-4 text-sm">
+                    <span
+                      className="range-value w-10 text-sm"
+                      style={{
+                        color:
+                          controlForm.varNF < 0
+                            ? "darkred"
+                            : controlForm.varNF == 0
+                            ? ""
+                            : "darkgreen",
+                      }}
+                    >
+                      {(controlForm.varNF * 100).toFixed(2)}%
+                    </span>
+                    <input
+                      type="range"
+                      id="varNF"
+                      name="varNF"
+                      min={-0.1}
+                      max={0.1}
+                      step={0.01}
+                      className="indigo-500"
+                      value={controlForm.varNF}
+                      onChange={handleControlFormChange}
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="varCotistas">% Shareholders var</label>
+                  <div className="flex gap-4 text-sm">
+                    <span
+                      className="range-value w-10 text-sm"
+                      style={{
+                        color:
+                          controlForm.varCotistas < 0
+                            ? "darkred"
+                            : controlForm.varCotistas == 0
+                            ? ""
+                            : "darkgreen",
+                      }}
+                    >
+                      {(controlForm.varCotistas * 100).toFixed(2)}%
+                    </span>
+                    <input
+                      type="range"
+                      id="varCotistas"
+                      name="varCotistas"
+                      min={-0.1}
+                      max={0.1}
+                      step={0.01}
+                      className="indigo-500"
+                      value={controlForm.varCotistas}
+                      onChange={handleControlFormChange}
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex flex-col font-semibold items-center gap-1">
+                  <label htmlFor="varCota">Quota variation (%)</label>
+                  <div className="flex gap-4">
+                    <span
+                      className="range-value w-10 text-sm"
+                      style={{
+                        color:
+                          controlForm.varCota < 0
+                            ? "darkred"
+                            : controlForm.varCota == 0
+                            ? ""
+                            : "darkgreen",
+                      }}
+                    >
+                      {(controlForm.varCota * 100).toFixed(2)}%
+                    </span>
+                    <input
+                      type="range"
+                      id="varCota"
+                      name="varCota"
+                      min={-0.05}
+                      max={0.05}
+                      step={0.005}
+                      className="indigo-500"
+                      value={controlForm.varCota}
+                      onChange={handleControlFormChange}
+                    ></input>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col font-semibold items-center w-[33%]">
-              <label htmlFor="varCota">Quota variation (%)</label>
-              <div className="flex gap-4">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varCota < 0
-                        ? "darkred"
-                        : controlForm.varCota == 0
-                        ? ""
-                        : "darkgreen",
-                  }}
-                >
-                  {(controlForm.varCota * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varCota"
-                  name="varCota"
-                  min={-0.05}
-                  max={0.05}
-                  step={0.005}
-                  className="indigo-500"
-                  value={controlForm.varCota}
-                  onChange={handleControlFormChange}
-                ></input>
-              </div>
-            </div>
-            <div className="flex justify-center relative items-center w-full mt-6">
-              <ButtonIndigo shadowSize="md" shadowColor="black">
+            <div className="flex justify-center items-center p-0">
+              <button
+                type="submit"
+                className="text-base transition-all duration-300 min-h-full border-l-2 border-white p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
+              >
+                {/* <ButtonIndigo shadowSize="md" shadowColor="white">
                 Update
               </ButtonIndigo>
+              */}
+                <div className="shadow-black hover:shadow-xl">Update</div>
+              </button>
               <div
                 onClick={saveCenario}
-                className="absolute right-40 bottom-0 text-indigo-900 font-semibold px-1 transition-all duration-200 border-yellow-900 hover:text-yellow-800  lg:ml-8 lg:hover:border-yellow-800 hover:cursor-pointer hover:-translate-y-px"
+                className="absolute bottom-0 right-24 text-gray-300 italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>
