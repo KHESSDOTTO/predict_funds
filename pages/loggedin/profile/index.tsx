@@ -217,7 +217,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                 className="text-indigo-100 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300 hover:-translate-y-px"
                 onClick={handleChangePwd}
               >
-                Redefinir Senha
+                Change Password
               </div>
               <div onClick={handleLogout}>
                 <ButtonRed shadowColor="white" shadowSize="md">

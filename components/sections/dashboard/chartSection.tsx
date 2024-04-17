@@ -158,10 +158,10 @@ export default function ChartSection({
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
           <div
             className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
-              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
+              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 150 : 300}>
+            <ResponsiveContainer height={smallV ? 150 : 400}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
@@ -242,10 +242,10 @@ export default function ChartSection({
         <div className="flex flex-col gap-2 lg:flex-row lg:gap-2">
           <div
             className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
-              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[312px]"
+              smallV ? "lg:w-full lg:h-[160px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 150 : 300} minWidth={250}>
+            <ResponsiveContainer height={smallV ? 150 : 400} minWidth={250}>
               <AreaChart data={unifiedData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">

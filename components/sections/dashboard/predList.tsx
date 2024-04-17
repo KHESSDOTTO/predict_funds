@@ -204,7 +204,7 @@ export default function PredList({
             <tr>
               <td className="text-center">
                 <select
-                  className="text-center bg-white border border-gray-500 w-fit rounded-md my-1"
+                  className="text-center bg-white/60 shadow-sm shadow-gray-500 border-gray-500 w-fit rounded-md my-1"
                   name="direction"
                   value={newRow.direction}
                   onChange={handleChangeNewRow}
@@ -215,7 +215,7 @@ export default function PredList({
               </td>
               <td className="text-center">
                 <input
-                  className="text-center bg-white border border-gray-500 w-1/2 rounded-md my-1"
+                  className="text-center bg-white/60 shadow-sm shadow-gray-500 border-gray-500 w-1/2 rounded-md my-1"
                   type="text"
                   name="numPer"
                   value={newRow.numPer}

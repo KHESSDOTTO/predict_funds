@@ -584,10 +584,10 @@ export default function ControlSection({
                       style={{
                         color:
                           controlForm.varNF < 0
-                            ? "darkred"
+                            ? "orange"
                             : controlForm.varNF == 0
                             ? ""
-                            : "darkgreen",
+                            : "green",
                       }}
                     >
                       {(controlForm.varNF * 100).toFixed(2)}%
@@ -613,10 +613,10 @@ export default function ControlSection({
                       style={{
                         color:
                           controlForm.varCotistas < 0
-                            ? "darkred"
+                            ? "orange"
                             : controlForm.varCotistas == 0
                             ? ""
-                            : "darkgreen",
+                            : "green",
                       }}
                     >
                       {(controlForm.varCotistas * 100).toFixed(2)}%
@@ -642,10 +642,10 @@ export default function ControlSection({
                       style={{
                         color:
                           controlForm.varCota < 0
-                            ? "darkred"
+                            ? "orange"
                             : controlForm.varCota == 0
                             ? ""
-                            : "darkgreen",
+                            : "green",
                       }}
                     >
                       {(controlForm.varCota * 100).toFixed(2)}%
@@ -668,17 +668,19 @@ export default function ControlSection({
             <div className="flex justify-center items-center p-0">
               <button
                 type="submit"
-                className="text-base transition-all duration-300 min-h-full border-l-2 border-white p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
+                className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
               >
                 {/* <ButtonIndigo shadowSize="md" shadowColor="white">
                 Update
               </ButtonIndigo>
               */}
-                <div className="shadow-black hover:shadow-xl">Update</div>
+                <div className="shadow-black relative bottom-1 hover:shadow-xl">
+                  Update
+                </div>
               </button>
               <div
                 onClick={saveCenario}
-                className="absolute bottom-0 right-24 text-gray-300 italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
+                className="absolute bottom-0 right-24 text-white italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
               >
                 + Save Cenario
               </div>

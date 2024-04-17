@@ -63,7 +63,7 @@ export default function Dashboard({ user }: DashboardProps) {
         setRegistration={setRegistration}
       />
       <RegistrationInfos isLoading={isLoading} registration={registration} />
-      <div className="lg:mb-2"></div>
+      <div className="lg:mb-8"></div>
       <ChartSection
         data={historicData}
         smallV={false}
@@ -76,12 +76,12 @@ export default function Dashboard({ user }: DashboardProps) {
         <div className="w-full border-white/90 mb-1 shadow-lg h-2 shadow-white lg:border-b-2"></div>
         <button
           onClick={saveCenario}
-          className="text-indigo-300 px-1 transition-all duration-300 border-indigo-300 hover:text-indigo-500 lg:border-b lg:ml-8 lg:hover:border-indigo-500 hover:-translate-y-px"
+          className="text-indigo-300 px-1 transition-all duration-300 border-indigo-300 hover:text-indigo-500 lg:ml-8 lg:hover:border-indigo-500 hover:-translate-y-px"
         >
           + Save Cenario
         </button>
         <Link href={"/loggedin/my_cenarios"} className="lg:right-2">
-          <button className="text-red-500 px-1 transition-all duration-200 border-red-500 hover:text-red-700 lg:border-b lg:hover:border-red-700 hover:-translate-y-px">
+          <button className="text-red-500 px-1 transition-all duration-200 border-red-500 hover:text-red-700 lg:hover:border-red-700 hover:-translate-y-px">
             Go to Cenarios
           </button>
         </Link>
