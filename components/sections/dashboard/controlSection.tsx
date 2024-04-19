@@ -344,7 +344,7 @@ export default function ControlSection({
                 htmlFor="varCotistas overflow-scroll"
                 className="h-8 whitespace-nowrap overflow-scroll"
               >
-                Shareholders var (%)
+                Shareholders qnt. var (%)
               </label>
               <label
                 htmlFor="varCota"
@@ -606,7 +606,7 @@ export default function ControlSection({
                   </div>
                 </div>
                 <div className="flex flex-col font-semibold items-center gap-1">
-                  <label htmlFor="varCotistas">% Shareholders var</label>
+                  <label htmlFor="varCotistas">% Shareholders qnt. var</label>
                   <div className="flex gap-4 text-sm">
                     <span
                       className="range-value w-10 text-sm"
