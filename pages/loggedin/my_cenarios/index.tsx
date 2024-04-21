@@ -133,15 +133,15 @@ export default function MyCenarios() {
       </h1>
       <section
         id="cenarios"
-        className="mb-8 flex flex-col gap-6 lg:justify-center lg:items-center lg:gap-0 text-black"
+        className="mb-8 flex flex-col gap-12 lg:justify-center lg:items-center lg:gap-0 text-black"
       >
         {cenarios?.map((cE, cI) => {
           return (
             <div
               key={cE.id.toString()}
-              className="border-black rounded-2xl bg-white/90 shadow-lg shadow-indigo-500 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-16"
+              className="border-black rounded-2xl bg-white/90 shadow-lg shadow-indigo-500 pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-16 lg:rounded-md"
             >
-              <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-2 lg:w-11/12">
+              <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-4 lg:w-11/12">
                 Cenario {cI + 1}
               </h2>
               <div className="flex flex-col items-center w-full justify-between text-sm lg:flex-row">

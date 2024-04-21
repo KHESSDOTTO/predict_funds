@@ -46,8 +46,8 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
   }
 
   return (
-    <div className="bg-[rgb(0,10,30)]">
-      <div className="min-h-screen min-w-screen relative min-h-screen bg-fixed bg-gradient-to-br from-black from-25% to-indigo-900/90 lg:to-indigo-900/80">
+    <div className="bg-black">
+      <div className="min-h-screen min-w-screen relative min-h-screen bg-fixed bg-gradient-to-br from-black from-25% to-indigo-900/90 lg:to-indigo-900/90">
         <Header user={user} />
         <Dashboard user={user} />
         <div className="flex justify-center px-4 pb-4 lg:justify-center">
