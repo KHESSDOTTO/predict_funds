@@ -303,21 +303,18 @@ export default function ControlSection({
 
   return (
     <>
-      <div className="w-screen hidden text-white/90 lg:block">
-        <h1 className="my-4 font-semibold text-2xl text-center border-b border-white/90 pb-2 mx-[32vw] lg:indent-6 lg:mx-8 lg:text-left">
+      <div className="w-screen text-white/90 flex justify-center lg:block">
+        <h1 className="my-4 font-semibold text-xl text-center border-b border-white/90 pb-1 px-1 lg:indent-6 lg:mx-8 lg:text-left">
           Control Section
         </h1>
       </div>
       <div
         id="controls"
-        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 mt-6 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[95vw] lg:w-fit lg:h-fit lg:mt-2 lg:bg-none lg:shadow-none lg:text-white"
+        className="px-4 mx-4 bg-gradient-to-br from-white from-15% to-white/30 py-4 rounded-xl shadow-lg shadow-indigo-900 lg:px-0 lg:max-w-[95vw] lg:w-fit lg:h-fit lg:mt-2 lg:bg-none lg:shadow-none lg:text-white"
       >
-        <h1 className="font-bold text-xl text-center w-fit mx-auto px-8 border-black border-b mb-6 lg:hidden">
-          Control section
-        </h1>
         <form
           id="controlFormMobile"
-          className="lg:hidden"
+          className="py-2 lg:hidden"
           onSubmit={handleControlFormSubmit}
         >
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
@@ -360,7 +357,7 @@ export default function ControlSection({
                   name="baseDate"
                   value={controlForm.baseDate}
                   onChange={handleControlFormChange}
-                  className="rounded-md border-2 border-black px-1 bg-white w-full"
+                  className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
                   {baseDates.map((cE) => {
                     return (
@@ -377,7 +374,7 @@ export default function ControlSection({
                   name="buscaCnpj"
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
-                  className="rounded-md border-2 border-black px-1 bg-white w-full"
+                  className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
                   {user &&
                     user.cnpjs &&
@@ -391,7 +388,7 @@ export default function ControlSection({
                   type="text"
                   id="weeksBack"
                   name="weeksBack"
-                  className="rounded-md border-2 border-black px-2 w-full"
+                  className="rounded-md shadow-md shadow-gray-500 px-2 w-full"
                   value={controlForm.weeksBack}
                   onChange={handleControlFormChange}
                 ></input>
@@ -400,7 +397,7 @@ export default function ControlSection({
                 <select
                   id="weeksForward"
                   name="weeksForward"
-                  className="rounded-md border-2 border-black px-1 w-full"
+                  className="rounded-md shadow-md shadow-gray-500 px-1 w-full"
                   value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
                 >
