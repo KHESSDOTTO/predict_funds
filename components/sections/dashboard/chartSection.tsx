@@ -140,7 +140,7 @@ export default function ChartSection({
     >
       <div
         id="ValueQuotaDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : ""}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 lg:py-4"}`}
       >
         <h1
           className={`my-4 ${
@@ -155,7 +155,7 @@ export default function ChartSection({
             (historic)
           </span>
         </h1>
-        <div className="flex flex-col gap-2 lg:flex-row lg:gap-4">
+        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
             className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
@@ -228,7 +228,7 @@ export default function ChartSection({
       </div>
       <div
         id="NetFundingDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : ""}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "py-4"}`}
       >
         <h1
           className={`my-4 ${
@@ -239,7 +239,7 @@ export default function ChartSection({
         >
           Net Funding
         </h1>
-        <div className="flex flex-col gap-2 lg:flex-row lg:gap-2">
+        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
             className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"

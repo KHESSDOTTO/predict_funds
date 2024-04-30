@@ -147,6 +147,12 @@ export default function ControlSection({
         `/cadastroFundos/getByCnpj?cnpj=${encodedParam}`
       );
       if (registration) {
+        setControlForm({
+          ...controlForm,
+          anbimaClass: registration.data["CLASSE_ANBIMA"],
+        });
+        console.log("controlForm");
+        console.log(controlForm);
         return registration.data;
       }
     } catch (err) {
@@ -317,6 +323,12 @@ export default function ControlSection({
           className="py-2 lg:hidden"
           onSubmit={handleControlFormSubmit}
         >
+          <input
+            type="hidden"
+            name="anbimaClass"
+            id="anbimaClass"
+            value={controlForm.anbimaClass}
+          />
           <div className="flex flex-row justify-center gap-4 lg:gap-16">
             <div className="flex flex-col gap-1 font-semibold max-w-24 lg:gap-0 text-sm">
               <label htmlFor="baseDate" className="h-8">
@@ -503,6 +515,12 @@ export default function ControlSection({
           className="hidden lg:block lg:border-red-500"
           onSubmit={handleControlFormSubmit}
         >
+          <input
+            type="hidden"
+            name="anbimaClass"
+            id="anbimaClass"
+            value={controlForm.anbimaClass}
+          />
           <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
             <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">
               <span className="mr-4">Config.: </span>

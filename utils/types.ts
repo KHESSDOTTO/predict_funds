@@ -137,6 +137,7 @@ interface DashboardControlFormType {
   varCota: number;
   weeksBack: number;
   weeksForward: number;
+  anbimaClass: string;
 }
 
 interface CenarioType {
