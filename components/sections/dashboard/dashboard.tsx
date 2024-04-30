@@ -35,6 +35,7 @@ export default function Dashboard({ user }: DashboardProps) {
       varCota: 0,
       weeksBack: 8,
       weeksForward: 4,
+      anbimaClass: "",
     });
 
   function saveCenario() {
@@ -71,9 +72,9 @@ export default function Dashboard({ user }: DashboardProps) {
       />
       <div
         id="cenariosBtnSection"
-        className="flex flex-wrap gap-1 lg:gap-0 px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0"
+        className="flex flex-wrap gap-2 lg:gap-0 px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0"
       >
-        <div className="w-full border-white/90 lg:border-white/60 mb-1 shadow-lg h-2 shadow-white lg:shadow-black lg:border-b-2 lg:mb-0"></div>
+        <div className="w-full border-white/90 lg:border-white/20 mb-1 shadow-lg h-2 shadow-white lg:shadow-black lg:border-b-2 lg:mb-0"></div>
         <div className="w-full flex justify-center items-start gap-4 lg:bg-gradient-to-b lg:from-black/50 lg:via-black/40 lg:via-50% lg:pt-[10px] lg:pb-4">
           <button
             onClick={saveCenario}

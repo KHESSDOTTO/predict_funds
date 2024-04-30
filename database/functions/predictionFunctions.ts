@@ -105,4 +105,82 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
   }
 }
 
+async function getAllPredictionsByParams(
+  controlForm: DashboardControlFormType
+) {
+  // Prediction of all CNPJs to 4 weeks forward based on params to build histogram
+
+  const predKey = [
+    (Number(controlForm.varCota) * 100).toFixed(1),
+    (Number(controlForm.varCotistas) * 100).toFixed(1),
+    (Number(controlForm.varNF) * 100).toFixed(1),
+  ].join("_");
+
+  console.log("predKey");
+  console.log(predKey);
+  console.log("controlForm.buscaCnpj");
+  console.log(controlForm.buscaCnpj);
+
+  try {
+    let prediction4weeks: PredictionsType[] | null = null;
+    switch (controlForm.baseDate) {
+      case arrBaseDates[0]:
+        console.log("Matched arrBaseDates[0]");
+        prediction4weeks = await Predictions4Weeks1Model.find(
+          {},
+          {
+            _id: 0,
+          }
+        );
+        break;
+      case arrBaseDates[1]:
+        console.log("Matched arrBaseDates[1]");
+        prediction4weeks = await Predictions4Weeks2Model.find(
+          {},
+          {
+            _id: 0,
+          }
+        );
+        break;
+      case arrBaseDates[2]:
+        console.log("Matched arrBaseDates[2]");
+        prediction4weeks = await Predictions4Weeks3Model.find(
+          {},
+          {
+            _id: 0,
+          }
+        );
+        break;
+    }
+
+    // console.log("prediction4weeks");
+    // console.log(prediction4weeks);
+
+    let finalPred4weeks:
+      | { CNPJ_FUNDO: any; CAPTC_LIQ: any }[]
+      | undefined
+      | PredictionsType[]
+      | null = prediction4weeks;
+
+    if (prediction4weeks) {
+      finalPred4weeks = finalPred4weeks?.map((cE) => {
+        return {
+          CNPJ_FUNDO: cE.CNPJ_FUNDO,
+          CAPTC_LIQ: cE[predKey],
+        };
+      });
+    } else {
+      return false;
+    }
+
+    console.log("finalPred4weeks");
+    console.log(finalPred4weeks);
+
+    return finalPred4weeks;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
 export { getPredictionsByCnpj, getPredictions2 };
