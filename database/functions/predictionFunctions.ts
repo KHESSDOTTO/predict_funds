@@ -4,6 +4,7 @@ import Predictions4Weeks2Model from "../models/predictions4WeeksModel2";
 import Predictions4Weeks3Model from "../models/predictions4WeeksModel3";
 import { DashboardControlFormType, PredictionsType } from "@/utils/types";
 import { arrBaseDates } from "@/utils/globalVars";
+import CadastroFundosModel from "../models/cadastroFundosModel";
 
 // Old -> single prediction
 async function getPredictionsByCnpj(cnpj: string) {
@@ -105,8 +106,34 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
   }
 }
 
-async function getAllPredictionsByParams(
-  controlForm: DashboardControlFormType
+async function getCnpjsByAnbimaClass(anbimaClass: string) {
+  try {
+    const queryRes = await CadastroFundosModel.find(
+      {
+        CLASSE_ANBIMA: anbimaClass,
+      },
+      {
+        _id: 0,
+        CNPJ_FUNDO: 1,
+      }
+    );
+    if (!queryRes) {
+      console.log("No anbima class:" + anbimaClass + "found in the database.");
+      return false;
+    }
+    const idArr = queryRes.map((cE) => {
+      return cE.CNPJ_FUNDO;
+    });
+    return idArr;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+async function getPredictionsByCnpjList(
+  controlForm: DashboardControlFormType,
+  cnpjArr: string[]
 ) {
   // Prediction of all CNPJs to 4 weeks forward based on params to build histogram
 
@@ -120,6 +147,15 @@ async function getAllPredictionsByParams(
   console.log(predKey);
   console.log("controlForm.buscaCnpj");
   console.log(controlForm.buscaCnpj);
+  console.log("controlForm.anbimaClass");
+  console.log(controlForm.anbimaClass);
+
+  // Erro se não tiver classe anbima
+  if (!controlForm.anbimaClass) {
+    console.log("There is no anbima class.");
+    return false;
+  }
+  // Fim: Erro se não tiver classe anbima
 
   try {
     let prediction4weeks: PredictionsType[] | null = null;
@@ -127,7 +163,7 @@ async function getAllPredictionsByParams(
       case arrBaseDates[0]:
         console.log("Matched arrBaseDates[0]");
         prediction4weeks = await Predictions4Weeks1Model.find(
-          {},
+          { CNPJ_FUNDO: { $in: cnpjArr } },
           {
             _id: 0,
           }
@@ -136,7 +172,7 @@ async function getAllPredictionsByParams(
       case arrBaseDates[1]:
         console.log("Matched arrBaseDates[1]");
         prediction4weeks = await Predictions4Weeks2Model.find(
-          {},
+          { CNPJ_FUNDO: { $in: cnpjArr } },
           {
             _id: 0,
           }
@@ -145,7 +181,7 @@ async function getAllPredictionsByParams(
       case arrBaseDates[2]:
         console.log("Matched arrBaseDates[2]");
         prediction4weeks = await Predictions4Weeks3Model.find(
-          {},
+          { CNPJ_FUNDO: { $in: cnpjArr } },
           {
             _id: 0,
           }
@@ -183,4 +219,9 @@ async function getAllPredictionsByParams(
   }
 }
 
-export { getPredictionsByCnpj, getPredictions2 };
+export {
+  getPredictionsByCnpj,
+  getPredictions2,
+  getPredictionsByCnpjList,
+  getCnpjsByAnbimaClass,
+};
