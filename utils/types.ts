@@ -140,6 +140,17 @@ interface DashboardControlFormType {
   anbimaClass: string;
 }
 
+interface RawHistogramData {
+  CNPJ_FUNDO: string;
+  CAPTC_LIQ: number;
+}
+
+interface FinalHistogramData {
+  xTick: string;
+  value: number;
+  limit: number;
+}
+
 interface CenarioType {
   id: string;
   params: DashboardControlFormType;
@@ -158,4 +169,6 @@ export type {
   CenarioType,
   PredictionsType,
   CadastroFundosType,
+  RawHistogramData,
+  FinalHistogramData,
 };

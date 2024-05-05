@@ -27,6 +27,8 @@ export default function Dashboard({ user }: DashboardProps) {
       false
     ),
     [predictionData, setPredictionData] = useState<PredictionsType[]>([]),
+    [loadingHistogram, setLoadingHistogram] = useState<boolean>(true),
+    [histogram, setHistogram] = useState<any[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       baseDate: "2023-11-24T03:00:00Z",
       buscaCnpj: "",
@@ -61,7 +63,10 @@ export default function Dashboard({ user }: DashboardProps) {
         setControlForm={setControlForm}
         saveCenario={saveCenario}
         setIsLoading={setIsLoading}
+        registration={registration}
         setRegistration={setRegistration}
+        setLoadingHistogram={setLoadingHistogram}
+        setHistogram={setHistogram}
       />
       <RegistrationInfos isLoading={isLoading} registration={registration} />
       <div className="lg:mb-8"></div>
@@ -69,6 +74,8 @@ export default function Dashboard({ user }: DashboardProps) {
         data={historicData}
         smallV={false}
         predictions={predictionData}
+        histogram={histogram}
+        loadingHistogram={loadingHistogram}
       />
       <div
         id="cenariosBtnSection"

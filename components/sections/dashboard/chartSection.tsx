@@ -7,6 +7,9 @@ import {
   Area,
   ResponsiveContainer,
   TooltipProps,
+  BarChart,
+  Bar,
+  Cell,
 } from "recharts";
 import {
   ValueType,
@@ -20,6 +23,7 @@ import {
   generateYaxisDomainBasedOnMaxAbs,
   generateYaxisTicksBasedOnMaxAbs,
 } from "@/utils/functions";
+import { ClipLoader } from "react-spinners";
 
 interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
   data?: (RawDataType | PredictionsType)[];
@@ -29,12 +33,16 @@ interface ChartSectionProps {
   data: RawDataType[];
   smallV: boolean;
   predictions: PredictionsType[];
+  loadingHistogram: boolean;
+  histogram: any[];
 }
 
 export default function ChartSection({
   data,
   smallV,
   predictions,
+  loadingHistogram,
+  histogram,
 }: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
@@ -329,6 +337,105 @@ export default function ChartSection({
           )}
         </div>
       </div>
+      <div
+        id="HistogramDiv"
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "py-4"}`}
+      >
+        <h1
+          className={`my-4 ${
+            smallV
+              ? "text-md w-9/12 mx-auto text-black border-black"
+              : "text-lg mx-[32vw] text-white/90 border-white/90"
+          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
+        >
+          Histogram (Market - same ANBIMA Class)
+        </h1>
+        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
+          <div
+            className={`bg-gray-900 pt-4 mx-8 shadow-md shadow-indigo-900/80 rounded-sm ${
+              smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%] lg:h-[512px]"
+            } lg:rounded-xl`}
+          >
+            {loadingHistogram && (
+              <div className="flex flex-col h-full relative items-center justify-center">
+                <small className="italic absolute top-2">
+                  Histogram data load might take a while
+                </small>
+                <div>
+                  <ClipLoader
+                    color={"white"}
+                    loading={loadingHistogram}
+                    size={50}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    className="my-4"
+                    speedMultiplier={0.75}
+                  />
+                </div>
+              </div>
+            )}
+            {!loadingHistogram && (
+              <ResponsiveContainer height={smallV ? 200 : 500} minWidth={250}>
+                <BarChart width={900} height={300} data={histogram}>
+                  <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
+                  <XAxis dataKey="xTick" className="text-white" />
+                  <YAxis />
+                  <Tooltip content={<HistogramTooltip />} />
+                  <Bar dataKey="value" fill="#82ca9d" color="black">
+                    {histogram.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.currCnpjBin ? "#82ca9d" : "#8884d8"}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
+      </div>
+      {/* <div className="text-white text-center">
+        <h1 className="font-bold text-center text-3xl">
+          Teste de histograma KD
+        </h1>
+        {!loadingHistogram && histogram && (
+          <ul> */}
+      {/* {histogram.map((cE: { CNPJ_FUNDO: string; CAPTC_LIQ: number }) => {
+              return (
+                <li>
+                  {cE.CNPJ_FUNDO}: {cE.CAPTC_LIQ}
+                </li>
+              );
+            })} */}
+      {/* {histogram.map(
+              (cE: { xTick: string; value: number; limit: number }) => {
+                return (
+                  <li>
+                    {cE.xTick}: {cE.value} // {cE.limit}
+                  </li>
+                );
+              }
+            )}
+          </ul>
+        )}
+        {loadingHistogram && (
+          <div className="flex flex-col items-center">
+            <small className="italic">
+              Histogram data load might take a while
+            </small>
+            <ClipLoader
+              color={"white"}
+              loading={loadingHistogram}
+              size={50}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+              className="my-4"
+              speedMultiplier={0.75}
+            />
+          </div>
+        )}
+      </div> */}
     </div>
   );
 }
@@ -379,6 +486,21 @@ function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
           Quota: R$
           {payload[0].payload.VL_QUOTA.toFixed(2).toLocaleString("en-US")}
         </p>
+      </div>
+    );
+  }
+  return <></>;
+}
+
+function HistogramTooltip({ active, payload, label }: CustomTootipProps) {
+  if (active && payload && payload.length) {
+    const message =
+      payload[0].color === "21-30"
+        ? "You are here"
+        : `Frequency: ${payload[0].value}`;
+    return (
+      <div className="bg-black/80 text-green-400 p-2 rounded-md shadow-green-800 shadow-sm">
+        <p>{message}</p>
       </div>
     );
   }

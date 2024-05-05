@@ -96,8 +96,8 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
       return false;
     }
 
-    console.log("finalPred4weeks");
-    console.log(finalPred4weeks);
+    // console.log("finalPred4weeks");
+    // console.log(finalPred4weeks);
 
     return finalPred4weeks;
   } catch (err) {
@@ -131,6 +131,7 @@ async function getCnpjsByAnbimaClass(anbimaClass: string) {
   }
 }
 
+// Function to get predictions based on CNPJ list - used to do the queries to generate the histogram.
 async function getPredictionsByCnpjList(
   controlForm: DashboardControlFormType,
   cnpjArr: string[]
@@ -143,12 +144,12 @@ async function getPredictionsByCnpjList(
     (Number(controlForm.varNF) * 100).toFixed(1),
   ].join("_");
 
-  console.log("predKey");
-  console.log(predKey);
-  console.log("controlForm.buscaCnpj");
-  console.log(controlForm.buscaCnpj);
-  console.log("controlForm.anbimaClass");
-  console.log(controlForm.anbimaClass);
+  // console.log("predKey");
+  // console.log(predKey);
+  // console.log("controlForm.buscaCnpj");
+  // console.log(controlForm.buscaCnpj);
+  // console.log("controlForm.anbimaClass");
+  // console.log(controlForm.anbimaClass);
 
   // Erro se não tiver classe anbima
   if (!controlForm.anbimaClass) {
@@ -193,7 +194,7 @@ async function getPredictionsByCnpjList(
     // console.log(prediction4weeks);
 
     let finalPred4weeks:
-      | { CNPJ_FUNDO: any; CAPTC_LIQ: any }[]
+      | { CNPJ_FUNDO: string; CAPTC_LIQ: number }[]
       | undefined
       | PredictionsType[]
       | null = prediction4weeks;
@@ -209,8 +210,8 @@ async function getPredictionsByCnpjList(
       return false;
     }
 
-    console.log("finalPred4weeks");
-    console.log(finalPred4weeks);
+    // console.log("finalPred4weeks");
+    // console.log(finalPred4weeks);
 
     return finalPred4weeks;
   } catch (err) {
