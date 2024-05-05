@@ -53,34 +53,6 @@ interface CadastroFundosType {
   CLASSE_ANBIMA: string;
 }
 
-// interface PredictionsType {
-//   _id?: string; // Not present in some parts of code
-//   DT_COMPTC?: Date; // Not present in mongoDB but necessary in parts of the code
-//   CNPJ_FUNDO: string;
-//   "-5.0"?: number;
-//   "-4.5"?: number;
-//   "-4.0"?: number;
-//   "-3.5"?: number;
-//   "-3.0"?: number;
-//   "-2.5"?: number;
-//   "-2.0"?: number;
-//   "-1.5"?: number;
-//   "-1.0"?: number;
-//   "-0.5"?: number;
-//   "0.0"?: number;
-//   "0.5"?: number;
-//   "1.0"?: number;
-//   "1.5"?: number;
-//   "2.0"?: number;
-//   "2.5"?: number;
-//   "3.0"?: number;
-//   "3.5"?: number;
-//   "4.0"?: number;
-//   "4.5"?: number;
-//   "5.0"?: number;
-//   CAPTC_LIQ?: number;
-// }
-
 interface PredictionsType {
   DT_COMPTC?: Date;
   CNPJ_FUNDO: string;
@@ -140,6 +112,17 @@ interface DashboardControlFormType {
   anbimaClass: string;
 }
 
+interface RawHistogramData {
+  CNPJ_FUNDO: string;
+  CAPTC_LIQ: number;
+}
+
+interface FinalHistogramData {
+  xTick: string;
+  value: number;
+  limit: number;
+}
+
 interface CenarioType {
   id: string;
   params: DashboardControlFormType;
@@ -158,4 +141,6 @@ export type {
   CenarioType,
   PredictionsType,
   CadastroFundosType,
+  RawHistogramData,
+  FinalHistogramData,
 };

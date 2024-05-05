@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import type {
   CadastroFundosType,
@@ -15,6 +15,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 import type { MouseEventHandler } from "react";
 import { arrBaseDates } from "@/utils/globalVars";
+import { prepareHistogram } from "@/utils/functions";
 
 interface ControlSectionProps {
   setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;
@@ -23,7 +24,10 @@ interface ControlSectionProps {
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
   saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  registration: CadastroFundosType | false;
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
+  setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
+  setHistogram: Dispatch<SetStateAction<any>>;
 }
 
 export default function ControlSection({
@@ -33,7 +37,10 @@ export default function ControlSection({
   setControlForm,
   saveCenario,
   setIsLoading,
+  registration,
   setRegistration,
+  setLoadingHistogram,
+  setHistogram,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
@@ -89,9 +96,6 @@ export default function ControlSection({
     slicedHistoricData: RawDataType[]
   ) {
     let responsePreds: AxiosResponse<any, any> | undefined;
-    // responsePreds = await ax.get(
-    //   `/prediction/getFromCnpj?cnpj=${encodedParam}`
-    // );
     responsePreds = await ax.post(`/prediction/getWithBaseDate`, {
       ...controlForm,
       buscaCnpj: cnpj,
@@ -112,11 +116,6 @@ export default function ControlSection({
         slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
       const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
       while (lastDate < endPredDate) {
-        // const lastDate =
-        //   finalPredictionData[finalPredictionData.length - 1].DT_COMPTC;
-        // if (!lastDate) {
-        //   break;
-        // }
         let newDate = lastDate;
         const dayOfWeek = getDay(lastDate);
         if (dayOfWeek === 5) {
@@ -159,6 +158,33 @@ export default function ControlSection({
       console.log(err);
     }
     return false;
+  }
+
+  async function getHistogram(controlForm: DashboardControlFormType) {
+    const numBins = 10; // Number of bins desired for the histogram
+
+    setLoadingHistogram(true);
+    if (!controlForm.anbimaClass) return; // Won't execute if there is no anbimaClass
+    let responsePreds: AxiosResponse<any, any> | undefined;
+    try {
+      responsePreds = await ax.post(`/prediction/getHistogramData`, {
+        ...controlForm,
+      });
+      console.log("responsePreds");
+      console.log(responsePreds);
+      if (responsePreds) {
+        const histogram = prepareHistogram(
+          responsePreds.data,
+          numBins,
+          controlForm.buscaCnpj
+        );
+        setHistogram(histogram);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    setLoadingHistogram(false);
+    return;
   }
 
   // Updates the controlForm with the logged in users CNPJ, initially.
@@ -220,49 +246,15 @@ export default function ControlSection({
     return;
   }, [user]);
 
+  // Get Histogram
+  useEffect(() => {
+    getHistogram(controlForm);
+  }, [registration]);
+
   function handleControlFormChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
-    // if (e.target.name === "buscaCnpj") {
-    //   const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
-    //     lenNum = cnpjNum.length,
-    //     len = e.target.value.length,
-    //     specialChars = [".", "/", "-"];
-    //   if (!specialChars.includes(e.target.value[len - 2])) {
-    //     switch (lenNum) {
-    //       case 3:
-    //         newVal =
-    //           e.target.value.slice(0, lenNum - 1) +
-    //           "." +
-    //           e.target.value.slice(lenNum - 1, lenNum);
-    //         break;
-    //       case 6:
-    //         newVal =
-    //           e.target.value.slice(0, lenNum) +
-    //           "." +
-    //           e.target.value.slice(lenNum, lenNum + 1);
-    //         break;
-    //       case 9:
-    //         newVal =
-    //           e.target.value.slice(0, lenNum + 1) +
-    //           "/" +
-    //           e.target.value.slice(lenNum + 1, lenNum + 2);
-    //         break;
-    //       case 13:
-    //         newVal =
-    //           e.target.value.slice(0, lenNum + 2) +
-    //           "-" +
-    //           e.target.value.slice(lenNum + 2, lenNum + 3);
-    //         break;
-    //       case 15:
-    //         newVal = e.target.value.slice(0, len - 1);
-    //         break;
-    //       default:
-    //         break;
-    //     }
-    //   }
-    // }
     setControlForm({ ...controlForm, [e.target.name]: newVal });
     return;
   }
@@ -273,7 +265,7 @@ export default function ControlSection({
     const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
 
     try {
-      // Registration fetching
+      // Registration fetching - automatically triggers reload of histogram data based on ANBIMA CLASS
       setIsLoading(true);
       const newRegistration = await selRegistration(encodedParam);
       setRegistration(newRegistration);
@@ -297,6 +289,7 @@ export default function ControlSection({
       }
       if (predictions) {
         toast.success("Done.");
+        console.log("Finished fetching historic and prediction.");
       } else {
         toast.error("Something went wrong.");
       }
@@ -304,6 +297,14 @@ export default function ControlSection({
       console.log(err);
       toast.error("Sorry. We had a problem fetching the data.");
     }
+
+    // Fetching histogram data
+    // try {
+    //   getHistogram({ ...controlForm });
+    // } catch (err) {
+    //   console.log(err);
+    //   toast.error("Couldn't fetch histogram data.");
+    // }
     toast.dismiss(loadingToast);
   }
 
@@ -680,7 +681,7 @@ export default function ControlSection({
                 </div>
               </div>
             </div>
-            <div className="flex justify-center items-center p-0">
+            <div className="flex justify-center items-center p-0 ml-6">
               <button
                 type="submit"
                 className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
@@ -702,7 +703,7 @@ export default function ControlSection({
             </div>
           </div>
         </form>
-      </div>
+      </div>{" "}
     </>
   );
 }

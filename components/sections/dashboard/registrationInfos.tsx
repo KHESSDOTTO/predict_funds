@@ -1,11 +1,9 @@
 import { CadastroFundosType } from "@/utils/types";
 import { ClipLoader } from "react-spinners";
-import { Dispatch, SetStateAction } from "react";
 
 interface RegistrationInfosPropsType {
   registration: CadastroFundosType | false;
   isLoading: boolean;
-  // setAnbimaClass: Dispatch<SetStateAction<string>>;
 }
 
 type CadastroFundosKey =
