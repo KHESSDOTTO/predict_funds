@@ -33,8 +33,8 @@ interface ChartSectionProps {
   data: RawDataType[];
   smallV: boolean;
   predictions: PredictionsType[];
-  loadingHistogram: boolean;
-  histogram: any[];
+  loadingHistogram?: boolean;
+  histogram?: any[];
 }
 
 export default function ChartSection({
@@ -42,7 +42,7 @@ export default function ChartSection({
   smallV,
   predictions,
   loadingHistogram,
-  histogram,
+  histogram = [],
 }: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
@@ -339,7 +339,7 @@ export default function ChartSection({
       </div>
       <div
         id="HistogramDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "py-4"}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-4"}`}
       >
         <h1
           className={`my-4 ${
@@ -382,7 +382,7 @@ export default function ChartSection({
                   <YAxis />
                   <Tooltip content={<HistogramTooltip />} />
                   <Bar dataKey="value" fill="#82ca9d" color="black">
-                    {histogram.map((entry, index) => (
+                    {histogram?.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={entry.currCnpjBin ? "#82ca9d" : "#8884d8"}
@@ -395,47 +395,6 @@ export default function ChartSection({
           </div>
         </div>
       </div>
-      {/* <div className="text-white text-center">
-        <h1 className="font-bold text-center text-3xl">
-          Teste de histograma KD
-        </h1>
-        {!loadingHistogram && histogram && (
-          <ul> */}
-      {/* {histogram.map((cE: { CNPJ_FUNDO: string; CAPTC_LIQ: number }) => {
-              return (
-                <li>
-                  {cE.CNPJ_FUNDO}: {cE.CAPTC_LIQ}
-                </li>
-              );
-            })} */}
-      {/* {histogram.map(
-              (cE: { xTick: string; value: number; limit: number }) => {
-                return (
-                  <li>
-                    {cE.xTick}: {cE.value} // {cE.limit}
-                  </li>
-                );
-              }
-            )}
-          </ul>
-        )}
-        {loadingHistogram && (
-          <div className="flex flex-col items-center">
-            <small className="italic">
-              Histogram data load might take a while
-            </small>
-            <ClipLoader
-              color={"white"}
-              loading={loadingHistogram}
-              size={50}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-              className="my-4"
-              speedMultiplier={0.75}
-            />
-          </div>
-        )}
-      </div> */}
     </div>
   );
 }
