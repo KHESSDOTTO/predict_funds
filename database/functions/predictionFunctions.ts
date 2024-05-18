@@ -34,10 +34,19 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
   // Prediction for 4 weeks forward
 
   const predKey = [
-    (Number(controlForm.varCota) * 100).toFixed(1),
-    (Number(controlForm.varCotistas) * 100).toFixed(1),
-    (Number(controlForm.varNF) * 100).toFixed(1),
-  ].join("_");
+    (Number(controlForm.varCota) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(controlForm.varCotistas) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(controlForm.varNF) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+  ].join("__");
 
   console.log("predKey");
   console.log(predKey);
@@ -55,6 +64,9 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
           },
           {
             _id: 0,
+            CNPJ_FUNDO: 1,
+            CLASSE_ANBIMA: 1,
+            [predKey]: 1,
           }
         );
         break;
@@ -66,6 +78,9 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
           },
           {
             _id: 0,
+            CNPJ_FUNDO: 1,
+            CLASSE_ANBIMA: 1,
+            [predKey]: 1,
           }
         );
         break;
@@ -77,6 +92,9 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
           },
           {
             _id: 0,
+            CNPJ_FUNDO: 1,
+            CLASSE_ANBIMA: 1,
+            [predKey]: 1,
           }
         );
         break;
@@ -90,6 +108,7 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
     if (prediction4weeks) {
       finalPred4weeks = {
         CNPJ_FUNDO: prediction4weeks.CNPJ_FUNDO,
+        CLASSE_ANBIMA: prediction4weeks.CLASSE_ANBIMA,
         CAPTC_LIQ: prediction4weeks[predKey],
       };
     } else {
@@ -132,24 +151,27 @@ async function getCnpjsByAnbimaClass(anbimaClass: string) {
 }
 
 // Function to get predictions based on CNPJ list - used to do the queries to generate the histogram.
-async function getPredictionsByCnpjList(
-  controlForm: DashboardControlFormType,
-  cnpjArr: string[]
-) {
+async function getPredsForHistogram(controlForm: DashboardControlFormType) {
   // Prediction of all CNPJs to 4 weeks forward based on params to build histogram
 
   const predKey = [
-    (Number(controlForm.varCota) * 100).toFixed(1),
-    (Number(controlForm.varCotistas) * 100).toFixed(1),
-    (Number(controlForm.varNF) * 100).toFixed(1),
-  ].join("_");
+    (Number(controlForm.varCota) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(controlForm.varCotistas) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(controlForm.varNF) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+  ].join("__");
 
-  // console.log("predKey");
-  // console.log(predKey);
-  // console.log("controlForm.buscaCnpj");
-  // console.log(controlForm.buscaCnpj);
-  // console.log("controlForm.anbimaClass");
-  // console.log(controlForm.anbimaClass);
+  console.log("predKey", predKey);
+  console.log("controlForm.buscaCnpj", controlForm.buscaCnpj);
+  console.log("controlForm.anbimaClass", controlForm.anbimaClass);
 
   // Erro se não tiver classe anbima
   if (!controlForm.anbimaClass) {
@@ -160,58 +182,50 @@ async function getPredictionsByCnpjList(
 
   try {
     let prediction4weeks: PredictionsType[] | null = null;
+
+    const projection = {
+      CNPJ_FUNDO: 1,
+      CLASSE_ANBIMA: 1,
+      [predKey]: 1,
+    };
+
     switch (controlForm.baseDate) {
       case arrBaseDates[0]:
-        console.log("Matched arrBaseDates[0]");
+        console.log("Matched arrBaseDates[0] in histogram");
         prediction4weeks = await Predictions4Weeks1Model.find(
-          { CNPJ_FUNDO: { $in: cnpjArr } },
-          {
-            _id: 0,
-          }
+          { CLASSE_ANBIMA: controlForm.anbimaClass },
+          projection
         );
         break;
       case arrBaseDates[1]:
-        console.log("Matched arrBaseDates[1]");
+        console.log("Matched arrBaseDates[1] in histogram");
         prediction4weeks = await Predictions4Weeks2Model.find(
-          { CNPJ_FUNDO: { $in: cnpjArr } },
-          {
-            _id: 0,
-          }
+          { CLASSE_ANBIMA: controlForm.anbimaClass },
+          projection
         );
         break;
       case arrBaseDates[2]:
-        console.log("Matched arrBaseDates[2]");
+        console.log("Matched arrBaseDates[2] in histogram");
         prediction4weeks = await Predictions4Weeks3Model.find(
-          { CNPJ_FUNDO: { $in: cnpjArr } },
-          {
-            _id: 0,
-          }
+          { CLASSE_ANBIMA: controlForm.anbimaClass },
+          projection
         );
         break;
     }
 
-    // console.log("prediction4weeks");
-    // console.log(prediction4weeks);
+    // console.log("prediction4weeks", prediction4weeks);
 
-    let finalPred4weeks:
-      | { CNPJ_FUNDO: string; CAPTC_LIQ: number }[]
-      | undefined
-      | PredictionsType[]
-      | null = prediction4weeks;
-
-    if (prediction4weeks) {
-      finalPred4weeks = finalPred4weeks?.map((cE) => {
-        return {
-          CNPJ_FUNDO: cE.CNPJ_FUNDO,
-          CAPTC_LIQ: cE[predKey],
-        };
-      });
-    } else {
+    if (!prediction4weeks) {
       return false;
     }
 
-    // console.log("finalPred4weeks");
-    // console.log(finalPred4weeks);
+    const finalPred4weeks = prediction4weeks.map((cE) => ({
+      CNPJ_FUNDO: cE.CNPJ_FUNDO,
+      CAPTC_LIQ: cE[predKey],
+      CLASSE_ANBIMA: cE.CLASSE_ANBIMA,
+    }));
+
+    console.log("finalPred4weeks", finalPred4weeks);
 
     return finalPred4weeks;
   } catch (err) {
@@ -223,6 +237,6 @@ async function getPredictionsByCnpjList(
 export {
   getPredictionsByCnpj,
   getPredictions2,
-  getPredictionsByCnpjList,
+  getPredsForHistogram,
   getCnpjsByAnbimaClass,
 };
