@@ -91,12 +91,12 @@ function prepareHistogram(
   step = (maxVal - minVal) / numBars;
   cVal = minVal;
 
-  console.log("maxVal");
-  console.log(maxVal);
-  console.log("minVal");
-  console.log(minVal);
-  console.log("step");
-  console.log(step);
+  // console.log("maxVal");
+  // console.log(maxVal);
+  // console.log("minVal");
+  // console.log(minVal);
+  // console.log("step");
+  // console.log(step);
 
   // Defining values for limits and xTicks arrays
   for (let i = 0; i < numBars; i++) {

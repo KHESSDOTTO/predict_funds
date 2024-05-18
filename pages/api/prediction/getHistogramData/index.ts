@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import {
-  getCnpjsByAnbimaClass,
-  getPredictionsByCnpjList,
-} from "@/database/functions/predictionFunctions";
+import { getPredsForHistogram } from "@/database/functions/predictionFunctions";
 
 async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -20,16 +17,7 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
-    const cnpjArr = await getCnpjsByAnbimaClass(req.body.anbimaClass);
-    console.log("cnpjArr");
-    console.log(cnpjArr);
-    if (!cnpjArr) {
-      return res.status(500).json({
-        status: 500,
-        message: "No cnpjs located by getCnpjsByAnbimaClass().",
-      });
-    }
-    const predictions4Weeks = await getPredictionsByCnpjList(req.body, cnpjArr);
+    const predictions4Weeks = await getPredsForHistogram(req.body);
     // await disconnect();
     if (!predictions4Weeks) {
       return res
