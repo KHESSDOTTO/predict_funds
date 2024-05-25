@@ -25,8 +25,7 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
       console.log("There is no user!");
       router.push("/login");
       return;
-    }
-    if (!userContext.user) {
+    } else {
       userContext.setUser(user);
     }
     return;
