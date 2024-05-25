@@ -190,10 +190,13 @@ export default function ControlSection({
   // Updates the controlForm with the logged in users CNPJ, initially.
   useEffect(() => {
     if (user) {
-      setControlForm({
+      const obj = {
         ...controlForm,
         buscaCnpj: user.cnpj ? user.cnpj : "",
-      });
+      };
+      // console.log("obj");
+      // console.log(obj);
+      setControlForm(obj);
     }
   }, [user]);
 

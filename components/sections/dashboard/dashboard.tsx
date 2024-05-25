@@ -31,7 +31,7 @@ export default function Dashboard({ user }: DashboardProps) {
     [histogram, setHistogram] = useState<any[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       baseDate: "2023-11-24T03:00:00Z",
-      buscaCnpj: "",
+      buscaCnpj: user.cnpj,
       varNF: 0,
       varCotistas: 0,
       varCota: 0,
