@@ -190,13 +190,10 @@ export default function ControlSection({
   // Updates the controlForm with the logged in users CNPJ, initially.
   useEffect(() => {
     if (user) {
-      const obj = {
-        ...controlForm,
-        buscaCnpj: user.cnpj ? user.cnpj : "",
-      };
-      // console.log("obj");
-      // console.log(obj);
-      setControlForm(obj);
+      setControlForm((prevForm) => ({
+        ...prevForm,
+        buscaCnpj: user.cnpj || "",
+      }));
     }
   }, [user]);
 
@@ -258,7 +255,7 @@ export default function ControlSection({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
-    setControlForm({ ...controlForm, [e.target.name]: newVal });
+    setControlForm((prevForm) => ({ ...controlForm, [e.target.name]: newVal }));
     return;
   }
 
@@ -392,11 +389,13 @@ export default function ControlSection({
                   onChange={handleControlFormChange}
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
-                  {user &&
-                    user.cnpjs &&
-                    user.cnpjs.map((cE) => {
-                      return <option value={cE}>{cE}</option>;
-                    })}
+                  {user?.cnpjs?.map((cE, index) => {
+                    return (
+                      <option key={index} value={cE}>
+                        {cE}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="h-8">
@@ -558,11 +557,11 @@ export default function ControlSection({
                     onChange={handleControlFormChange}
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
-                    {user &&
-                      user.cnpjs &&
-                      user.cnpjs.map((cE) => {
-                        return <option value={cE}>{cE}</option>;
-                      })}
+                    {user?.cnpjs?.map((cE, index) => (
+                      <option key={index} value={cE}>
+                        {cE}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex flex-col font-semibold items-center gap-1">
