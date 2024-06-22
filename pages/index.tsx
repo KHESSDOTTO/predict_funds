@@ -14,13 +14,6 @@ export default function Home() {
           className="font-bold text-5xl text-center font-serif border-black py-2 px-4 z-20"
           style={lgTextShadow}
         >
-          {/* <Image
-            src="/logo2_19.06.2024.png"
-            alt="Logo"
-            width={400}
-            height={200}
-            className=""
-          /> */}{" "}
           <div className="flex justify-center items-center gap-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
