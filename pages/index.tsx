@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -8,13 +9,28 @@ export default function Home() {
     <main className="bg-landing bg-cover z-0 relative">
       <div className="z-0 hidden lg:block bg-gradient-to-l from-black via-black/10 absolute top-0 left-0 h-full w-[50%]"></div>
       <div className="z-0 hidden lg:block bg-gradient-to-r from-black via-black/10 absolute top-0 left-[50%] h-full w-[50%]"></div>
-      <div className="text-white flex min-h-screen flex-col items-center justify-around p-8 z-20 lg:p-16 lg:p-16 animate-fadeIn-l-r lg:animate-fadeIn">
+      <div className="text-white flex min-h-screen flex-col items-center justify-around p-8 z-20 lg:p-16 animate-fadeIn-l-r lg:animate-fadeIn">
         <h1
           className="font-bold text-5xl text-center font-serif border-black py-2 px-4 z-20"
           style={lgTextShadow}
         >
-          <span className="hidden lg:block">P R E D I C T</span>
-          <span className="lg:hidden">PREDICT</span>
+          <div className="flex justify-center items-center gap-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1}
+              stroke="currentColor"
+              className="size-16"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+              />
+            </svg>
+            <span className="lg:tracking-[0.25em]">PREDICT</span>
+          </div>
         </h1>
         <div className="flex flex-col gap-8 w-10/12 items-center text-xl font-semibold z-20 justify-around h-fit lg:relative lg:top-16 lg:gap-10">
           <Link
