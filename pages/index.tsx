@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -21,7 +20,7 @@ export default function Home() {
               viewBox="0 0 24 24"
               strokeWidth={1}
               stroke="currentColor"
-              className="size-16"
+              className="size-16 hidden lg:block"
             >
               <path
                 strokeLinecap="round"
