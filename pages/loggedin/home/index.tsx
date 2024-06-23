@@ -10,7 +10,6 @@ import Header from "@/components/layout/header";
 import { ax } from "@/database/axios.config";
 import { UserContext } from "@/contexts/UserContext";
 import { UserType } from "@/utils/types";
-import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection";
 
 interface LoggedInHomePropsType {
   user: UserType;
@@ -49,11 +48,10 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
     <div className="bg-black">
       <div className="min-h-screen min-w-screen relative bg-fixed bg-gradient-to-br from-black from-50% to-indigo-900/90 lg:to-indigo-900/90">
         <Header user={user} />
-        <CorrelCardsSection padding="20" gap="8" />
         <Dashboard user={user} />
         <div className="flex justify-center px-4 pb-4 lg:justify-center">
           <div onClick={handleLogout} className="mt-8 w-fit">
-            <ButtonRed shadowColor="white" shadowSize="md">
+            <ButtonRed shadowColor="white/30" shadowSize="md">
               Log Out
             </ButtonRed>
           </div>

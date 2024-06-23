@@ -130,6 +130,17 @@ interface CenarioType {
   predictionData: PredictionsType[];
 }
 
+interface NameValType {
+  name: string;
+  value: any;
+}
+
+interface CardProps {
+  title: string;
+  imgSrc: string;
+  nameValsArr: NameValType[];
+}
+
 export type {
   ButtonPropsType,
   UserType,
@@ -143,4 +154,6 @@ export type {
   CadastroFundosType,
   RawHistogramData,
   FinalHistogramData,
+  NameValType,
+  CardProps,
 };

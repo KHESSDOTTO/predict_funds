@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import {
   CadastroFundosType,
+  CardProps,
   DashboardControlFormType,
   PredictionsType,
   RawDataType,
@@ -12,6 +13,7 @@ import ChartSection from "./chartSection";
 import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
 import RegistrationInfos from "./registrationInfos";
+import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection";
 
 interface DashboardProps {
   user: UserType;
@@ -54,6 +56,34 @@ export default function Dashboard({ user }: DashboardProps) {
     return;
   }
 
+  const correlArr: CardProps[] = [
+    {
+      title: "IBOV",
+      imgSrc: "",
+      nameValsArr: [{ name: "Correl.", value: 0.35 }],
+    },
+    {
+      title: "CDI",
+      imgSrc: "",
+      nameValsArr: [{ name: "Correl.", value: 0.8 }],
+    },
+    {
+      title: "GOLD",
+      imgSrc: "",
+      nameValsArr: [{ name: "Correl.", value: 0.63 }],
+    },
+    {
+      title: "S&P - 500",
+      imgSrc: "",
+      nameValsArr: [{ name: "Correl.", value: 0.3 }],
+    },
+    // {
+    //   title: "VIX",
+    //   imgSrc: "",
+    //   nameValsArr: [{ name: "Correl.", value: 0.71 }],
+    // },
+  ];
+
   return (
     <section className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
       <ControlSection
@@ -77,6 +107,7 @@ export default function Dashboard({ user }: DashboardProps) {
         histogram={histogram}
         loadingHistogram={loadingHistogram}
       />
+      <CorrelCardsSection padding="20" gap="8" correlArr={correlArr} />
       <div
         id="cenariosBtnSection"
         className="flex flex-wrap gap-2 lg:gap-0 px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0"
