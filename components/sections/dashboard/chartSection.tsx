@@ -147,94 +147,6 @@ export default function ChartSection({
       } text-white`}
     >
       <div
-        id="ValueQuotaDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 lg:py-4"}`}
-      >
-        <h1
-          className={`my-4 ${
-            smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
-        >
-          Value - Quota
-          <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
-            {" "}
-            (historic)
-          </span>
-        </h1>
-        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
-          <div
-            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
-              smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
-            } lg:rounded-xl`}
-          >
-            <ResponsiveContainer height={smallV ? 200 : 400}>
-              <AreaChart data={data}>
-                <defs>
-                  <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="30%"
-                      stopColor="rgb(200, 200, 100)"
-                      stopOpacity={1}
-                    />
-                    <stop
-                      offset="70%"
-                      stopColor="rgb(200, 200, 100)"
-                      stopOpacity={0.75}
-                    />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="DT_COMPTC"
-                  tick={{ fill: "rgb(230, 230, 230)" }}
-                  height={30}
-                  interval={smallV ? 8 : 6}
-                  fontSize={12}
-                  tickLine={false}
-                  tickFormatter={(DT_COMPTC) => {
-                    return format(DT_COMPTC, `dd/MM`);
-                  }}
-                />
-                <YAxis
-                  ticks={ticksYaxisVQ}
-                  tick={{ fill: "rgb(230, 230, 230)" }}
-                  tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
-                  width={65}
-                  fontSize={12}
-                  domain={domainYaxisVQ}
-                />
-                {/* <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" /> */}
-                <CartesianGrid
-                  // vertical={false}
-                  stroke="rgb(170, 150, 255)"
-                  strokeWidth={0.3}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="VL_QUOTA"
-                  stroke="rgb(150, 150, 75)"
-                  strokeWidth={1}
-                  fill="url(#customYellow)"
-                ></Area>
-                <Tooltip content={<CustomTooltipYellow />} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          {!smallV && (
-            <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
-              <PredList
-                title="Value Quota (history)"
-                onlyBack={true}
-                data={data}
-                predictions={predictions}
-                varName={"VL_QUOTA"}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-      <div
         id="NetFundingDiv"
         className={` ${smallV ? "px-2 lg:w-[48.5%]" : "py-4"}`}
       >
@@ -249,7 +161,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
@@ -337,6 +249,7 @@ export default function ChartSection({
           )}
         </div>
       </div>
+
       <div
         id="HistogramDiv"
         className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-4"}`}
@@ -352,7 +265,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-8 shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-8 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%] lg:h-[512px]"
             } lg:rounded-xl`}
           >
@@ -393,6 +306,94 @@ export default function ChartSection({
               </ResponsiveContainer>
             )}
           </div>
+        </div>
+      </div>
+      <div
+        id="ValueQuotaDiv"
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 lg:py-4"}`}
+      >
+        <h1
+          className={`my-4 ${
+            smallV
+              ? "text-md w-9/12 mx-auto text-black border-black"
+              : "text-lg mx-[32vw] text-white/90 border-white/90"
+          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
+        >
+          Value - Quota
+          <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
+            {" "}
+            (historic)
+          </span>
+        </h1>
+        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
+          <div
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
+              smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
+            } lg:rounded-xl`}
+          >
+            <ResponsiveContainer height={smallV ? 200 : 400}>
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="30%"
+                      stopColor="rgb(200, 200, 100)"
+                      stopOpacity={1}
+                    />
+                    <stop
+                      offset="70%"
+                      stopColor="rgb(200, 200, 100)"
+                      stopOpacity={0.75}
+                    />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="DT_COMPTC"
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  height={30}
+                  interval={smallV ? 8 : 6}
+                  fontSize={12}
+                  tickLine={false}
+                  tickFormatter={(DT_COMPTC) => {
+                    return format(DT_COMPTC, `dd/MM`);
+                  }}
+                />
+                <YAxis
+                  ticks={ticksYaxisVQ}
+                  tick={{ fill: "rgb(230, 230, 230)" }}
+                  tickFormatter={(num) => `R$${String(num.toFixed(2))}`}
+                  width={65}
+                  fontSize={12}
+                  domain={domainYaxisVQ}
+                />
+                {/* <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" /> */}
+                <CartesianGrid
+                  // vertical={false}
+                  stroke="rgb(170, 150, 255)"
+                  strokeWidth={0.3}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="VL_QUOTA"
+                  stroke="rgb(150, 150, 75)"
+                  strokeWidth={1}
+                  fill="url(#customYellow)"
+                ></Area>
+                <Tooltip content={<CustomTooltipYellow />} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+          {!smallV && (
+            <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
+              <PredList
+                title="Value Quota (history)"
+                onlyBack={true}
+                data={data}
+                predictions={predictions}
+                varName={"VL_QUOTA"}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
