@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        "no-offset-white-soft": "0 0 15px rgba(255, 255, 255, 0.25)",
+      },
       colors: {
         "blue-custom-light": "rgb(154, 216, 225)",
       },

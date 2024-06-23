@@ -165,7 +165,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
@@ -249,7 +249,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-2 shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
@@ -352,7 +352,7 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-8 shadow-md shadow-indigo-900/80 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-8 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%] lg:h-[512px]"
             } lg:rounded-xl`}
           >
