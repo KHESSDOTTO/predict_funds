@@ -5,7 +5,7 @@ export default function Card({ title, imgSrc, nameValsArr }: CardProps) {
   const withImg = imgSrc;
 
   return (
-    <article className="w-full rounded-lg border border-white/90 py-6 px-8 flex flex-col justify-between gap-6 items-center lg:min-w-80">
+    <article className="w-full rounded-lg border border-white py-6 px-8 flex flex-col justify-between gap-6 items-center lg:min-w-80">
       <h1 className="border-b-2 border-red-700 text-white pb-2 w-full">
         {title}
       </h1>
