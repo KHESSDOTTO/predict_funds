@@ -1,5 +1,12 @@
 import { RawHistogramData, FinalHistogramData } from "./types";
 
+function pushIfNew(val: any, arr: any[]) {
+  const isNew = !arr.includes(val);
+  if (isNew) {
+    arr.push(val);
+  }
+}
+
 function generateYaxisTicksBasedOnMaxAbs(
   maxAbs: number,
   maxValueTick = 100000,
@@ -169,6 +176,7 @@ function formatNumberToStringK(
 }
 
 export {
+  pushIfNew,
   generateYaxisTicksBasedOnMaxAbs,
   generateYaxisDomainBasedOnMaxAbs,
   prepareHistogram,
