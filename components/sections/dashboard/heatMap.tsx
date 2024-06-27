@@ -13,24 +13,27 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
   const titleClass: string = "text-center border-b border-white mb-4",
     tableClass: string = "text-center border border-white";
 
-  const cols: string[] = [];
+  const colsDesk: string[] = [];
+  const rowsDesk: string[] = [];
   for (const key in correlAssocArr) {
     const colArr = key.split("_"),
       col1 = colArr[0],
       col2 = colArr[1];
-    pushIfNew(col1, cols);
-    pushIfNew(col2, cols);
+    pushIfNew(col1, colsDesk);
+    pushIfNew(col2, rowsDesk);
   }
-  const rows: string[] = cols;
+  const colsMobile: string[] = rowsDesk;
+  const rowsMobile: string[] = colsDesk;
 
   return (
     <>
+      {/* Desk */}
       <h2 className={titleClass}>{title}</h2>
-      <table className={tableClass}>
+      <table className={tableClass + " hidden lg:table"}>
         <thead>
-          <tr>
+          <tr className="hidden lg:table-row">
             <th></th>
-            {cols.map((currCol) => {
+            {colsDesk.map((currCol) => {
               return (
                 <th className="border border-white text-center p-2">
                   {currCol}
@@ -39,20 +42,15 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
             })}
           </tr>
         </thead>
-        <tbody>
-          {rows.map((currRow) => {
+        <tbody className="hidden lg:table-row-group">
+          {rowsDesk.map((currRow) => {
             return (
               <tr>
                 <td className="border border-white text-center p-2">
                   {currRow}
                 </td>
-                {cols.map((currCol) => {
-                  const name1 = currRow + "_" + currCol;
-                  const name2 = currCol + "_" + currRow;
-                  let key = name1;
-                  if (name2 in correlAssocArr) {
-                    key = name2;
-                  }
+                {colsDesk.map((currCol) => {
+                  const key = currCol + "_" + currRow;
                   return (
                     <td className="border border-white text-center p-2">
                       {correlAssocArr[key]}
@@ -64,6 +62,42 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
           })}
         </tbody>
       </table>
+      {/* End Desk */}
+      {/* Mobile */}
+      <table className={tableClass + " hidden lg:table"}>
+        <thead>
+          <tr>
+            <th></th>
+            {colsMobile.map((currCol) => {
+              return (
+                <th className="border border-white text-center p-2">
+                  {currCol}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {rowsMobile.map((currRow) => {
+            return (
+              <tr>
+                <td className="border border-white text-center p-2">
+                  {currRow}
+                </td>
+                {colsMobile.map((currCol) => {
+                  const key = currRow + "_" + currCol;
+                  return (
+                    <td className="border border-white text-center p-2">
+                      {correlAssocArr[key]}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {/* End Mobile */}
     </>
   );
 }
