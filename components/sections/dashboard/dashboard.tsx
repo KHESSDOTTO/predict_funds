@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import {
+  CardPropsType,
   CadastroFundosType,
-  CardProps,
   DashboardControlFormType,
   PredictionsType,
   RawDataType,
@@ -56,11 +56,11 @@ export default function Dashboard({ user }: DashboardProps) {
     return;
   }
 
-  const correlArr: CardProps[] = [
+  const correlArr: CardPropsType[] = [
     {
       title: "IBOV",
       imgSrc: "",
-      nameValsArr: [{ name: "Correl.", value: 0.35 }],
+      nameValsArr: [{ name: "Correl.", value: 0.94 }],
     },
     {
       title: "CDI",

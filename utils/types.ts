@@ -135,10 +135,14 @@ interface NameValType {
   value: any;
 }
 
-interface CardProps {
+interface CardPropsType {
   title: string;
   imgSrc: string;
   nameValsArr: NameValType[];
+}
+
+interface ToneColorsInterface {
+  [key: string]: string;
 }
 
 export type {
@@ -155,5 +159,6 @@ export type {
   RawHistogramData,
   FinalHistogramData,
   NameValType,
-  CardProps,
+  CardPropsType,
+  ToneColorsInterface,
 };
