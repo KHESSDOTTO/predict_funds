@@ -1,9 +1,10 @@
-import Card, { CardProps } from "@/components/UI/card";
+import Card from "@/components/UI/card";
+import type { CardPropsType } from "@/utils/types";
 
 interface CorrelCardsSectionProps {
   padding: string;
   gap: string;
-  correlArr: CardProps[];
+  correlArr: CardPropsType[];
 }
 
 export default function CorrelCardsSection({
