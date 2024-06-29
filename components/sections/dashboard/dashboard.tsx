@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import {
   CadastroFundosType,
-  CardProps,
   DashboardControlFormType,
   PredictionsType,
   RawDataType,

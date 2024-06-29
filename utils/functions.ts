@@ -1,4 +1,13 @@
-import { RawHistogramData, FinalHistogramData } from "./types";
+import {
+  RawHistogramData,
+  FinalHistogramData,
+  ToneColorsInterface,
+} from "./types";
+
+function getToneColor(value: number, toneColors: ToneColorsInterface) {
+  const key = value.toFixed(1);
+  return toneColors[key];
+}
 
 function pushIfNew(val: any, arr: any[]) {
   const isNew = !arr.includes(val);
@@ -177,6 +186,7 @@ function formatNumberToStringK(
 
 export {
   pushIfNew,
+  getToneColor,
   generateYaxisTicksBasedOnMaxAbs,
   generateYaxisDomainBasedOnMaxAbs,
   prepareHistogram,

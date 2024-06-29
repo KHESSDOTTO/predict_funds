@@ -1,6 +1,6 @@
-import type { CardProps } from "@/utils/types";
+import type { CardPropsType } from "@/utils/types";
 
-export const correlArr: CardProps[] = [
+export const correlArr: CardPropsType[] = [
   {
     title: "IBOV",
     imgSrc: "",
