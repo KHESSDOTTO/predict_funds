@@ -49,7 +49,7 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
                 key={currRow}
                 className="border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
               >
-                <td className="py-3 px-6 text-center font-bold whitespace-nowrap">
+                <td className="py-3 px-6 text-lg bg-gray-200 text-black text-center font-bold whitespace-nowrap">
                   {capitalize(currRow)}
                 </td>
                 {colsDesk.map((currCol) => {
@@ -94,7 +94,7 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
                 key={currRow}
                 className="border-b border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
               >
-                <td className="py-3 px-6 text-center whitespace-nowrap font-medium">
+                <td className="py-3 px-6 bg-gradient-to-r from-gray-100 to-gray-300 text-black text-center whitespace-nowrap font-medium">
                   {currRow}
                 </td>
                 {colsMobile.map((currCol) => {
