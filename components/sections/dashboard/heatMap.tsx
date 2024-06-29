@@ -1,4 +1,5 @@
-import { pushIfNew } from "@/utils/functions";
+import { capitalize, getToneColor, pushIfNew } from "@/utils/functions";
+import { toneColorsMapTxtRG } from "@/utils/toneColors";
 
 export interface CorrelAssocArrType {
   [key: string]: number;
@@ -10,8 +11,8 @@ export interface HeatMapPropsType {
 }
 
 export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
-  const titleClass: string = "text-center border-b border-white mb-4",
-    tableClass: string = "text-center border border-white";
+  const titleClass: string = "text-center mb-4",
+    tableClass: string = "text-center border border-gray-500 rounded-lg w-full";
 
   const colsDesk: string[] = [];
   const rowsDesk: string[] = [];
@@ -27,76 +28,96 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
 
   return (
     <>
+      <h2 className={`${titleClass} text-xl font-semibold my-4`}>{title}</h2>
+
       {/* Desk */}
-      <h2 className={titleClass}>{title}</h2>
-      <table className={tableClass + " hidden lg:table"}>
-        <thead>
-          <tr className="hidden lg:table-row">
-            <th></th>
-            {colsDesk.map((currCol) => {
-              return (
-                <th className="border border-white text-center p-2">
+      <div className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto">
+        <table className={`${tableClass}`}>
+          <thead className="">
+            <tr className="bg-gray-400 bg-opacity-60 text-white uppercase text-sm leading-normal">
+              <th></th>
+              {colsDesk.map((currCol) => (
+                <th key={currCol} className="py-3 px-6 text-center">
                   {currCol}
                 </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody className="hidden lg:table-row-group">
-          {rowsDesk.map((currRow) => {
-            return (
-              <tr>
-                <td className="border border-white text-center p-2">
-                  {currRow}
+              ))}
+            </tr>
+          </thead>
+          <tbody className="text-white text-sm font-light">
+            {rowsDesk.map((currRow) => (
+              <tr
+                key={currRow}
+                className="border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
+              >
+                <td className="py-3 px-6 text-center font-bold whitespace-nowrap">
+                  {capitalize(currRow)}
                 </td>
                 {colsDesk.map((currCol) => {
                   const key = currCol + "_" + currRow;
+                  const value = correlAssocArr[key];
+                  const color = getToneColor(value, toneColorsMapTxtRG, 0.9);
+                  const valColor =
+                    value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
                   return (
-                    <td className="border border-white text-center p-2">
-                      {correlAssocArr[key]}
+                    <td
+                      key={key}
+                      className="py-3 px-6 text-center bg-opacity-20 text-black font-bold text-md"
+                      style={{ backgroundColor: color, color: valColor }}
+                    >
+                      {value}
                     </td>
                   );
                 })}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* End Desk */}
+
       {/* Mobile */}
-      <table className={tableClass + " hidden lg:table"}>
-        <thead>
-          <tr>
-            <th></th>
-            {colsMobile.map((currCol) => {
-              return (
-                <th className="border border-white text-center p-2">
+      <div className="overflow-x-auto lg:hidden">
+        <table className={`${tableClass}`}>
+          <thead>
+            <tr className="bg-gray-700 bg-opacity-50 text-white uppercase text-sm leading-normal">
+              <th className="py-3 px-6 text-left"></th>
+              {colsMobile.map((currCol) => (
+                <th key={currCol} className="py-3 px-6 text-center">
                   {currCol}
                 </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {rowsMobile.map((currRow) => {
-            return (
-              <tr>
-                <td className="border border-white text-center p-2">
+              ))}
+            </tr>
+          </thead>
+          <tbody className="text-white text-sm font-light">
+            {rowsMobile.map((currRow) => (
+              <tr
+                key={currRow}
+                className="border-b border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
+              >
+                <td className="py-3 px-6 text-center whitespace-nowrap font-medium">
                   {currRow}
                 </td>
                 {colsMobile.map((currCol) => {
                   const key = currRow + "_" + currCol;
+                  const value = correlAssocArr[key];
+                  const color = getToneColor(value, toneColorsMapTxtRG, 0.9);
+                  const valColor =
+                    value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
                   return (
-                    <td className="border border-white text-center p-2">
-                      {correlAssocArr[key]}
+                    <td
+                      key={key}
+                      className="py-3 px-6 text-center"
+                      style={{ backgroundColor: color, color: valColor }}
+                    >
+                      {value}
                     </td>
                   );
                 })}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* End Mobile */}
     </>
   );

@@ -27,4 +27,3 @@ export const correlArr: CardPropsType[] = [
   //   nameValsArr: [{ name: "Correl.", value: 0.71 }],
   // },
 ];
-
