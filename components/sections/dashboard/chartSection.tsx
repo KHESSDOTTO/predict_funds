@@ -24,7 +24,7 @@ import {
   generateYaxisTicksBasedOnMaxAbs,
 } from "@/functions/functions";
 import { ClipLoader } from "react-spinners";
-import useWindowWidth from "@/hooks/useWindwWidth";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
   data?: (RawDataType | PredictionsType)[];
