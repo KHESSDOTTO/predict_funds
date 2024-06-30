@@ -1,6 +1,6 @@
 import { CardPropsType } from "@/utils/types";
 import Image from "next/image";
-import { getToneColor } from "@/utils/functions";
+import { getToneColor } from "@/functions/functions";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 
 export default function Card({ title, imgSrc, nameValsArr }: CardPropsType) {
@@ -21,7 +21,7 @@ export default function Card({ title, imgSrc, nameValsArr }: CardPropsType) {
           const name = cE.name;
           const value = cE.value;
           const formattedNum = value.toFixed(2);
-          const color = getToneColor(value, toneColorsMapTxtRG);
+          const color = getToneColor(value, toneColorsMapTxtRG, 1);
           const numClass = `relative right-2 mb-1 text-[24px]`;
           return (
             <div className="flex flex-col w-full px-10 py-4 border border-gray-500 border-r-white border-l-8 border-l-blue-custom-light rounded-lg box-shadow-no-offset-white gap-2">

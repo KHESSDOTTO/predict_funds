@@ -2,11 +2,37 @@ import {
   RawHistogramData,
   FinalHistogramData,
   ToneColorsInterface,
-} from "./types";
+} from "../utils/types";
 
-function getToneColor(value: number, toneColors: ToneColorsInterface) {
+function capitalize(string: string) {
+  switch (string.length) {
+    case 0:
+      return string;
+    case 1:
+      return string.toUpperCase();
+    default:
+      return string[0].toUpperCase() + string.slice(1);
+  }
+}
+
+function getToneColor(
+  value: number,
+  toneColors: ToneColorsInterface,
+  opacity: number | string
+) {
   const key = value.toFixed(1);
-  return toneColors[key];
+  const original = toneColors[key];
+  const start = original.slice(0, -2);
+  const end = original.slice(-1);
+  const adjustedColor = start + opacity + end;
+  return adjustedColor;
+}
+
+function pushIfNew(val: any, arr: any[]) {
+  const isNew = !arr.includes(val);
+  if (isNew) {
+    arr.push(val);
+  }
 }
 
 function generateYaxisTicksBasedOnMaxAbs(
@@ -178,6 +204,8 @@ function formatNumberToStringK(
 }
 
 export {
+  capitalize,
+  pushIfNew,
   getToneColor,
   generateYaxisTicksBasedOnMaxAbs,
   generateYaxisDomainBasedOnMaxAbs,

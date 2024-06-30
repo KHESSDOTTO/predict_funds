@@ -22,8 +22,9 @@ import { useEffect, useState } from "react";
 import {
   generateYaxisDomainBasedOnMaxAbs,
   generateYaxisTicksBasedOnMaxAbs,
-} from "@/utils/functions";
+} from "@/functions/functions";
 import { ClipLoader } from "react-spinners";
+import useWindowWidth from "@/hooks/useWindwWidth";
 
 interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
   data?: (RawDataType | PredictionsType)[];
@@ -51,7 +52,10 @@ export default function ChartSection({
     [unifiedData, setUnifiedData] = useState<(RawDataType | PredictionsType)[]>(
       [...data]
     ),
-    [gradientOffset, setGradientOffset] = useState(1);
+    [gradientOffset, setGradientOffset] = useState(1),
+    [chartHeight, setChartHeight] = useState(0),
+    [histogramHeight, setHistogramHeight] = useState(0),
+    screenWidth = useWindowWidth();
 
   // Margin to aply to find the domain of the Yaxis on the charts
   const margin = 0.05;
@@ -138,6 +142,16 @@ export default function ChartSection({
     }
   }, [data, predictions]);
 
+  useEffect(() => {
+    if (screenWidth > 992) {
+      setChartHeight(400);
+      setHistogramHeight(500);
+    } else {
+      setChartHeight(300);
+      setHistogramHeight(300);
+    }
+  }, [screenWidth]);
+
   return (
     <div
       className={`${
@@ -165,7 +179,10 @@ export default function ChartSection({
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 200 : 400} minWidth={250}>
+            <ResponsiveContainer
+              height={smallV ? 200 : chartHeight}
+              minWidth={250}
+            >
               <AreaChart data={unifiedData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
@@ -265,9 +282,10 @@ export default function ChartSection({
         </h1>
         <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
           <div
-            className={`bg-gray-900 pt-4 mx-8 rounded-sm ${
-              smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%] lg:h-[512px]"
-            } lg:rounded-xl`}
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
+              smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
+            } lg:rounded-xl lg:mx-8`}
+            style={{ height: histogramHeight }}
           >
             {loadingHistogram && (
               <div className="flex flex-col h-full relative items-center justify-center">
@@ -288,8 +306,11 @@ export default function ChartSection({
               </div>
             )}
             {!loadingHistogram && (
-              <ResponsiveContainer height={smallV ? 200 : 500} minWidth={250}>
-                <BarChart width={900} height={300} data={histogram}>
+              <ResponsiveContainer
+                height={smallV ? 200 : histogramHeight - 15}
+                minWidth={250}
+              >
+                <BarChart width={900} height={histogramHeight} data={histogram}>
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
                   <XAxis dataKey="xTick" className="text-white" />
                   <YAxis />
@@ -308,6 +329,7 @@ export default function ChartSection({
           </div>
         </div>
       </div>
+
       <div
         id="ValueQuotaDiv"
         className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 lg:py-4"}`}
@@ -331,7 +353,7 @@ export default function ChartSection({
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 200 : 400}>
+            <ResponsiveContainer height={smallV ? 200 : chartHeight}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">

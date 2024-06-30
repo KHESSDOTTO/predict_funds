@@ -15,7 +15,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 import type { MouseEventHandler } from "react";
 import { arrBaseDates } from "@/utils/globalVars";
-import { prepareHistogram } from "@/utils/functions";
+import { prepareHistogram } from "@/functions/functions";
 
 interface ControlSectionProps {
   setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;

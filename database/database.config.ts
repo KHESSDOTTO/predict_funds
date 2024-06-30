@@ -3,6 +3,8 @@ import cache from "@/utils/mongoCache";
 
 mongoose.set("strictQuery", false);
 
+let listenersAdded = false;
+
 async function connect(): Promise<mongoose.Mongoose> {
   if (cache.conn) {
     console.log("Did not create new connection.");
@@ -29,8 +31,8 @@ async function connect(): Promise<mongoose.Mongoose> {
   return cache.conn;
 }
 
-if (process.env.NODE_ENV === "development") {
-  console.log("I am here where i should be.");
+if (process.env.NODE_ENV === "development" && !listenersAdded) {
+  console.log("I am here where I should be.");
   process.on("SIGINT", async () => {
     console.log("SIGINT received, shutting down...");
     await mongoose.disconnect();
@@ -43,6 +45,8 @@ if (process.env.NODE_ENV === "development") {
     console.log("Disconnected from MongoDB.");
     process.exit(0);
   });
+
+  listenersAdded = true;
 }
 
 export { connect };
