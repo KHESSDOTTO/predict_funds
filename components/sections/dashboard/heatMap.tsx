@@ -1,4 +1,4 @@
-import { capitalize, getToneColor, pushIfNew } from "@/utils/functions";
+import { capitalize, getToneColor, pushIfNew } from "@/functions/functions";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 
 export interface CorrelAssocArrType {

@@ -1,6 +1,6 @@
 import { CardPropsType } from "@/utils/types";
 import Image from "next/image";
-import { getToneColor } from "@/utils/functions";
+import { getToneColor } from "@/functions/functions";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 
 export default function Card({ title, imgSrc, nameValsArr }: CardPropsType) {
