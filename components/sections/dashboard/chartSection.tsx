@@ -128,13 +128,24 @@ export default function ChartSection({
     const newGradientOffset =
       (newUnifiedData.length - predictions.slice(1).length) /
       newUnifiedData.length;
-    console.log("unifiedData");
-    console.log(newUnifiedData);
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
   }
 
-  function getBarColor(DT_COMPTC: any) {}
+  function getBarColor(dataPoint: PredictionsType | RawDataType): string {
+    if (!dataPoint.DT_COMPTC) {
+      return "#8884d8";
+    }
+    let barColor: string;
+    const currDate = dataPoint.DT_COMPTC;
+    const lastHistoricData = data[data.length - 1]["DT_COMPTC"];
+    if (currDate > lastHistoricData) {
+      barColor = "white";
+    } else {
+      barColor = "#8884d8";
+    }
+    return barColor;
+  }
 
   useEffect(() => {
     if (data.length === 0 || predictions.length === 0) {
@@ -247,12 +258,15 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                <Bar
-                  type="monotone"
-                  dataKey="CAPTC_LIQ"
-                  stroke="rgb(99, 102, 241)"
-                  fill={(DT_COMPTC) => getColor(DT_COMPTC)}
-                ></Bar>
+                <Bar type="monotone" dataKey="CAPTC_LIQ">
+                  {unifiedData.map((cE, cI) => (
+                    <Cell
+                      key={`cell-${cI}`}
+                      fill={getBarColor(cE)}
+                      stroke={getBarColor(cE)}
+                    />
+                  ))}
+                </Bar>
                 <Tooltip
                   content={<CustomTooltipIndigo data={unifiedData} />}
                   cursor={<CustomTooltipCursor />}
