@@ -52,7 +52,7 @@ export default function ControlSection({
       const responseHistoric = await ax.get(
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
-      console.log("Complete historic data:");
+      // console.log("Complete historic data:");
       // console.log(responseHistoric);
       let slicedHistoricData: RawDataType[] = [];
       if (responseHistoric.data) {
@@ -150,8 +150,8 @@ export default function ControlSection({
           ...controlForm,
           anbimaClass: registration.data["CLASSE_ANBIMA"],
         });
-        console.log("controlForm");
-        console.log(controlForm);
+        // console.log("controlForm");
+        // console.log(controlForm);
         return registration.data;
       }
     } catch (err) {
@@ -170,8 +170,8 @@ export default function ControlSection({
       responsePreds = await ax.post(`/prediction/getHistogramData`, {
         ...controlForm,
       });
-      console.log("responsePreds");
-      console.log(responsePreds);
+      // console.log("responsePreds");
+      // console.log(responsePreds);
       if (responsePreds) {
         const histogram = prepareHistogram(
           responsePreds.data,
@@ -289,7 +289,7 @@ export default function ControlSection({
       }
       if (predictions) {
         toast.success("Done.");
-        console.log("Finished fetching historic and prediction.");
+        // console.log("Finished fetching historic and prediction.");
       } else {
         toast.error("Something went wrong.");
       }
@@ -372,9 +372,9 @@ export default function ControlSection({
                   onChange={handleControlFormChange}
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
-                  {baseDates.map((cE) => {
+                  {baseDates.map((cE, cI) => {
                     return (
-                      <option value={cE}>
+                      <option key={cI} value={cE}>
                         {format(new Date(cE), "dd/MM/yyyy")}
                       </option>
                     );
@@ -389,9 +389,9 @@ export default function ControlSection({
                   onChange={handleControlFormChange}
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
-                  {user?.cnpjs?.map((cE, index) => {
+                  {user?.cnpjs?.map((cE, cI) => {
                     return (
-                      <option key={index} value={cE}>
+                      <option key={cI} value={cE}>
                         {cE}
                       </option>
                     );
@@ -416,8 +416,12 @@ export default function ControlSection({
                   value={controlForm.weeksForward}
                   onChange={handleControlFormChange}
                 >
-                  {arrWeeksPreds.map((cE) => {
-                    return <option value={cE}>{cE}</option>;
+                  {arrWeeksPreds.map((cE, cI) => {
+                    return (
+                      <option key={cI} value={cE}>
+                        {cE}
+                      </option>
+                    );
                   })}
                 </select>
               </div>
@@ -539,9 +543,9 @@ export default function ControlSection({
                     onChange={handleControlFormChange}
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
-                    {baseDates.map((cE) => {
+                    {baseDates.map((cE, cI) => {
                       return (
-                        <option value={cE}>
+                        <option key={cI} value={cE}>
                           {format(new Date(cE), "dd/MM/yyyy")}
                         </option>
                       );
@@ -557,8 +561,8 @@ export default function ControlSection({
                     onChange={handleControlFormChange}
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
-                    {user?.cnpjs?.map((cE, index) => (
-                      <option key={index} value={cE}>
+                    {user?.cnpjs?.map((cE, cI) => (
+                      <option key={cI} value={cE}>
                         {cE}
                       </option>
                     ))}
@@ -584,8 +588,12 @@ export default function ControlSection({
                     value={controlForm.weeksForward}
                     onChange={handleControlFormChange}
                   >
-                    {arrWeeksPreds.map((cE) => {
-                      return <option value={cE}>{cE}</option>;
+                    {arrWeeksPreds.map((cE, cI) => {
+                      return (
+                        <option key={cI} value={cE}>
+                          {cE}
+                        </option>
+                      );
                     })}
                   </select>
                 </div>

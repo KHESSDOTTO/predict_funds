@@ -20,7 +20,7 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
     if (!user) {
       console.log("There is no user!");
       router.push("/login");

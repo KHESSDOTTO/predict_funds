@@ -82,7 +82,7 @@ export default function ChartSection({
       { length: ticksQntYaxisVQ },
       (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
     );
-    console.log("before setTicksYaxisVQ");
+    // console.log("before setTicksYaxisVQ");
     setTicksYaxisVQ(newTicksYaxisVQ);
   }
 
@@ -112,8 +112,8 @@ export default function ChartSection({
         setDomainYaxisNF(newDomain);
       }
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
-      console.log("newYaxisNFTicks");
-      console.log(newYaxisNFTicks);
+      // console.log("newYaxisNFTicks");
+      // console.log(newYaxisNFTicks);
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
@@ -128,9 +128,13 @@ export default function ChartSection({
     const newGradientOffset =
       (newUnifiedData.length - predictions.slice(1).length) /
       newUnifiedData.length;
+    console.log("unifiedData");
+    console.log(newUnifiedData);
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
   }
+
+  function getBarColor(DT_COMPTC: any) {}
 
   useEffect(() => {
     if (data.length === 0 || predictions.length === 0) {
@@ -183,7 +187,7 @@ export default function ChartSection({
               height={smallV ? 200 : chartHeight}
               minWidth={250}
             >
-              <AreaChart data={unifiedData}>
+              <BarChart data={unifiedData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
@@ -243,14 +247,17 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                <Area
+                <Bar
                   type="monotone"
                   dataKey="CAPTC_LIQ"
-                  stroke="url(#customIndigoDark)"
-                  fill="url(#customIndigo)"
-                ></Area>
-                <Tooltip content={<CustomTooltipIndigo data={unifiedData} />} />
-              </AreaChart>
+                  stroke="rgb(99, 102, 241)"
+                  fill={(DT_COMPTC) => getColor(DT_COMPTC)}
+                ></Bar>
+                <Tooltip
+                  content={<CustomTooltipIndigo data={unifiedData} />}
+                  cursor={<CustomTooltipCursor />}
+                />
+              </BarChart>
             </ResponsiveContainer>
           </div>
           {!smallV && (
@@ -314,7 +321,10 @@ export default function ChartSection({
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
                   <XAxis dataKey="xTick" className="text-white" />
                   <YAxis />
-                  <Tooltip content={<HistogramTooltip />} />
+                  <Tooltip
+                    content={<HistogramTooltip />}
+                    cursor={<CustomTooltipCursor />}
+                  />
                   <Bar dataKey="value" fill="#82ca9d" color="black">
                     {histogram?.map((entry, index) => (
                       <Cell
@@ -488,3 +498,23 @@ function HistogramTooltip({ active, payload, label }: CustomTootipProps) {
   }
   return <></>;
 }
+
+interface CustomCursorProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  stroke?: string;
+}
+
+const CustomTooltipCursor = ({ width, height, x, y }: CustomCursorProps) => (
+  <rect
+    x={x}
+    y={y}
+    width={width}
+    height={height}
+    fill="#ccc"
+    opacity={0.4}
+    className="recharts-tooltip-cursor"
+  />
+);

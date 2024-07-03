@@ -43,9 +43,6 @@ function generateYaxisTicksBasedOnMaxAbs(
 ) {
   const ticks: number[] = [];
 
-  console.log("maxAbs");
-  console.log(maxAbs);
-
   if (maxAbs <= maxValueTick || times > 50) {
     // Prevent infinite recursion by limiting times
     const minTick = -maxValueTick;
@@ -56,8 +53,6 @@ function generateYaxisTicksBasedOnMaxAbs(
       ticks.push(minTick + step * i);
     }
 
-    console.log("ticks");
-    console.log(ticks);
     return ticks;
   }
 
@@ -117,11 +112,6 @@ function prepareHistogram(
   const maxVal = histogramData.reduce((max, cE) => {
     return cE.CAPTC_LIQ > max ? cE.CAPTC_LIQ : max;
   }, histogramData[0]["CAPTC_LIQ"]);
-
-  console.log("maxVal");
-  console.log(maxVal);
-  console.log("minVal");
-  console.log(minVal);
 
   step = (maxVal - minVal) / numBars;
   cVal = minVal;

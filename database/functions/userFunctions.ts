@@ -39,7 +39,7 @@ async function getUserCnpjById(userId: string) {
 
 // Enviar email de confirmação da conta/email
 async function sendConfirmEmail(userId: string, email: string) {
-  console.log(transporter);
+  // console.log(transporter);
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,
     to: email,
@@ -54,17 +54,17 @@ async function sendConfirmEmail(userId: string, email: string) {
 
 // Envia e-mail de alteração de senha
 async function sendPwdUpdateEmail(userId: string, changeId: string) {
-  console.log(transporter);
+  // console.log(transporter);
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
       return false;
     }
-    console.log(user);
-    console.log(user._doc);
+    // console.log(user);
+    // console.log(user._doc);
     const { email, cnpj } = user;
-    console.log(email);
-    console.log(cnpj);
+    // console.log(email);
+    // console.log(cnpj);
     transporter.sendMail({
       from: process.env.EMAIL_ADDRESS,
       to: email,
@@ -223,8 +223,8 @@ async function doUpdateUserInfoNoPwd(
     pwd?: string;
   }
 ) {
-  console.log("clientInfo");
-  console.log(clientInfo);
+  // console.log("clientInfo");
+  // console.log(clientInfo);
   try {
     if (clientInfo.pwd && clientInfo.pwd !== "") {
       const user = await UserModel.findOne({ username: clientInfo.username });
