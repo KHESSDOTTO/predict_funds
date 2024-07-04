@@ -19,8 +19,8 @@ async function GetPredictionsWithBaseDate(
         .status(500)
         .send("No predictions were found for this CNPJ on this baseDate.");
     }
-    console.log("predictions4Weeks:");
-    console.log(predictions4Weeks);
+    // console.log("predictions4Weeks:");
+    // console.log(predictions4Weeks);
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);

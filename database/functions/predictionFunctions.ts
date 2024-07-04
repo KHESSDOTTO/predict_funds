@@ -32,7 +32,6 @@ async function getPredictionsByCnpj(cnpj: string) {
 
 async function getPredictions2(controlForm: DashboardControlFormType) {
   // Prediction for 4 weeks forward
-
   const predKey = [
     (Number(controlForm.varCota) * 100)
       .toFixed(1)
@@ -48,16 +47,16 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
       .replaceAll("-", "n"),
   ].join("__");
 
-  console.log("predKey");
-  console.log(predKey);
-  console.log("controlForm.buscaCnpj");
-  console.log(controlForm.buscaCnpj);
+  // console.log("predKey");
+  // console.log(predKey);
+  // console.log("controlForm.buscaCnpj");
+  // console.log(controlForm.buscaCnpj);
 
   try {
     let prediction4weeks: PredictionsType | null = null;
     switch (controlForm.baseDate) {
       case arrBaseDates[0]:
-        console.log("Matched arrBaseDates[0]");
+        // console.log("Matched arrBaseDates[0]");
         prediction4weeks = await Predictions4Weeks1Model.findOne(
           {
             CNPJ_FUNDO: controlForm.buscaCnpj,
@@ -71,7 +70,7 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
         );
         break;
       case arrBaseDates[1]:
-        console.log("Matched arrBaseDates[1]");
+        // console.log("Matched arrBaseDates[1]");
         prediction4weeks = await Predictions4Weeks2Model.findOne(
           {
             CNPJ_FUNDO: controlForm.buscaCnpj,
@@ -85,7 +84,7 @@ async function getPredictions2(controlForm: DashboardControlFormType) {
         );
         break;
       case arrBaseDates[2]:
-        console.log("Matched arrBaseDates[2]");
+        // console.log("Matched arrBaseDates[2]");
         prediction4weeks = await Predictions4Weeks3Model.findOne(
           {
             CNPJ_FUNDO: controlForm.buscaCnpj,
@@ -169,9 +168,9 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
       .replaceAll("-", "n"),
   ].join("__");
 
-  console.log("predKey", predKey);
-  console.log("controlForm.buscaCnpj", controlForm.buscaCnpj);
-  console.log("controlForm.anbimaClass", controlForm.anbimaClass);
+  // console.log("predKey", predKey);
+  // console.log("controlForm.buscaCnpj", controlForm.buscaCnpj);
+  // console.log("controlForm.anbimaClass", controlForm.anbimaClass);
 
   // Erro se não tiver classe anbima
   if (!controlForm.anbimaClass) {
@@ -225,7 +224,7 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
       CLASSE_ANBIMA: cE.CLASSE_ANBIMA,
     }));
 
-    console.log("finalPred4weeks", finalPred4weeks);
+    // console.log("finalPred4weeks", finalPred4weeks);
 
     return finalPred4weeks;
   } catch (err) {

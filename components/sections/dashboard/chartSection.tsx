@@ -6,15 +6,10 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
-  TooltipProps,
   BarChart,
   Bar,
   Cell,
 } from "recharts";
-import {
-  ValueType,
-  NameType,
-} from "recharts/types/component/DefaultTooltipContent";
 import { format } from "date-fns";
 import { PredictionsType, RawDataType } from "@/utils/types";
 import PredList from "./predList";
@@ -25,18 +20,11 @@ import {
 } from "@/functions/functions";
 import { ClipLoader } from "react-spinners";
 import useWindowWidth from "@/hooks/useWindowWidth";
-
-interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
-  data?: (RawDataType | PredictionsType)[];
-}
-
-interface ChartSectionProps {
-  data: RawDataType[];
-  smallV: boolean;
-  predictions: PredictionsType[];
-  loadingHistogram?: boolean;
-  histogram?: any[];
-}
+import type {
+  ChartSectionProps,
+  CustomTooltipProps,
+  CustomCursorProps,
+} from "@/utils/types";
 
 export default function ChartSection({
   data,
@@ -82,7 +70,7 @@ export default function ChartSection({
       { length: ticksQntYaxisVQ },
       (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
     );
-    console.log("before setTicksYaxisVQ");
+    // console.log("before setTicksYaxisVQ");
     setTicksYaxisVQ(newTicksYaxisVQ);
   }
 
@@ -112,8 +100,8 @@ export default function ChartSection({
         setDomainYaxisNF(newDomain);
       }
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
-      console.log("newYaxisNFTicks");
-      console.log(newYaxisNFTicks);
+      // console.log("newYaxisNFTicks");
+      // console.log(newYaxisNFTicks);
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
@@ -130,6 +118,21 @@ export default function ChartSection({
       newUnifiedData.length;
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
+  }
+
+  function getBarColor(dataPoint: PredictionsType | RawDataType): string {
+    if (!dataPoint.DT_COMPTC) {
+      return "#8884d8";
+    }
+    let barColor: string;
+    const currDate = dataPoint.DT_COMPTC;
+    const lastHistoricData = data[data.length - 1]["DT_COMPTC"];
+    if (currDate > lastHistoricData) {
+      barColor = "white";
+    } else {
+      barColor = "#8884d8";
+    }
+    return barColor;
   }
 
   useEffect(() => {
@@ -183,7 +186,7 @@ export default function ChartSection({
               height={smallV ? 200 : chartHeight}
               minWidth={250}
             >
-              <AreaChart data={unifiedData}>
+              <BarChart data={unifiedData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
@@ -243,14 +246,20 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                <Area
-                  type="monotone"
-                  dataKey="CAPTC_LIQ"
-                  stroke="url(#customIndigoDark)"
-                  fill="url(#customIndigo)"
-                ></Area>
-                <Tooltip content={<CustomTooltipIndigo data={unifiedData} />} />
-              </AreaChart>
+                <Bar type="monotone" dataKey="CAPTC_LIQ">
+                  {unifiedData.map((cE, cI) => (
+                    <Cell
+                      key={`cell-${cI}`}
+                      fill={getBarColor(cE)}
+                      stroke={getBarColor(cE)}
+                    />
+                  ))}
+                </Bar>
+                <Tooltip
+                  content={<CustomTooltipIndigo data={unifiedData} />}
+                  cursor={<CustomTooltipCursor />}
+                />
+              </BarChart>
             </ResponsiveContainer>
           </div>
           {!smallV && (
@@ -289,9 +298,6 @@ export default function ChartSection({
           >
             {loadingHistogram && (
               <div className="flex flex-col h-full relative items-center justify-center">
-                <small className="italic absolute top-2">
-                  Histogram data load might take a while
-                </small>
                 <div>
                   <ClipLoader
                     color={"white"}
@@ -314,12 +320,15 @@ export default function ChartSection({
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
                   <XAxis dataKey="xTick" className="text-white" />
                   <YAxis />
-                  <Tooltip content={<HistogramTooltip />} />
-                  <Bar dataKey="value" fill="#82ca9d" color="black">
+                  <Tooltip
+                    content={<HistogramTooltip />}
+                    cursor={<CustomTooltipCursor />}
+                  />
+                  <Bar dataKey="value" color="black">
                     {histogram?.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={entry.currCnpjBin ? "#82ca9d" : "#8884d8"}
+                        fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
                       />
                     ))}
                   </Bar>
@@ -427,7 +436,7 @@ function CustomTooltipIndigo({
   payload,
   label,
   data,
-}: CustomTootipProps) {
+}: CustomTooltipProps) {
   // console.log(JSON.stringify(payload));
   // Identify preictions to differentiate on the chart
   // <IdentificandoPredsLabels>
@@ -458,7 +467,7 @@ function CustomTooltipIndigo({
   return <></>;
 }
 
-function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
+function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
   // console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
@@ -474,17 +483,41 @@ function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
   return <></>;
 }
 
-function HistogramTooltip({ active, payload, label }: CustomTootipProps) {
+function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
   if (active && payload && payload.length) {
-    const message =
-      payload[0].color === "21-30"
-        ? "You are here"
-        : `Frequency: ${payload[0].value}`;
+    const selCnpjBin = payload[0].payload.selCnpjBin;
+    const msg1 = selCnpjBin ? `You are here.` : "";
+    const msg2 = `Count: ${payload[0].value}`;
+    const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
+    const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
     return (
-      <div className="bg-black/80 text-green-400 p-2 rounded-md shadow-green-800 shadow-sm">
-        <p>{message}</p>
+      <div
+        className="bg-black/80 p-2 rounded-md"
+        style={{ color: txtColor, boxShadow: `0px 1px 2px ${shadowColor}` }}
+      >
+        <p className="leading-6">
+          {msg1 && (
+            <>
+              {msg1}
+              <br />
+            </>
+          )}
+          {msg2}
+        </p>
       </div>
     );
   }
   return <></>;
 }
+
+const CustomTooltipCursor = ({ width, height, x, y }: CustomCursorProps) => (
+  <rect
+    x={x}
+    y={y}
+    width={width}
+    height={height}
+    fill="#ccc"
+    opacity={0.4}
+    className="recharts-tooltip-cursor"
+  />
+);

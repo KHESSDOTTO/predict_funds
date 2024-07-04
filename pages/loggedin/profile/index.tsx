@@ -78,7 +78,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     const loading = toast.loading("Updating...");
     try {
       const updUser = await ax.post(`/user/edit/${user._id}`, form);
-      console.log(updUser);
+      // console.log(updUser);
       toast.success("Informations updated!");
     } catch (err) {
       console.log(err);
@@ -93,7 +93,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     const confirmFormData = new FormData(e.currentTarget);
     const confirmFormValues = Object.fromEntries(confirmFormData.entries());
     const formData = { ...form, ...confirmFormValues };
-    console.log("formData:", formData);
+    // console.log("formData:", formData);
     if (!confirmFormValues.pwd) {
       toast.error("Insert a password.");
       return;

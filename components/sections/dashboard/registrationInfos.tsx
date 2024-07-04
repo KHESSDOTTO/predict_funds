@@ -97,7 +97,7 @@ export default function RegistrationInfos({
         <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-12 lg:px-2">
           {fieldsToShow.map((cE, cI) => {
             return (
-              <li>
+              <li key={titlesOfFields[cI]}>
                 <span className="font-semibold text-white -ml-1">
                   {titlesOfFields[cI]}
                 </span>

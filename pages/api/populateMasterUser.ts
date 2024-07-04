@@ -13,10 +13,6 @@ export default async function PopulateMasterUser(
       {},
       { CNPJ_FUNDO: 1, _id: 0 }
     );
-    console.log("allCnpjsPredicted.data.slice(0, 3)");
-    console.log(allCnpjsPredicted.slice(0, 3));
-    console.log("allCnpjsPredicted.length");
-    console.log(allCnpjsPredicted.length);
     const masterUser = await UserModel.findOne({ username: "master" });
     let newCnpjs = [masterUser.cnpj].concat(
       Object.values(allCnpjsPredicted.slice(0, 50))
