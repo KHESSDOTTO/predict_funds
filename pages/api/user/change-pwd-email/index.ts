@@ -15,8 +15,8 @@ async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
   }
   try {
     await connect();
-    console.log("req.body");
-    console.log(req.body);
+    // console.log("req.body");
+    // console.log(req.body);
     const user = await UserModel.findOne({ ...req.body });
     if (!user) {
       return res.status(500).send("No user was found.");

@@ -21,7 +21,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
   }, [showSideBar]);
 
   function handleClickOutside(e: React.MouseEvent) {
-    console.log("Mouse left");
+    // console.log("Mouse left");
     if (e.target === e.currentTarget) {
       setShowSideBar(false);
     }

@@ -1,4 +1,9 @@
 import { ReactNode } from "react";
+import { TooltipProps } from "recharts";
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 
 interface SideBarPropsType {
   showSideBar: boolean;
@@ -145,6 +150,26 @@ interface ToneColorsInterface {
   [key: string]: string;
 }
 
+interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
+  data?: (RawDataType | PredictionsType)[];
+}
+
+interface ChartSectionProps {
+  data: RawDataType[];
+  smallV: boolean;
+  predictions: PredictionsType[];
+  loadingHistogram?: boolean;
+  histogram?: any[];
+}
+
+interface CustomCursorProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  stroke?: string;
+}
+
 export type {
   ButtonPropsType,
   UserType,
@@ -161,4 +186,7 @@ export type {
   NameValType,
   CardPropsType,
   ToneColorsInterface,
+  CustomTooltipProps,
+  ChartSectionProps,
+  CustomCursorProps,
 };

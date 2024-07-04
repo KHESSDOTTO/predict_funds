@@ -35,8 +35,8 @@ export default function SendEmailModal({
   const labelClass = "text-white lg:py-1";
 
   useEffect(() => {
-    console.log("Object.keys(changePwdForm)");
-    console.log(Object.keys(changePwdForm));
+    // console.log("Object.keys(changePwdForm)");
+    // console.log(Object.keys(changePwdForm));
     if (showModal) {
       setContainerClass(
         `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-100 z-20`
@@ -73,14 +73,14 @@ export default function SendEmailModal({
     const loading = toast.loading("Loading...");
     try {
       const { field } = changePwdForm;
-      console.log("field");
-      console.log(field);
+      // console.log("field");
+      // console.log(field);
       const arrToFindUser = Object.entries(changePwdForm).filter(([cK, cV]) => {
         return cK == field;
       });
       const infoToFindUser = Object.fromEntries(arrToFindUser);
-      console.log("infoToFindUser");
-      console.log(infoToFindUser);
+      // console.log("infoToFindUser");
+      // console.log(infoToFindUser);
       setShowModal(false);
       await ax.post("/user/change-pwd-email", infoToFindUser);
       toast.success("An e-mail was sent with a link to change the password.");
