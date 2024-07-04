@@ -95,7 +95,7 @@ function generateYaxisDomainBasedOnMaxAbs(
 function prepareHistogram(
   histogramData: RawHistogramData[],
   numBars: number,
-  currCnpj: string
+  selCnpj: string
 ): FinalHistogramData[] | false {
   if (!histogramData || histogramData.length === 0) return false; // Won't run if there is no histogramData or lenght of array = 0
 
@@ -104,6 +104,7 @@ function prepareHistogram(
   const limits: number[] = [];
   const xTicks: string[] = [];
   const values: number[] = [];
+  let selCnpjBin: boolean[] = [];
 
   const minVal = histogramData.reduce((min, cE) => {
     return cE.CAPTC_LIQ < min ? cE.CAPTC_LIQ : min;
@@ -135,6 +136,7 @@ function prepareHistogram(
     xTicks.push(tick);
     limits.push(upperEnd); // No rounding on this array to count the elements in each interval of values
     values.push(0);
+    selCnpjBin.push(false);
     cVal = upperEnd;
   }
   // End of limits and xTicks arrays
@@ -142,7 +144,12 @@ function prepareHistogram(
   // Count elements on each interval of values to be the Yaxis values (based on 'limits' array)
   histogramData.forEach((cE) => {
     const index = limits.findIndex((limit) => cE.CAPTC_LIQ <= limit);
-    if (index !== -1) values[index]++;
+    if (index !== -1) {
+      values[index]++;
+    }
+    if (cE.CNPJ_FUNDO === selCnpj && index !== -1) {
+      selCnpjBin[index] = true;
+    }
   });
   // End of the counting of values for the histogram
 
@@ -150,7 +157,7 @@ function prepareHistogram(
     xTick: cE,
     value: values[cI],
     limit: limits[cI],
-    currCnpjBin: 0,
+    selCnpjBin: selCnpjBin[cI],
   }));
 
   return finalData;

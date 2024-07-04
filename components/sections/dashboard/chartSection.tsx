@@ -6,15 +6,10 @@ import {
   AreaChart,
   Area,
   ResponsiveContainer,
-  TooltipProps,
   BarChart,
   Bar,
   Cell,
 } from "recharts";
-import {
-  ValueType,
-  NameType,
-} from "recharts/types/component/DefaultTooltipContent";
 import { format } from "date-fns";
 import { PredictionsType, RawDataType } from "@/utils/types";
 import PredList from "./predList";
@@ -25,18 +20,11 @@ import {
 } from "@/functions/functions";
 import { ClipLoader } from "react-spinners";
 import useWindowWidth from "@/hooks/useWindowWidth";
-
-interface CustomTootipProps extends TooltipProps<ValueType, NameType> {
-  data?: (RawDataType | PredictionsType)[];
-}
-
-interface ChartSectionProps {
-  data: RawDataType[];
-  smallV: boolean;
-  predictions: PredictionsType[];
-  loadingHistogram?: boolean;
-  histogram?: any[];
-}
+import type {
+  ChartSectionProps,
+  CustomTooltipProps,
+  CustomCursorProps,
+} from "@/utils/types";
 
 export default function ChartSection({
   data,
@@ -310,9 +298,6 @@ export default function ChartSection({
           >
             {loadingHistogram && (
               <div className="flex flex-col h-full relative items-center justify-center">
-                <small className="italic absolute top-2">
-                  Histogram data load might take a while
-                </small>
                 <div>
                   <ClipLoader
                     color={"white"}
@@ -339,11 +324,11 @@ export default function ChartSection({
                     content={<HistogramTooltip />}
                     cursor={<CustomTooltipCursor />}
                   />
-                  <Bar dataKey="value" fill="#82ca9d" color="black">
+                  <Bar dataKey="value" color="black">
                     {histogram?.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={entry.currCnpjBin ? "#82ca9d" : "#8884d8"}
+                        fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
                       />
                     ))}
                   </Bar>
@@ -451,7 +436,7 @@ function CustomTooltipIndigo({
   payload,
   label,
   data,
-}: CustomTootipProps) {
+}: CustomTooltipProps) {
   // console.log(JSON.stringify(payload));
   // Identify preictions to differentiate on the chart
   // <IdentificandoPredsLabels>
@@ -482,7 +467,7 @@ function CustomTooltipIndigo({
   return <></>;
 }
 
-function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
+function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
   // console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
@@ -498,27 +483,31 @@ function CustomTooltipYellow({ active, payload, label }: CustomTootipProps) {
   return <></>;
 }
 
-function HistogramTooltip({ active, payload, label }: CustomTootipProps) {
+function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
   if (active && payload && payload.length) {
-    const message =
-      payload[0].color === "21-30"
-        ? "You are here"
-        : `Frequency: ${payload[0].value}`;
+    const selCnpjBin = payload[0].payload.selCnpjBin;
+    const msg1 = selCnpjBin ? `You are here.` : "";
+    const msg2 = `Count: ${payload[0].value}`;
+    const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
+    const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
     return (
-      <div className="bg-black/80 text-green-400 p-2 rounded-md shadow-green-800 shadow-sm">
-        <p>{message}</p>
+      <div
+        className="bg-black/80 p-2 rounded-md"
+        style={{ color: txtColor, boxShadow: `0px 1px 2px ${shadowColor}` }}
+      >
+        <p className="leading-6">
+          {msg1 && (
+            <>
+              {msg1}
+              <br />
+            </>
+          )}
+          {msg2}
+        </p>
       </div>
     );
   }
   return <></>;
-}
-
-interface CustomCursorProps {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  stroke?: string;
 }
 
 const CustomTooltipCursor = ({ width, height, x, y }: CustomCursorProps) => (
