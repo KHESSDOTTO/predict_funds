@@ -5,11 +5,18 @@ import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
-import type { RawDataType } from "@/utils/types";
+import type { RawDataType, UserType } from "@/utils/types";
 import ButtonRed from "@/components/UI/buttonRed";
+import type { GetServerSideProps } from "next";
+import type { JwtPayload } from "jsonwebtoken";
+import { verifyToken } from "@/utils/jwt.config";
 
-export default function MyCenarios() {
-  const { user, cenarios, setCenarios } = useContext(UserContext);
+interface MyCenariosPagePropsType {
+  userJWT: UserType;
+}
+
+export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
+  const { cenarios, setCenarios } = useContext(UserContext);
   const [footerPosition, setFooterPosition] = useState("absolute");
   const footerRef = useRef<HTMLDivElement>(null);
 
@@ -122,7 +129,7 @@ export default function MyCenarios() {
 
   return (
     <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-black from-30% to-[rgba(0,30,100,0.8)] text-white/90">
-      {user && <Header user={user} />}
+      {userJWT && <Header user={userJWT} />}
       <div className="flex justify-center lg:hidden">
         <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
           My Cenarios
@@ -236,3 +243,16 @@ export default function MyCenarios() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const token = req.cookies.loggedInUser;
+  let userJWT: string | false | JwtPayload = false;
+  if (token) {
+    userJWT = verifyToken(token);
+  }
+  return {
+    props: {
+      userJWT,
+    },
+  };
+};
