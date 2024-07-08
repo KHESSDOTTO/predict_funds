@@ -246,7 +246,19 @@ async function doUpdateUserInfoNoPwd(
         new: true,
       }
     );
-    return { ok: true, status: 200, msg: updUser };
+    const token = generateToken(updUser);
+    const authCookie = serialize("loggedInUser", token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 12,
+      path: "/",
+    });
+    return {
+      ok: true,
+      status: 200,
+      msg: updUser,
+      token: token,
+      authCookie: authCookie,
+    };
   } catch (err) {
     console.log(err);
     return { ok: false, status: 500, msg: err };
@@ -296,7 +308,19 @@ or password didn't match the required format.",
     if (!done) {
       return { ok: false, status: 500, msg: "Something went wrong." };
     }
-    return { ok: true, status: 200, msg: "Password updated." };
+    const token = generateToken(user);
+    const authCookie = serialize("loggedInUser", token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 12,
+      path: "/",
+    });
+    return {
+      ok: true,
+      status: 200,
+      msg: "Password updated.",
+      token: token,
+      authCookie: authCookie,
+    };
   } catch (err) {
     return { ok: false, status: 500, msg: err };
   }
