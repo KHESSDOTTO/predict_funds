@@ -68,7 +68,7 @@ export default function LoginPage() {
           <BackLink color="white" />
         </div>
         <main className={mainClass}>
-          <div className="flex flex-col justify-around items-center lg:col-start-1 lg:ml-24 lg:col-span-2 min-h-[95vh] lg:pt-12 lg:pb-8 lg:pt-6">
+          <div className="flex flex-col justify-around items-center lg:col-start-1 lg:ml-24 lg:col-span-2 min-h-[95vh] lg:pb-8 lg:pt-6">
             <h1 className={h1Class} style={smTextShadow}>
               Login
             </h1>

@@ -13,8 +13,14 @@ async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
     const confirmation = await doUpdateUserInfoNoPwd(userId, req.body);
+    if (confirmation.ok && confirmation.authCookie) {
+      return res
+        .status(confirmation.status)
+        .setHeader("Set-Cookie", confirmation.authCookie)
+        .json({ msg: confirmation.msg, token: confirmation.token });
+    }
     // await disconnect();
-    return res.status(confirmation.status).send(confirmation.msg);
+    return res.status(confirmation.status).json(confirmation.msg);
   } catch (err) {
     console.log(err);
     return res.status(500).send(`Error: ${err}`);
