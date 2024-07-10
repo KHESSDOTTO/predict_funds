@@ -53,17 +53,18 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="w-full h-full absolute top-0 left-0 bg-landing lg:bg-login z-0"></div>
+      <div className="w-full h-full absolute top-0 left-0 bg-landing lg:bg-login"></div>
+      {showModal && <div className="fixed inset-0 backdrop-blur-md"></div>}
       <div className="lg:hidden">
         <BackLink color="white" />
       </div>
-      <div className="text-white z-1 relative bg-transparent animate-fadeIn lg:animate-fadeIn-l-r lg:from-black/90 lg:bg-gradient-to-r lg:via-transparent lg:from-20% lg:to-transparent">
-        <SendEmailModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          title="Enter your information to receive the password recovery e-mail"
-          textBtn="Send e-mail"
-        />
+      <SendEmailModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        title="Enter your information to receive the password recovery e-mail"
+        textBtn="Send e-mail"
+      />
+      <div className="text-white relative bg-transparent animate-fadeIn lg:animate-fadeIn-l-r lg:from-black/90 lg:bg-gradient-to-r lg:via-transparent lg:from-20% lg:to-transparent">
         <div className="hidden lg:block">
           <BackLink color="white" />
         </div>
@@ -105,7 +106,7 @@ export default function LoginPage() {
               <div className="flex flex-col justify-end pb-2 items-center text-sm italic text-center lg:pb-4">
                 {/* <p className="italic text-sm text-center">Forgot my password: </p> */}
                 <button
-                  className="transition-all text-sm duration-200 italic font-semibold w-fit hover:underline hover:text-yellow-800 hover:underline hover:text-indigo-600 lg:mt-2"
+                  className="transition-all text-sm duration-200 italic font-semibold w-fit hover:text-yellow-600 lg:mt-2"
                   onClick={sendPwdChangeEmail}
                 >
                   Forgot Password
@@ -117,7 +118,7 @@ export default function LoginPage() {
                 </p>
                 <Link
                   href={"/signup"}
-                  className="transition-all duration-200 text-indigo-300 font-semibold w-fit hover:underline hover:text-yellow-800 hover:underline hover:text-indigo-600"
+                  className="transition-all duration-200 text-indigo-300 font-semibold w-fit hover:text-yellow-800 "
                 >
                   Sign Up
                 </Link>
