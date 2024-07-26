@@ -200,6 +200,26 @@ function formatNumberToStringK(
   return formattedNum;
 }
 
+function buildPredKey(
+  varCota: string | number,
+  varCotistas: string | number,
+  varNF: string | number
+): string {
+  const predKey = [
+    (Number(varCota) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(varCotistas) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(varNF) * 100).toFixed(1).replaceAll(".", "_").replaceAll("-", "n"),
+  ].join("__");
+
+  return predKey;
+}
+
 export {
   capitalize,
   pushIfNew,
@@ -207,4 +227,5 @@ export {
   generateYaxisTicksBasedOnMaxAbs,
   generateYaxisDomainBasedOnMaxAbs,
   prepareHistogram,
+  buildPredKey,
 };

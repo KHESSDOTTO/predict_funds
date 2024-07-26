@@ -13,11 +13,16 @@ import { UserType } from "@/utils/types";
 
 interface LoggedInHomePropsType {
   user: UserType;
+  ancoras: string[] | null;
 }
 
-export default function LoggedInHome({ user }: LoggedInHomePropsType) {
+export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   const router = useRouter();
   const userContext = useContext(UserContext);
+  const dashboardProps = {
+    user: user,
+    ancoras: ancoras,
+  };
 
   useEffect(() => {
     // console.log(user);
@@ -48,7 +53,7 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
     <div className="bg-black">
       <div className="min-h-screen min-w-screen relative bg-fixed bg-gradient-to-br from-black from-50% to-indigo-900/90 lg:to-indigo-900/90">
         <Header user={user} />
-        <Dashboard user={user} />
+        <Dashboard {...dashboardProps} />
         <div className="flex justify-center px-4 pb-4 lg:justify-center">
           <div onClick={handleLogout} className="mt-8 w-fit">
             <ButtonRed shadowColor="white/30" shadowSize="md">
@@ -62,6 +67,9 @@ export default function LoggedInHome({ user }: LoggedInHomePropsType) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const ancorasResponse: any = await ax.get("/prediction/getAncoras");
+  const ancoras = ancorasResponse.data;
+
   const token = req.cookies.loggedInUser;
   let user: string | false | JwtPayload = false;
   if (token) {
@@ -70,6 +78,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return {
     props: {
       user,
+      ancoras,
     },
   };
 };

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getPredictions2 } from "@/database/functions/predictionFunctions";
+import { getPredictions } from "@/database/functions/predictionFunctions";
 
 async function GetPredictionsWithBaseDate(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ async function GetPredictionsWithBaseDate(
 
   try {
     await connect();
-    const predictions4Weeks = await getPredictions2(req.body);
+    const predictions4Weeks = await getPredictions(req.body);
     // await disconnect();
     if (!predictions4Weeks) {
       return res

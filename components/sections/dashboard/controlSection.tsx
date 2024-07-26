@@ -1,21 +1,21 @@
 import { format } from "date-fns";
 import ButtonIndigo from "../../UI/buttonIndigo";
 import { RawDataType } from "@/utils/types";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
-import type {
-  CadastroFundosType,
-  DashboardControlFormType,
-  PredictionsType,
-} from "@/utils/types";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
-import type { MouseEventHandler } from "react";
-import { arrBaseDates } from "@/utils/globalVars";
 import { prepareHistogram } from "@/functions/functions";
+
+import type { MouseEventHandler } from "react";
+import type {
+  CadastroFundosType,
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types";
 
 interface ControlSectionProps {
   setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;
@@ -28,6 +28,7 @@ interface ControlSectionProps {
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
   setHistogram: Dispatch<SetStateAction<any>>;
+  ancoras: string[] | null;
 }
 
 export default function ControlSection({
@@ -41,20 +42,19 @@ export default function ControlSection({
   setRegistration,
   setLoadingHistogram,
   setHistogram,
+  ancoras,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const user = userContext.user;
   const arrWeeksPreds = [4];
-  const baseDates = arrBaseDates;
 
   async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
       const responseHistoric = await ax.get(
         `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
-      // console.log("Complete historic data:");
-      // console.log(responseHistoric);
       let slicedHistoricData: RawDataType[] = [];
+
       if (responseHistoric.data) {
         const adjHistoricData: RawDataType[] = responseHistoric.data.map(
           (cE: RawDataType) => {
@@ -62,28 +62,21 @@ export default function ControlSection({
             return { ...cE, DT_COMPTC: convDate };
           }
         );
+
         adjHistoricData.sort(
           (a, b) => a.DT_COMPTC.getTime() - b.DT_COMPTC.getTime()
         );
+
         const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
           return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
         }, new Date("2020-01-01T00:00:00Z"));
-        // console.log("higherDate");
-        // console.log(higherDate);
-        // console.log("cutDate");
-        // console.log(subWeeks(higherDate, controlForm.weeksBack));
 
         slicedHistoricData = adjHistoricData.filter((cE) => {
           return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
         });
       }
-      // console.log("Length of sliced data:");
-      // console.log(slicedHistoricData.length);
-      // console.log("Sliced data:");
-      // console.log(slicedHistoricData);
-      // console.log("Final historic data after mapping to convert date:");
-      // console.log(slicedHistoricData);
       setHistoricData(slicedHistoricData);
+
       return slicedHistoricData;
     } catch (err) {
       console.log(err);
@@ -100,9 +93,9 @@ export default function ControlSection({
       ...controlForm,
       buscaCnpj: cnpj,
     });
-    // console.log("Predictions:");
-    // console.log(responsePreds);
+
     let finalPredictionData: PredictionsType[] = [];
+
     if (responsePreds && responsePreds.data && slicedHistoricData) {
       finalPredictionData.push({
         // including last date shown in historic (current date)
@@ -115,14 +108,17 @@ export default function ControlSection({
       let lastDate =
         slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
       const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
+
       while (lastDate < endPredDate) {
         let newDate = lastDate;
         const dayOfWeek = getDay(lastDate);
+
         if (dayOfWeek === 5) {
           newDate = addDays(lastDate, 3);
         } else {
           newDate = addDays(lastDate, 1);
         }
+
         finalPredictionData.push({
           // including prediction for 4 weeks based on the varCota of the controlForm
           DT_COMPTC: newDate,
@@ -132,11 +128,11 @@ export default function ControlSection({
         lastDate = newDate;
       }
     }
-    // console.log("Final prediction data:");
-    // console.log(finalPredictionData);
+
     if (finalPredictionData) {
       setPredictionData(finalPredictionData);
     }
+
     return finalPredictionData;
   }
 
@@ -170,8 +166,7 @@ export default function ControlSection({
       responsePreds = await ax.post(`/prediction/getHistogramData`, {
         ...controlForm,
       });
-      // console.log("responsePreds");
-      // console.log(responsePreds);
+
       if (responsePreds) {
         const histogram = prepareHistogram(
           responsePreds.data,
@@ -255,6 +250,8 @@ export default function ControlSection({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
+    console.log("controlForm");
+    console.log(controlForm);
     setControlForm((prevForm) => ({ ...controlForm, [e.target.name]: newVal }));
     return;
   }
@@ -281,12 +278,14 @@ export default function ControlSection({
         controlForm.baseDate
       );
       let predictions: PredictionsType[] = [];
+
       if (slicedHistoricData) {
         predictions = await getPredictions(
           controlForm.buscaCnpj,
           slicedHistoricData
         );
       }
+
       if (predictions) {
         toast.success("Done.");
         // console.log("Finished fetching historic and prediction.");
@@ -298,13 +297,6 @@ export default function ControlSection({
       toast.error("Sorry. We had a problem fetching the data.");
     }
 
-    // Fetching histogram data
-    // try {
-    //   getHistogram({ ...controlForm });
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error("Couldn't fetch histogram data.");
-    // }
     toast.dismiss(loadingToast);
   }
 
@@ -372,7 +364,7 @@ export default function ControlSection({
                   onChange={handleControlFormChange}
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
-                  {baseDates.map((cE, cI) => {
+                  {ancoras?.map((cE, cI) => {
                     return (
                       <option key={cI} value={cE}>
                         {format(new Date(cE), "dd/MM/yyyy")}
@@ -543,7 +535,7 @@ export default function ControlSection({
                     onChange={handleControlFormChange}
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
-                    {baseDates.map((cE, cI) => {
+                    {ancoras?.map((cE, cI) => {
                       return (
                         <option key={cI} value={cE}>
                           {format(new Date(cE), "dd/MM/yyyy")}
