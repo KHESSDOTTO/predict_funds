@@ -8,8 +8,6 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (!req.body.anbimaClass) {
-    // console.log("req.body");
-    // console.log(req.body);
     return res
       .status(500)
       .json({ status: "500", message: "There is no anbima class." });
@@ -18,14 +16,13 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
     const predictions4Weeks = await getPredsForHistogram(req.body);
-    // await disconnect();
+
     if (!predictions4Weeks) {
       return res
         .status(500)
         .send("There was an error when fetching the data for the histogram.");
     }
-    // console.log("predictions4Weeks:");
-    // console.log(predictions4Weeks);
+
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);

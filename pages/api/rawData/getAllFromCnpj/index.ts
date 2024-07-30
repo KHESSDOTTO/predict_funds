@@ -7,8 +7,10 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
       await connect();
+
       if (req.cookies.loggedInUser) {
         const user = verifyToken(req.cookies.loggedInUser);
+
         if (typeof user === "object") {
           if (user.cnpj) {
             if (!user.formatedCnpj) {
@@ -23,7 +25,9 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                 "-" +
                 user.cnpj.slice(12, 14);
             }
+
             let allRawData = [];
+
             if (
               typeof req.query.cnpj == "string" &&
               typeof req.query.baseDate == "string"
@@ -32,6 +36,7 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                 req.query.cnpj,
                 req.query.baseDate
               );
+
               if (!response) {
                 return res
                   .status(500)
@@ -39,21 +44,18 @@ async function GetAllRawData(req: NextApiRequest, res: NextApiResponse) {
                     `No data found for CNPJ: ${req.query.cnpj} on baseDate: ${req.query.baseDate}`
                   );
               }
+
               allRawData = response;
             }
-            // console.log(allRawData);
-            // await disconnect();
+
             return res.status(200).json(allRawData);
           }
-          // await disconnect();
           return res.status(500).json({ message: "Something went wrong." });
         }
-        // await disconnect();
         return res.status(500).json({ message: "No logged in user." });
       }
     } catch (err) {
       console.error(err);
-      // await disconnect();
       return res.status(500).json({ error: err });
     }
   }

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getPredictions2 } from "@/database/functions/predictionFunctions";
+import { getPredictions } from "@/database/functions/predictionFunctions";
 
 async function GetPredictionsWithBaseDate(
   req: NextApiRequest,
@@ -12,19 +12,17 @@ async function GetPredictionsWithBaseDate(
 
   try {
     await connect();
-    const predictions4Weeks = await getPredictions2(req.body);
-    // await disconnect();
+    const predictions4Weeks = await getPredictions(req.body);
+
     if (!predictions4Weeks) {
       return res
         .status(500)
         .send("No predictions were found for this CNPJ on this baseDate.");
     }
-    // console.log("predictions4Weeks:");
-    // console.log(predictions4Weeks);
+
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);
-    // await disconnect();
     return res.status(500).json({ error: err });
   }
 }
