@@ -11,7 +11,7 @@ import ControlSection from "./controlSection";
 import ChartSection from "./chartSection";
 import { UserContext } from "@/contexts/UserContext";
 import RegistrationInfos from "./registrationInfos";
-import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection";
+import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection/correlCardsSection";
 import HeatMap from "./heatMap";
 import { correlAssocArr } from "@/dummy-vars-tests/correlAssocArr";
 import CenariosBtnSection from "./cenariosBtnSection";
