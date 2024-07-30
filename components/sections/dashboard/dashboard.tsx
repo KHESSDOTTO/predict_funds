@@ -9,19 +9,19 @@ import {
 } from "@/utils/types";
 import ControlSection from "./controlSection";
 import ChartSection from "./chartSection";
-import Link from "next/link";
 import { UserContext } from "@/contexts/UserContext";
 import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection";
-import { correlArr } from "@/dummy-vars-tests/correlCards";
 import HeatMap from "./heatMap";
 import { correlAssocArr } from "@/dummy-vars-tests/correlAssocArr";
+import CenariosBtnSection from "./cenariosBtnSection";
 
 interface DashboardProps {
   user: UserType;
+  ancoras: string[] | null;
 }
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard({ user, ancoras }: DashboardProps) {
   // console.log("this is the user:");
   // console.log(user);
   const userContext = useContext(UserContext);
@@ -34,7 +34,7 @@ export default function Dashboard({ user }: DashboardProps) {
     [loadingHistogram, setLoadingHistogram] = useState<boolean>(true),
     [histogram, setHistogram] = useState<any[]>([]),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
-      baseDate: "2023-11-24T03:00:00Z",
+      baseDate: ancoras ? ancoras[0] : "2024-05-31T00:00:00.00Z",
       buscaCnpj: user.cnpj,
       varNF: 0,
       varCotistas: 0,
@@ -42,7 +42,23 @@ export default function Dashboard({ user }: DashboardProps) {
       weeksBack: 8,
       weeksForward: 4,
       anbimaClass: "",
-    });
+    }),
+    [correls, setCorrels] = useState<any>(false);
+
+  const controlSectionProps = {
+    setHistoricData: setHistoricData,
+    setPredictionData: setPredictionData,
+    controlForm: controlForm,
+    setControlForm: setControlForm,
+    saveCenario: saveCenario,
+    setIsLoading: setIsLoading,
+    registration: registration,
+    setRegistration: setRegistration,
+    setLoadingHistogram: setLoadingHistogram,
+    setHistogram: setHistogram,
+    setCorrels: setCorrels,
+    ancoras: ancoras,
+  };
 
   function saveCenario() {
     userContext.setCenarios([
@@ -60,18 +76,7 @@ export default function Dashboard({ user }: DashboardProps) {
 
   return (
     <section className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <ControlSection
-        setHistoricData={setHistoricData}
-        setPredictionData={setPredictionData}
-        controlForm={controlForm}
-        setControlForm={setControlForm}
-        saveCenario={saveCenario}
-        setIsLoading={setIsLoading}
-        registration={registration}
-        setRegistration={setRegistration}
-        setLoadingHistogram={setLoadingHistogram}
-        setHistogram={setHistogram}
-      />
+      <ControlSection {...controlSectionProps} />
       <RegistrationInfos isLoading={isLoading} registration={registration} />
       <div className="lg:mb-8"></div>
       <ChartSection
@@ -81,30 +86,12 @@ export default function Dashboard({ user }: DashboardProps) {
         histogram={histogram}
         loadingHistogram={loadingHistogram}
       />
-      <CorrelCardsSection padding="20" gap="8" correlArr={correlArr} />
+      <CorrelCardsSection padding="20" gap="8" correls={correls} />
       <HeatMap
         title="Heat Map - Correlations"
         correlAssocArr={correlAssocArr}
       />
-      <div
-        id="cenariosBtnSection"
-        className="flex flex-wrap gap-2 lg:gap-0 px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0"
-      >
-        <div className="w-full border-white/90 lg:border-white/20 mb-1 shadow-lg h-2 shadow-white lg:shadow-black lg:border-b-2 lg:mb-0"></div>
-        <div className="w-full flex justify-center items-start gap-4 lg:bg-gradient-to-b lg:from-black/50 lg:via-black/40 lg:via-50% lg:pt-[10px] lg:pb-4">
-          <button
-            onClick={saveCenario}
-            className="text-indigo-400 px-1 transition-all duration-300 border-indigo-400 hover:text-indigo-300 lg:hover:border-indigo-500 hover:-translate-y-px"
-          >
-            + Save Cenario
-          </button>
-          <Link href={"/loggedin/my_cenarios"} className="lg:right-2">
-            <button className="text-red-600 px-1 transition-all duration-200 border-red-500 hover:text-red-500 lg:hover:border-red-700 hover:-translate-y-px">
-              Go to Cenarios
-            </button>
-          </Link>
-        </div>
-      </div>
+      <CenariosBtnSection saveCenario={saveCenario} />
     </section>
   );
 }

@@ -9,6 +9,7 @@ const toneColorsMapTxtRG = {
   "-0.3": "rgba(255, 235, 235, 1)", // very light pink
   "-0.2": "rgba(255, 245, 245, 1)", // almost white with a hint of pink
   "-0.1": "rgba(255, 250, 250, 1)", // very very light pink
+  "-0.0": "rgba(255, 255, 255, 1)", // white
   "0.0": "rgba(255, 255, 255, 1)", // white
   "0.1": "rgba(235, 245, 235, 1)", // very very light green
   "0.2": "rgba(210, 230, 210, 1)", // very light green

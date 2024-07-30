@@ -1,5 +1,5 @@
 import { connect } from "@/database/database.config";
-import PredictionModel from "@/database/models/predictionModel";
+import PredictionsModel from "@/database/models/predictionsModel";
 import UserModel from "@/database/models/userModel";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -9,7 +9,7 @@ export default async function PopulateMasterUser(
 ) {
   try {
     await connect();
-    const allCnpjsPredicted = await PredictionModel.find(
+    const allCnpjsPredicted = await PredictionsModel.find(
       {},
       { CNPJ_FUNDO: 1, _id: 0 }
     );

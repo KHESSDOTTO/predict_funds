@@ -3,7 +3,6 @@ import cache from "@/utils/mongoCache";
 
 mongoose.set("strictQuery", false);
 
-let listenersAdded = false;
 let connectionPromise: Promise<mongoose.Mongoose> | null = null;
 
 async function connect(): Promise<mongoose.Mongoose> {
@@ -36,27 +35,30 @@ async function connect(): Promise<mongoose.Mongoose> {
 }
 
 function addListeners() {
-  if (listenersAdded) {
-    return;
+  const hasSigintListener = process.rawListeners("SIGINT").length > 0;
+  const hasSigtermListener = process.rawListeners("SIGTERM").length > 0;
+
+  // Check if SIGINT listener is already added
+  if (!hasSigintListener) {
+    console.log("Adding SIGINT listener.");
+    process.on("SIGINT", async () => {
+      console.log("SIGINT received, shutting down...");
+      await mongoose.disconnect();
+      console.log("Disconnected from MongoDB.");
+      process.exit(0);
+    });
   }
 
-  console.log("Adding SIGINT and SIGTERM listeners.");
-
-  process.on("SIGINT", async () => {
-    console.log("SIGINT received, shutting down...");
-    await mongoose.disconnect();
-    console.log("Disconnected from MongoDB.");
-    process.exit(0);
-  });
-
-  process.on("SIGTERM", async () => {
-    console.log("SIGTERM received, shutting down...");
-    await mongoose.disconnect();
-    console.log("Disconnected from MongoDB.");
-    process.exit(0);
-  });
-
-  listenersAdded = true;
+  // Check if SIGTERM listener is already added
+  if (!hasSigtermListener) {
+    console.log("Adding SIGTERM listener.");
+    process.on("SIGTERM", async () => {
+      console.log("SIGTERM received, shutting down...");
+      await mongoose.disconnect();
+      console.log("Disconnected from MongoDB.");
+      process.exit(0);
+    });
+  }
 }
 
 if (process.env.NODE_ENV === "development") {

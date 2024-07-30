@@ -20,6 +20,8 @@ function getToneColor(
   toneColors: ToneColorsInterface,
   opacity: number | string
 ) {
+  console.log("value getToneColor");
+  console.log(value);
   const key = value.toFixed(1);
   const original = toneColors[key];
   const start = original.slice(0, -2);
@@ -200,6 +202,26 @@ function formatNumberToStringK(
   return formattedNum;
 }
 
+function buildPredKey(
+  varCota: string | number,
+  varCotistas: string | number,
+  varNF: string | number
+): string {
+  const predKey = [
+    (Number(varCota) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(varCotistas) * 100)
+      .toFixed(1)
+      .replaceAll(".", "_")
+      .replaceAll("-", "n"),
+    (Number(varNF) * 100).toFixed(1).replaceAll(".", "_").replaceAll("-", "n"),
+  ].join("__");
+
+  return predKey;
+}
+
 export {
   capitalize,
   pushIfNew,
@@ -207,4 +229,5 @@ export {
   generateYaxisTicksBasedOnMaxAbs,
   generateYaxisDomainBasedOnMaxAbs,
   prepareHistogram,
+  buildPredKey,
 };

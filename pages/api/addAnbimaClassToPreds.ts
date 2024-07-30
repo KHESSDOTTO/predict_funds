@@ -1,7 +1,5 @@
 import { connect } from "@/database/database.config";
-import Predictions4Weeks1Model from "@/database/models/predictions4WeeksModel1";
-import Predictions4Weeks2Model from "@/database/models/predictions4WeeksModel2";
-import Predictions4Weeks3Model from "@/database/models/predictions4WeeksModel3";
+import PredictionsModel from "@/database/models/predictionsModel";
 import { NextApiRequest, NextApiResponse } from "next";
 
 // NECESSÁRIO DEFINIR QUAL(IS) MODELO/COLLECTION SERÁ ATUALIZADO
@@ -12,7 +10,7 @@ export default async function AddAnbimaClassToPreds(
 ) {
   try {
     await connect();
-    let entries = await Predictions4Weeks1Model.aggregate([
+    let entries = await PredictionsModel.aggregate([
       {
         $lookup: {
           from: "cadastro_fundos",
@@ -35,67 +33,7 @@ export default async function AddAnbimaClassToPreds(
     // Ensuring all updates complete before responding
     await Promise.all(
       entries.map((doc) =>
-        Predictions4Weeks1Model.updateOne(
-          { _id: doc._id },
-          { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
-        )
-      )
-    );
-
-    entries = await Predictions4Weeks2Model.aggregate([
-      {
-        $lookup: {
-          from: "cadastro_fundos",
-          localField: "CNPJ_FUNDO",
-          foreignField: "CNPJ_FUNDO",
-          as: "fundosDetails",
-        },
-      },
-      {
-        $unwind: "$fundosDetails",
-      },
-      {
-        $project: {
-          _id: 1,
-          CLASSE_ANBIMA: "$fundosDetails.CLASSE_ANBIMA",
-        },
-      },
-    ]);
-
-    // Ensuring all updates complete before responding
-    await Promise.all(
-      entries.map((doc) =>
-        Predictions4Weeks2Model.updateOne(
-          { _id: doc._id },
-          { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
-        )
-      )
-    );
-
-    entries = await Predictions4Weeks3Model.aggregate([
-      {
-        $lookup: {
-          from: "cadastro_fundos",
-          localField: "CNPJ_FUNDO",
-          foreignField: "CNPJ_FUNDO",
-          as: "fundosDetails",
-        },
-      },
-      {
-        $unwind: "$fundosDetails",
-      },
-      {
-        $project: {
-          _id: 1,
-          CLASSE_ANBIMA: "$fundosDetails.CLASSE_ANBIMA",
-        },
-      },
-    ]);
-
-    // Ensuring all updates complete before responding
-    await Promise.all(
-      entries.map((doc) =>
-        Predictions4Weeks3Model.updateOne(
+        PredictionsModel.updateOne(
           { _id: doc._id },
           { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
         )
