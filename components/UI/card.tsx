@@ -3,8 +3,10 @@ import Image from "next/image";
 import { getToneColor } from "@/functions/functions";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 
-export default function Card({ title, imgSrc, nameValsArr }: CardPropsType) {
+export default function Card({ title, imgSrc, correlVal }: CardPropsType) {
   const withImg = imgSrc;
+
+  const color = getToneColor(Number(correlVal), toneColorsMapTxtRG, 1);
 
   return (
     <article className="w-full rounded-lg border border-white py-6 px-8 flex flex-col justify-between gap-6 items-center lg:min-w-80">
@@ -17,24 +19,15 @@ export default function Card({ title, imgSrc, nameValsArr }: CardPropsType) {
             <Image src={imgSrc} alt="Symbol" width={85} height={85} />
           </div>
         )}
-        {nameValsArr.map((cE) => {
-          const name = cE.name;
-          const value = cE.value;
-          const formattedNum = value.toFixed(2);
-          const color = getToneColor(value, toneColorsMapTxtRG, 1);
-          const numClass = `relative right-2 mb-1 text-[24px]`;
-          return (
-            <div
-              key={cE.name}
-              className="flex flex-col w-full px-10 py-4 border border-gray-500 border-r-white border-l-8 border-l-blue-custom-light rounded-lg box-shadow-no-offset-white gap-2"
-            >
-              <div className="relative right-2 text-[0.9em]">{name}</div>
-              <div className={numClass} style={{ color: color }}>
-                {formattedNum}
-              </div>
-            </div>
-          );
-        })}
+        <div className="flex flex-col w-full px-10 py-4 border border-gray-500 border-r-white border-l-8 border-l-blue-custom-light rounded-lg box-shadow-no-offset-white gap-2">
+          <div className="relative right-2 text-[0.9em]">Correl.</div>
+          <div
+            className="relative right-2 mb-1 text-[24px]"
+            style={{ color: color }}
+          >
+            {Number(correlVal).toFixed(2)}
+          </div>
+        </div>
       </div>
     </article>
   );

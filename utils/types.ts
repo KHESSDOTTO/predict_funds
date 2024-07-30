@@ -135,15 +135,10 @@ interface CenarioType {
   predictionData: PredictionsType[];
 }
 
-interface NameValType {
-  name: string;
-  value: any;
-}
-
 interface CardPropsType {
   title: string;
   imgSrc: string;
-  nameValsArr: NameValType[];
+  correlVal: number;
 }
 
 interface ToneColorsInterface {
@@ -183,7 +178,6 @@ export type {
   CadastroFundosType,
   RawHistogramData,
   FinalHistogramData,
-  NameValType,
   CardPropsType,
   ToneColorsInterface,
   CustomTooltipProps,

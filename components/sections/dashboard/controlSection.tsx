@@ -28,6 +28,7 @@ interface ControlSectionProps {
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
   setHistogram: Dispatch<SetStateAction<any>>;
+  setCorrels: Dispatch<SetStateAction<any>>;
   ancoras: string[] | null;
 }
 
@@ -42,6 +43,7 @@ export default function ControlSection({
   setRegistration,
   setLoadingHistogram,
   setHistogram,
+  setCorrels,
   ancoras,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
@@ -146,8 +148,6 @@ export default function ControlSection({
           ...controlForm,
           anbimaClass: registration.data["CLASSE_ANBIMA"],
         });
-        // console.log("controlForm");
-        // console.log(controlForm);
         return registration.data;
       }
     } catch (err) {
@@ -180,6 +180,24 @@ export default function ControlSection({
     }
     setLoadingHistogram(false);
     return;
+  }
+
+  async function getCorrelArr(cnpj: string) {
+    const encodedCnpj = encodeURIComponent(cnpj);
+    try {
+      const response = await ax.get(
+        `/correlations/getByCnpj?cnpj=${encodedCnpj}`
+      );
+
+      if (response) {
+        setCorrels(response.data);
+      }
+
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 
   // Updates the controlForm with the logged in users CNPJ, initially.
@@ -241,9 +259,10 @@ export default function ControlSection({
     return;
   }, [user]);
 
-  // Get Histogram
+  // Get Histogram and correlations
   useEffect(() => {
     getHistogram(controlForm);
+    getCorrelArr(controlForm.buscaCnpj);
   }, [registration]);
 
   function handleControlFormChange(

@@ -43,7 +43,9 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       weeksBack: 8,
       weeksForward: 4,
       anbimaClass: "",
-    });
+    }),
+    [correls, setCorrels] = useState<any>(false);
+
   const controlSectionProps = {
     setHistoricData: setHistoricData,
     setPredictionData: setPredictionData,
@@ -55,6 +57,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     setRegistration: setRegistration,
     setLoadingHistogram: setLoadingHistogram,
     setHistogram: setHistogram,
+    setCorrels: setCorrels,
     ancoras: ancoras,
   };
 
@@ -84,7 +87,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
         histogram={histogram}
         loadingHistogram={loadingHistogram}
       />
-      <CorrelCardsSection padding="20" gap="8" correlArr={correlArr} />
+      <CorrelCardsSection padding="20" gap="8" correls={correls} />
       <HeatMap
         title="Heat Map - Correlations"
         correlAssocArr={correlAssocArr}

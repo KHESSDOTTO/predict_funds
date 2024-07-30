@@ -13,18 +13,16 @@ async function GetPredictionsWithBaseDate(
   try {
     await connect();
     const predictions4Weeks = await getPredictions(req.body);
-    // await disconnect();
+
     if (!predictions4Weeks) {
       return res
         .status(500)
         .send("No predictions were found for this CNPJ on this baseDate.");
     }
-    // console.log("predictions4Weeks:");
-    // console.log(predictions4Weeks);
+
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);
-    // await disconnect();
     return res.status(500).json({ error: err });
   }
 }
