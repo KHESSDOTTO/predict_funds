@@ -27,8 +27,8 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
   const rowsMobile: string[] = colsDesk;
 
   return (
-    <>
-      <h2 className={`${titleClass} text-xl font-semibold my-4`}>{title}</h2>
+    <div className="mt-12 mb-6 w-screen">
+      <h2 className={`${titleClass} text-xl font-semibold`}>{title}</h2>
 
       {/* Desk */}
       <div className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto">
@@ -119,6 +119,6 @@ export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
         </table>
       </div>
       {/* End Mobile */}
-    </>
+    </div>
   );
 }
