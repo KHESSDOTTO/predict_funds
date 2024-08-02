@@ -20,8 +20,6 @@ function getToneColor(
   toneColors: ToneColorsInterface,
   opacity: number | string
 ) {
-  console.log("value getToneColor");
-  console.log(value);
   const key = value.toFixed(1);
   const original = toneColors[key];
   const start = original.slice(0, -2);

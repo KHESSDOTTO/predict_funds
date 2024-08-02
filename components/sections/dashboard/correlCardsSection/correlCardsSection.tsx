@@ -15,31 +15,46 @@ SwiperCore.use([Navigation]);
 
 interface CorrelCardsSectionProps {
   padding: string;
-  gap: string;
   correls: any[];
 }
 
 export default function CorrelCardsSection({
   padding,
-  gap,
   correls,
 }: CorrelCardsSectionProps) {
   const h2Class =
     "mt-4 text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left";
   const tippyContent =
-    "This section refers to the correlation between the returns on the benchmarks, given the same initial investment over the course of 12 months.";
+    "This section refers to the correlation between the returns on the benchmarks, given the same initial investment over the course of 6 or 12 months, as choosen below.";
 
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
-  const [selCorrels, setSelCorrels] = useState([]);
+  const [selCorrels, setSelCorrels] = useState<any>([]);
+  const [numMonths, setNumMonths] = useState(6);
+
+  function handleNumMonthsChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setNumMonths(Number(e.target.value));
+  }
 
   useEffect(() => {
     if (correls) {
-      setSelCorrels(correls[0]);
-      setIsLoadingCorrels(false);
+      const newSelCorrel = correls.filter((cE) => {
+        let result = false;
+        cE.forEach((cE2: any[]) => {
+          if (cE2[0] === "janela_em_meses" && Number(cE2[1]) === numMonths) {
+            result = true;
+          }
+        });
+        return result;
+      });
+
+      if (newSelCorrel.length === 1) {
+        setSelCorrels(newSelCorrel[0]);
+        setIsLoadingCorrels(false);
+      }
     } else {
       setIsLoadingCorrels(true);
     }
-  }, [correls]);
+  }, [correls, numMonths]);
 
   // Definindo classes CSS para o contêiner superior
   const topWrapperClass = `w-full flex justify-center items-center py-8 px-4`;
@@ -77,6 +92,8 @@ export default function CorrelCardsSection({
                 name="monthsCorrel"
                 id="monthsCorrel6"
                 value={6}
+                onChange={handleNumMonthsChange}
+                checked={numMonths === 6}
               />
               <label htmlFor="monthsCorrel6">
                 6 <span className="text-sm"> months</span>
@@ -88,6 +105,8 @@ export default function CorrelCardsSection({
                 name="monthsCorrel"
                 id="monthsCorrel12"
                 value={12}
+                onChange={handleNumMonthsChange}
+                checked={numMonths === 12}
               />
               <label>
                 12 <span className="text-sm"> months</span>
@@ -96,15 +115,17 @@ export default function CorrelCardsSection({
           </form>
         </div>
         {isLoadingCorrels && (
-          <ClipLoader
-            color={"white"}
-            loading={isLoadingCorrels}
-            size={50}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-            className="my-4"
-            speedMultiplier={0.75}
-          />
+          <div className="flex justify-center items-center">
+            <ClipLoader
+              color={"white"}
+              loading={isLoadingCorrels}
+              size={50}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+              className="my-4"
+              speedMultiplier={0.75}
+            />
+          </div>
         )}
         {!isLoadingCorrels && (
           <>
@@ -149,7 +170,7 @@ export default function CorrelCardsSection({
                 };
 
                 if (hiddenFields.includes(cE[0])) {
-                  return null;
+                  return <></>;
                 }
 
                 return (

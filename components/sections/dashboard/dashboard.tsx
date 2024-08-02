@@ -86,7 +86,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
         histogram={histogram}
         loadingHistogram={loadingHistogram}
       />
-      <CorrelCardsSection padding="20" gap="8" correls={correls} />
+      <CorrelCardsSection padding="20" correls={correls} />
       <HeatMap
         title="Heat Map - Correlations"
         correlAssocArr={correlAssocArr}
