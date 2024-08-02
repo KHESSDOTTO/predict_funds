@@ -1,16 +1,28 @@
 import CorrelationsModel from "../models/correlationsModel";
 
-async function getLastCorrelationsByCnpj(cnpj: string) {
+async function getMostRecentCorrelsByCnpj(cnpj: string) {
   try {
-    const correlations = await CorrelationsModel.find({
+    const correl6months = await CorrelationsModel.findOne({
       CNPJ_FUNDO: cnpj,
-    });
+      janela_em_meses: 6,
+    })
+      .sort({ data_calc_correlacao: -1 })
+      .exec();
 
-    return correlations;
+    const correl12months = await CorrelationsModel.findOne({
+      CNPJ_FUNDO: cnpj,
+      janela_em_meses: 12,
+    })
+      .sort({ data_calc_correlacao: -1 })
+      .exec();
+
+    const mostRecentCorrelations = [correl6months, correl12months];
+
+    return mostRecentCorrelations;
   } catch (err) {
     console.log(err);
-    return false;
+    return [];
   }
 }
 
-export { getLastCorrelationsByCnpj };
+export { getMostRecentCorrelsByCnpj };
