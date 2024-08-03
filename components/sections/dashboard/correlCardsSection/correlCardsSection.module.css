@@ -13,11 +13,11 @@
 
 @media (max-width: 992px) {
   .swiperButtonNext {
-    right: 15px;
+    right: 7px;
   }
 
   .swiperButtonPrev {
-    left: 15px;
+    left: 7px;
   }
 }
 
