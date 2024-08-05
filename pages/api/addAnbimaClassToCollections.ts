@@ -24,6 +24,7 @@ export default async function AddAnbimaClassToPreds(
       {
         $project: {
           _id: 1,
+          CNPJ_FUNDO: 1,
           CLASSE_ANBIMA: "$fundosDetails.CLASSE_ANBIMA",
         },
       },

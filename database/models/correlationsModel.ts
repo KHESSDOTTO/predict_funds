@@ -22,6 +22,11 @@ const CorrelationSchema = new Schema({
     required: true,
     unique: false,
   },
+  CLASSE_ANBIMA: {
+    type: String,
+    required: true,
+    unique: false,
+  },
 });
 
 const CorrelationsModel =
