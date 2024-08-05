@@ -100,8 +100,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     }
     const loading = toast.loading("Updating...");
     try {
-      const updUser = await ax.post(`/user/edit/${user._id}`, formData);
-      console.log(updUser);
+      await ax.post(`/user/edit/${user._id}`, formData);
       toast.success("Informations updated!");
     } catch (err) {
       console.log(err);

@@ -43,7 +43,8 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       weeksForward: 4,
       anbimaClass: "",
     }),
-    [correls, setCorrels] = useState<any>(false);
+    [correls, setCorrels] = useState<any>(false),
+    [heatMapArr, setHeatMapArr] = useState<any>(false);
 
   const controlSectionProps = {
     setHistoricData: setHistoricData,
@@ -57,6 +58,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     setLoadingHistogram: setLoadingHistogram,
     setHistogram: setHistogram,
     setCorrels: setCorrels,
+    setHeatMapArr: setHeatMapArr,
     ancoras: ancoras,
   };
 

@@ -23,15 +23,9 @@ async function getMostRecentCorrelsByCnpj(cnpj: string) {
   }
 }
 
-interface AverageFields {
-  [field: string]: number;
-}
-
 async function getAvgMostRecentCorrelsByAnbimaClass(
   anbimaClass: string
 ): Promise<any[]> {
-  console.log("anbimaClass");
-  console.log(anbimaClass);
   try {
     const correlPeriods = [6, 12];
     const nonCalculatingFields = [
@@ -46,7 +40,6 @@ async function getAvgMostRecentCorrelsByAnbimaClass(
     const results: any[] = [];
 
     for (const correlPeriod of correlPeriods) {
-      // Find the most recent correlation for the given period
       const lastCorrel = await CorrelationsModel.findOne(
         {
           CLASSE_ANBIMA: anbimaClass,
@@ -60,9 +53,6 @@ async function getAvgMostRecentCorrelsByAnbimaClass(
       )
         .sort({ data_calc_correlacao: -1 })
         .exec();
-
-      console.log("lastCorrel");
-      console.log(lastCorrel);
 
       if (!lastCorrel) continue; // Skip if no correlation found
 

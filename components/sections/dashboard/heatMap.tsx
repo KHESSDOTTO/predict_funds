@@ -11,6 +11,9 @@ export interface HeatMapPropsType {
 }
 
 export default function HeatMap({ title, correlAssocArr }: HeatMapPropsType) {
+  console.log("correlAssocArr");
+  console.log(correlAssocArr);
+
   const titleClass: string = "text-center mb-4",
     tableClass: string = "text-center border border-gray-500 rounded-lg w-full";
 

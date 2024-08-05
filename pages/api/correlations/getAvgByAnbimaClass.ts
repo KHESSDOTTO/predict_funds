@@ -17,27 +17,28 @@ async function GetMostRecentCorrelsByAnbimaClass(
 
   try {
     await connect();
-    const cnpj = req.query.cnpj;
-    const cnpjCorrect = cnpj && typeof cnpj === "string";
+    const anbimaClass = req.query.anbimaClass;
+    const anbimaClassCorrect = anbimaClass && typeof anbimaClass === "string";
 
-    if (!cnpjCorrect) {
+    if (!anbimaClassCorrect) {
       return res.status(400).json({
         error:
-          "Invalid CNPJ format. CNPJ should be present in the query and should be a string",
+          "Invalid anbimaClass format. anbimaClass should be present in the query and should be a string",
       });
     }
 
-    const mostRecentCorrels = await getAvgMostRecentCorrelsByAnbimaClass(cnpj);
+    const mostRecentCorrels = await getAvgMostRecentCorrelsByAnbimaClass(
+      anbimaClass
+    );
 
-    // let adjustCorrels: Array<[string, any]>[] = mostRecentCorrels;
-    // if (mostRecentCorrels) {
-    //   adjustCorrels = mostRecentCorrels.map((cE: CorrelDoc) =>
-    //     Object.entries(cE._doc)
-    //   );
-    // }
+    let adjustCorrels: Array<[string, any]>[] = mostRecentCorrels;
+    if (mostRecentCorrels) {
+      adjustCorrels = mostRecentCorrels.map((cE: CorrelDoc) =>
+        Object.entries(cE)
+      );
+    }
 
-    // return res.status(200).json(adjustCorrels);
-    return res.status(200).json(mostRecentCorrels);
+    return res.status(200).json(adjustCorrels);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });

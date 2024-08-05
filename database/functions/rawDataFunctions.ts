@@ -3,8 +3,8 @@ import { addHours } from "date-fns";
 
 async function GetAllRawDataFromCnpj(cnpj: string, baseDate: string) {
   try {
-    console.log("baseDate");
-    console.log(baseDate);
+    // console.log("baseDate");
+    // console.log(baseDate);
     const allRawData = await RawDataModel.find({
       CNPJ_FUNDO: cnpj,
       DT_COMPTC: { $lte: new Date(baseDate) },
@@ -16,8 +16,8 @@ async function GetAllRawDataFromCnpj(cnpj: string, baseDate: string) {
       return cE;
     });
 
-    console.log("lastPred");
-    console.log(finalResult.findLast(() => true));
+    // console.log("lastPred");
+    // console.log(finalResult.findLast(() => true));
 
     return finalResult;
   } catch (err) {
