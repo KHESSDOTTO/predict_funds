@@ -29,6 +29,7 @@ interface ControlSectionProps {
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
   setHistogram: Dispatch<SetStateAction<any>>;
   setCorrels: Dispatch<SetStateAction<any>>;
+  setHeatMapArr: Dispatch<SetStateAction<any>>;
   ancoras: string[] | null;
 }
 
@@ -44,6 +45,7 @@ export default function ControlSection({
   setLoadingHistogram,
   setHistogram,
   setCorrels,
+  setHeatMapArr,
   ancoras,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
@@ -182,18 +184,41 @@ export default function ControlSection({
     return;
   }
 
-  async function getCorrelArr(cnpj: string) {
+  async function getCorrels(cnpj: string, anbimaClass: string) {
     const encodedCnpj = encodeURIComponent(cnpj);
+    const encodedAnbimaClass = encodeURIComponent(anbimaClass);
     try {
-      const response = await ax.get(
+      const resCnpj = await ax.get(
         `/correlations/getByCnpj?cnpj=${encodedCnpj}`
       );
 
-      if (response) {
-        setCorrels(response.data);
+      console.log("resCnpj");
+      console.log(resCnpj);
+
+      let adjustCorrelCnpj;
+      if (resCnpj) {
+        adjustCorrelCnpj = resCnpj.data.map((cE: any) => Object.entries(cE));
       }
 
-      return response.data;
+      if (resCnpj) {
+        setCorrels(adjustCorrelCnpj);
+      }
+
+      const resAvgAnbimaClass = await ax.get(
+        `/correlations/getAvgByAnbimaClass?anbimaClass=${encodedAnbimaClass}`
+      );
+
+      if (resCnpj && resAvgAnbimaClass) {
+        const newHeatMapArr = {
+          fund: resCnpj.data,
+          avg: resAvgAnbimaClass.data,
+        };
+        console.log("NewHeatMap Arr");
+        console.log(newHeatMapArr);
+        setHeatMapArr(newHeatMapArr);
+      }
+
+      return true;
     } catch (err) {
       console.log(err);
       return false;
@@ -262,15 +287,13 @@ export default function ControlSection({
   // Get Histogram and correlations
   useEffect(() => {
     getHistogram(controlForm);
-    getCorrelArr(controlForm.buscaCnpj);
+    getCorrels(controlForm.buscaCnpj, controlForm.anbimaClass);
   }, [registration]);
 
   function handleControlFormChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
-    console.log("controlForm");
-    console.log(controlForm);
     setControlForm((prevForm) => ({ ...controlForm, [e.target.name]: newVal }));
     return;
   }

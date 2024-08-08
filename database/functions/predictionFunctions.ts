@@ -1,7 +1,4 @@
 import PredictionsModel from "@/database/models/predictionsModel";
-import Predictions4Weeks1Model from "../models/predictions4WeeksModel1";
-import Predictions4Weeks2Model from "../models/predictions4WeeksModel2";
-import Predictions4Weeks3Model from "../models/predictions4WeeksModel3";
 import { DashboardControlFormType, PredictionsType } from "@/utils/types";
 import { arrBaseDates } from "@/utils/globalVars";
 import CadastroFundosModel from "../models/cadastroFundosModel";
@@ -13,59 +10,17 @@ async function getPredictions(controlForm: DashboardControlFormType) {
 
   try {
     let prediction4weeks: PredictionsType | null = null;
-    switch (baseDate) {
-      case arrBaseDates[0]:
-        prediction4weeks = await Predictions4Weeks1Model.findOne(
-          {
-            CNPJ_FUNDO: buscaCnpj,
-          },
-          {
-            _id: 0,
-            CNPJ_FUNDO: 1,
-            CLASSE_ANBIMA: 1,
-            [predKey]: 1,
-          }
-        );
-        break;
-      case arrBaseDates[1]:
-        prediction4weeks = await Predictions4Weeks2Model.findOne(
-          {
-            CNPJ_FUNDO: buscaCnpj,
-          },
-          {
-            _id: 0,
-            CNPJ_FUNDO: 1,
-            CLASSE_ANBIMA: 1,
-            [predKey]: 1,
-          }
-        );
-        break;
-      case arrBaseDates[2]:
-        prediction4weeks = await Predictions4Weeks3Model.findOne(
-          {
-            CNPJ_FUNDO: buscaCnpj,
-          },
-          {
-            _id: 0,
-            CNPJ_FUNDO: 1,
-            CLASSE_ANBIMA: 1,
-            [predKey]: 1,
-          }
-        );
-        break;
-      default:
-        prediction4weeks = await PredictionsModel.findOne(
-          {
-            CNPJ_FUNDO: buscaCnpj,
-          },
-          {
-            _id: 0,
-            CNPJ_FUNDO: 1,
-            CLASSE_ANBIMA: 1,
-            [predKey]: 1,
-          }
-        );
-    }
+    prediction4weeks = await PredictionsModel.findOne(
+      {
+        CNPJ_FUNDO: buscaCnpj,
+      },
+      {
+        _id: 0,
+        CNPJ_FUNDO: 1,
+        CLASSE_ANBIMA: 1,
+        [predKey]: 1,
+      }
+    );
 
     let finalPred4weeks = prediction4weeks;
     if (prediction4weeks) {
@@ -135,31 +90,10 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
       [defaultPredKey]: 1,
     };
 
-    switch (baseDate) {
-      case arrBaseDates[0]:
-        prediction4weeks = await Predictions4Weeks1Model.find(
-          { CLASSE_ANBIMA: anbimaClass },
-          projection
-        );
-        break;
-      case arrBaseDates[1]:
-        prediction4weeks = await Predictions4Weeks2Model.find(
-          { CLASSE_ANBIMA: anbimaClass },
-          projection
-        );
-        break;
-      case arrBaseDates[2]:
-        prediction4weeks = await Predictions4Weeks3Model.find(
-          { CLASSE_ANBIMA: anbimaClass },
-          projection
-        );
-        break;
-      default:
-        prediction4weeks = await PredictionsModel.find(
-          { CLASSE_ANBIMA: anbimaClass },
-          projection
-        );
-    }
+    prediction4weeks = await PredictionsModel.find(
+      { CLASSE_ANBIMA: anbimaClass },
+      projection
+    );
 
     if (!prediction4weeks) {
       return false;

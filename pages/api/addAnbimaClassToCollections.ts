@@ -1,8 +1,6 @@
-import { connect } from "@/database/database.config";
-import PredictionsModel from "@/database/models/predictionsModel";
 import { NextApiRequest, NextApiResponse } from "next";
-
-// NECESSÁRIO DEFINIR QUAL(IS) MODELO/COLLECTION SERÁ ATUALIZADO
+import { connect } from "@/database/database.config";
+import CorrelationsModel from "@/database/models/correlationsModel";
 
 export default async function AddAnbimaClassToPreds(
   req: NextApiRequest,
@@ -10,7 +8,8 @@ export default async function AddAnbimaClassToPreds(
 ) {
   try {
     await connect();
-    let entries = await PredictionsModel.aggregate([
+
+    const entries = await CorrelationsModel.aggregate([
       {
         $lookup: {
           from: "cadastro_fundos",
@@ -25,24 +24,32 @@ export default async function AddAnbimaClassToPreds(
       {
         $project: {
           _id: 1,
+          CNPJ_FUNDO: 1,
           CLASSE_ANBIMA: "$fundosDetails.CLASSE_ANBIMA",
         },
       },
     ]);
 
-    // Ensuring all updates complete before responding
+    if (entries.length === 0) {
+      return res.status(404).json({ status: 404, message: "No entries found" });
+    }
+
     await Promise.all(
       entries.map((doc) =>
-        PredictionsModel.updateOne(
+        CorrelationsModel.updateOne(
           { _id: doc._id },
           { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
         )
       )
     );
 
-    return res.status(200).json({ status: 200, message: "Updated!" });
+    return res
+      .status(200)
+      .json({ status: 200, message: "Updated successfully!" });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ status: 500, message: err });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal Server Error" });
   }
 }

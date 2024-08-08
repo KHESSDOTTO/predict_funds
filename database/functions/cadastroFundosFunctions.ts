@@ -12,4 +12,27 @@ async function getCadastroByCnpj(cnpj: string) {
   }
 }
 
-export { getCadastroByCnpj };
+async function getAnbimaClassByCnpj(cnpj: string) {
+  try {
+    const anbimaClass = await CadastroFundosModel.findOne(
+      {
+        CNPJ_FUNDO: cnpj,
+      },
+      {
+        CLASSE_ANBIMA: 1,
+        _id: 0,
+      }
+    );
+
+    if (!anbimaClass) {
+      return false;
+    }
+
+    return anbimaClass.CLASSE_ANBIMA;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export { getCadastroByCnpj, getAnbimaClassByCnpj };
