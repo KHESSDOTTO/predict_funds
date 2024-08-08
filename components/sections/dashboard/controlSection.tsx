@@ -15,7 +15,6 @@ import type {
   CadastroFundosType,
   DashboardControlFormType,
   PredictionsType,
-  CorrelDoc,
 } from "@/utils/types";
 
 interface ControlSectionProps {
