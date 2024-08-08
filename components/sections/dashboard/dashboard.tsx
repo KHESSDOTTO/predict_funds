@@ -77,13 +77,13 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
 
   return (
     <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <div className="mt-12">
+      <div className="mt-6 lg:mt-12">
         <ControlSection {...controlSectionProps} />
       </div>
-      <div className="mt-12 w-screen">
+      <div className="mt-10 w-screen">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="mt-12 lg:mt-16 w-screen">
+      <div className="mt-10 lg:mt-16 w-screen">
         <ChartSection
           data={historicData}
           smallV={false}
@@ -92,13 +92,13 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
           loadingHistogram={loadingHistogram}
         />
       </div>
-      <div className="mt-12 lg:mt-16 w-screen">
+      <div className="mt-6 lg:mt-16 w-screen">
         <CorrelCardsSection padding="20" correls={correls} />
       </div>
-      <div className="mt-12 lg:mt-16 w-screen">
+      <div className="mt-10 lg:mt-16 w-screen">
         <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />
       </div>
-      <div className="w-screen mt-6 lg:my-12">
+      <div className="w-screen mt-6 lg:mt-10 flex justify-center">
         <CenariosBtnSection saveCenario={saveCenario} />
       </div>
     </main>

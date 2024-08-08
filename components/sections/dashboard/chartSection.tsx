@@ -177,7 +177,7 @@ export default function ChartSection({
           Net Funding
         </h1>
         <div
-          className={`flex flex-col gap-8 lg:gap-4 lg:flex-row ${
+          className={`flex flex-col gap-4 lg:flex-row ${
             smallV ? "" : "lg:mx-6 lg:mt-6"
           }`}
         >
@@ -293,7 +293,7 @@ export default function ChartSection({
         >
           Histogram (Market - same ANBIMA Class)
         </h1>
-        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row">
           <div
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
@@ -361,7 +361,7 @@ export default function ChartSection({
           </span>
         </h1>
         <div
-          className={`flex flex-col gap-8 lg:gap-4 lg:flex-row ${
+          className={`flex flex-col gap-4 lg:flex-row ${
             smallV ? "" : "lg:mx-6 lg:mt-6"
           }`}
         >

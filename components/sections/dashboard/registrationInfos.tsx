@@ -90,7 +90,7 @@ export default function RegistrationInfos({
       id="registrationInfos"
       className="text-white flex flex-col items-center w-full lg:items-start"
     >
-      <h1 className="text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left lg:w-[97.5vw]">
+      <h1 className="text-lg mx-[16vw] text-white/90 mb-4 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left lg:w-[97.5vw]">
         Fund Infos.
       </h1>
       {!isLoading && registration ? (
