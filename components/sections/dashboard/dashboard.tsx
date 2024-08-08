@@ -92,13 +92,13 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
           loadingHistogram={loadingHistogram}
         />
       </div>
-      <div className="mt-6 lg:mt-16 w-screen">
+      <div className="mt-10 lg:mt-16 w-screen">
         <CorrelCardsSection padding="20" correls={correls} />
       </div>
-      <div className="mt-10 lg:mt-16 w-screen">
+      <div className="mt-12 lg:mt-16 w-screen">
         <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />
       </div>
-      <div className="w-screen mt-6 lg:mt-10 flex justify-center">
+      <div className="w-screen mt-8 lg:mt-10 flex justify-center">
         <CenariosBtnSection saveCenario={saveCenario} />
       </div>
     </main>
