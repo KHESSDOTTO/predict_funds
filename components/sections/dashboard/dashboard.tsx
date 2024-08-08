@@ -12,8 +12,7 @@ import ChartSection from "./chartSection";
 import { UserContext } from "@/contexts/UserContext";
 import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection/correlCardsSection";
-import HeatMap from "./heatMap";
-import { correlAssocArr } from "@/dummy-vars-tests/correlAssocArr";
+import HeatMap, { HeatMapObjType } from "./heatMap";
 import CenariosBtnSection from "./cenariosBtnSection";
 
 interface DashboardProps {
@@ -44,7 +43,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       anbimaClass: "",
     }),
     [correls, setCorrels] = useState<any>(false),
-    [heatMapArr, setHeatMapArr] = useState<any>(false);
+    [heatMapArr, setHeatMapArr] = useState<HeatMapObjType | false>(false);
 
   const controlSectionProps = {
     setHistoricData: setHistoricData,
@@ -77,23 +76,31 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
   }
 
   return (
-    <section className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <ControlSection {...controlSectionProps} />
-      <RegistrationInfos isLoading={isLoading} registration={registration} />
-      <div className="lg:mb-8"></div>
-      <ChartSection
-        data={historicData}
-        smallV={false}
-        predictions={predictionData}
-        histogram={histogram}
-        loadingHistogram={loadingHistogram}
-      />
-      <CorrelCardsSection padding="20" correls={correls} />
-      <HeatMap
-        title="Heat Map - Correlations"
-        correlAssocArr={correlAssocArr}
-      />
-      <CenariosBtnSection saveCenario={saveCenario} />
-    </section>
+    <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
+      <div className="mt-12">
+        <ControlSection {...controlSectionProps} />
+      </div>
+      <div className="mt-12 w-screen">
+        <RegistrationInfos isLoading={isLoading} registration={registration} />
+      </div>
+      <div className="mt-12 lg:mt-16 w-screen">
+        <ChartSection
+          data={historicData}
+          smallV={false}
+          predictions={predictionData}
+          histogram={histogram}
+          loadingHistogram={loadingHistogram}
+        />
+      </div>
+      <div className="mt-12 lg:mt-16 w-screen">
+        <CorrelCardsSection padding="20" correls={correls} />
+      </div>
+      <div className="mt-12 lg:mt-16 w-screen">
+        <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />
+      </div>
+      <div className="w-screen mt-6 lg:my-12">
+        <CenariosBtnSection saveCenario={saveCenario} />
+      </div>
+    </main>
   );
 }

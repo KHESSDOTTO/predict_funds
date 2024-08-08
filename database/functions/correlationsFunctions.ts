@@ -6,10 +6,18 @@ async function getMostRecentCorrelsByCnpj(cnpj: string) {
 
   try {
     for (const correlPeriod of correlPeriods) {
-      const lastCorrels = await CorrelationsModel.findOne({
-        CNPJ_FUNDO: cnpj,
-        janela_em_meses: correlPeriod,
-      })
+      const lastCorrels = await CorrelationsModel.findOne(
+        {
+          CNPJ_FUNDO: cnpj,
+          janela_em_meses: correlPeriod,
+        },
+        {
+          _id: 0,
+          CNPJ_FUNDO: 0,
+          ancora: 0,
+          data_calc_correlacao: 0,
+        }
+      )
         .sort({ data_calc_correlacao: -1 })
         .exec();
 
@@ -75,6 +83,9 @@ async function getAvgMostRecentCorrelsByAnbimaClass(
           data_calc_correlacao: 0,
         }
       ).exec();
+
+      console.log("correls");
+      console.log(correls);
 
       const averages: { [field: string]: any } = {};
 

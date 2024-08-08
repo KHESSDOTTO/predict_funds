@@ -2,11 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import { getMostRecentCorrelsByCnpj } from "@/database/functions/correlationsFunctions";
 
-interface CorrelDoc {
-  _doc: any[];
-  [key: string]: any;
-}
-
 async function GetMostRecentCorrelsByCnpj(
   req: NextApiRequest,
   res: NextApiResponse
@@ -29,14 +24,7 @@ async function GetMostRecentCorrelsByCnpj(
 
     const mostRecentCorrels = await getMostRecentCorrelsByCnpj(cnpj);
 
-    let adjustCorrels: Array<[string, any]>[] = mostRecentCorrels;
-    if (mostRecentCorrels) {
-      adjustCorrels = mostRecentCorrels.map((cE: CorrelDoc) =>
-        Object.entries(cE._doc)
-      );
-    }
-
-    return res.status(200).json(adjustCorrels);
+    return res.status(200).json(mostRecentCorrels);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });

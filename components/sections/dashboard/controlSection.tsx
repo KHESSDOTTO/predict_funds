@@ -15,6 +15,7 @@ import type {
   CadastroFundosType,
   DashboardControlFormType,
   PredictionsType,
+  CorrelDoc,
 } from "@/utils/types";
 
 interface ControlSectionProps {
@@ -192,8 +193,16 @@ export default function ControlSection({
         `/correlations/getByCnpj?cnpj=${encodedCnpj}`
       );
 
+      console.log("resCnpj");
+      console.log(resCnpj);
+
+      let adjustCorrelCnpj;
       if (resCnpj) {
-        setCorrels(resCnpj.data);
+        adjustCorrelCnpj = resCnpj.data.map((cE: any) => Object.entries(cE));
+      }
+
+      if (resCnpj) {
+        setCorrels(adjustCorrelCnpj);
       }
 
       const resAvgAnbimaClass = await ax.get(

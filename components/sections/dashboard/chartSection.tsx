@@ -160,12 +160,12 @@ export default function ChartSection({
       className={`${
         smallV
           ? "w-full flex gap-0 flex-wrap flex-col lg:gap-2 lg:flex-row"
-          : "w-screen"
+          : "w-full flex flex-col justify-center items-center gap-8 lg:gap-10"
       } text-white`}
     >
       <div
         id="NetFundingDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "py-4"}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "w-full"}`}
       >
         <h1
           className={`my-4 ${
@@ -176,7 +176,11 @@ export default function ChartSection({
         >
           Net Funding
         </h1>
-        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
+        <div
+          className={`flex flex-col gap-8 lg:gap-4 lg:flex-row ${
+            smallV ? "" : "lg:mx-6 lg:mt-6"
+          }`}
+        >
           <div
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
@@ -278,7 +282,7 @@ export default function ChartSection({
 
       <div
         id="HistogramDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-4"}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-4 w-full"}`}
       >
         <h1
           className={`my-4 ${
@@ -341,7 +345,7 @@ export default function ChartSection({
 
       <div
         id="ValueQuotaDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 lg:py-4"}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 w-full"}`}
       >
         <h1
           className={`my-4 ${
@@ -356,7 +360,11 @@ export default function ChartSection({
             (historic)
           </span>
         </h1>
-        <div className="flex flex-col gap-8 lg:gap-4 lg:flex-row">
+        <div
+          className={`flex flex-col gap-8 lg:gap-4 lg:flex-row ${
+            smallV ? "" : "lg:mx-6 lg:mt-6"
+          }`}
+        >
           <div
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"

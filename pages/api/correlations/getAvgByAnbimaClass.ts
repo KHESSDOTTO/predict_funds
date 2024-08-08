@@ -31,14 +31,7 @@ async function GetMostRecentCorrelsByAnbimaClass(
       anbimaClass
     );
 
-    let adjustCorrels: Array<[string, any]>[] = mostRecentCorrels;
-    if (mostRecentCorrels) {
-      adjustCorrels = mostRecentCorrels.map((cE: CorrelDoc) =>
-        Object.entries(cE)
-      );
-    }
-
-    return res.status(200).json(adjustCorrels);
+    return res.status(200).json(mostRecentCorrels);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });

@@ -88,9 +88,9 @@ export default function RegistrationInfos({
   return (
     <div
       id="registrationInfos"
-      className="mt-4 text-white flex flex-col items-center w-full lg:items-start"
+      className="text-white flex flex-col items-center w-full lg:items-start"
     >
-      <h1 className="my-4 text-lg mx-[32vw] text-white/90 border-white/90 font-semibold text-center border-b lg:pb-2 lg:indent-4 lg:mx-2 lg:text-left lg:w-[98%]">
+      <h1 className="text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left lg:w-[97.5vw]">
         Fund Infos.
       </h1>
       {!isLoading && registration ? (
