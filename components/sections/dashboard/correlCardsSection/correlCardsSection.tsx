@@ -157,6 +157,7 @@ export default function CorrelCardsSection({
                   "janela_em_meses",
                   "ancora",
                   "data_calc_correlacao",
+                  "CLASSE_ANBIMA",
                 ];
 
                 const props: CardPropsType = {
