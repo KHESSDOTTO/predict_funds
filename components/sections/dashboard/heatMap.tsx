@@ -1,4 +1,4 @@
-import { capitalize, getToneColor, pushIfNew } from "@/functions/functions";
+import { capitalize, getToneColor } from "@/functions/functions";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 import { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
@@ -101,7 +101,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
               onChange={handleNumMonthsChange}
               checked={numMonths === 12}
             />
-            <label>12 cmonths</label>
+            <label htmlFor="monthsCorrel12">12 months</label>
           </div>
         </form>
       </div>
@@ -126,12 +126,9 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
             <table className={`${tableClass}`}>
               <thead className="">
                 <tr className="bg-gray-400 bg-opacity-60 text-white uppercase text-sm leading-normal">
-                  <th></th>
+                  <th className="py-3 px-6 text-center"></th>
                   {tickers.map((ticker) => (
-                    <th
-                      key={ticker}
-                      className="py-3 px-6 text-center overflow-auto w-8"
-                    >
+                    <th key={ticker} className="py-3 px-6 text-center w-1/12">
                       {ticker}
                     </th>
                   ))}
@@ -141,7 +138,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                 {Object.keys(selCorrels).map((key) => {
                   return (
                     <tr className="border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50">
-                      <td className="py-3 px-6 text-lg bg-gray-200 text-black text-center font-bold whitespace-nowrap">
+                      <td className="py-3 px-6 text-lg bg-gray-300 text-black text-center font-bold whitespace-nowrap">
                         {capitalize(key)}
                       </td>
                       {tickers.map((ticker) => {
