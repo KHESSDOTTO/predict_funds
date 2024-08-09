@@ -14,6 +14,7 @@ import type { MouseEventHandler } from "react";
 import type {
   CadastroFundosType,
   DashboardControlFormType,
+  HistoricType,
   PredictionsType,
 } from "@/utils/types";
 
@@ -55,13 +56,13 @@ export default function ControlSection({
   async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
       const responseHistoric = await ax.get(
-        `/rawData/getAllFromCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
+        `/historic/getAllByCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
       let slicedHistoricData: RawDataType[] = [];
 
       if (responseHistoric.data) {
         const adjHistoricData: RawDataType[] = responseHistoric.data.map(
-          (cE: RawDataType) => {
+          (cE: HistoricType) => {
             const convDate = new Date(cE.DT_COMPTC);
             return { ...cE, DT_COMPTC: convDate };
           }
