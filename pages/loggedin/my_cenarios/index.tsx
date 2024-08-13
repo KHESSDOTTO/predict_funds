@@ -146,7 +146,7 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
           return (
             <div
               key={cE.id.toString()}
-              className="border-black rounded-2xl bg-white pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-12 lg:rounded-md"
+              className="border-black rounded-lg bg-white pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-12 lg:rounded-md"
             >
               <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-4 lg:w-11/12">
                 Cenario {cI + 1}
@@ -161,21 +161,21 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
                       Var. Quota:
                       <span className="font-bold">
                         {" "}
-                        {cE.params.varCota * 100}%
+                        {(cE.params.varCota * 100).toFixed(1)}%
                       </span>
                     </li>
                     <li>
                       Var. Sharehold.:
                       <span className="font-bold">
                         {" "}
-                        {cE.params.varCotistas * 100}%
+                        {(cE.params.varCotistas * 100).toFixed(1)}%
                       </span>
                     </li>
                     <li>
                       Var. Net Fund.:
                       <span className="font-bold">
                         {" "}
-                        {cE.params.varNF * 100}%
+                        {(cE.params.varNF * 100).toFixed(1)}%
                       </span>
                     </li>
                     <li>

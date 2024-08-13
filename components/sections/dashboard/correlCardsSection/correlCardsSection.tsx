@@ -106,7 +106,7 @@ export default function CorrelCardsSection({
                 onChange={handleNumMonthsChange}
                 checked={numMonths === 12}
               />
-              <label>12 cmonths</label>
+              <label>12 months</label>
             </div>
           </form>
         </div>

@@ -291,7 +291,7 @@ export default function ChartSection({
               : "text-lg mx-[32vw] text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
         >
-          Histogram (Market - same ANBIMA Class)
+          Preds. Histogram (Market - same ANBIMA Class)
         </h1>
         <div className="flex flex-col gap-6 lg:gap-4 lg:flex-row">
           <div
