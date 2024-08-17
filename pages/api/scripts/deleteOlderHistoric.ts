@@ -38,9 +38,9 @@ export default async function CheckOlderHistoric(
     const totalDocumentsCountBefore =
       await HistoricModel.countDocuments().exec();
 
-    // await HistoricModel.deleteMany({
-    //   datahora_proc_informes: { $lt: lastImportDate },
-    // }).exec();
+    await HistoricModel.deleteMany({
+      datahora_proc_informes: { $lt: lastImportDate },
+    }).exec();
 
     const totalDocumentsCountAfter =
       await HistoricModel.countDocuments().exec();
