@@ -29,8 +29,8 @@ async function getAllHistoricByCnpj(cnpj: string, baseDate: string) {
       return cE;
     });
 
-    console.log("lastPred");
-    console.log(finalResult.findLast(() => true));
+    // console.log("lastPred");
+    // console.log(finalResult.findLast(() => true));
 
     return finalResult;
   } catch (err) {

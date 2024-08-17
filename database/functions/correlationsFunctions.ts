@@ -84,9 +84,6 @@ async function getAvgMostRecentCorrelsByAnbimaClass(
         }
       ).exec();
 
-      console.log("correls");
-      console.log(correls);
-
       const averages: { [field: string]: any } = {};
 
       // Calculate the averages for each field

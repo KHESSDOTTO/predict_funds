@@ -115,21 +115,14 @@ export default function ControlSection({
       const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
 
       while (lastDate < endPredDate) {
-        let newDate = lastDate;
-        const dayOfWeek = getDay(lastDate);
-
-        if (dayOfWeek === 5) {
-          newDate = addDays(lastDate, 3);
-        } else {
-          newDate = addDays(lastDate, 1);
-        }
+        const newDate = addWeeks(lastDate, 1);
 
         finalPredictionData.push({
-          // including prediction for 4 weeks based on the varCota of the controlForm
           DT_COMPTC: newDate,
           CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
           CAPTC_LIQ: responsePreds.data.CAPTC_LIQ,
         });
+
         lastDate = newDate;
       }
     }
@@ -176,8 +169,6 @@ export default function ControlSection({
           numBins,
           controlForm.buscaCnpj
         );
-        console.log("histogram");
-        console.log(histogram);
         setHistogram(histogram);
       }
     } catch (err) {
@@ -194,9 +185,6 @@ export default function ControlSection({
       const resCnpj = await ax.get(
         `/correlations/getByCnpj?cnpj=${encodedCnpj}`
       );
-
-      console.log("resCnpj");
-      console.log(resCnpj);
 
       let adjustCorrelCnpj;
       if (resCnpj) {
@@ -216,8 +204,6 @@ export default function ControlSection({
           fund: resCnpj.data,
           avg: resAvgAnbimaClass.data,
         };
-        console.log("NewHeatMap Arr");
-        console.log(newHeatMapArr);
         setHeatMapArr(newHeatMapArr);
       }
 

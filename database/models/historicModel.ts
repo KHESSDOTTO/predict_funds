@@ -21,6 +21,7 @@ const HistoricSchema = new Schema(
   }
 );
 
-const HistoricModel = models.historic || model("historic", HistoricSchema);
+const HistoricModel =
+  models.historic || model("historic", HistoricSchema, "HN_informes_ms");
 
 export default HistoricModel;
