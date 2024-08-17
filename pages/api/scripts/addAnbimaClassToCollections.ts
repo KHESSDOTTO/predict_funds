@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import CorrelationsModel from "@/database/models/correlationsModel";
+import PredictionsModel from "@/database/models/predictionsModel";
 
 export default async function AddAnbimaClassToPreds(
   req: NextApiRequest,
@@ -9,7 +10,7 @@ export default async function AddAnbimaClassToPreds(
   try {
     await connect();
 
-    const entries = await CorrelationsModel.aggregate([
+    const entries = await PredictionsModel.aggregate([
       {
         $lookup: {
           from: "cadastro_fundos",
@@ -36,7 +37,7 @@ export default async function AddAnbimaClassToPreds(
 
     await Promise.all(
       entries.map((doc) =>
-        CorrelationsModel.updateOne(
+        PredictionsModel.updateOne(
           { _id: doc._id },
           { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
         )

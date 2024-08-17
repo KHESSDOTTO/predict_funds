@@ -71,7 +71,7 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
   const { varCota, varCotistas, varNF, anbimaClass, baseDate, buscaCnpj } =
     controlForm;
   const customPredKey = buildPredKey(varCota, varCotistas, varNF);
-  const defaultPredKey = "0_0__0_0__0_0";
+  const defaultPredKey = "abs_BRL__0_0__0_0__0_0";
 
   // Erro se não tiver classe anbima
   if (!anbimaClass) {

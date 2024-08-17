@@ -206,6 +206,7 @@ function buildPredKey(
   varNF: string | number
 ): string {
   const predKey = [
+    "abs_BRL",
     (Number(varCota) * 100)
       .toFixed(1)
       .replaceAll(".", "_")
