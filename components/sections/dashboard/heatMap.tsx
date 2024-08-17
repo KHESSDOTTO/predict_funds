@@ -1,4 +1,5 @@
 import { capitalize, getToneColor } from "@/functions/functions";
+import { mapTickers } from "@/utils/mapTickersCorrels";
 import { toneColorsMapTxtRG } from "@/utils/toneColors";
 import { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
@@ -18,9 +19,6 @@ export interface HeatMapPropsType {
 }
 
 export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
-  const titleClass: string = "text-center mb-4",
-    tableClass: string = "text-center border border-gray-500 rounded-lg w-full";
-
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [selCorrels, setSelCorrels] = useState<any>([]);
   const [tickers, setTickers] = useState<string[]>([]);
@@ -54,10 +52,6 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
           (cE) => !exclude.includes(cE)
         );
 
-        console.log("newSelCorrel");
-        console.log(newSelCorrel);
-        console.log("filteredTickers");
-        console.log(filteredTickers);
         setTickers(filteredTickers);
         setSelCorrels(newSelCorrel);
         setIsLoadingCorrels(false);
@@ -123,22 +117,34 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
         <>
           {/* Desk */}
           <div className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto">
-            <table className={`${tableClass}`}>
-              <thead className="">
-                <tr className="bg-gray-400 bg-opacity-60 text-white uppercase text-sm leading-normal">
-                  <th className="py-3 px-6 text-center"></th>
-                  {tickers.map((ticker) => (
-                    <th key={ticker} className="py-3 px-6 text-center w-1/12">
-                      {ticker}
-                    </th>
-                  ))}
+            <table className="text-center border border-gray-500 rounded-md border-separate border-spacing-0 overflow-hidden">
+              <thead>
+                <tr className="bg-gray-500 bg-opacity-60 text-white uppercase text-sm leading-normal">
+                  <th className="text-center"></th>
+                  {tickers.map((ticker) => {
+                    const nameTicker = mapTickers[ticker]
+                      ? mapTickers[ticker]
+                      : ticker;
+                    return (
+                      <th
+                        key={ticker}
+                        className="py-2 px-1 text-center w-1/12 text-sm"
+                      >
+                        {nameTicker}
+                      </th>
+                    );
+                  })}
                 </tr>
               </thead>
               <tbody className="text-white text-sm font-light">
-                {Object.keys(selCorrels).map((key) => {
+                {Object.keys(selCorrels).map((key, cI, arr) => {
                   return (
-                    <tr className="border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50">
-                      <td className="py-3 px-6 text-lg bg-gray-300 text-black text-center font-bold whitespace-nowrap">
+                    <tr
+                      className={`border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50 last:rounded-b-sm`}
+                    >
+                      <td
+                        className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/5`}
+                      >
                         {capitalize(key)}
                       </td>
                       {tickers.map((ticker) => {
@@ -174,7 +180,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
 
           {/* Mobile */}
           <div className="overflow-x-auto lg:hidden">
-            <table className={`${tableClass}`}>
+            <table className="text-center border border-gray-500 rounded-lg w-full">
               <thead>
                 <tr className="bg-gray-700 bg-opacity-50 text-white uppercase text-sm leading-normal">
                   <th className="py-3 px-6 text-left w-1/3"></th>
