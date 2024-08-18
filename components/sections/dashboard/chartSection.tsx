@@ -227,7 +227,6 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  interval={smallV ? 12 : 6}
                   fontSize={12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
@@ -449,7 +448,7 @@ function CustomTooltipIndigo({
   // Identify preictions to differentiate on the chart
   // <IdentificandoPredsLabels>
   const numPreds = 4;
-  const predsElements = data?.slice(data.length - numPreds * 5, data.length);
+  const predsElements = data?.slice(data.length - numPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
   // </IdentificandoPredsLabels>
   let tooltipClass =
