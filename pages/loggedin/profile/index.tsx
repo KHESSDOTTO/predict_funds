@@ -219,7 +219,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                 Change Password
               </div>
               <div onClick={handleLogout}>
-                <ButtonRed shadowColor="white" shadowSize="md">
+                <ButtonRed shadowColor="white/30" shadowSize="md">
                   Log out
                 </ButtonRed>
               </div>

@@ -139,6 +139,8 @@ async function doLogin(clientInfo: {
   username: string;
   password: string | Buffer;
 }) {
+  console.log("clientInfo");
+  console.log(clientInfo);
   try {
     const { username, password } = clientInfo;
     const user = await UserModel.findOne({ username: username });
@@ -149,6 +151,10 @@ async function doLogin(clientInfo: {
         msg: "User not found.",
       };
     }
+
+    console.log("user");
+    console.log(user);
+
     if (!user.emailConfirm) {
       return {
         ok: false,

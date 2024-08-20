@@ -193,6 +193,9 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
               </thead>
               <tbody className="text-white text-sm font-light">
                 {tickers.map((ticker) => {
+                  const nameTicker = mapTickers[ticker]
+                    ? mapTickers[ticker]
+                    : ticker;
                   const id = Math.random();
                   return (
                     <tr
@@ -200,7 +203,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                       className="border-b border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
                     >
                       <td className="py-3 px-6 bg-gradient-to-r from-gray-100 to-gray-300 text-black text-center whitespace-nowrap font-medium w-1/3">
-                        {ticker}
+                        {nameTicker}
                       </td>
                       {Object.keys(selCorrels).map((key) => {
                         const value = selCorrels[key][ticker];
