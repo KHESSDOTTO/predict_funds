@@ -149,6 +149,7 @@ async function doLogin(clientInfo: {
         msg: "User not found.",
       };
     }
+
     if (!user.emailConfirm) {
       return {
         ok: false,
