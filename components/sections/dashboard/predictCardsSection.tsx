@@ -1,8 +1,8 @@
-import { RawDataType } from "@/utils/types";
+import { HistoricType } from "@/utils/types";
 import PredictCard from "../../UI/predictCard";
 
 interface PredictCardsSectionProps {
-  data: RawDataType[];
+  data: HistoricType[];
 }
 
 export default function PredictCardsSection({

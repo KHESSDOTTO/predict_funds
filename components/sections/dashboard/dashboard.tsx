@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import {
   CadastroFundosType,
   DashboardControlFormType,
+  HistoricType,
   PredictionsType,
-  RawDataType,
   UserType,
 } from "@/utils/types";
 import ControlSection from "./controlSection";
@@ -24,7 +24,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
   // console.log("this is the user:");
   // console.log(user);
   const userContext = useContext(UserContext);
-  const [historicData, setHistoricData] = useState<RawDataType[]>([]),
+  const [historicData, setHistoricData] = useState<HistoricType[]>([]),
     [isLoading, setIsLoading] = useState(true),
     [registration, setRegistration] = useState<CadastroFundosType | false>(
       false

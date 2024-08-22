@@ -5,7 +5,7 @@ import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
-import type { RawDataType, UserType } from "@/utils/types";
+import type { HistoricType, UserType } from "@/utils/types";
 import ButtonRed from "@/components/UI/buttonRed";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
@@ -86,7 +86,7 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
           predsArray.push(...predsSubArray);
         });
       // </Adjusting_predictions>
-      const historicDataHeader: (keyof RawDataType)[] = [
+      const historicDataHeader: (keyof HistoricType)[] = [
         "DT_COMPTC",
         "CNPJ_FUNDO",
         "VL_TOTAL",

@@ -11,7 +11,7 @@ import {
   Cell,
 } from "recharts";
 import { format } from "date-fns";
-import { PredictionsType, RawDataType } from "@/utils/types";
+import { PredictionsType, HistoricType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
 import {
@@ -37,9 +37,9 @@ export default function ChartSection({
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
     [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
-    [unifiedData, setUnifiedData] = useState<(RawDataType | PredictionsType)[]>(
-      [...data]
-    ),
+    [unifiedData, setUnifiedData] = useState<
+      (HistoricType | PredictionsType)[]
+    >([...data]),
     [gradientOffset, setGradientOffset] = useState(1),
     [chartHeight, setChartHeight] = useState(0),
     [histogramHeight, setHistogramHeight] = useState(0),
@@ -51,11 +51,11 @@ export default function ChartSection({
   function adjustValueQuotaChartAxis() {
     // Defining domain values for axis of Value Quota Chart
     const minValueVQ = data.reduce((minObj, currObj) => {
-      return currObj["VL_QUOTA"] < minObj["VL_QUOTA"] ? currObj : minObj;
-    }, data[0])["VL_QUOTA"];
+      return currObj["VL_QUOTA_ms"] < minObj["VL_QUOTA_ms"] ? currObj : minObj;
+    }, data[0])["VL_QUOTA_ms"];
     const maxValueVQ = data.reduce((maxObj, currObj) => {
-      return currObj["VL_QUOTA"] > maxObj["VL_QUOTA"] ? currObj : maxObj;
-    }, data[0])["VL_QUOTA"];
+      return currObj["VL_QUOTA_ms"] > maxObj["VL_QUOTA_ms"] ? currObj : maxObj;
+    }, data[0])["VL_QUOTA_ms"];
 
     // Domain of the Yaxis
     const minValYaxisVQ = minValueVQ * (1 - margin),
@@ -78,15 +78,17 @@ export default function ChartSection({
     // Defining values for domain/axis in Net Funding Chart
     // Max absolute value in historic data
     let maxAbsValueNF = data.reduce((maxAbsObj, currObj) => {
-      return Math.abs(currObj["CAPTC_LIQ"] ?? 0) >
-        (maxAbsObj["CAPTC_LIQ"] ? Math.abs(maxAbsObj["CAPTC_LIQ"]) : 0)
+      return Math.abs(currObj["CAPTC_LIQ_ABS_ms"] ?? 0) >
+        (maxAbsObj["CAPTC_LIQ_ABS_ms"]
+          ? Math.abs(maxAbsObj["CAPTC_LIQ_ABS_ms"])
+          : 0)
         ? currObj
         : maxAbsObj;
-    }, data[0])["CAPTC_LIQ"];
+    }, data[0])["CAPTC_LIQ_ABS_ms"];
 
     // Value of prediction to compare with highest absolute value of historic data.
-    const absValuePred = predictions[0].CAPTC_LIQ
-      ? Math.abs(Number(predictions[0].CAPTC_LIQ))
+    const absValuePred = predictions[0]["CAPTC_LIQ_ABS_ms"]
+      ? Math.abs(Number(predictions[0]["CAPTC_LIQ_ABS_ms"]))
       : 0;
     if (maxAbsValueNF) {
       // Defyning domain.
@@ -100,8 +102,6 @@ export default function ChartSection({
         setDomainYaxisNF(newDomain);
       }
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
-      // console.log("newYaxisNFTicks");
-      // console.log(newYaxisNFTicks);
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
@@ -116,11 +116,13 @@ export default function ChartSection({
     const newGradientOffset =
       (newUnifiedData.length - predictions.slice(1).length) /
       newUnifiedData.length;
+    console.log("newUnifiedData");
+    console.log(newUnifiedData);
     setUnifiedData(newUnifiedData);
     setGradientOffset(newGradientOffset);
   }
 
-  function getBarColor(dataPoint: PredictionsType | RawDataType): string {
+  function getBarColor(dataPoint: PredictionsType | HistoricType): string {
     if (!dataPoint.DT_COMPTC) {
       return "#8884d8";
     }
@@ -249,7 +251,7 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                <Bar type="monotone" dataKey="CAPTC_LIQ">
+                <Bar type="monotone" dataKey="CAPTC_LIQ_ABS_ms">
                   {unifiedData.map((cE, cI) => (
                     <Cell
                       key={`cell-${cI}`}
@@ -272,7 +274,7 @@ export default function ChartSection({
                 onlyBack={false}
                 data={data}
                 predictions={predictions}
-                varName={"CAPTC_LIQ"}
+                varName={"CAPTC_LIQ_ABS_ms"}
               />
             </div>
           )}
@@ -412,7 +414,7 @@ export default function ChartSection({
                 />
                 <Area
                   type="monotone"
-                  dataKey="VL_QUOTA"
+                  dataKey="VL_QUOTA_ms"
                   stroke="rgb(150, 150, 75)"
                   strokeWidth={1}
                   fill="url(#customYellow)"
@@ -428,7 +430,7 @@ export default function ChartSection({
                 onlyBack={true}
                 data={data}
                 predictions={predictions}
-                varName={"VL_QUOTA"}
+                varName={"VL_QUOTA_ms"}
               />
             </div>
           )}
@@ -466,7 +468,9 @@ function CustomTooltipIndigo({
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
           Net Funding: R$
-          {payload[0].payload.CAPTC_LIQ.toFixed(2).toLocaleString("en-US")}
+          {payload[0].payload.CAPTC_LIQ_ABS_ms.toFixed(2).toLocaleString(
+            "en-US"
+          )}
         </p>
       </div>
     );
@@ -482,7 +486,7 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         <p>
           Quota: R$
-          {payload[0].payload.VL_QUOTA.toFixed(2).toLocaleString("en-US")}
+          {payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")}
         </p>
       </div>
     );

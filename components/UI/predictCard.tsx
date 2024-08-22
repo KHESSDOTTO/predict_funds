@@ -1,9 +1,9 @@
-import { RawDataType } from "@/utils/types";
+import { HistoricType } from "@/utils/types";
 import { useEffect, useState } from "react";
 
 interface PredictCardProps {
   time: string;
-  data: RawDataType[];
+  data: HistoricType[];
 }
 
 function PredictCard({ time, data }: PredictCardProps) {

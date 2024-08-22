@@ -107,12 +107,12 @@ function prepareHistogram(
   let selCnpjBin: boolean[] = [];
 
   const minVal = histogramData.reduce((min, cE) => {
-    return cE.CAPTC_LIQ < min ? cE.CAPTC_LIQ : min;
-  }, histogramData[0]["CAPTC_LIQ"]);
+    return cE["CAPTC_LIQ_ABS_ms"] < min ? cE["CAPTC_LIQ_ABS_ms"] : min;
+  }, histogramData[0]["CAPTC_LIQ_ABS_ms"]);
 
   const maxVal = histogramData.reduce((max, cE) => {
-    return cE.CAPTC_LIQ > max ? cE.CAPTC_LIQ : max;
-  }, histogramData[0]["CAPTC_LIQ"]);
+    return cE["CAPTC_LIQ_ABS_ms"] > max ? cE["CAPTC_LIQ_ABS_ms"] : max;
+  }, histogramData[0]["CAPTC_LIQ_ABS_ms"]);
 
   step = (maxVal - minVal) / numBars;
   cVal = minVal;
@@ -143,7 +143,7 @@ function prepareHistogram(
 
   // Count elements on each interval of values to be the Yaxis values (based on 'limits' array)
   histogramData.forEach((cE) => {
-    const index = limits.findIndex((limit) => cE.CAPTC_LIQ <= limit);
+    const index = limits.findIndex((limit) => cE["CAPTC_LIQ_ABS_ms"] <= limit);
     if (index !== -1) {
       values[index]++;
     }
@@ -203,10 +203,16 @@ function formatNumberToStringK(
 function buildPredKey(
   varCota: string | number,
   varCotistas: string | number,
-  varNF: string | number
+  varNF: string | number,
+  absOrPct: "abs" | "pct"
 ): string {
+  const mapPrefix: any = {
+    abs: "abs_BRL",
+    pct: "pct_PL",
+  };
+
   const predKey = [
-    "abs_BRL",
+    mapPrefix[absOrPct],
     (Number(varCota) * 100)
       .toFixed(1)
       .replaceAll(".", "_")

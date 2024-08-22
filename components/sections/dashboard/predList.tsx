@@ -1,5 +1,5 @@
 import ButtonIndigo from "@/components/UI/buttonIndigo";
-import { PredictionsType, RawDataType } from "@/utils/types";
+import { PredictionsType, HistoricType } from "@/utils/types";
 import { addWeeks, subWeeks } from "date-fns";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -7,9 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 interface PredListPropsType {
   title: string;
   onlyBack: boolean;
-  data: RawDataType[];
+  data: HistoricType[];
   predictions: PredictionsType[];
-  varName: "VL_QUOTA" | "CAPTC_LIQ";
+  varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
 }
 
 export default function PredList({
