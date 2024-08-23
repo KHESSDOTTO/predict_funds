@@ -172,7 +172,6 @@ export type {
   ButtonPropsType,
   UserType,
   HistoricType,
-  HistoricType,
   SideBarPropsType,
   HeaderPropsType,
   UserContextType,
