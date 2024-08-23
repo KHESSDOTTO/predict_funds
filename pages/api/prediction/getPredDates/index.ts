@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import { getCalcDatesPred } from "@/database/functions/predictionFunctions";
 
-async function getCalcDatesPred(req: NextApiRequest, res: NextApiResponse) {
+async function GetCalcDatesPred(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     return res.status(400).send("Only GET method accepted at this endpoint.");
   }
@@ -17,4 +17,4 @@ async function getCalcDatesPred(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default getCalcDatesPred;
+export default GetCalcDatesPred;
