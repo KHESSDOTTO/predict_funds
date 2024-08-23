@@ -1,24 +1,26 @@
 import PredictionsModel from "@/database/models/predictionsModel";
 import { DashboardControlFormType, PredictionsType } from "@/utils/types";
-import { arrBaseDates } from "@/utils/globalVars";
 import CadastroFundosModel from "../models/cadastroFundosModel";
 import { buildPredKey } from "@/functions/functions";
 
 async function getPredictions(controlForm: DashboardControlFormType) {
   const { varCota, varCotistas, varNF, baseDate, buscaCnpj } = controlForm;
-  const predKey = buildPredKey(varCota, varCotistas, varNF);
+  const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
+  const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
   try {
     let prediction4weeks: PredictionsType | null = null;
     prediction4weeks = await PredictionsModel.findOne(
       {
         CNPJ_FUNDO: buscaCnpj,
+        ancora: new Date(baseDate),
       },
       {
         _id: 0,
         CNPJ_FUNDO: 1,
         CLASSE_ANBIMA: 1,
-        [predKey]: 1,
+        [predKeyAbs]: 1,
+        [predKeyPct]: 1,
       }
     );
 
@@ -27,7 +29,8 @@ async function getPredictions(controlForm: DashboardControlFormType) {
       finalPred4weeks = {
         CNPJ_FUNDO: prediction4weeks.CNPJ_FUNDO,
         CLASSE_ANBIMA: prediction4weeks.CLASSE_ANBIMA,
-        CAPTC_LIQ: prediction4weeks[predKey],
+        CAPTC_LIQ_ABS_ms: prediction4weeks[predKeyAbs],
+        CAPTC_LIQ_PCT_ms: prediction4weeks[predKeyPct],
       };
     } else {
       return false;
@@ -70,8 +73,10 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
 
   const { varCota, varCotistas, varNF, anbimaClass, baseDate, buscaCnpj } =
     controlForm;
-  const customPredKey = buildPredKey(varCota, varCotistas, varNF);
-  const defaultPredKey = "abs_BRL__0_0__0_0__0_0";
+  const customPredKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
+  const defaultPredKeyAbs = "abs_BRL__0_0__0_0__0_0";
+  const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
+  const defaultPredKeyPct = "pct_PL__0_0__0_0__0_0";
 
   // Erro se não tiver classe anbima
   if (!anbimaClass) {
@@ -86,12 +91,20 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
     const projection = {
       CNPJ_FUNDO: 1,
       CLASSE_ANBIMA: 1,
-      [customPredKey]: 1,
-      [defaultPredKey]: 1,
+      [customPredKeyAbs]: 1,
+      [defaultPredKeyAbs]: 1,
+      [customPredKeyPct]: 1,
+      [defaultPredKeyPct]: 1,
     };
 
+    console.log("ancora buscada em Histograma (baseDate)");
+    console.log(baseDate);
+
     prediction4weeks = await PredictionsModel.find(
-      { CLASSE_ANBIMA: anbimaClass },
+      {
+        CLASSE_ANBIMA: anbimaClass,
+        ancora: new Date(baseDate),
+      },
       projection
     );
 
@@ -100,17 +113,21 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
     }
 
     const finalPred4weeks = prediction4weeks.map((cE) => {
-      let predKey;
+      let predKeyAbs;
+      let predKeyPct;
 
       if (cE.CNPJ_FUNDO === buscaCnpj) {
-        predKey = customPredKey;
+        predKeyAbs = customPredKeyAbs;
+        predKeyPct = customPredKeyPct;
       } else {
-        predKey = defaultPredKey;
+        predKeyAbs = defaultPredKeyAbs;
+        predKeyPct = defaultPredKeyPct;
       }
 
       return {
         CNPJ_FUNDO: cE.CNPJ_FUNDO,
-        CAPTC_LIQ: cE[predKey],
+        CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
+        CAPTC_LIQ_PCT_ms: cE[predKeyPct],
         CLASSE_ANBIMA: cE.CLASSE_ANBIMA,
       };
     });
@@ -127,7 +144,7 @@ async function getAncoras() {
   return ancoras;
 }
 
-async function getPredDates() {
+async function getCalcDatesPred() {
   const datahoraPredicao = await PredictionsModel.distinct("datahora_predicao");
   return datahoraPredicao;
 }
@@ -136,6 +153,6 @@ export {
   getPredictions,
   getPredsForHistogram,
   getCnpjsByAnbimaClass,
-  getPredDates,
+  getCalcDatesPred,
   getAncoras,
 };

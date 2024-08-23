@@ -11,12 +11,12 @@ import {
   Cell,
 } from "recharts";
 import { format } from "date-fns";
-import { PredictionsType, RawDataType } from "@/utils/types";
+import { PredictionsType, HistoricType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
 import {
-  generateYaxisDomainBasedOnMaxAbs,
-  generateYaxisTicksBasedOnMaxAbs,
+  generateYaxisDomainBasedOnMaxMod,
+  generateYaxisTicksBasedOnMaxMod,
 } from "@/functions/functions";
 import { ClipLoader } from "react-spinners";
 import useWindowWidth from "@/hooks/useWindowWidth";
@@ -37,71 +37,87 @@ export default function ChartSection({
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
     [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
-    [unifiedData, setUnifiedData] = useState<(RawDataType | PredictionsType)[]>(
-      [...data]
-    ),
+    [unifiedData, setUnifiedData] = useState<
+      (HistoricType | PredictionsType)[]
+    >([...data]),
     [gradientOffset, setGradientOffset] = useState(1),
     [chartHeight, setChartHeight] = useState(0),
     [histogramHeight, setHistogramHeight] = useState(0),
+    [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
+      "CAPTC_LIQ_ABS_ms"
+    ),
     screenWidth = useWindowWidth();
 
-  // Margin to aply to find the domain of the Yaxis on the charts
-  const margin = 0.05;
+  function adjustValueQuotaChartAxis(
+    data: HistoricType[],
+    absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms"
+  ) {
+    // Margin to aply to find the domain of the Yaxis on the charts
+    const marginAbs = 0.05;
+    const marginPct = 0.01;
+    const marginForDomain =
+      absOrPct === "CAPTC_LIQ_ABS_ms" ? marginAbs : marginPct;
+    const ticksQntYaxisVQ = 7;
 
-  function adjustValueQuotaChartAxis() {
     // Defining domain values for axis of Value Quota Chart
     const minValueVQ = data.reduce((minObj, currObj) => {
-      return currObj["VL_QUOTA"] < minObj["VL_QUOTA"] ? currObj : minObj;
-    }, data[0])["VL_QUOTA"];
+      return currObj["VL_QUOTA_ms"] < minObj["VL_QUOTA_ms"] ? currObj : minObj;
+    }, data[0])["VL_QUOTA_ms"];
     const maxValueVQ = data.reduce((maxObj, currObj) => {
-      return currObj["VL_QUOTA"] > maxObj["VL_QUOTA"] ? currObj : maxObj;
-    }, data[0])["VL_QUOTA"];
+      return currObj["VL_QUOTA_ms"] > maxObj["VL_QUOTA_ms"] ? currObj : maxObj;
+    }, data[0])["VL_QUOTA_ms"];
 
     // Domain of the Yaxis
-    const minValYaxisVQ = minValueVQ * (1 - margin),
-      maxValYaxisVQ = maxValueVQ * (1 + margin);
+    const minValYaxisVQ = minValueVQ * (1 - marginForDomain),
+      maxValYaxisVQ = maxValueVQ * (1 + marginForDomain);
     setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
 
-    // Ticks for Value Quota chart
-    const ticksQntYaxisVQ = 7;
     const ticksIntervalYaxisVQ =
       (maxValYaxisVQ - minValYaxisVQ) / (ticksQntYaxisVQ - 1);
     const newTicksYaxisVQ = Array.from(
       { length: ticksQntYaxisVQ },
       (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
     );
-    // console.log("before setTicksYaxisVQ");
     setTicksYaxisVQ(newTicksYaxisVQ);
   }
 
-  function adjustNetFundingChartAxis() {
+  function adjustNetFundingChartAxis(
+    data: HistoricType[],
+    absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms"
+  ) {
+    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
     // Defining values for domain/axis in Net Funding Chart
     // Max absolute value in historic data
-    let maxAbsValueNF = data.reduce((maxAbsObj, currObj) => {
-      return Math.abs(currObj["CAPTC_LIQ"] ?? 0) >
-        (maxAbsObj["CAPTC_LIQ"] ? Math.abs(maxAbsObj["CAPTC_LIQ"]) : 0)
+    let maxModValueNF = data.reduce((maxAbsObj, currObj) => {
+      return Math.abs(currObj[absOrPct] ?? 0) >
+        (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
         ? currObj
         : maxAbsObj;
-    }, data[0])["CAPTC_LIQ"];
+    }, data[0])[absOrPct];
 
     // Value of prediction to compare with highest absolute value of historic data.
-    const absValuePred = predictions[0].CAPTC_LIQ
-      ? Math.abs(Number(predictions[0].CAPTC_LIQ))
+    const modValuePred = predictions[0][absOrPct]
+      ? Math.abs(Number(predictions[0][absOrPct]))
       : 0;
-    if (maxAbsValueNF) {
-      // Defyning domain.
-      maxAbsValueNF =
-        absValuePred > Math.abs(maxAbsValueNF)
-          ? Number(Math.abs(absValuePred).toFixed(2))
-          : Number(Math.abs(maxAbsValueNF).toFixed(2));
 
-      const newDomain = generateYaxisDomainBasedOnMaxAbs(maxAbsValueNF);
+    if (maxModValueNF) {
+      // Defyning domain.
+      const decimalPlaces = isPct ? 4 : 2;
+      maxModValueNF =
+        modValuePred > Math.abs(maxModValueNF)
+          ? Number(Math.abs(modValuePred).toFixed(decimalPlaces))
+          : Number(Math.abs(maxModValueNF).toFixed(decimalPlaces));
+
+      const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
       if (newDomain) {
         setDomainYaxisNF(newDomain);
       }
-      const newYaxisNFTicks = generateYaxisTicksBasedOnMaxAbs(maxAbsValueNF);
-      // console.log("newYaxisNFTicks");
-      // console.log(newYaxisNFTicks);
+      const newYaxisNFTicks = generateYaxisTicksBasedOnMaxMod(
+        maxModValueNF,
+        isPct
+      );
+      console.log("newYaxisNFTicks");
+      console.log(newYaxisNFTicks);
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
@@ -112,7 +128,7 @@ export default function ChartSection({
 
   function unifyData() {
     // Unifying data
-    const newUnifiedData = [...data, ...predictions.slice(1)]; // Slice to exclude last data present in historic
+    const newUnifiedData = [...data, ...predictions]; // Slice to exclude last data present in historic
     const newGradientOffset =
       (newUnifiedData.length - predictions.slice(1).length) /
       newUnifiedData.length;
@@ -120,7 +136,7 @@ export default function ChartSection({
     setGradientOffset(newGradientOffset);
   }
 
-  function getBarColor(dataPoint: PredictionsType | RawDataType): string {
+  function getBarColor(dataPoint: PredictionsType | HistoricType): string {
     if (!dataPoint.DT_COMPTC) {
       return "#8884d8";
     }
@@ -135,15 +151,19 @@ export default function ChartSection({
     return barColor;
   }
 
+  function handleAbsOrPctChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setAbsOrPct(e.target.value as "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms");
+  }
+
   useEffect(() => {
     if (data.length === 0 || predictions.length === 0) {
       return;
     }
-    adjustValueQuotaChartAxis();
-    if (adjustNetFundingChartAxis()) {
+    adjustValueQuotaChartAxis(data, absOrPct);
+    if (adjustNetFundingChartAxis(data, absOrPct)) {
       unifyData();
     }
-  }, [data, predictions]);
+  }, [data, predictions, absOrPct]);
 
   useEffect(() => {
     if (screenWidth > 992) {
@@ -176,6 +196,35 @@ export default function ChartSection({
         >
           Net Funding
         </h1>
+        {!smallV && (
+          <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+            <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
+              <h4 className="mr-2 md:mr-6">Visualization: </h4>
+              <div className="flex text-xs items-center gap-1 md:text-sm">
+                <input
+                  type="radio"
+                  name="absOrPct"
+                  id="inpAbsOrPctABS"
+                  value={"CAPTC_LIQ_ABS_ms"}
+                  onChange={handleAbsOrPctChange}
+                  checked={absOrPct === "CAPTC_LIQ_ABS_ms"}
+                />
+                <label htmlFor="monthsCorrel6">Absolute values</label>
+              </div>
+              <div className="flex items-center gap-1 text-xs md:text-sm">
+                <input
+                  type="radio"
+                  name="absOrPct"
+                  id="inpAbsOrPctPCT"
+                  value={"CAPTC_LIQ_PCT_ms"}
+                  onChange={handleAbsOrPctChange}
+                  checked={absOrPct === "CAPTC_LIQ_PCT_ms"}
+                />
+                <label>Percentage of Net Asset</label>
+              </div>
+            </form>
+          </div>
+        )}
         <div
           className={`flex flex-col gap-6 lg:gap-4 lg:flex-row ${
             smallV ? "" : "lg:mx-6 lg:mt-6"
@@ -236,9 +285,12 @@ export default function ChartSection({
                 <YAxis
                   ticks={ticksYaxisNF}
                   tick={{ fill: "rgb(230, 230, 230)" }}
-                  tickFormatter={(num) =>
-                    `R$${String((num / 1000).toFixed(0))} k`
-                  }
+                  tickFormatter={(num) => {
+                    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
+                    const numAbs = String((num / 1000).toFixed(0));
+                    const numPct = (num * 100).toFixed(1);
+                    return isPct ? `${numPct}%` : `R$${numAbs} k`;
+                  }}
                   tickCount={11}
                   domain={domainYaxisNF}
                   width={65}
@@ -249,7 +301,7 @@ export default function ChartSection({
                   stroke="rgb(170, 150, 255)"
                   strokeWidth={0.3}
                 />
-                <Bar type="monotone" dataKey="CAPTC_LIQ">
+                <Bar type="monotone" dataKey={absOrPct}>
                   {unifiedData.map((cE, cI) => (
                     <Cell
                       key={`cell-${cI}`}
@@ -259,7 +311,12 @@ export default function ChartSection({
                   ))}
                 </Bar>
                 <Tooltip
-                  content={<CustomTooltipIndigo data={unifiedData} />}
+                  content={
+                    <CustomTooltipIndigo
+                      data={unifiedData}
+                      absOrPct={absOrPct}
+                    />
+                  }
                   cursor={<CustomTooltipCursor />}
                 />
               </BarChart>
@@ -272,7 +329,7 @@ export default function ChartSection({
                 onlyBack={false}
                 data={data}
                 predictions={predictions}
-                varName={"CAPTC_LIQ"}
+                varName={absOrPct}
               />
             </div>
           )}
@@ -412,12 +469,14 @@ export default function ChartSection({
                 />
                 <Area
                   type="monotone"
-                  dataKey="VL_QUOTA"
+                  dataKey="VL_QUOTA_ms"
                   stroke="rgb(150, 150, 75)"
                   strokeWidth={1}
                   fill="url(#customYellow)"
                 ></Area>
-                <Tooltip content={<CustomTooltipYellow />} />
+                <Tooltip
+                  content={<CustomTooltipYellow absOrPct={absOrPct} />}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -428,7 +487,7 @@ export default function ChartSection({
                 onlyBack={true}
                 data={data}
                 predictions={predictions}
-                varName={"VL_QUOTA"}
+                varName={"VL_QUOTA_ms"}
               />
             </div>
           )}
@@ -443,6 +502,7 @@ function CustomTooltipIndigo({
   payload,
   label,
   data,
+  absOrPct,
 }: CustomTooltipProps) {
   // console.log(JSON.stringify(payload));
   // Identify preictions to differentiate on the chart
@@ -450,6 +510,7 @@ function CustomTooltipIndigo({
   const numPreds = 4;
   const predsElements = data?.slice(data.length - numPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
+  const adjustAbsOrPct = absOrPct || "CAPTC_LIQ_ABS_ms";
   // </IdentificandoPredsLabels>
   let tooltipClass =
     "bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm";
@@ -459,14 +520,20 @@ function CustomTooltipIndigo({
       "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
   }
   if (active && label && payload) {
+    const valueForPct = (payload[0].payload[adjustAbsOrPct] * 100).toFixed(2);
+    const valueForAbs = payload[0].payload[adjustAbsOrPct]
+      .toFixed(2)
+      .toLocaleString("en-US");
     return (
       <div className={tooltipClass}>
         {isPrediction && <h3 className="font-semibold mb-1">Prediction</h3>}
         {!isPrediction && <h3 className="font-semibold ">Historic</h3>}
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
-          Net Funding: R$
-          {payload[0].payload.CAPTC_LIQ.toFixed(2).toLocaleString("en-US")}
+          Net Funding:
+          {absOrPct === "CAPTC_LIQ_PCT_ms"
+            ? valueForPct + "%"
+            : "R$" + valueForAbs}
         </p>
       </div>
     );
@@ -482,7 +549,7 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         <p>
           Quota: R$
-          {payload[0].payload.VL_QUOTA.toFixed(2).toLocaleString("en-US")}
+          {payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")}
         </p>
       </div>
     );

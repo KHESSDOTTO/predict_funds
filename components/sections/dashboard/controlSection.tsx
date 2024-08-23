@@ -1,6 +1,5 @@
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import ButtonIndigo from "../../UI/buttonIndigo";
-import { RawDataType } from "@/utils/types";
 import { useContext, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
@@ -19,7 +18,7 @@ import type {
 } from "@/utils/types";
 
 interface ControlSectionProps {
-  setHistoricData: Dispatch<SetStateAction<RawDataType[]>>;
+  setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
   controlForm: DashboardControlFormType;
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
@@ -58,10 +57,10 @@ export default function ControlSection({
       const responseHistoric = await ax.get(
         `/historic/getAllByCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
       );
-      let slicedHistoricData: RawDataType[] = [];
+      let slicedHistoricData: HistoricType[] = [];
 
       if (responseHistoric.data) {
-        const adjHistoricData: RawDataType[] = responseHistoric.data.map(
+        const adjHistoricData: HistoricType[] = responseHistoric.data.map(
           (cE: HistoricType) => {
             const convDate = new Date(cE.DT_COMPTC);
             return { ...cE, DT_COMPTC: convDate };
@@ -91,7 +90,7 @@ export default function ControlSection({
 
   async function getPredictions(
     cnpj: string,
-    slicedHistoricData: RawDataType[]
+    slicedHistoricData: HistoricType[]
   ) {
     let responsePreds: AxiosResponse<any, any> | undefined;
     responsePreds = await ax.post(`/prediction/getWithBaseDate`, {
@@ -102,14 +101,6 @@ export default function ControlSection({
     let finalPredictionData: PredictionsType[] = [];
 
     if (responsePreds && responsePreds.data && slicedHistoricData) {
-      finalPredictionData.push({
-        // including last date shown in historic (current date)
-        DT_COMPTC: slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC,
-        CNPJ_FUNDO:
-          slicedHistoricData[slicedHistoricData.length - 1].CNPJ_FUNDO,
-        CAPTC_LIQ: slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ,
-      });
-
       let lastDate =
         slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
       const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
@@ -120,7 +111,8 @@ export default function ControlSection({
         finalPredictionData.push({
           DT_COMPTC: newDate,
           CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
-          CAPTC_LIQ: responsePreds.data.CAPTC_LIQ,
+          CAPTC_LIQ_ABS_ms: responsePreds.data.CAPTC_LIQ_ABS_ms,
+          CAPTC_LIQ_PCT_ms: responsePreds.data.CAPTC_LIQ_PCT_ms,
         });
 
         lastDate = newDate;
@@ -396,9 +388,11 @@ export default function ControlSection({
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
                   {ancoras?.map((cE, cI) => {
+                    const timeZoneBrDate = new Date(cE);
+                    const correctDate = addHours(timeZoneBrDate, 3);
                     return (
                       <option key={cI} value={cE}>
-                        {format(new Date(cE), "dd/MM/yyyy")}
+                        {format(correctDate, "dd/MM/yyyy")}
                       </option>
                     );
                   })}
@@ -567,9 +561,11 @@ export default function ControlSection({
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
                     {ancoras?.map((cE, cI) => {
+                      const timeZoneBrDate = new Date(cE);
+                      const correctDate = addHours(timeZoneBrDate, 3);
                       return (
                         <option key={cI} value={cE}>
-                          {format(new Date(cE), "dd/MM/yyyy")}
+                          {format(correctDate, "dd/MM/yyyy")}
                         </option>
                       );
                     })}
