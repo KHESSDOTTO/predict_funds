@@ -89,26 +89,13 @@ interface UserType {
 interface HistoricType {
   DT_COMPTC: Date;
   CNPJ_FUNDO: string;
-  VL_QUOTA: number;
-  VL_TOTAL?: number;
-  CAPTC_DIA: number;
-  NR_COTST?: number;
-  TP_FUNDO?: string;
-  VL_PATRIM_LIQ: number;
-  RESG_DIA: number;
-  CAPTC_LIQ: number;
-}
-
-interface HistoricType {
-  DT_COMPTC: Date;
-  CNPJ_FUNDO: string;
   VL_QUOTA_ms: number;
   VL_TOTAL_ms?: number;
-  CAPTC_DIA_ms: number;
   NR_COTST_ms?: number;
-  VL_PATRIM_LIQ: number;
+  VL_PATRIM_LIQ_ms: number;
+  CAPTC_DIA_ms: number;
   RESG_DIA_ms: number;
-  CAPTC_LIQ_ms: number;
+  CAPTC_LIQ_ms?: number;
   CAPTC_LIQ_ABS_ms?: number;
   CAPTC_LIQ_PCT_ms?: number;
 }
@@ -162,6 +149,7 @@ interface ToneColorsInterface {
 
 interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
   data?: (HistoricType | PredictionsType)[];
+  absOrPct?: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
 }
 
 interface ChartSectionProps {

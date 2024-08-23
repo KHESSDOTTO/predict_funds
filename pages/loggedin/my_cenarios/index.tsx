@@ -89,13 +89,13 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
       const historicDataHeader: (keyof HistoricType)[] = [
         "DT_COMPTC",
         "CNPJ_FUNDO",
-        "VL_TOTAL",
-        "VL_PATRIM_LIQ",
-        "NR_COTST",
-        "VL_QUOTA",
-        "CAPTC_DIA",
-        "RESG_DIA",
-        "CAPTC_LIQ",
+        "VL_TOTAL_ms",
+        "VL_PATRIM_LIQ_ms",
+        "NR_COTST_ms",
+        "VL_QUOTA_ms",
+        "CAPTC_DIA_ms",
+        "RESG_DIA_ms",
+        "CAPTC_LIQ_ms",
       ];
       const historicDataArray = cenario.historicData.map((dataRow) => {
         const orderedDataRow = historicDataHeader.map((key) => {

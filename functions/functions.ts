@@ -35,18 +35,24 @@ function pushIfNew(val: any, arr: any[]) {
   }
 }
 
-function generateYaxisTicksBasedOnMaxAbs(
-  maxAbs: number,
+function generateYaxisTicksBasedOnMaxMod(
+  maxMod: number,
+  isPct: boolean,
   maxValueTick = 100000,
   numTicks = 9,
   times = 1
 ) {
   const ticks: number[] = [];
 
-  if (maxAbs <= maxValueTick || times > 50) {
+  console.log("maxMod");
+  console.log(maxMod);
+
+  const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTick;
+
+  if (maxMod <= adjustMaxValueTick || times > 50) {
     // Prevent infinite recursion by limiting times
-    const minTick = -maxValueTick;
-    const maxTick = maxValueTick;
+    const minTick = -adjustMaxValueTick;
+    const maxTick = adjustMaxValueTick;
     const step = (maxTick - minTick) / (numTicks - 1);
 
     for (let i = 0; i < numTicks; i++) {
@@ -56,40 +62,63 @@ function generateYaxisTicksBasedOnMaxAbs(
     return ticks;
   }
 
-  let newMaxValueTick = maxValueTick;
-  if (times == 1) newMaxValueTick = 200000;
-  else if (times == 2) newMaxValueTick = 500000;
-  else newMaxValueTick += 500000;
+  let newMaxValueTick = adjustMaxValueTick;
+  const newMaxFirstTime = isPct ? 0.1 : 200000;
+  const newMaxSecondTime = isPct ? 0.15 : 500000;
+  const defaultStep = isPct ? 0.05 : 500000;
+  if (times == 1) {
+    newMaxValueTick = newMaxFirstTime;
+  } else if (times == 2) {
+    newMaxValueTick = newMaxSecondTime;
+  } else {
+    newMaxValueTick += defaultStep; // Simplify the logic for increasing maxValueTick
+  }
 
-  return generateYaxisTicksBasedOnMaxAbs(
-    maxAbs,
+  return generateYaxisTicksBasedOnMaxMod(
+    maxMod,
+    isPct,
     newMaxValueTick,
     numTicks,
     times + 1
   );
 }
 
-function generateYaxisDomainBasedOnMaxAbs(
-  maxAbs: number,
+function generateYaxisDomainBasedOnMaxMod(
+  maxMod: number,
+  isPct: boolean,
   maxValueTick = 100000,
   times = 1
 ) {
-  if (maxAbs <= maxValueTick || times > 50) {
+  const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTick;
+
+  if (maxMod <= adjustMaxValueTick || times > 50) {
     // Prevent infinite recursion
-    const minTick = -maxValueTick;
-    const maxTick = maxValueTick;
+    const minTick = -adjustMaxValueTick;
+    const maxTick = adjustMaxValueTick;
 
     const domain = [minTick, maxTick];
     return domain;
   }
 
   // Adjust newMaxValueTick based on the current attempt (times)
-  let newMaxValueTick = maxValueTick;
-  if (times == 1) newMaxValueTick = 200000;
-  else if (times == 2) newMaxValueTick = 500000;
-  else newMaxValueTick += 500000; // Simplify the logic for increasing maxValueTick
+  let newMaxValueTick = adjustMaxValueTick;
+  const newMaxFirstTime = isPct ? 0.1 : 200000;
+  const newMaxSecondTime = isPct ? 0.15 : 500000;
+  const defaultStep = isPct ? 0.05 : 500000;
+  if (times == 1) {
+    newMaxValueTick = newMaxFirstTime;
+  } else if (times == 2) {
+    newMaxValueTick = newMaxSecondTime;
+  } else {
+    newMaxValueTick += defaultStep; // Simplify the logic for increasing maxValueTick
+  }
 
-  return generateYaxisDomainBasedOnMaxAbs(maxAbs, newMaxValueTick, times + 1);
+  return generateYaxisDomainBasedOnMaxMod(
+    maxMod,
+    isPct,
+    newMaxValueTick,
+    times + 1
+  );
 }
 
 function prepareHistogram(
@@ -231,8 +260,8 @@ export {
   capitalize,
   pushIfNew,
   getToneColor,
-  generateYaxisTicksBasedOnMaxAbs,
-  generateYaxisDomainBasedOnMaxAbs,
+  generateYaxisTicksBasedOnMaxMod,
+  generateYaxisDomainBasedOnMaxMod,
   prepareHistogram,
   buildPredKey,
 };

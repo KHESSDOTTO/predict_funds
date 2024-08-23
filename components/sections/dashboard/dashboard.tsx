@@ -93,7 +93,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
         />
       </div>
       <div className="mt-10 lg:mt-16 w-screen">
-        <CorrelCardsSection padding="20" correls={correls} />
+        <CorrelCardsSection padding="5px 0" correls={correls} />
       </div>
       <div className="mt-12 lg:mt-16 w-screen">
         <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />

@@ -101,17 +101,6 @@ export default function ControlSection({
     let finalPredictionData: PredictionsType[] = [];
 
     if (responsePreds && responsePreds.data && slicedHistoricData) {
-      finalPredictionData.push({
-        // including last date shown in historic (current date)
-        DT_COMPTC: slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC,
-        CNPJ_FUNDO:
-          slicedHistoricData[slicedHistoricData.length - 1].CNPJ_FUNDO,
-        CAPTC_LIQ_ABS_ms:
-          slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ_ABS_ms,
-        CAPTC_LIQ_PCT_ms:
-          slicedHistoricData[slicedHistoricData.length - 1].CAPTC_LIQ_PCT_ms,
-      });
-
       let lastDate =
         slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
       const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
