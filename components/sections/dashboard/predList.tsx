@@ -23,7 +23,19 @@ export default function PredList({
     { id: uuidv4(), direction: "backward", numPer: 8 },
     { id: uuidv4(), direction: "backward", numPer: 4 },
   ]);
+  const [newRow, setNewRow] = useState({
+    id: uuidv4(),
+    direction: "backward",
+    numPer: 8,
+  });
+  const [showAddRow, setShowAddRow] = useState(false);
   const [lastHistoricDate, setLastHistoricDate] = useState(new Date());
+  const isPct = varName === "CAPTC_LIQ_PCT_ms";
+  const formatter = new Intl.NumberFormat("de-DE", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   useEffect(() => {
     if (data[data.length - 1]) {
@@ -31,44 +43,28 @@ export default function PredList({
     }
   }, [data, predictions]);
 
-  const formatter = new Intl.NumberFormat("de-DE", {
-    style: "decimal",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-  const [newRow, setNewRow] = useState({
-    id: uuidv4(),
-    direction: "backward",
-    numPer: 8,
-  });
-  const [showAddRow, setShowAddRow] = useState(false);
-
-  function formatValue(
+  function formatValuePredList(
     direction: string,
     varName: string,
     currEntryBack: Record<string, any> | undefined,
     currEntryFront: Record<string, any> | undefined,
     formatter: Intl.NumberFormat
   ): string {
-    // console.log("currEntryBack");
-    // console.log(currEntryBack);
-    // console.log("currEntryFront");
-    // console.log(currEntryFront);
+    let value = "";
     if (direction === "backward" && currEntryBack) {
-      const value = currEntryBack[varName];
-      if (typeof value === "number") {
-        return formatter.format(value);
-      }
+      value = currEntryBack[varName];
     } else if (
       direction === "forward" &&
       currEntryFront &&
-      varName !== "VL_QUOTA"
+      varName !== "VL_QUOTA_ms"
     ) {
-      const value = currEntryFront[varName];
-      if (typeof value === "number") {
-        return formatter.format(value);
-      }
+      value = currEntryFront[varName];
+    }
+
+    if (typeof value === "number" && !isPct) {
+      return formatter.format(value);
+    } else if (typeof value === "number" && isPct) {
+      return formatter.format(value) + "%";
     }
 
     return "-";
@@ -126,39 +122,25 @@ export default function PredList({
         <tbody>
           {predRows.map((cE) => {
             let tgtDate = lastHistoricDate;
-            // console.log("tgtDate");
-            // console.log(tgtDate);
             let entriesBack = data;
-            // console.log("entriesBack");
-            // console.log(entriesBack);
             let entriesFront = predictions;
-            // console.log("entriesFront");
-            // console.log(entriesFront);
 
             if (cE.direction === "backward") {
               tgtDate = subWeeks(lastHistoricDate, cE.numPer);
-              // console.log("newTgtDate");
-              // console.log(tgtDate);
               entriesBack = entriesBack.filter((cE, cI) => {
                 return cE.DT_COMPTC.getTime() == tgtDate.getTime();
               });
-              // console.log("entryBackFilter");
-              // console.log(entriesBack);
             }
 
             if (cE.direction === "forward") {
               tgtDate = addWeeks(lastHistoricDate, cE.numPer);
-              // console.log("newTgtDate");
-              // console.log(tgtDate);
               entriesFront = entriesFront.filter((cE) => {
                 return (
                   cE.DT_COMPTC &&
                   cE.DT_COMPTC.getTime() == tgtDate.getTime() &&
-                  cE.CAPTC_LIQ
+                  cE[varName]
                 );
               });
-              // console.log("entryFrontFilter");
-              // console.log(entriesFront);
             }
 
             const currEntryBack = entriesBack[0];
@@ -172,15 +154,7 @@ export default function PredList({
                 <td className="p-0">{cE.direction}</td>
                 <td className="p-0">{cE.numPer}</td>
                 <td className="p-0">
-                  {/* {data[data.length - 7 * cE.numPer] &&
-                  cE.direction === "backward"
-                    ? data[data.length - 7 * cE.numPer][varName] != undefined
-                      ? formatter.format(
-                          data[data.length - 7 * cE.numPer][varName]
-                        )
-                      : "-"
-                    : "-"} */}
-                  {formatValue(
+                  {formatValuePredList(
                     cE.direction,
                     varName,
                     currEntryBack,
@@ -188,7 +162,7 @@ export default function PredList({
                     formatter
                   )}
                 </td>
-                <td className="text-red-800 p-1 text-base align-middle p-0">
+                <td className="text-red-800 p-1 text-base align-middle">
                   <button
                     className="hover:text-red-600"
                     id={cE.id.toString()}

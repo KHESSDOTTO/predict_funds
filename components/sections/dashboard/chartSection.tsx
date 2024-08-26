@@ -24,6 +24,7 @@ import type {
   ChartSectionProps,
   CustomTooltipProps,
   CustomCursorProps,
+  FinalHistogramData,
 } from "@/utils/types";
 
 export default function ChartSection({
@@ -31,7 +32,7 @@ export default function ChartSection({
   smallV,
   predictions,
   loadingHistogram,
-  histogram = [],
+  histogram = false,
 }: ChartSectionProps) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
@@ -46,6 +47,7 @@ export default function ChartSection({
     [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
       "CAPTC_LIQ_ABS_ms"
     ),
+    [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
     screenWidth = useWindowWidth();
 
   function adjustValueQuotaChartAxis(
@@ -153,6 +155,10 @@ export default function ChartSection({
 
   function handleAbsOrPctChange(e: React.ChangeEvent<HTMLInputElement>) {
     setAbsOrPct(e.target.value as "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms");
+  }
+
+  function handleAbsOrPctHistChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setAbsOrPctHist(e.target.value as "abs" | "pct");
   }
 
   useEffect(() => {
@@ -288,7 +294,7 @@ export default function ChartSection({
                   tickFormatter={(num) => {
                     const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
                     const numAbs = String((num / 1000).toFixed(0));
-                    const numPct = (num * 100).toFixed(1);
+                    const numPct = num.toFixed(2);
                     return isPct ? `${numPct}%` : `R$${numAbs} k`;
                   }}
                   tickCount={11}
@@ -349,6 +355,33 @@ export default function ChartSection({
         >
           Preds. Histogram (Market - same ANBIMA Class)
         </h1>
+        <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+          <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
+            <h4 className="mr-2 md:mr-6">Visualization: </h4>
+            <div className="flex text-xs items-center gap-1 md:text-sm">
+              <input
+                type="radio"
+                name="absOrPctHist"
+                id="inpAbsOrPctHistABS"
+                value={"abs"}
+                onChange={handleAbsOrPctHistChange}
+                checked={absOrPctHist === "abs"}
+              />
+              <label htmlFor="monthsCorrel6">Absolute values</label>
+            </div>
+            <div className="flex items-center gap-1 text-xs md:text-sm">
+              <input
+                type="radio"
+                name="absOrPctHist"
+                id="inpAbsOrPctHistPCT"
+                value={"pct"}
+                onChange={handleAbsOrPctHistChange}
+                checked={absOrPctHist === "pct"}
+              />
+              <label>Percentage of Net Asset</label>
+            </div>
+          </form>
+        </div>
         <div className="flex flex-col gap-6 lg:gap-4 lg:flex-row">
           <div
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
@@ -376,21 +409,26 @@ export default function ChartSection({
                 height={smallV ? 200 : histogramHeight - 15}
                 minWidth={250}
               >
-                <BarChart width={900} height={histogramHeight} data={histogram}>
+                <BarChart
+                  width={900}
+                  height={histogramHeight}
+                  data={histogram ? histogram[absOrPctHist] : []}
+                >
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
-                  <XAxis dataKey="xTick" className="text-white" />
+                  <XAxis dataKey="xTick" interval={0} className="text-white" />
                   <YAxis />
                   <Tooltip
                     content={<HistogramTooltip />}
                     cursor={<CustomTooltipCursor />}
                   />
                   <Bar dataKey="value" color="black">
-                    {histogram?.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
-                      />
-                    ))}
+                    {histogram &&
+                      histogram[absOrPctHist]?.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
+                        />
+                      ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -504,14 +542,10 @@ function CustomTooltipIndigo({
   data,
   absOrPct,
 }: CustomTooltipProps) {
-  // console.log(JSON.stringify(payload));
-  // Identify preictions to differentiate on the chart
-  // <IdentificandoPredsLabels>
   const numPreds = 4;
   const predsElements = data?.slice(data.length - numPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
   const adjustAbsOrPct = absOrPct || "CAPTC_LIQ_ABS_ms";
-  // </IdentificandoPredsLabels>
   let tooltipClass =
     "bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm";
   const isPrediction = predsDates?.includes(label);
@@ -520,7 +554,7 @@ function CustomTooltipIndigo({
       "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
   }
   if (active && label && payload) {
-    const valueForPct = (payload[0].payload[adjustAbsOrPct] * 100).toFixed(2);
+    const valueForPct = payload[0].payload[adjustAbsOrPct].toFixed(2);
     const valueForAbs = payload[0].payload[adjustAbsOrPct]
       .toFixed(2)
       .toLocaleString("en-US");

@@ -26,7 +26,6 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);
-    // await disconnect();
     return res.status(500).json({ error: err });
   }
 }

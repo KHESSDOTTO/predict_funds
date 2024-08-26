@@ -44,9 +44,6 @@ function generateYaxisTicksBasedOnMaxMod(
 ) {
   const ticks: number[] = [];
 
-  console.log("maxMod");
-  console.log(maxMod);
-
   const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTick;
 
   if (maxMod <= adjustMaxValueTick || times > 50) {
@@ -125,77 +122,131 @@ function prepareHistogram(
   histogramData: RawHistogramData[],
   numBars: number,
   selCnpj: string
-): FinalHistogramData[] | false {
+): FinalHistogramData | false {
   if (!histogramData || histogramData.length === 0) return false; // Won't run if there is no histogramData or lenght of array = 0
 
-  let step: number;
-  let cVal: number;
-  const limits: number[] = [];
-  const xTicks: string[] = [];
-  const values: number[] = [];
-  let selCnpjBin: boolean[] = [];
+  let stepAbs: number;
+  let cValAbs: number;
+  let stepPct: number;
+  let cValPct: number;
+  const limits: { abs: number[]; pct: number[] } = {
+    abs: [],
+    pct: [],
+  };
+  const xTicks: { abs: string[]; pct: string[] } = {
+    abs: [],
+    pct: [],
+  };
+  const values: { abs: number[]; pct: number[] } = {
+    abs: [],
+    pct: [],
+  };
+  let selCnpjBin: { abs: boolean[]; pct: boolean[] } = {
+    abs: [],
+    pct: [],
+  };
 
-  const minVal = histogramData.reduce((min, cE) => {
+  const minValAbs = histogramData.reduce((min, cE) => {
     return cE["CAPTC_LIQ_ABS_ms"] < min ? cE["CAPTC_LIQ_ABS_ms"] : min;
   }, histogramData[0]["CAPTC_LIQ_ABS_ms"]);
 
-  const maxVal = histogramData.reduce((max, cE) => {
+  const maxValAbs = histogramData.reduce((max, cE) => {
     return cE["CAPTC_LIQ_ABS_ms"] > max ? cE["CAPTC_LIQ_ABS_ms"] : max;
   }, histogramData[0]["CAPTC_LIQ_ABS_ms"]);
 
-  step = (maxVal - minVal) / numBars;
-  cVal = minVal;
+  const minValPct = histogramData.reduce((min, cE) => {
+    return cE["CAPTC_LIQ_PCT_ms"] < min ? cE["CAPTC_LIQ_PCT_ms"] : min;
+  }, histogramData[0]["CAPTC_LIQ_PCT_ms"]);
 
-  // console.log("maxVal");
-  // console.log(maxVal);
-  // console.log("minVal");
-  // console.log(minVal);
-  // console.log("step");
-  // console.log(step);
+  const maxValPct = histogramData.reduce((max, cE) => {
+    return cE["CAPTC_LIQ_PCT_ms"] > max ? cE["CAPTC_LIQ_PCT_ms"] : max;
+  }, histogramData[0]["CAPTC_LIQ_PCT_ms"]);
+
+  stepAbs = (maxValAbs - minValAbs) / numBars;
+  stepPct = (maxValPct - minValPct) / numBars;
+
+  cValAbs = minValAbs;
+  cValPct = minValPct;
 
   // Defining values for limits and xTicks arrays
   for (let i = 0; i < numBars; i++) {
-    const lowerEnd = cVal;
-    const separator = " - ";
-    const upperEnd = cVal + step;
-    const tick =
-      formatNumberToStringK(lowerEnd, false) +
+    const lowerEndAbs = cValAbs;
+    const upperEndAbs = cValAbs + stepAbs;
+
+    const lowerEndPct = cValPct;
+    const upperEndPct = cValPct + stepPct;
+
+    const separator = " | ";
+
+    const tickAbs =
+      formatNumToStrMlnK(lowerEndAbs, false) +
       separator +
-      formatNumberToStringK(upperEnd, i === numBars - 1); // If it is the last limit, than roundUp (true)
-    xTicks.push(tick);
-    limits.push(upperEnd); // No rounding on this array to count the elements in each interval of values
-    values.push(0);
-    selCnpjBin.push(false);
-    cVal = upperEnd;
+      formatNumToStrMlnK(upperEndAbs, i === numBars - 1); // If it is the last limit, than roundUp (true)
+    const tickPct =
+      lowerEndPct.toFixed(1) + "%" + separator + upperEndPct.toFixed(1) + "%";
+
+    xTicks.abs.push(tickAbs);
+    limits.abs.push(upperEndAbs); // No rounding on this array to count the elements in each interval of values
+    values.abs.push(0);
+    selCnpjBin.abs.push(false);
+    cValAbs = upperEndAbs;
+
+    xTicks.pct.push(tickPct);
+    limits.pct.push(upperEndPct); // No rounding on this array to count the elements in each interval of values
+    values.pct.push(0);
+    selCnpjBin.pct.push(false);
+    cValPct = upperEndPct;
   }
   // End of limits and xTicks arrays
 
-  // Count elements on each interval of values to be the Yaxis values (based on 'limits' array)
+  // Count elements on each interval of values to be the Yaxis values (based on 'limits' array for both abs and Pct)
   histogramData.forEach((cE) => {
-    const index = limits.findIndex((limit) => cE["CAPTC_LIQ_ABS_ms"] <= limit);
-    if (index !== -1) {
-      values[index]++;
+    // Abs values
+    const indexAbs = limits.abs.findIndex(
+      (limit) => cE["CAPTC_LIQ_ABS_ms"] <= limit
+    );
+    if (indexAbs !== -1) {
+      values.abs[indexAbs]++;
     }
-    if (cE.CNPJ_FUNDO === selCnpj && index !== -1) {
-      selCnpjBin[index] = true;
+    if (cE.CNPJ_FUNDO === selCnpj && indexAbs !== -1) {
+      selCnpjBin.abs[indexAbs] = true;
+    }
+
+    // Pct values
+    const indexPct = limits.pct.findIndex(
+      (limit) => cE["CAPTC_LIQ_PCT_ms"] <= limit
+    );
+    if (indexPct !== -1) {
+      values.pct[indexPct]++;
+    }
+    if (cE.CNPJ_FUNDO === selCnpj && indexPct !== -1) {
+      selCnpjBin.pct[indexPct] = true;
     }
   });
   // End of the counting of values for the histogram
 
-  const finalData = xTicks.map((cE, cI) => ({
+  // Building final data format for absolute values
+  const finalDataAbs = xTicks.abs.map((cE, cI) => ({
     xTick: cE,
-    value: values[cI],
-    limit: limits[cI],
-    selCnpjBin: selCnpjBin[cI],
+    value: values.abs[cI],
+    limit: limits.abs[cI],
+    selCnpjBin: selCnpjBin.abs[cI],
   }));
+
+  // Building final data format for percentual values
+  const finalDataPct = xTicks.pct.map((cE, cI) => ({
+    xTick: cE,
+    value: values.pct[cI],
+    limit: limits.pct[cI],
+    selCnpjBin: selCnpjBin.pct[cI],
+  }));
+
+  const finalData = { abs: finalDataAbs, pct: finalDataPct };
 
   return finalData;
 }
 
-function formatNumberToStringK(
-  number: number,
-  roundUp: boolean = false
-): string {
+function formatNumToStrMlnK(number: number, roundUp: boolean = false): string {
   const absVal: number = Math.abs(number);
   const neg: boolean = number < 0;
   const localeString = "en-US";

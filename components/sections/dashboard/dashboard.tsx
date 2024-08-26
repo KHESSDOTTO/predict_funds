@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import {
   CadastroFundosType,
   DashboardControlFormType,
+  FinalHistogramData,
   HistoricType,
   PredictionsType,
   UserType,
@@ -31,7 +32,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     ),
     [predictionData, setPredictionData] = useState<PredictionsType[]>([]),
     [loadingHistogram, setLoadingHistogram] = useState<boolean>(true),
-    [histogram, setHistogram] = useState<any[]>([]),
+    [histogram, setHistogram] = useState<FinalHistogramData | false>(false),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       baseDate: ancoras ? ancoras[0] : "2024-05-31T00:00:00.00Z",
       buscaCnpj: user.cnpj,
