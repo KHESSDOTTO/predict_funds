@@ -1,10 +1,9 @@
-import { addHours, format } from "date-fns";
 import ButtonIndigo from "../../UI/buttonIndigo";
 import { useContext, useEffect } from "react";
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
-import { subWeeks, addDays, getDay, addWeeks } from "date-fns";
+import { subWeeks, addWeeks, format } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 import { prepareHistogram } from "@/functions/functions";
@@ -145,7 +144,7 @@ export default function ControlSection({
   }
 
   async function getHistogram(controlForm: DashboardControlFormType) {
-    const numBins = 10; // Number of bins desired for the histogram
+    const numBins = 7; // Number of bins desired for the histogram
 
     setLoadingHistogram(true);
     if (!controlForm.anbimaClass) return; // Won't execute if there is no anbimaClass
@@ -161,6 +160,10 @@ export default function ControlSection({
           numBins,
           controlForm.buscaCnpj
         );
+
+        console.log("histogram");
+        console.log(histogram);
+
         setHistogram(histogram);
       }
     } catch (err) {
@@ -388,11 +391,10 @@ export default function ControlSection({
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
                 >
                   {ancoras?.map((cE, cI) => {
-                    const timeZoneBrDate = new Date(cE);
-                    const correctDate = addHours(timeZoneBrDate, 3);
+                    const ancora = new Date(cE);
                     return (
                       <option key={cI} value={cE}>
-                        {format(correctDate, "dd/MM/yyyy")}
+                        {format(ancora, "dd/MM/yyyy")}
                       </option>
                     );
                   })}
@@ -561,11 +563,10 @@ export default function ControlSection({
                     className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
                   >
                     {ancoras?.map((cE, cI) => {
-                      const timeZoneBrDate = new Date(cE);
-                      const correctDate = addHours(timeZoneBrDate, 3);
+                      const ancora = new Date(cE);
                       return (
                         <option key={cI} value={cE}>
-                          {format(correctDate, "dd/MM/yyyy")}
+                          {format(ancora, "dd/MM/yyyy")}
                         </option>
                       );
                     })}

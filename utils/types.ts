@@ -125,9 +125,18 @@ interface RawHistogramData {
 }
 
 interface FinalHistogramData {
-  xTick: string;
-  value: number;
-  limit: number;
+  abs: {
+    xTick: string;
+    value: number;
+    limit: number;
+    selCnpjBin: boolean;
+  }[];
+  pct: {
+    xTick: string;
+    value: number;
+    limit: number;
+    selCnpjBin: boolean;
+  }[];
 }
 
 interface CenarioType {
@@ -157,7 +166,7 @@ interface ChartSectionProps {
   smallV: boolean;
   predictions: PredictionsType[];
   loadingHistogram?: boolean;
-  histogram?: any[];
+  histogram?: FinalHistogramData | false;
 }
 
 interface CustomCursorProps {

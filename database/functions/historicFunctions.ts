@@ -18,7 +18,8 @@ async function getAllHistoricByCnpj(cnpj: string, baseDate: string) {
         }
       }
 
-      const captcLiqPct = cE._doc["CAPTC_LIQ_ms"] / cE._doc["VL_PATRIM_LIQ_ms"];
+      const captcLiqPct =
+        (cE._doc["CAPTC_LIQ_ms"] / cE._doc["VL_PATRIM_LIQ_ms"]) * 100;
       newDoc["CAPTC_LIQ_PCT_ms"] = captcLiqPct;
 
       cE._doc = newDoc;
