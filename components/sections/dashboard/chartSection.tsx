@@ -26,6 +26,7 @@ import type {
   CustomCursorProps,
   FinalHistogramData,
 } from "@/utils/types";
+import { formatterBrNumber } from "@/utils/numberFormatters";
 
 export default function ChartSection({
   data,
@@ -48,6 +49,7 @@ export default function ChartSection({
       "CAPTC_LIQ_ABS_ms"
     ),
     [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
+    [isMobile, setIsMobile] = useState<boolean>(false),
     screenWidth = useWindowWidth();
 
   function adjustValueQuotaChartAxis(
@@ -175,9 +177,11 @@ export default function ChartSection({
     if (screenWidth > 992) {
       setChartHeight(400);
       setHistogramHeight(500);
+      setIsMobile(false);
     } else {
       setChartHeight(300);
       setHistogramHeight(300);
+      setIsMobile(true);
     }
   }, [screenWidth]);
 
@@ -282,7 +286,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  fontSize={12}
+                  fontSize={isMobile ? 10 : 12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
                     return format(DT_COMPTC, `dd/MM`);
@@ -415,7 +419,12 @@ export default function ChartSection({
                   data={histogram ? histogram[absOrPctHist] : []}
                 >
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
-                  <XAxis dataKey="xTick" interval={0} className="text-white" />
+                  <XAxis
+                    dataKey="xTick"
+                    fontSize={isMobile ? 10 : 12}
+                    className="text-white"
+                    interval={isMobile ? 1 : 0}
+                  />
                   <YAxis />
                   <Tooltip
                     content={<HistogramTooltip />}
@@ -484,8 +493,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  interval={smallV ? 8 : 6}
-                  fontSize={12}
+                  fontSize={isMobile ? 10 : 12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
                     return format(DT_COMPTC, `dd/MM`);
@@ -554,20 +562,19 @@ function CustomTooltipIndigo({
       "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
   }
   if (active && label && payload) {
-    const valueForPct = payload[0].payload[adjustAbsOrPct].toFixed(2);
-    const valueForAbs = payload[0].payload[adjustAbsOrPct]
-      .toFixed(2)
-      .toLocaleString("en-US");
+    const formattedValue = formatterBrNumber.format(
+      payload[0].payload[adjustAbsOrPct]
+    );
     return (
       <div className={tooltipClass}>
         {isPrediction && <h3 className="font-semibold mb-1">Prediction</h3>}
         {!isPrediction && <h3 className="font-semibold ">Historic</h3>}
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
-          Net Funding:
+          Net Funding:&nbsp;
           {absOrPct === "CAPTC_LIQ_PCT_ms"
-            ? valueForPct + "%"
-            : "R$" + valueForAbs}
+            ? formattedValue + "%"
+            : "R$ " + formattedValue}
         </p>
       </div>
     );
@@ -582,8 +589,10 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
       <div className="bg-black/80 text-white p-2 rounded-md shadow-yellow-700 shadow-sm">
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         <p>
-          Quota: R$
-          {payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")}
+          Quota: R$&nbsp;
+          {formatterBrNumber.format(
+            payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")
+          )}
         </p>
       </div>
     );
@@ -591,13 +600,22 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
   return <></>;
 }
 
-function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
+function HistogramTooltip({
+  active,
+  payload,
+  label,
+  isMobile,
+}: CustomTooltipProps) {
   if (active && payload && payload.length) {
     const selCnpjBin = payload[0].payload.selCnpjBin;
     const msg1 = selCnpjBin ? `You are here.` : "";
     const msg2 = `Count: ${payload[0].value}`;
     const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
     const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
+    let adjustedLabel = label;
+    if (isMobile) {
+      adjustedLabel = label.replace("|", "<br>");
+    }
     return (
       <div
         className="bg-black/80 p-2 rounded-md"
@@ -612,6 +630,7 @@ function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
           )}
           {msg2}
         </p>
+        <p>{"Interval: " + adjustedLabel}</p>
       </div>
     );
   }

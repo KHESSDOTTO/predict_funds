@@ -3,6 +3,7 @@ import { PredictionsType, HistoricType } from "@/utils/types";
 import { addWeeks, subWeeks } from "date-fns";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { formatterBrNumber } from "@/utils/numberFormatters";
 
 interface PredListPropsType {
   title: string;
@@ -31,11 +32,6 @@ export default function PredList({
   const [showAddRow, setShowAddRow] = useState(false);
   const [lastHistoricDate, setLastHistoricDate] = useState(new Date());
   const isPct = varName === "CAPTC_LIQ_PCT_ms";
-  const formatter = new Intl.NumberFormat("de-DE", {
-    style: "decimal",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
 
   useEffect(() => {
     if (data[data.length - 1]) {
@@ -159,7 +155,7 @@ export default function PredList({
                     varName,
                     currEntryBack,
                     currEntryFront,
-                    formatter
+                    formatterBrNumber
                   )}
                 </td>
                 <td className="text-red-800 p-1 text-base align-middle">

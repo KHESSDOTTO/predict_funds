@@ -159,6 +159,7 @@ interface ToneColorsInterface {
 interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
   data?: (HistoricType | PredictionsType)[];
   absOrPct?: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+  isMobile?: boolean;
 }
 
 interface ChartSectionProps {
