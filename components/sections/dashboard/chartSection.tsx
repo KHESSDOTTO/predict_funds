@@ -43,8 +43,6 @@ export default function ChartSection({
       (HistoricType | PredictionsType)[]
     >([...data]),
     [gradientOffset, setGradientOffset] = useState(1),
-    [chartHeight, setChartHeight] = useState(0),
-    [histogramHeight, setHistogramHeight] = useState(0),
     [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
       "CAPTC_LIQ_ABS_ms"
     ),
@@ -106,25 +104,25 @@ export default function ChartSection({
 
     if (maxModValueNF) {
       // Defyning domain.
-      const decimalPlaces = isPct ? 4 : 2;
       maxModValueNF =
         modValuePred > Math.abs(maxModValueNF)
-          ? Number(Math.abs(modValuePred).toFixed(decimalPlaces))
-          : Number(Math.abs(maxModValueNF).toFixed(decimalPlaces));
+          ? Number(Math.abs(modValuePred).toFixed(2))
+          : Number(Math.abs(maxModValueNF).toFixed(2));
 
       const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
       if (newDomain) {
         setDomainYaxisNF(newDomain);
       }
+
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxMod(
         maxModValueNF,
         isPct
       );
-      console.log("newYaxisNFTicks");
-      console.log(newYaxisNFTicks);
+
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
+
       return true;
     }
     return false;
@@ -175,12 +173,8 @@ export default function ChartSection({
 
   useEffect(() => {
     if (screenWidth > 992) {
-      setChartHeight(400);
-      setHistogramHeight(500);
       setIsMobile(false);
     } else {
-      setChartHeight(300);
-      setHistogramHeight(300);
       setIsMobile(true);
     }
   }, [screenWidth]);
@@ -246,7 +240,7 @@ export default function ChartSection({
             } lg:rounded-xl`}
           >
             <ResponsiveContainer
-              height={smallV ? 200 : chartHeight}
+              height={smallV ? 200 : isMobile ? 300 : 400}
               minWidth={250}
             >
               <BarChart data={unifiedData}>
@@ -391,7 +385,7 @@ export default function ChartSection({
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
             } lg:rounded-xl lg:mx-8`}
-            style={{ height: histogramHeight }}
+            style={{ height: isMobile ? 300 : 500 }}
           >
             {loadingHistogram && (
               <div className="flex flex-col h-full relative items-center justify-center">
@@ -410,12 +404,12 @@ export default function ChartSection({
             )}
             {!loadingHistogram && (
               <ResponsiveContainer
-                height={smallV ? 200 : histogramHeight - 15}
+                height={smallV ? 200 : isMobile ? 300 : 500}
                 minWidth={250}
               >
                 <BarChart
                   width={900}
-                  height={histogramHeight}
+                  height={isMobile ? 300 : 500}
                   data={histogram ? histogram[absOrPctHist] : []}
                 >
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
@@ -473,7 +467,7 @@ export default function ChartSection({
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 200 : chartHeight}>
+            <ResponsiveContainer height={smallV ? 200 : isMobile ? 300 : 400}>
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">

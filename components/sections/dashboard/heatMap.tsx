@@ -46,7 +46,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
       if (newSelCorrel.fund && newSelCorrel.avg) {
         const newTickers: string[] = Object.keys(newSelCorrel.fund);
 
-        const exclude = ["janela_em_meses", "CLASSE_ANBIMA"];
+        const exclude = ["janela_em_meses", "CLASSE_ANBIMA", "updated_at"];
 
         const filteredTickers = newTickers.filter(
           (cE) => !exclude.includes(cE)

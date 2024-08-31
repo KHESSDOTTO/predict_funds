@@ -64,6 +64,18 @@ interface PredictionsType {
   [key: string]: string | number | Date | undefined; // Adjust the index signature to accommodate both types
 }
 
+interface ConfidenceIntervalType {
+  CNPJ_FUNDO: string;
+  mean: number;
+  std: number;
+  CI90: number;
+  CI95: number;
+  CI99: number;
+  ancora: Date;
+  datahora_calc_residual_abs: Date;
+  [key: string]: string | number | Date; // Adjust the index signature to accommodate both types
+}
+
 interface ButtonPropsType {
   children: ReactNode;
   shadowColor: string;
@@ -188,6 +200,7 @@ export type {
   DashboardControlFormType,
   CenarioType,
   PredictionsType,
+  ConfidenceIntervalType,
   CadastroFundosType,
   RawHistogramData,
   FinalHistogramData,

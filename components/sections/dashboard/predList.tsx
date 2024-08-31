@@ -68,7 +68,6 @@ export default function PredList({
 
   function handleShowAddRow() {
     setShowAddRow(true);
-    console.log("Clicked");
   }
 
   function handleChangeNewRow(

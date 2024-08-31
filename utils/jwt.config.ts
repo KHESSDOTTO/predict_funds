@@ -59,7 +59,6 @@ function verifyToken(token: string) {
     const userToken = jwt.verify(token, process.env.TOKEN_SIGN_SECRET);
     return userToken;
   } else {
-    console.log("Token secret not defined");
     return false;
   }
 }

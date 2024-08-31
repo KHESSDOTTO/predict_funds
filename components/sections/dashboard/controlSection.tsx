@@ -161,9 +161,6 @@ export default function ControlSection({
           controlForm.buscaCnpj
         );
 
-        console.log("histogram");
-        console.log(histogram);
-
         setHistogram(histogram);
       }
     } catch (err) {
