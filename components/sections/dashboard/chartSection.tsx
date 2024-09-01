@@ -7,8 +7,10 @@ import {
   Area,
   ResponsiveContainer,
   BarChart,
+  ComposedChart,
   Bar,
   Cell,
+  Scatter,
 } from "recharts";
 import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
@@ -29,7 +31,7 @@ import type {
 import { formatterBrNumber } from "@/utils/numberFormatters";
 
 export default function ChartSection({
-  data,
+  historic,
   smallV,
   predictions,
   loadingHistogram,
@@ -39,9 +41,9 @@ export default function ChartSection({
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
     [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
-    [unifiedData, setUnifiedData] = useState<
+    [unifiedNFData, setUnifiedNFData] = useState<
       (HistoricType | PredictionsType)[]
-    >([...data]),
+    >([...historic]),
     [gradientOffset, setGradientOffset] = useState(1),
     [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
       "CAPTC_LIQ_ABS_ms"
@@ -84,20 +86,20 @@ export default function ChartSection({
   }
 
   function adjustNetFundingChartAxis(
-    data: HistoricType[],
+    historic: HistoricType[],
     absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms"
   ) {
     const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
     // Defining values for domain/axis in Net Funding Chart
-    // Max absolute value in historic data
-    let maxModValueNF = data.reduce((maxAbsObj, currObj) => {
+    // Max absolute value in historic historic
+    let maxModValueNF = historic.reduce((maxAbsObj, currObj) => {
       return Math.abs(currObj[absOrPct] ?? 0) >
         (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
         ? currObj
         : maxAbsObj;
-    }, data[0])[absOrPct];
+    }, historic[0])[absOrPct];
 
-    // Value of prediction to compare with highest absolute value of historic data.
+    // Value of prediction to compare with highest absolute value of historic historic.
     const modValuePred = predictions[0][absOrPct]
       ? Math.abs(Number(predictions[0][absOrPct]))
       : 0;
@@ -128,13 +130,55 @@ export default function ChartSection({
     return false;
   }
 
-  function unifyData() {
+  function prepareChartNFData(
+    historic: HistoricType[],
+    predictions: PredictionsType[],
+    absOrPct: string
+  ) {
+    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
+    const suffix = isPct ? "PCT" : "ABS";
+    // Preparing data for scatter chart
+    const newHistoric = historic.map((cE) => {
+      return {
+        ...cE,
+        CI_minor_90: null,
+        CI_major_90: null,
+        CI_minor_95: null,
+        CI_major_95: null,
+        CI_minor_99: null,
+        CI_major_99: null,
+      };
+    });
+
+    const newPredictions = predictions.map((cE) => {
+      if (!cE[absOrPct]) {
+        return cE;
+      }
+
+      const predVal = cE[absOrPct] as number;
+      const confidenceInterval90 = cE[`CI90_${suffix}`] as number;
+      const confidenceInterval95 = cE[`CI95_${suffix}`] as number;
+      const confidenceInterval99 = cE[`CI99_${suffix}`] as number;
+
+      return {
+        ...cE,
+        CI_minor_90: predVal - confidenceInterval90,
+        CI_major_90: predVal + confidenceInterval90,
+        CI_minor_95: predVal - confidenceInterval95,
+        CI_major_95: predVal + confidenceInterval95,
+        CI_minor_99: predVal - confidenceInterval99,
+        CI_major_99: predVal + confidenceInterval99,
+      };
+    });
+
     // Unifying data
-    const newUnifiedData = [...data, ...predictions]; // Slice to exclude last data present in historic
+    const newUnifiedNFData = [...newHistoric, ...newPredictions];
     const newGradientOffset =
-      (newUnifiedData.length - predictions.slice(1).length) /
-      newUnifiedData.length;
-    setUnifiedData(newUnifiedData);
+      (newUnifiedNFData.length - predictions.slice(1).length) /
+      newUnifiedNFData.length;
+    console.log("newUnifiedNFData");
+    console.log(newUnifiedNFData);
+    setUnifiedNFData(newUnifiedNFData);
     setGradientOffset(newGradientOffset);
   }
 
@@ -144,7 +188,7 @@ export default function ChartSection({
     }
     let barColor: string;
     const currDate = dataPoint.DT_COMPTC;
-    const lastHistoricData = data[data.length - 1]["DT_COMPTC"];
+    const lastHistoricData = historic[historic.length - 1]["DT_COMPTC"];
     if (currDate > lastHistoricData) {
       barColor = "white";
     } else {
@@ -162,14 +206,14 @@ export default function ChartSection({
   }
 
   useEffect(() => {
-    if (data.length === 0 || predictions.length === 0) {
+    if (historic.length === 0 || predictions.length === 0) {
       return;
     }
-    adjustValueQuotaChartAxis(data, absOrPct);
-    if (adjustNetFundingChartAxis(data, absOrPct)) {
-      unifyData();
+    adjustValueQuotaChartAxis(historic, absOrPct);
+    if (adjustNetFundingChartAxis(historic, absOrPct)) {
+      prepareChartNFData(historic, predictions, absOrPct);
     }
-  }, [data, predictions, absOrPct]);
+  }, [historic, predictions, absOrPct]);
 
   useEffect(() => {
     if (screenWidth > 992) {
@@ -243,7 +287,7 @@ export default function ChartSection({
               height={smallV ? 200 : isMobile ? 300 : 400}
               minWidth={250}
             >
-              <BarChart data={unifiedData}>
+              <ComposedChart data={unifiedNFData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
@@ -300,13 +344,9 @@ export default function ChartSection({
                   width={65}
                   fontSize={12}
                 />
-                <CartesianGrid
-                  // vertical={false}
-                  stroke="rgb(170, 150, 255)"
-                  strokeWidth={0.3}
-                />
+                <CartesianGrid stroke="rgb(170, 150, 255)" strokeWidth={0.3} />
                 <Bar type="monotone" dataKey={absOrPct}>
-                  {unifiedData.map((cE, cI) => (
+                  {unifiedNFData.map((cE, cI) => (
                     <Cell
                       key={`cell-${cI}`}
                       fill={getBarColor(cE)}
@@ -314,16 +354,45 @@ export default function ChartSection({
                     />
                   ))}
                 </Bar>
+                <Scatter
+                  dataKey={"CI_major_90"}
+                  fill="rgb(0, 0, 225)"
+                  format="circle"
+                ></Scatter>
+                <Scatter
+                  dataKey={"CI_minor_90"}
+                  fill="rgb(225, 0, 0)"
+                  format="circle"
+                ></Scatter>
+                <Scatter
+                  dataKey={"CI_major_95"}
+                  fill="rgb(0, 0, 205)"
+                  format="circle"
+                ></Scatter>
+                <Scatter
+                  dataKey={"CI_minor_95"}
+                  fill="rgb(205, 0, 0)"
+                  format="circle"
+                ></Scatter>
+                <Scatter
+                  dataKey={"CI_major_99"}
+                  fill="rgb(0, 0, 175)"
+                  format="circle"
+                ></Scatter>
+                <Scatter
+                  dataKey={"CI_minor_99"}
+                  fill="rgb(175, 0, 0)"
+                  format="circle"
+                ></Scatter>
                 <Tooltip
                   content={
                     <CustomTooltipIndigo
-                      data={unifiedData}
+                      data={unifiedNFData}
                       absOrPct={absOrPct}
                     />
                   }
-                  cursor={<CustomTooltipCursor />}
                 />
-              </BarChart>
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
           {!smallV && (
@@ -331,7 +400,7 @@ export default function ChartSection({
               <PredList
                 title="Net Funding"
                 onlyBack={false}
-                data={data}
+                historic={historic}
                 predictions={predictions}
                 varName={absOrPct}
               />
@@ -468,7 +537,7 @@ export default function ChartSection({
             } lg:rounded-xl`}
           >
             <ResponsiveContainer height={smallV ? 200 : isMobile ? 300 : 400}>
-              <AreaChart data={data}>
+              <AreaChart data={historic}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
                     <stop
@@ -525,7 +594,7 @@ export default function ChartSection({
               <PredList
                 title="Value Quota (history)"
                 onlyBack={true}
-                data={data}
+                historic={historic}
                 predictions={predictions}
                 varName={"VL_QUOTA_ms"}
               />

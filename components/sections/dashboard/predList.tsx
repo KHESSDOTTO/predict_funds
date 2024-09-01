@@ -8,7 +8,7 @@ import { formatterBrNumber } from "@/utils/numberFormatters";
 interface PredListPropsType {
   title: string;
   onlyBack: boolean;
-  data: HistoricType[];
+  historic: HistoricType[];
   predictions: PredictionsType[];
   varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
 }
@@ -16,7 +16,7 @@ interface PredListPropsType {
 export default function PredList({
   title,
   onlyBack,
-  data,
+  historic,
   predictions,
   varName,
 }: PredListPropsType) {
@@ -34,10 +34,10 @@ export default function PredList({
   const isPct = varName === "CAPTC_LIQ_PCT_ms";
 
   useEffect(() => {
-    if (data[data.length - 1]) {
-      setLastHistoricDate(data[data.length - 1].DT_COMPTC);
+    if (historic[historic.length - 1]) {
+      setLastHistoricDate(historic[historic.length - 1].DT_COMPTC);
     }
-  }, [data, predictions]);
+  }, [historic, predictions]);
 
   function formatValuePredList(
     direction: string,
@@ -117,7 +117,7 @@ export default function PredList({
         <tbody>
           {predRows.map((cE) => {
             let tgtDate = lastHistoricDate;
-            let entriesBack = data;
+            let entriesBack = historic;
             let entriesFront = predictions;
 
             if (cE.direction === "backward") {
