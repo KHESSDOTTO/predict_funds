@@ -11,6 +11,7 @@ import {
   Bar,
   Cell,
   Scatter,
+  ErrorBar,
 } from "recharts";
 import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
@@ -223,6 +224,8 @@ export default function ChartSection({
     }
   }, [screenWidth]);
 
+  let previousCx: number | null, previousCy: number | null;
+
   return (
     <div
       className={`${
@@ -346,44 +349,51 @@ export default function ChartSection({
                 />
                 <CartesianGrid stroke="rgb(170, 150, 255)" strokeWidth={0.3} />
                 <Bar type="monotone" dataKey={absOrPct}>
-                  {unifiedNFData.map((cE, cI) => (
-                    <Cell
-                      key={`cell-${cI}`}
-                      fill={getBarColor(cE)}
-                      stroke={getBarColor(cE)}
-                    />
-                  ))}
+                  {unifiedNFData.map((cE, cI) => {
+                    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
+                    const absOrPctId = isPct ? "PCT" : "ABS";
+                    return (
+                      <>
+                        <Cell
+                          key={`cell-${cI}`}
+                          fill={getBarColor(cE)}
+                          stroke={getBarColor(cE)}
+                        />
+                        {[
+                          {
+                            name: "CI90",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 6,
+                            strokeWidth: 1,
+                          },
+                          {
+                            name: "CI95",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 10,
+                            strokeWidth: 1,
+                          },
+                          {
+                            name: "CI99",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 14,
+                            strokeWidth: 1,
+                          },
+                        ].map((cE2, cI2) => {
+                          return (
+                            <ErrorBar
+                              key={`cell-${cI}-subcell-${cI2}`}
+                              dataKey={`${cE2.name}_${absOrPctId}`}
+                              stroke={cE2.stroke}
+                              width={cE2.width}
+                              strokeWidth={cE2.strokeWidth}
+                              direction="y"
+                            />
+                          );
+                        })}
+                      </>
+                    );
+                  })}
                 </Bar>
-                <Scatter
-                  dataKey={"CI_major_90"}
-                  fill="rgb(0, 0, 225)"
-                  format="circle"
-                ></Scatter>
-                <Scatter
-                  dataKey={"CI_minor_90"}
-                  fill="rgb(225, 0, 0)"
-                  format="circle"
-                ></Scatter>
-                <Scatter
-                  dataKey={"CI_major_95"}
-                  fill="rgb(0, 0, 205)"
-                  format="circle"
-                ></Scatter>
-                <Scatter
-                  dataKey={"CI_minor_95"}
-                  fill="rgb(205, 0, 0)"
-                  format="circle"
-                ></Scatter>
-                <Scatter
-                  dataKey={"CI_major_99"}
-                  fill="rgb(0, 0, 175)"
-                  format="circle"
-                ></Scatter>
-                <Scatter
-                  dataKey={"CI_minor_99"}
-                  fill="rgb(175, 0, 0)"
-                  format="circle"
-                ></Scatter>
                 <Tooltip
                   content={
                     <CustomTooltipIndigo
@@ -646,7 +656,6 @@ function CustomTooltipIndigo({
 }
 
 function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
-  // console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-md shadow-yellow-700 shadow-sm">
