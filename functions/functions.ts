@@ -307,6 +307,12 @@ function buildPredKey(
   return predKey;
 }
 
+function consoleLog(varObj: any): void {
+  const varName = Object.keys(varObj)[0];
+  console.log(`${varName}`);
+  console.log(varObj[varName]);
+}
+
 export {
   capitalize,
   pushIfNew,
@@ -315,4 +321,5 @@ export {
   generateYaxisDomainBasedOnMaxMod,
   prepareHistogram,
   buildPredKey,
+  consoleLog,
 };

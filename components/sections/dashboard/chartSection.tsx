@@ -7,17 +7,20 @@ import {
   Area,
   ResponsiveContainer,
   BarChart,
-  ComposedChart,
   Bar,
   Cell,
-  Scatter,
+  Line,
   ErrorBar,
+  ReferenceLine,
+  LineChart,
+  ComposedChart,
 } from "recharts";
 import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
 import {
+  consoleLog,
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
 } from "@/functions/functions";
@@ -175,10 +178,10 @@ export default function ChartSection({
     // Unifying data
     const newUnifiedNFData = [...newHistoric, ...newPredictions];
     const newGradientOffset =
-      (newUnifiedNFData.length - predictions.slice(1).length) /
-      newUnifiedNFData.length;
-    console.log("newUnifiedNFData");
-    console.log(newUnifiedNFData);
+      (newUnifiedNFData.length - predictions.length) /
+      (newUnifiedNFData.length - 1);
+    consoleLog({ newUnifiedNFData });
+    consoleLog({ newGradientOffset });
     setUnifiedNFData(newUnifiedNFData);
     setGradientOffset(newGradientOffset);
   }
@@ -223,8 +226,6 @@ export default function ChartSection({
       setIsMobile(true);
     }
   }, [screenWidth]);
-
-  let previousCx: number | null, previousCy: number | null;
 
   return (
     <div
@@ -294,12 +295,12 @@ export default function ChartSection({
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
-                      offset={gradientOffset * 0.95}
+                      offset={gradientOffset}
                       stopColor="rgb(150, 130, 200)"
                       stopOpacity={0.85}
                     />
                     <stop
-                      offset={gradientOffset * 1.1}
+                      offset={gradientOffset}
                       stopColor="white"
                       stopOpacity={1}
                     />
@@ -312,12 +313,12 @@ export default function ChartSection({
                     y2="0"
                   >
                     <stop
-                      offset={gradientOffset * 0.98}
+                      offset={gradientOffset}
                       stopColor="rgb(120, 50, 150)"
                       stopOpacity={1}
                     />
                     <stop
-                      offset={gradientOffset * 1.02}
+                      offset={gradientOffset}
                       stopColor="white"
                       stopOpacity={1}
                     />
@@ -348,17 +349,27 @@ export default function ChartSection({
                   fontSize={12}
                 />
                 <CartesianGrid stroke="rgb(170, 150, 255)" strokeWidth={0.3} />
-                <Bar type="monotone" dataKey={absOrPct}>
+                <Area
+                  dataKey={absOrPct}
+                  type="linear"
+                  fill="indigo"
+                  fillOpacity={0.15}
+                />
+                <Line
+                  type="linear"
+                  dataKey={absOrPct}
+                  stroke="url(#customIndigo)"
+                  strokeWidth={2}
+                  dot={{
+                    stroke: "rgb(150, 130, 200)",
+                    strokeWidth: 2,
+                  }}
+                >
                   {unifiedNFData.map((cE, cI) => {
                     const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
                     const absOrPctId = isPct ? "PCT" : "ABS";
                     return (
                       <>
-                        <Cell
-                          key={`cell-${cI}`}
-                          fill={getBarColor(cE)}
-                          stroke={getBarColor(cE)}
-                        />
                         {[
                           {
                             name: "CI90",
@@ -381,7 +392,7 @@ export default function ChartSection({
                         ].map((cE2, cI2) => {
                           return (
                             <ErrorBar
-                              key={`cell-${cI}-subcell-${cI2}`}
+                              key={`errorBar-${cE.DT_COMPTC}-${cE2.name}`}
                               dataKey={`${cE2.name}_${absOrPctId}`}
                               stroke={cE2.stroke}
                               width={cE2.width}
@@ -393,7 +404,10 @@ export default function ChartSection({
                       </>
                     );
                   })}
-                </Bar>
+                </Line>
+
+                <ReferenceLine y={0} fill="white" strokeWidth={2} />
+
                 <Tooltip
                   content={
                     <CustomTooltipIndigo
@@ -624,15 +638,120 @@ function CustomTooltipIndigo({
   absOrPct,
 }: CustomTooltipProps) {
   const numPreds = 4;
+  const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
   const predsElements = data?.slice(data.length - numPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
   const adjustAbsOrPct = absOrPct || "CAPTC_LIQ_ABS_ms";
+  const isPrediction = predsDates?.includes(label);
   let tooltipClass =
     "bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm";
-  const isPrediction = predsDates?.includes(label);
-  if (isPrediction) {
+  let CI90_lower: string;
+  let CI90_upper: string;
+  let CI95_lower: string;
+  let CI95_upper: string;
+  let CI99_lower: string;
+  let CI99_upper: string;
+  let CI90_LABEL: string = "";
+  let CI95_LABEL: string = "";
+  let CI99_LABEL: string = "";
+  if (isPrediction && payload && payload[0]) {
+    const payloadFirstElement = payload[0];
     tooltipClass =
       "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
+
+    CI90_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI90_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI95_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI95_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI99_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI99_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI90_LABEL = `Confidence 90%:  ${
+      isPct ? CI90_lower + "%" : "R$ " + CI90_lower
+    } | ${isPct ? CI90_upper + "%" : "R$ " + CI90_upper}`;
+    CI95_LABEL = `Confidence 95%:  ${
+      isPct ? CI95_lower + "%" : "R$ " + CI95_lower
+    } | ${isPct ? CI95_upper + "%" : "R$ " + CI95_upper}`;
+    CI99_LABEL = `Confidence 99%:  ${
+      isPct ? CI99_lower + "%" : "R$ " + CI99_lower
+    } | ${isPct ? CI99_upper + "%" : "R$ " + CI99_upper}`;
   }
   if (active && label && payload) {
     const formattedValue = formatterBrNumber.format(
@@ -645,10 +764,15 @@ function CustomTooltipIndigo({
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
           Net Funding:&nbsp;
-          {absOrPct === "CAPTC_LIQ_PCT_ms"
-            ? formattedValue + "%"
-            : "R$ " + formattedValue}
+          {isPct ? formattedValue + "%" : "R$ " + formattedValue}
         </p>
+        {isPrediction && payload && (
+          <div className="flex flex-col gap-1 py-2 text-xs text-gray-200">
+            <p>{CI90_LABEL}</p>
+            <p>{CI95_LABEL}</p>
+            <p>{CI99_LABEL}</p>
+          </div>
+        )}
       </div>
     );
   }
