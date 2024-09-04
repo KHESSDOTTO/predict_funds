@@ -73,9 +73,9 @@ async function getPredictions(controlForm: DashboardControlFormType) {
         CI90_ABS: confidenceIntervalDoc?.CI90,
         CI95_ABS: confidenceIntervalDoc?.CI95,
         CI99_ABS: confidenceIntervalDoc?.CI99,
-        CI90_PCT: confidenceIntervalDoc?.CI90_PCT,
-        CI95_PCT: confidenceIntervalDoc?.CI95_PCT,
-        CI99_PCT: confidenceIntervalDoc?.CI99_PCT,
+        CI90_PCT: confidenceIntervalDoc?.CI90_PCT as number,
+        CI95_PCT: confidenceIntervalDoc?.CI95_PCT as number,
+        CI99_PCT: confidenceIntervalDoc?.CI99_PCT as number,
       };
     } else {
       return false;
