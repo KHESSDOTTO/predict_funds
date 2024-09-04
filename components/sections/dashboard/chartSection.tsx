@@ -9,12 +9,18 @@ import {
   BarChart,
   Bar,
   Cell,
+  Line,
+  ErrorBar,
+  ReferenceLine,
+  LineChart,
+  ComposedChart,
 } from "recharts";
 import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
 import PredList from "./predList";
 import { useEffect, useState } from "react";
 import {
+  consoleLog,
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
 } from "@/functions/functions";
@@ -26,9 +32,10 @@ import type {
   CustomCursorProps,
   FinalHistogramData,
 } from "@/utils/types";
+import { formatterBrNumber } from "@/utils/numberFormatters";
 
 export default function ChartSection({
-  data,
+  historic,
   smallV,
   predictions,
   loadingHistogram,
@@ -38,16 +45,15 @@ export default function ChartSection({
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
     [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]),
-    [unifiedData, setUnifiedData] = useState<
+    [unifiedNFData, setUnifiedNFData] = useState<
       (HistoricType | PredictionsType)[]
-    >([...data]),
+    >([...historic]),
     [gradientOffset, setGradientOffset] = useState(1),
-    [chartHeight, setChartHeight] = useState(0),
-    [histogramHeight, setHistogramHeight] = useState(0),
     [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
       "CAPTC_LIQ_ABS_ms"
     ),
     [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
+    [isMobile, setIsMobile] = useState<boolean>(false),
     screenWidth = useWindowWidth();
 
   function adjustValueQuotaChartAxis(
@@ -84,57 +90,99 @@ export default function ChartSection({
   }
 
   function adjustNetFundingChartAxis(
-    data: HistoricType[],
+    historic: HistoricType[],
     absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms"
   ) {
     const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
     // Defining values for domain/axis in Net Funding Chart
-    // Max absolute value in historic data
-    let maxModValueNF = data.reduce((maxAbsObj, currObj) => {
+    // Max absolute value in historic historic
+    let maxModValueNF = historic.reduce((maxAbsObj, currObj) => {
       return Math.abs(currObj[absOrPct] ?? 0) >
         (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
         ? currObj
         : maxAbsObj;
-    }, data[0])[absOrPct];
+    }, historic[0])[absOrPct];
 
-    // Value of prediction to compare with highest absolute value of historic data.
+    // Value of prediction to compare with highest absolute value of historic historic.
     const modValuePred = predictions[0][absOrPct]
       ? Math.abs(Number(predictions[0][absOrPct]))
       : 0;
 
     if (maxModValueNF) {
       // Defyning domain.
-      const decimalPlaces = isPct ? 4 : 2;
       maxModValueNF =
         modValuePred > Math.abs(maxModValueNF)
-          ? Number(Math.abs(modValuePred).toFixed(decimalPlaces))
-          : Number(Math.abs(maxModValueNF).toFixed(decimalPlaces));
+          ? Number(Math.abs(modValuePred).toFixed(2))
+          : Number(Math.abs(maxModValueNF).toFixed(2));
 
       const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
       if (newDomain) {
         setDomainYaxisNF(newDomain);
       }
+
       const newYaxisNFTicks = generateYaxisTicksBasedOnMaxMod(
         maxModValueNF,
         isPct
       );
-      console.log("newYaxisNFTicks");
-      console.log(newYaxisNFTicks);
+
       if (newYaxisNFTicks) {
         setTicksYaxisNF(newYaxisNFTicks);
       }
+
       return true;
     }
     return false;
   }
 
-  function unifyData() {
+  function prepareChartNFData(
+    historic: HistoricType[],
+    predictions: PredictionsType[],
+    absOrPct: string
+  ) {
+    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
+    const suffix = isPct ? "PCT" : "ABS";
+    // Preparing data for scatter chart
+    const newHistoric = historic.map((cE) => {
+      return {
+        ...cE,
+        CI_minor_90: null,
+        CI_major_90: null,
+        CI_minor_95: null,
+        CI_major_95: null,
+        CI_minor_99: null,
+        CI_major_99: null,
+      };
+    });
+
+    const newPredictions = predictions.map((cE) => {
+      if (!cE[absOrPct]) {
+        return cE;
+      }
+
+      const predVal = cE[absOrPct] as number;
+      const confidenceInterval90 = cE[`CI90_${suffix}`] as number;
+      const confidenceInterval95 = cE[`CI95_${suffix}`] as number;
+      const confidenceInterval99 = cE[`CI99_${suffix}`] as number;
+
+      return {
+        ...cE,
+        CI_minor_90: predVal - confidenceInterval90,
+        CI_major_90: predVal + confidenceInterval90,
+        CI_minor_95: predVal - confidenceInterval95,
+        CI_major_95: predVal + confidenceInterval95,
+        CI_minor_99: predVal - confidenceInterval99,
+        CI_major_99: predVal + confidenceInterval99,
+      };
+    });
+
     // Unifying data
-    const newUnifiedData = [...data, ...predictions]; // Slice to exclude last data present in historic
+    const newUnifiedNFData = [...newHistoric, ...newPredictions];
     const newGradientOffset =
-      (newUnifiedData.length - predictions.slice(1).length) /
-      newUnifiedData.length;
-    setUnifiedData(newUnifiedData);
+      (newUnifiedNFData.length - predictions.length) /
+      (newUnifiedNFData.length - 1);
+    consoleLog({ newUnifiedNFData });
+    consoleLog({ newGradientOffset });
+    setUnifiedNFData(newUnifiedNFData);
     setGradientOffset(newGradientOffset);
   }
 
@@ -144,7 +192,7 @@ export default function ChartSection({
     }
     let barColor: string;
     const currDate = dataPoint.DT_COMPTC;
-    const lastHistoricData = data[data.length - 1]["DT_COMPTC"];
+    const lastHistoricData = historic[historic.length - 1]["DT_COMPTC"];
     if (currDate > lastHistoricData) {
       barColor = "white";
     } else {
@@ -162,22 +210,20 @@ export default function ChartSection({
   }
 
   useEffect(() => {
-    if (data.length === 0 || predictions.length === 0) {
+    if (historic.length === 0 || predictions.length === 0) {
       return;
     }
-    adjustValueQuotaChartAxis(data, absOrPct);
-    if (adjustNetFundingChartAxis(data, absOrPct)) {
-      unifyData();
+    adjustValueQuotaChartAxis(historic, absOrPct);
+    if (adjustNetFundingChartAxis(historic, absOrPct)) {
+      prepareChartNFData(historic, predictions, absOrPct);
     }
-  }, [data, predictions, absOrPct]);
+  }, [historic, predictions, absOrPct]);
 
   useEffect(() => {
     if (screenWidth > 992) {
-      setChartHeight(400);
-      setHistogramHeight(500);
+      setIsMobile(false);
     } else {
-      setChartHeight(300);
-      setHistogramHeight(300);
+      setIsMobile(true);
     }
   }, [screenWidth]);
 
@@ -242,19 +288,19 @@ export default function ChartSection({
             } lg:rounded-xl`}
           >
             <ResponsiveContainer
-              height={smallV ? 200 : chartHeight}
+              height={smallV ? 200 : isMobile ? 300 : 400}
               minWidth={250}
             >
-              <BarChart data={unifiedData}>
+              <ComposedChart data={unifiedNFData}>
                 <defs>
                   <linearGradient id="customIndigo" x1="0" y1="0" x2="1" y2="0">
                     <stop
-                      offset={gradientOffset * 0.95}
+                      offset={gradientOffset}
                       stopColor="rgb(150, 130, 200)"
                       stopOpacity={0.85}
                     />
                     <stop
-                      offset={gradientOffset * 1.1}
+                      offset={gradientOffset}
                       stopColor="white"
                       stopOpacity={1}
                     />
@@ -267,12 +313,12 @@ export default function ChartSection({
                     y2="0"
                   >
                     <stop
-                      offset={gradientOffset * 0.98}
+                      offset={gradientOffset}
                       stopColor="rgb(120, 50, 150)"
                       stopOpacity={1}
                     />
                     <stop
-                      offset={gradientOffset * 1.02}
+                      offset={gradientOffset}
                       stopColor="white"
                       stopOpacity={1}
                     />
@@ -282,7 +328,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  fontSize={12}
+                  fontSize={isMobile ? 10 : 12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
                     return format(DT_COMPTC, `dd/MM`);
@@ -302,30 +348,75 @@ export default function ChartSection({
                   width={65}
                   fontSize={12}
                 />
-                <CartesianGrid
-                  // vertical={false}
-                  stroke="rgb(170, 150, 255)"
-                  strokeWidth={0.3}
+                <CartesianGrid stroke="rgb(170, 150, 255)" strokeWidth={0.3} />
+                <Area
+                  dataKey={absOrPct}
+                  type="linear"
+                  fill="indigo"
+                  fillOpacity={0.15}
                 />
-                <Bar type="monotone" dataKey={absOrPct}>
-                  {unifiedData.map((cE, cI) => (
-                    <Cell
-                      key={`cell-${cI}`}
-                      fill={getBarColor(cE)}
-                      stroke={getBarColor(cE)}
-                    />
-                  ))}
-                </Bar>
+                <Line
+                  type="linear"
+                  dataKey={absOrPct}
+                  stroke="url(#customIndigo)"
+                  strokeWidth={2}
+                  dot={{
+                    stroke: "rgb(150, 130, 200)",
+                    strokeWidth: 2,
+                  }}
+                >
+                  {unifiedNFData.map((cE, cI) => {
+                    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
+                    const absOrPctId = isPct ? "PCT" : "ABS";
+                    return (
+                      <>
+                        {[
+                          {
+                            name: "CI90",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 6,
+                            strokeWidth: 1,
+                          },
+                          {
+                            name: "CI95",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 10,
+                            strokeWidth: 1,
+                          },
+                          {
+                            name: "CI99",
+                            stroke: "rgba(100, 150, 100)",
+                            width: 14,
+                            strokeWidth: 1,
+                          },
+                        ].map((cE2, cI2) => {
+                          return (
+                            <ErrorBar
+                              key={`errorBar-${cE.DT_COMPTC}-${cE2.name}`}
+                              dataKey={`${cE2.name}_${absOrPctId}`}
+                              stroke={cE2.stroke}
+                              width={cE2.width}
+                              strokeWidth={cE2.strokeWidth}
+                              direction="y"
+                            />
+                          );
+                        })}
+                      </>
+                    );
+                  })}
+                </Line>
+
+                <ReferenceLine y={0} fill="white" strokeWidth={2} />
+
                 <Tooltip
                   content={
                     <CustomTooltipIndigo
-                      data={unifiedData}
+                      data={unifiedNFData}
                       absOrPct={absOrPct}
                     />
                   }
-                  cursor={<CustomTooltipCursor />}
                 />
-              </BarChart>
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
           {!smallV && (
@@ -333,7 +424,7 @@ export default function ChartSection({
               <PredList
                 title="Net Funding"
                 onlyBack={false}
-                data={data}
+                historic={historic}
                 predictions={predictions}
                 varName={absOrPct}
               />
@@ -387,7 +478,7 @@ export default function ChartSection({
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
             } lg:rounded-xl lg:mx-8`}
-            style={{ height: histogramHeight }}
+            style={{ height: isMobile ? 300 : 500 }}
           >
             {loadingHistogram && (
               <div className="flex flex-col h-full relative items-center justify-center">
@@ -406,16 +497,21 @@ export default function ChartSection({
             )}
             {!loadingHistogram && (
               <ResponsiveContainer
-                height={smallV ? 200 : histogramHeight - 15}
+                height={smallV ? 200 : isMobile ? 300 : 500}
                 minWidth={250}
               >
                 <BarChart
                   width={900}
-                  height={histogramHeight}
+                  height={isMobile ? 300 : 500}
                   data={histogram ? histogram[absOrPctHist] : []}
                 >
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
-                  <XAxis dataKey="xTick" interval={0} className="text-white" />
+                  <XAxis
+                    dataKey="xTick"
+                    fontSize={isMobile ? 10 : 12}
+                    className="text-white"
+                    interval={isMobile ? 1 : 0}
+                  />
                   <YAxis />
                   <Tooltip
                     content={<HistogramTooltip />}
@@ -464,8 +560,8 @@ export default function ChartSection({
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
-            <ResponsiveContainer height={smallV ? 200 : chartHeight}>
-              <AreaChart data={data}>
+            <ResponsiveContainer height={smallV ? 200 : isMobile ? 300 : 400}>
+              <AreaChart data={historic}>
                 <defs>
                   <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
                     <stop
@@ -484,8 +580,7 @@ export default function ChartSection({
                   dataKey="DT_COMPTC"
                   tick={{ fill: "rgb(230, 230, 230)" }}
                   height={30}
-                  interval={smallV ? 8 : 6}
-                  fontSize={12}
+                  fontSize={isMobile ? 10 : 12}
                   tickLine={false}
                   tickFormatter={(DT_COMPTC) => {
                     return format(DT_COMPTC, `dd/MM`);
@@ -523,7 +618,7 @@ export default function ChartSection({
               <PredList
                 title="Value Quota (history)"
                 onlyBack={true}
-                data={data}
+                historic={historic}
                 predictions={predictions}
                 varName={"VL_QUOTA_ms"}
               />
@@ -543,32 +638,141 @@ function CustomTooltipIndigo({
   absOrPct,
 }: CustomTooltipProps) {
   const numPreds = 4;
+  const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
   const predsElements = data?.slice(data.length - numPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
   const adjustAbsOrPct = absOrPct || "CAPTC_LIQ_ABS_ms";
+  const isPrediction = predsDates?.includes(label);
   let tooltipClass =
     "bg-black/80 text-white p-2 rounded-sm shadow-indigo-700 shadow-sm";
-  const isPrediction = predsDates?.includes(label);
-  if (isPrediction) {
+  let CI90_lower: string;
+  let CI90_upper: string;
+  let CI95_lower: string;
+  let CI95_upper: string;
+  let CI99_lower: string;
+  let CI99_upper: string;
+  let CI90_LABEL: string = "";
+  let CI95_LABEL: string = "";
+  let CI99_LABEL: string = "";
+  if (isPrediction && payload && payload[0]) {
+    const payloadFirstElement = payload[0];
     tooltipClass =
       "bg-black/50 text-white p-2 rounded-sm shadow-white shadow-sm";
+
+    CI90_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI90_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI95_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI95_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI99_lower = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] -
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI99_upper = isPct
+      ? formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ]
+        )
+      : formatterBrNumber.format(
+          payloadFirstElement.payload[adjustAbsOrPct] +
+            payloadFirstElement.payload[
+              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
+            ] *
+              100
+        );
+    CI90_LABEL = `Confidence 90%:  ${
+      isPct ? CI90_lower + "%" : "R$ " + CI90_lower
+    } | ${isPct ? CI90_upper + "%" : "R$ " + CI90_upper}`;
+    CI95_LABEL = `Confidence 95%:  ${
+      isPct ? CI95_lower + "%" : "R$ " + CI95_lower
+    } | ${isPct ? CI95_upper + "%" : "R$ " + CI95_upper}`;
+    CI99_LABEL = `Confidence 99%:  ${
+      isPct ? CI99_lower + "%" : "R$ " + CI99_lower
+    } | ${isPct ? CI99_upper + "%" : "R$ " + CI99_upper}`;
   }
   if (active && label && payload) {
-    const valueForPct = payload[0].payload[adjustAbsOrPct].toFixed(2);
-    const valueForAbs = payload[0].payload[adjustAbsOrPct]
-      .toFixed(2)
-      .toLocaleString("en-US");
+    const formattedValue = formatterBrNumber.format(
+      payload[0].payload[adjustAbsOrPct]
+    );
     return (
       <div className={tooltipClass}>
         {isPrediction && <h3 className="font-semibold mb-1">Prediction</h3>}
         {!isPrediction && <h3 className="font-semibold ">Historic</h3>}
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
-          Net Funding:
-          {absOrPct === "CAPTC_LIQ_PCT_ms"
-            ? valueForPct + "%"
-            : "R$" + valueForAbs}
+          Net Funding:&nbsp;
+          {isPct ? formattedValue + "%" : "R$ " + formattedValue}
         </p>
+        {isPrediction && payload && (
+          <div className="flex flex-col gap-1 py-2 text-xs text-gray-200">
+            <p>{CI90_LABEL}</p>
+            <p>{CI95_LABEL}</p>
+            <p>{CI99_LABEL}</p>
+          </div>
+        )}
       </div>
     );
   }
@@ -576,14 +780,15 @@ function CustomTooltipIndigo({
 }
 
 function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
-  // console.log(JSON.stringify(payload));
   if (active && label && payload) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-md shadow-yellow-700 shadow-sm">
         <h4 className="font-semibold">{format(label, "d, MMM, yy")}</h4>
         <p>
-          Quota: R$
-          {payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")}
+          Quota: R$&nbsp;
+          {formatterBrNumber.format(
+            payload[0].payload.VL_QUOTA_ms.toFixed(2).toLocaleString("en-US")
+          )}
         </p>
       </div>
     );
@@ -591,13 +796,22 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
   return <></>;
 }
 
-function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
+function HistogramTooltip({
+  active,
+  payload,
+  label,
+  isMobile,
+}: CustomTooltipProps) {
   if (active && payload && payload.length) {
     const selCnpjBin = payload[0].payload.selCnpjBin;
     const msg1 = selCnpjBin ? `You are here.` : "";
     const msg2 = `Count: ${payload[0].value}`;
     const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
     const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
+    let adjustedLabel = label;
+    if (isMobile) {
+      adjustedLabel = label.replace("|", "<br>");
+    }
     return (
       <div
         className="bg-black/80 p-2 rounded-md"
@@ -612,6 +826,7 @@ function HistogramTooltip({ active, payload, label }: CustomTooltipProps) {
           )}
           {msg2}
         </p>
+        <p>{"Interval: " + adjustedLabel}</p>
       </div>
     );
   }

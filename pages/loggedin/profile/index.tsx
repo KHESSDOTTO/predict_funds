@@ -132,7 +132,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           textBtn="Confirm"
           handleSubmitPwdConfirmForm={handleSubmitEmailChange}
         />
-        <main className="flex flex-col items-center py-8 md:py-16 lg:py-12">
+        <main className="flex flex-col items-center py-8 lg:pt-12 lg:pb-24">
           <h1 className="text-3xl font-bold my-6 font-serif px-4 pb-2 lg:w-[90vw] border-b lg:border-white lg:mt-0 lg:mb-12">
             Profile
           </h1>
@@ -203,7 +203,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
                     />
                   </div>
                 </div>
-                <div className="hidden lg:flex text-lg justify-center mb-4 underline font-semibold transition-all duration-300 hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-24 lg:border-l-2 lg:border-white lg:no-underline lg:px-2 lg:right-[-30px] lg:bottom-[10%] lg:text-base">
+                <div className="hidden text-gray-100 lg:flex text-lg justify-center mb-4 underline font-semibold transition-all duration-300 hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-32 lg:border-l-2 lg:border-gray-100 lg:no-underline lg:pl-4 lg:right-[-45px] lg:bottom-[50%] lg:translate-y-[50%] lg:text-base lg:mb-0">
                   <button type="submit">Save</button>
                 </div>
               </form>

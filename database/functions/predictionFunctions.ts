@@ -1,7 +1,12 @@
 import PredictionsModel from "@/database/models/predictionsModel";
-import { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import {
+  ConfidenceIntervalType,
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types";
 import CadastroFundosModel from "../models/cadastroFundosModel";
 import { buildPredKey } from "@/functions/functions";
+import ConfidenceIntervalModel from "../models/confidenceIntervalModel";
 
 async function getPredictions(controlForm: DashboardControlFormType) {
   const { varCota, varCotistas, varNF, baseDate, buscaCnpj } = controlForm;
@@ -9,8 +14,8 @@ async function getPredictions(controlForm: DashboardControlFormType) {
   const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
   try {
-    let prediction4weeks: PredictionsType | null = null;
-    prediction4weeks = await PredictionsModel.findOne(
+    let prediction: PredictionsType | null = null;
+    prediction = await PredictionsModel.findOne(
       {
         CNPJ_FUNDO: buscaCnpj,
         ancora: new Date(baseDate),
@@ -22,21 +27,61 @@ async function getPredictions(controlForm: DashboardControlFormType) {
         [predKeyAbs]: 1,
         [predKeyPct]: 1,
       }
-    );
+    )
+      .sort({ datahora_predicao: -1 })
+      .exec();
 
-    let finalPred4weeks = prediction4weeks;
-    if (prediction4weeks) {
-      finalPred4weeks = {
-        CNPJ_FUNDO: prediction4weeks.CNPJ_FUNDO,
-        CLASSE_ANBIMA: prediction4weeks.CLASSE_ANBIMA,
-        CAPTC_LIQ_ABS_ms: prediction4weeks[predKeyAbs],
-        CAPTC_LIQ_PCT_ms: prediction4weeks[predKeyPct],
+    const confidenceIntervalDoc: ConfidenceIntervalType =
+      await ConfidenceIntervalModel.findOne(
+        {
+          CNPJ_FUNDO: buscaCnpj,
+          ancora: new Date(baseDate),
+        },
+        {
+          CI90: 1,
+          CI95: 1,
+          CI99: 1,
+        }
+      )
+        .sort({ datahora_calc_residual_abs: -1 })
+        .exec();
+
+    // Calculating confidence intervals as % of Net Assets
+    // CAPTC_ABS / PL = CAPTC_PCT
+    // PL = CAPTC_ABS / CAPTC_PCT
+    // (CAPTC_ABS + CIX_ABS) / PL = CIX_PCT
+    // CIX_PCT = (CAPTC_ABS + CIX_ABS) * CAPTC_PCT / CAPTC_ABS
+    for (const key in confidenceIntervalDoc) {
+      if (key.slice(0, 2) === "CI" && prediction) {
+        const CI_ABS = confidenceIntervalDoc[key] as number;
+        const CAPTC_ABS = prediction[predKeyAbs] as number;
+        const CAPTC_PCT_TIMES100 = prediction[predKeyPct] as number;
+        const CAPTC_PCT = CAPTC_PCT_TIMES100 / 100;
+        const PL = CAPTC_ABS / CAPTC_PCT;
+
+        confidenceIntervalDoc[`${key}_PCT`] = (CI_ABS / PL) * 100;
+      }
+    }
+
+    let finalPred = prediction;
+    if (prediction) {
+      finalPred = {
+        CNPJ_FUNDO: prediction.CNPJ_FUNDO,
+        CLASSE_ANBIMA: prediction.CLASSE_ANBIMA,
+        CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
+        CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
+        CI90_ABS: confidenceIntervalDoc?.CI90,
+        CI95_ABS: confidenceIntervalDoc?.CI95,
+        CI99_ABS: confidenceIntervalDoc?.CI99,
+        CI90_PCT: confidenceIntervalDoc?.CI90_PCT as number,
+        CI95_PCT: confidenceIntervalDoc?.CI95_PCT as number,
+        CI99_PCT: confidenceIntervalDoc?.CI99_PCT as number,
       };
     } else {
       return false;
     }
 
-    return finalPred4weeks;
+    return finalPred;
   } catch (err) {
     console.log(err);
     return false;
@@ -96,9 +141,6 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
       [customPredKeyPct]: 1,
       [defaultPredKeyPct]: 1,
     };
-
-    console.log("ancora buscada em Histograma (baseDate)");
-    console.log(baseDate);
 
     prediction4weeks = await PredictionsModel.find(
       {

@@ -197,7 +197,7 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
                 </div>
                 <div className=" lg:block lg:w-full">
                   <ChartSection
-                    data={cE.historicData}
+                    historic={cE.historicData}
                     smallV={true}
                     predictions={cE.predictionData}
                   />

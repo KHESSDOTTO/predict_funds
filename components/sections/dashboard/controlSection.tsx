@@ -112,6 +112,12 @@ export default function ControlSection({
           CNPJ_FUNDO: responsePreds.data.CNPJ_FUNDO,
           CAPTC_LIQ_ABS_ms: responsePreds.data.CAPTC_LIQ_ABS_ms,
           CAPTC_LIQ_PCT_ms: responsePreds.data.CAPTC_LIQ_PCT_ms,
+          CI90_ABS: responsePreds.data.CI90_ABS,
+          CI95_ABS: responsePreds.data.CI95_ABS,
+          CI99_ABS: responsePreds.data.CI99_ABS,
+          CI90_PCT: responsePreds.data.CI90_PCT,
+          CI95_PCT: responsePreds.data.CI95_PCT,
+          CI99_PCT: responsePreds.data.CI99_PCT,
         });
 
         lastDate = newDate;
@@ -160,9 +166,6 @@ export default function ControlSection({
           numBins,
           controlForm.buscaCnpj
         );
-
-        console.log("histogram");
-        console.log(histogram);
 
         setHistogram(histogram);
       }

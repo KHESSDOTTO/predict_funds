@@ -61,7 +61,28 @@ interface CadastroFundosType {
 interface PredictionsType {
   DT_COMPTC?: Date;
   CNPJ_FUNDO: string;
-  [key: string]: string | number | Date | undefined; // Adjust the index signature to accommodate both types
+  CI90_ABS?: number;
+  CI95_ABS?: number;
+  CI99_ABS?: number;
+  CI90_PCT?: number;
+  CI95_PCT?: number;
+  CI99_PCT?: number;
+  CI_minor_90?: number | null;
+  CI_major_95?: number | null;
+  CI_major_99?: number | null;
+  [key: string]: string | number | Date | undefined | null; // Adjust the index signature to accommodate both types
+}
+
+interface ConfidenceIntervalType {
+  CNPJ_FUNDO: string;
+  mean: number;
+  std: number;
+  CI90: number;
+  CI95: number;
+  CI99: number;
+  ancora: Date;
+  datahora_calc_residual_abs: Date;
+  [key: string]: string | number | Date; // Adjust the index signature to accommodate both types
 }
 
 interface ButtonPropsType {
@@ -98,6 +119,8 @@ interface HistoricType {
   CAPTC_LIQ_ms?: number;
   CAPTC_LIQ_ABS_ms?: number;
   CAPTC_LIQ_PCT_ms?: number;
+  CI_minor?: number | null;
+  CI_major?: number | null;
 }
 
 interface UserContextType {
@@ -159,10 +182,11 @@ interface ToneColorsInterface {
 interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
   data?: (HistoricType | PredictionsType)[];
   absOrPct?: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+  isMobile?: boolean;
 }
 
 interface ChartSectionProps {
-  data: HistoricType[];
+  historic: HistoricType[];
   smallV: boolean;
   predictions: PredictionsType[];
   loadingHistogram?: boolean;
@@ -187,6 +211,7 @@ export type {
   DashboardControlFormType,
   CenarioType,
   PredictionsType,
+  ConfidenceIntervalType,
   CadastroFundosType,
   RawHistogramData,
   FinalHistogramData,
