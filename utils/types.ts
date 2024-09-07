@@ -67,10 +67,13 @@ interface PredictionsType {
   CI90_PCT?: number;
   CI95_PCT?: number;
   CI99_PCT?: number;
-  CI_minor_90?: number | null;
-  CI_major_95?: number | null;
-  CI_major_99?: number | null;
-  [key: string]: string | number | Date | undefined | null; // Adjust the index signature to accommodate both types
+  CI90_ABS_limits?: number[];
+  CI95_ABS_limits?: number[];
+  CI99_ABS_limits?: number[];
+  CI90_PCT_limits?: number[];
+  CI95_PCT_limits?: number[];
+  CI99_PCT_limits?: number[];
+  [key: string]: string | number | number[] | Date | undefined | null; // Adjust the index signature to accommodate both types
 }
 
 interface ConfidenceIntervalType {

@@ -5,7 +5,7 @@ import {
   PredictionsType,
 } from "@/utils/types";
 import CadastroFundosModel from "../models/cadastroFundosModel";
-import { buildPredKey } from "@/functions/functions";
+import { buildPredKey, consoleLog } from "@/functions/functions";
 import ConfidenceIntervalModel from "../models/confidenceIntervalModel";
 
 async function getPredictions(controlForm: DashboardControlFormType) {
@@ -64,23 +64,54 @@ async function getPredictions(controlForm: DashboardControlFormType) {
     }
 
     let finalPred = prediction;
-    if (prediction) {
+    if (prediction && confidenceIntervalDoc) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
         CLASSE_ANBIMA: prediction.CLASSE_ANBIMA,
         CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
         CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
-        CI90_ABS: confidenceIntervalDoc?.CI90,
-        CI95_ABS: confidenceIntervalDoc?.CI95,
-        CI99_ABS: confidenceIntervalDoc?.CI99,
-        CI90_PCT: confidenceIntervalDoc?.CI90_PCT as number,
-        CI95_PCT: confidenceIntervalDoc?.CI95_PCT as number,
-        CI99_PCT: confidenceIntervalDoc?.CI99_PCT as number,
+        CI90_ABS: confidenceIntervalDoc.CI90,
+        CI95_ABS: confidenceIntervalDoc.CI95,
+        CI99_ABS: confidenceIntervalDoc.CI99,
+        CI90_PCT: confidenceIntervalDoc.CI90_PCT as number,
+        CI95_PCT: confidenceIntervalDoc.CI95_PCT as number,
+        CI99_PCT: confidenceIntervalDoc.CI99_PCT as number,
+        CI90_ABS_limits: [
+          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI90,
+          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI90,
+        ],
+        CI95_ABS_limits: [
+          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI95,
+          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI95,
+        ],
+        CI99_ABS_limits: [
+          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI99,
+          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI99,
+        ],
+        CI90_PCT_limits: [
+          (prediction[predKeyPct] as number) -
+            (confidenceIntervalDoc.CI90_PCT as number),
+          (prediction[predKeyPct] as number) +
+            (confidenceIntervalDoc.CI90_PCT as number),
+        ],
+        CI95_PCT_limits: [
+          (prediction[predKeyPct] as number) -
+            (confidenceIntervalDoc.CI95_PCT as number),
+          (prediction[predKeyPct] as number) +
+            (confidenceIntervalDoc.CI95_PCT as number),
+        ],
+        CI99_PCT_limits: [
+          (prediction[predKeyPct] as number) -
+            (confidenceIntervalDoc.CI99_PCT as number),
+          (prediction[predKeyPct] as number) +
+            (confidenceIntervalDoc.CI99_PCT as number),
+        ],
       };
     } else {
       return false;
     }
 
+    consoleLog({ finalPred });
     return finalPred;
   } catch (err) {
     console.log(err);
