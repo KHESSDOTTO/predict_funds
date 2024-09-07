@@ -320,7 +320,6 @@ export default function ChartSection({
                   fillOpacity={0.15}
                 />
                 {[
-                  `CI90_${absOrPctNFShort.toUpperCase()}_limits`,
                   `CI95_${absOrPctNFShort.toUpperCase()}_limits`,
                   `CI99_${absOrPctNFShort.toUpperCase()}_limits`,
                 ].map((cE) => {
@@ -328,10 +327,9 @@ export default function ChartSection({
                     <Area
                       dataKey={cE}
                       type="linear"
-                      fill="lightgray"
-                      fillOpacity={0.1}
-                      stroke="darkgray"
-                      strokeWidth={2}
+                      fill="gray"
+                      fillOpacity={0.2}
+                      strokeWidth={0}
                     />
                   );
                 })}
@@ -658,24 +656,21 @@ function CustomTooltipIndigo({
           payloadFirstElement.payload["CI95_PCT_limits"][0]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload["CI95_ABS_limits"][0]
+          payloadFirstElement.payload["CI95_ABS_limits"][0]
         );
     CI95_upper = isPct
       ? formatterBrNumber.format(
           payloadFirstElement.payload["CI95_PCT_limits"][1]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload["CI95_ABS_limits"][1]
+          payloadFirstElement.payload["CI95_ABS_limits"][1]
         );
     CI99_lower = isPct
       ? formatterBrNumber.format(
           payloadFirstElement.payload["CI99_PCT_limits"][0]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload["CI99_ABS_limits"][0]
+          payloadFirstElement.payload["CI99_ABS_limits"][0]
         );
     CI99_upper = isPct
       ? formatterBrNumber.format(
@@ -710,7 +705,6 @@ function CustomTooltipIndigo({
         </p>
         {isPrediction && payload && (
           <div className="flex flex-col gap-1 py-2 text-xs text-gray-200">
-            <p>{CI90_LABEL}</p>
             <p>{CI95_LABEL}</p>
             <p>{CI99_LABEL}</p>
           </div>

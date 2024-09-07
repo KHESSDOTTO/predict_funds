@@ -82,7 +82,12 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
       cenario.predictionData
         .slice(cenario.predictionData.length - 1)
         .forEach((cE) => {
-          const predsSubArray = Object.entries(cE).map(([cK, cV]) => [cK, cV]);
+          const predsSubArray = Object.entries(cE).map(([cK, cV]) => {
+            if (Array.isArray(cV)) {
+              return [cK, ...cV];
+            }
+            return [cK, cV];
+          });
           predsArray.push(...predsSubArray);
         });
       // </Adjusting_predictions>
