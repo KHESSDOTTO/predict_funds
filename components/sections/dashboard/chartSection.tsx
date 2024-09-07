@@ -10,9 +10,7 @@ import {
   Bar,
   Cell,
   Line,
-  ErrorBar,
   ReferenceLine,
-  LineChart,
   ComposedChart,
 } from "recharts";
 import { format } from "date-fns";
@@ -30,7 +28,6 @@ import type {
   ChartSectionProps,
   CustomTooltipProps,
   CustomCursorProps,
-  FinalHistogramData,
 } from "@/utils/types";
 import { formatterBrNumber } from "@/utils/numberFormatters";
 
@@ -41,6 +38,7 @@ export default function ChartSection({
   loadingHistogram,
   histogram = false,
 }: ChartSectionProps) {
+  consoleLog({ predictions });
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
@@ -52,6 +50,7 @@ export default function ChartSection({
     [absOrPct, setAbsOrPct] = useState<"CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms">(
       "CAPTC_LIQ_ABS_ms"
     ),
+    [absOrPctNFShort, setAbsOrPctNFShort] = useState<"abs" | "pct">("abs"),
     [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
     [isMobile, setIsMobile] = useState<boolean>(false),
     screenWidth = useWindowWidth();
@@ -139,44 +138,8 @@ export default function ChartSection({
     predictions: PredictionsType[],
     absOrPct: string
   ) {
-    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
-    const suffix = isPct ? "PCT" : "ABS";
-    // Preparing data for scatter chart
-    const newHistoric = historic.map((cE) => {
-      return {
-        ...cE,
-        CI_minor_90: null,
-        CI_major_90: null,
-        CI_minor_95: null,
-        CI_major_95: null,
-        CI_minor_99: null,
-        CI_major_99: null,
-      };
-    });
-
-    const newPredictions = predictions.map((cE) => {
-      if (!cE[absOrPct]) {
-        return cE;
-      }
-
-      const predVal = cE[absOrPct] as number;
-      const confidenceInterval90 = cE[`CI90_${suffix}`] as number;
-      const confidenceInterval95 = cE[`CI95_${suffix}`] as number;
-      const confidenceInterval99 = cE[`CI99_${suffix}`] as number;
-
-      return {
-        ...cE,
-        CI_minor_90: predVal - confidenceInterval90,
-        CI_major_90: predVal + confidenceInterval90,
-        CI_minor_95: predVal - confidenceInterval95,
-        CI_major_95: predVal + confidenceInterval95,
-        CI_minor_99: predVal - confidenceInterval99,
-        CI_major_99: predVal + confidenceInterval99,
-      };
-    });
-
     // Unifying data
-    const newUnifiedNFData = [...newHistoric, ...newPredictions];
+    const newUnifiedNFData = [...historic, ...predictions];
     const newGradientOffset =
       (newUnifiedNFData.length - predictions.length) /
       (newUnifiedNFData.length - 1);
@@ -203,6 +166,7 @@ export default function ChartSection({
 
   function handleAbsOrPctChange(e: React.ChangeEvent<HTMLInputElement>) {
     setAbsOrPct(e.target.value as "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms");
+    setAbsOrPctNFShort(e.target.value === "CAPTC_LIQ_ABS_ms" ? "abs" : "pct");
   }
 
   function handleAbsOrPctHistChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -283,7 +247,7 @@ export default function ChartSection({
           }`}
         >
           <div
-            className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
+            className={`bg-gray-900 pt-4 mx-2 rounded-sm overflow-hidden ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
@@ -355,6 +319,22 @@ export default function ChartSection({
                   fill="indigo"
                   fillOpacity={0.15}
                 />
+                {[
+                  `CI90_${absOrPctNFShort.toUpperCase()}_limits`,
+                  `CI95_${absOrPctNFShort.toUpperCase()}_limits`,
+                  `CI99_${absOrPctNFShort.toUpperCase()}_limits`,
+                ].map((cE) => {
+                  return (
+                    <Area
+                      dataKey={cE}
+                      type="linear"
+                      fill="lightgray"
+                      fillOpacity={0.1}
+                      stroke="darkgray"
+                      strokeWidth={2}
+                    />
+                  );
+                })}
                 <Line
                   type="linear"
                   dataKey={absOrPct}
@@ -365,7 +345,7 @@ export default function ChartSection({
                     strokeWidth: 2,
                   }}
                 >
-                  {unifiedNFData.map((cE, cI) => {
+                  {/* {unifiedNFData.map((cE, cI) => {
                     const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
                     const absOrPctId = isPct ? "PCT" : "ABS";
                     return (
@@ -403,7 +383,7 @@ export default function ChartSection({
                         })}
                       </>
                     );
-                  })}
+                  })} */}
                 </Line>
 
                 <ReferenceLine y={0} fill="white" strokeWidth={2} />
@@ -661,88 +641,50 @@ function CustomTooltipIndigo({
 
     CI90_lower = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI90_PCT_limits"][0]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+          payloadFirstElement.payload["CI90_ABS_limits"][0]
         );
     CI90_upper = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI90_PCT_limits"][1]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI90_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+          payloadFirstElement.payload["CI90_ABS_limits"][1]
         );
     CI95_lower = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI95_PCT_limits"][0]
         )
       : formatterBrNumber.format(
           payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+            payloadFirstElement.payload["CI95_ABS_limits"][0]
         );
     CI95_upper = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI95_PCT_limits"][1]
         )
       : formatterBrNumber.format(
           payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI95_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+            payloadFirstElement.payload["CI95_ABS_limits"][1]
         );
     CI99_lower = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI99_PCT_limits"][0]
         )
       : formatterBrNumber.format(
           payloadFirstElement.payload[adjustAbsOrPct] -
-            payloadFirstElement.payload[
-              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+            payloadFirstElement.payload["CI99_ABS_limits"][0]
         );
     CI99_upper = isPct
       ? formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ]
+          payloadFirstElement.payload["CI99_PCT_limits"][1]
         )
       : formatterBrNumber.format(
-          payloadFirstElement.payload[adjustAbsOrPct] +
-            payloadFirstElement.payload[
-              `CI99_${adjustAbsOrPct === "CAPTC_LIQ_ABS_ms" ? "ABS" : "PCT"}`
-            ] *
-              100
+          payloadFirstElement.payload["CI99_ABS_limits"][1]
         );
+
     CI90_LABEL = `Confidence 90%:  ${
       isPct ? CI90_lower + "%" : "R$ " + CI90_lower
     } | ${isPct ? CI90_upper + "%" : "R$ " + CI90_upper}`;
