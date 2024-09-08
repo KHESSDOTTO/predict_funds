@@ -502,8 +502,8 @@ export default function ControlSection({
                   type="range"
                   id="varNF"
                   name="varNF"
-                  min={-0.1}
-                  max={0.1}
+                  min={-0.05}
+                  max={0.05}
                   step={0.01}
                   className="indigo-500"
                   value={controlForm.varNF}
@@ -528,8 +528,8 @@ export default function ControlSection({
                   type="range"
                   id="varCotistas"
                   name="varCotistas"
-                  min={-0.1}
-                  max={0.1}
+                  min={-0.05}
+                  max={0.05}
                   step={0.01}
                   className="indigo-500"
                   value={controlForm.varCotistas}
@@ -556,7 +556,7 @@ export default function ControlSection({
                   name="varCota"
                   min={-0.05}
                   max={0.05}
-                  step={0.005}
+                  step={0.01}
                   className="indigo-500"
                   value={controlForm.varCota}
                   onChange={handleControlFormChange}
