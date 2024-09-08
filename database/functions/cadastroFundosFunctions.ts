@@ -1,3 +1,4 @@
+import { consoleLog } from "@/functions/functions";
 import CadastroFundosModel from "../models/cadastroFundosModel";
 
 async function getCadastroByCnpj(cnpj: string) {
@@ -35,4 +36,24 @@ async function getAnbimaClassByCnpj(cnpj: string) {
   }
 }
 
-export { getCadastroByCnpj, getAnbimaClassByCnpj };
+async function getArrCnpjName(cnpjs: string[]) {
+  consoleLog({ cnpjs });
+  try {
+    const arrCnpjNames = await CadastroFundosModel.find(
+      {
+        CNPJ_FUNDO: { $in: cnpjs },
+      },
+      {
+        _id: 0,
+        CNPJ_FUNDO: 1,
+        DENOM_SOCIAL: 1,
+      }
+    );
+    return arrCnpjNames;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export { getCadastroByCnpj, getAnbimaClassByCnpj, getArrCnpjName };

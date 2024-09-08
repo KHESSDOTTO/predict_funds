@@ -1,12 +1,12 @@
 import ButtonIndigo from "../../UI/buttonIndigo";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks, format } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
-import { prepareHistogram } from "@/functions/functions";
+import { consoleLog, prepareHistogram } from "@/functions/functions";
 
 import type { MouseEventHandler } from "react";
 import type {
@@ -48,6 +48,8 @@ export default function ControlSection({
   ancoras,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
+  const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
+  const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
   const user = userContext.user;
   const arrWeeksPreds = [4];
 
@@ -204,62 +206,90 @@ export default function ControlSection({
     }
   }
 
-  // Updates the controlForm with the logged in users CNPJ, initially.
-  useEffect(() => {
-    if (user) {
-      setControlForm((prevForm) => ({
-        ...prevForm,
-        buscaCnpj: user.cnpj || "",
-      }));
+  async function getRegistration() {
+    if (!user) return;
+    const encodedParam = encodeURIComponent(user.cnpj);
+    try {
+      const registration = await selRegistration(encodedParam);
+      setRegistration(registration);
+      setNameSelectedFund(registration["DENOM_SOCIAL"]);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
     }
-  }, [user]);
+  }
 
+  async function getData() {
+    if (!user) {
+      return;
+    }
+
+    const loadingToast = toast.loading("Fetching data...");
+    const encodedParam = encodeURIComponent(user.cnpj);
+    try {
+      const slicedHistoricData = await getHistoricData(
+        encodedParam,
+        controlForm.baseDate
+      );
+      let predictions: PredictionsType[] | false = [];
+      if (slicedHistoricData) {
+        predictions = await getPredictions(user.cnpj, slicedHistoricData);
+      }
+      if (predictions) {
+        toast.success("Done.");
+      } else {
+        toast.error("Something went wrong.");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Sorry. We had a problem fetching the data.");
+    }
+    toast.dismiss(loadingToast);
+  }
+
+  async function getArrCnpjFundName(
+    cnpjs: string[],
+    setArrCnpjName: Dispatch<SetStateAction<any[]>>
+  ): Promise<boolean> {
+    if (!cnpjs) {
+      return false;
+    }
+
+    try {
+      const arrCnpjName = await ax.post("/cadastroFundos/getArrCnpjName", {
+        cnpjs: cnpjs,
+      });
+
+      consoleLog({ arrCnpjName });
+
+      if (!arrCnpjName.data) {
+        return false;
+      }
+
+      setArrCnpjName(arrCnpjName.data);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  // Updates the controlForm with the logged in users CNPJ, initially.
+  // Get user registration and array with CNPJ and names of funds.
   // Get historic data and predictions
   useEffect(() => {
-    async function getData() {
-      if (!user) return; // won't execute if there is no logged in user
-      const loadingToast = toast.loading("Fetching data...");
-      const encodedParam = encodeURIComponent(user.cnpj);
-      try {
-        const slicedHistoricData = await getHistoricData(
-          encodedParam,
-          controlForm.baseDate
-        );
-        let predictions: PredictionsType[] | false = [];
-        if (slicedHistoricData) {
-          predictions = await getPredictions(user.cnpj, slicedHistoricData);
-        }
-        if (predictions) {
-          toast.success("Done.");
-        } else {
-          toast.error("Something went wrong.");
-        }
-      } catch (err) {
-        console.log(err);
-        toast.error("Sorry. We had a problem fetching the data.");
-      }
-      toast.dismiss(loadingToast);
+    if (!user) {
+      return;
     }
-    // Calling the function defined above
-    getData();
-    return;
-  }, [user]);
 
-  // Get registration
-  useEffect(() => {
-    async function getRegistration() {
-      if (!user) return;
-      const encodedParam = encodeURIComponent(user.cnpj);
-      try {
-        const registration = await selRegistration(encodedParam);
-        setRegistration(registration);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    // Calling the function defined above
+    setControlForm((prevForm) => ({
+      ...prevForm,
+      buscaCnpj: user.cnpj || "",
+    }));
+
+    getData();
     getRegistration();
+    getArrCnpjFundName(user.cnpjs, setArrCnpjName);
     return;
   }, [user]);
 
@@ -273,7 +303,16 @@ export default function ControlSection({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     let newVal = e.target.value;
-    setControlForm((prevForm) => ({ ...controlForm, [e.target.name]: newVal }));
+    setControlForm({ ...controlForm, [e.target.name]: newVal });
+
+    if (e.target.name === "buscaCnpj" && arrCnpjName) {
+      const selectedFund = arrCnpjName.filter((cE) => {
+        return cE["CNPJ_FUNDO"] === e.target.value;
+      });
+
+      setNameSelectedFund(selectedFund[0]["DENOM_SOCIAL"]);
+    }
+
     return;
   }
 
@@ -349,7 +388,7 @@ export default function ControlSection({
                 Base Date
               </label>
               <label htmlFor="buscaCnpj" className="h-8">
-                CNPJ
+                Fund Name
               </label>
               <label htmlFor="weeksBack" className="h-8">
                 Weeks back
@@ -376,7 +415,7 @@ export default function ControlSection({
                 Quota var (%)
               </label>
             </div>
-            <div className="flex flex-col items-stretch gap-1 lg:gap-0">
+            <div className="flex flex-col items-stretch gap-1 lg:gap-0 overflow-hidden">
               <div className="h-8">
                 <select
                   id="baseDate"
@@ -402,14 +441,20 @@ export default function ControlSection({
                   value={controlForm.buscaCnpj}
                   onChange={handleControlFormChange}
                   className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
+                  title={controlForm.buscaCnpj}
                 >
-                  {user?.cnpjs?.map((cE, cI) => {
-                    return (
-                      <option key={cI} value={cE}>
-                        {cE}
-                      </option>
-                    );
-                  })}
+                  {arrCnpjName &&
+                    arrCnpjName.map((cE, cI) => {
+                      return (
+                        <option
+                          key={cI}
+                          value={cE["CNPJ_FUNDO"]}
+                          className="text-ellipsis max-w-6 overflow-hidden"
+                        >
+                          {cE["DENOM_SOCIAL"]}
+                        </option>
+                      );
+                    })}
                 </select>
               </div>
               <div className="h-8">
@@ -568,19 +613,23 @@ export default function ControlSection({
                   </select>
                 </div>
                 <div className="flex flex-col font-semibold items-center gap-1">
-                  <label htmlFor="buscaCnpj">CNPJ</label>
+                  <label htmlFor="buscaCnpj">Fund Name</label>
                   <select
                     id="buscaCnpj"
                     name="buscaCnpj"
                     value={controlForm.buscaCnpj}
                     onChange={handleControlFormChange}
-                    className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                    className="border-b-2 text-ellipsis rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                    title={nameSelectedFund}
                   >
-                    {user?.cnpjs?.map((cE, cI) => (
-                      <option key={cI} value={cE}>
-                        {cE}
-                      </option>
-                    ))}
+                    {arrCnpjName &&
+                      arrCnpjName.map((cE, cI) => {
+                        return (
+                          <option key={cI} value={cE["CNPJ_FUNDO"]}>
+                            {cE["DENOM_SOCIAL"]}
+                          </option>
+                        );
+                      })}
                   </select>
                 </div>
                 <div className="flex flex-col font-semibold items-center gap-1">
@@ -637,8 +686,8 @@ export default function ControlSection({
                       type="range"
                       id="varNF"
                       name="varNF"
-                      min={-0.1}
-                      max={0.1}
+                      min={-0.05}
+                      max={0.05}
                       step={0.01}
                       className="indigo-500"
                       value={controlForm.varNF}
@@ -666,8 +715,8 @@ export default function ControlSection({
                       type="range"
                       id="varCotistas"
                       name="varCotistas"
-                      min={-0.1}
-                      max={0.1}
+                      min={-0.05}
+                      max={0.05}
                       step={0.01}
                       className="indigo-500"
                       value={controlForm.varCotistas}
@@ -697,7 +746,7 @@ export default function ControlSection({
                       name="varCota"
                       min={-0.05}
                       max={0.05}
-                      step={0.005}
+                      step={0.01}
                       className="indigo-500"
                       value={controlForm.varCota}
                       onChange={handleControlFormChange}
@@ -711,10 +760,6 @@ export default function ControlSection({
                 type="submit"
                 className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
               >
-                {/* <ButtonIndigo shadowSize="md" shadowColor="white">
-                Update
-              </ButtonIndigo>
-              */}
                 <div className="shadow-black relative bottom-1 hover:shadow-xl">
                   Update
                 </div>

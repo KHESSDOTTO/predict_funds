@@ -54,7 +54,7 @@ export default function RegistrationInfos({
   isLoading,
 }: RegistrationInfosPropsType) {
   const fieldsToShow: CadastroFundosKey[] = [
-    // "CNPJ_FUNDO",
+    "CNPJ_FUNDO",
     "DENOM_SOCIAL",
     // "TP_FUNDO",
     // "CLASSE",
@@ -70,7 +70,7 @@ export default function RegistrationInfos({
   ];
 
   const titlesOfFields = [
-    // "CNPJ",
+    "CNPJ",
     "Fund Name",
     // "Type",
     // "Class",
@@ -98,10 +98,10 @@ export default function RegistrationInfos({
           {fieldsToShow.map((cE, cI) => {
             return (
               <li key={titlesOfFields[cI]}>
-                <span className="font-semibold text-white -ml-1">
-                  {titlesOfFields[cI]}
+                <span className="font-semibold text-white -ml-1 mr-2">
+                  {titlesOfFields[cI]} :
                 </span>
-                : {registration[cE]}
+                <span>{registration[cE]}</span>
               </li>
             );
           })}

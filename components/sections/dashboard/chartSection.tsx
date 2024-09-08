@@ -38,7 +38,6 @@ export default function ChartSection({
   loadingHistogram,
   histogram = false,
 }: ChartSectionProps) {
-  consoleLog({ predictions });
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]),
     [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]),
     [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]),
@@ -143,8 +142,6 @@ export default function ChartSection({
     const newGradientOffset =
       (newUnifiedNFData.length - predictions.length) /
       (newUnifiedNFData.length - 1);
-    consoleLog({ newUnifiedNFData });
-    consoleLog({ newGradientOffset });
     setUnifiedNFData(newUnifiedNFData);
     setGradientOffset(newGradientOffset);
   }
