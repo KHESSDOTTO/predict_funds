@@ -54,7 +54,6 @@ export default function ChartSection({
     [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
     [isMobile, setIsMobile] = useState<boolean>(false),
     screenWidth = useWindowWidth();
-  const { CLASSE_ANBIMA } = registration;
 
   function adjustValueQuotaChartAxis(
     data: HistoricType[],
@@ -390,7 +389,9 @@ export default function ChartSection({
                 <span className="mr-2 font-semibold italic lg:not-italic lg:text-base">
                   Anbima class:
                 </span>
-                <span className="text-white/80 italic">{CLASSE_ANBIMA}</span>
+                <span className="text-white/80 italic">
+                  {registration["CLASSE_ANBIMA"]}
+                </span>
               </li>
             </ul>
           </div>
