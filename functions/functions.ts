@@ -182,8 +182,17 @@ function prepareHistogram(
       formatNumToStrMlnK(lowerEndAbs, false) +
       separator +
       formatNumToStrMlnK(upperEndAbs, i === numBars - 1); // If it is the last limit, than roundUp (true)
-    const tickPct =
-      lowerEndPct.toFixed(1) + "%" + separator + upperEndPct.toFixed(1) + "%";
+
+    let adjustedLowerEndPct = lowerEndPct.toFixed(1) + "%";
+    let adjustedUpperEndPct = upperEndPct.toFixed(1) + "%";
+    if (lowerEndPct < 0) {
+      adjustedLowerEndPct = "(" + lowerEndPct.toFixed(1) + "%" + ")";
+    }
+    if (upperEndPct < 0) {
+      adjustedUpperEndPct = "(" + upperEndPct.toFixed(1) + "%" + ")";
+    }
+
+    const tickPct = adjustedLowerEndPct + separator + adjustedUpperEndPct;
 
     xTicks.abs.push(tickAbs);
     limits.abs.push(upperEndAbs); // No rounding on this array to count the elements in each interval of values

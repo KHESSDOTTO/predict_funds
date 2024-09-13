@@ -86,6 +86,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       </div>
       <div className="mt-10 lg:mt-16 w-screen">
         <ChartSection
+          registration={registration}
           historic={historicData}
           smallV={false}
           predictions={predictionData}

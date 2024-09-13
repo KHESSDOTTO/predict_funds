@@ -189,6 +189,7 @@ interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
 }
 
 interface ChartSectionProps {
+  registration: CadastroFundosType;
   historic: HistoricType[];
   smallV: boolean;
   predictions: PredictionsType[];
