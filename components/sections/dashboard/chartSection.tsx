@@ -32,6 +32,7 @@ import type {
 import { formatterBrNumber } from "@/utils/numberFormatters";
 
 export default function ChartSection({
+  registration,
   historic,
   smallV,
   predictions,
@@ -339,47 +340,7 @@ export default function ChartSection({
                     stroke: "rgb(150, 130, 200)",
                     strokeWidth: 2,
                   }}
-                >
-                  {/* {unifiedNFData.map((cE, cI) => {
-                    const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
-                    const absOrPctId = isPct ? "PCT" : "ABS";
-                    return (
-                      <>
-                        {[
-                          {
-                            name: "CI90",
-                            stroke: "rgba(100, 150, 100)",
-                            width: 6,
-                            strokeWidth: 1,
-                          },
-                          {
-                            name: "CI95",
-                            stroke: "rgba(100, 150, 100)",
-                            width: 10,
-                            strokeWidth: 1,
-                          },
-                          {
-                            name: "CI99",
-                            stroke: "rgba(100, 150, 100)",
-                            width: 14,
-                            strokeWidth: 1,
-                          },
-                        ].map((cE2, cI2) => {
-                          return (
-                            <ErrorBar
-                              key={`errorBar-${cE.DT_COMPTC}-${cE2.name}`}
-                              dataKey={`${cE2.name}_${absOrPctId}`}
-                              stroke={cE2.stroke}
-                              width={cE2.width}
-                              strokeWidth={cE2.strokeWidth}
-                              direction="y"
-                            />
-                          );
-                        })}
-                      </>
-                    );
-                  })} */}
-                </Line>
+                ></Line>
 
                 <ReferenceLine y={0} fill="white" strokeWidth={2} />
 
@@ -421,6 +382,20 @@ export default function ChartSection({
         >
           Preds. Histogram (Market - same ANBIMA Class)
         </h1>
+        {registration && (
+          <div className="relative top-1 flex justify-center lg:block lg:mb-2 lg:top-0">
+            <ul className="list-inside lg:list-disc">
+              <li className="text-sm lg:ml-12">
+                <span className="mr-2 font-semibold italic lg:not-italic lg:text-base">
+                  Anbima class:
+                </span>
+                <span className="text-white/80 italic">
+                  {registration["CLASSE_ANBIMA"]}
+                </span>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
           <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
             <h4 className="mr-2 md:mr-6">Visualization: </h4>
