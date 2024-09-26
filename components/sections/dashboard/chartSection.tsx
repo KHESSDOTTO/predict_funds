@@ -323,6 +323,7 @@ export default function ChartSection({
                 ].map((cE) => {
                   return (
                     <Area
+                      key={cE}
                       dataKey={cE}
                       type="linear"
                       fill="gray"

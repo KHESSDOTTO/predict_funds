@@ -137,9 +137,11 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                 </tr>
               </thead>
               <tbody className="text-white text-sm font-light">
-                {Object.keys(selCorrels).map((key, cI, arr) => {
+                {Object.keys(selCorrels).map((key) => {
+                  const id = Math.random();
                   return (
                     <tr
+                      key={id}
                       className={`border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50 last:rounded-b-sm`}
                     >
                       <td
@@ -206,6 +208,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                         {nameTicker}
                       </td>
                       {Object.keys(selCorrels).map((key) => {
+                        const id = Math.random();
                         const value = selCorrels[key][ticker];
                         const color = getToneColor(
                           value,
@@ -216,6 +219,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                           value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
                         return (
                           <td
+                            key={id}
                             className="py-3 px-6 text-center bg-opacity-20 text-black font-bold text-md"
                             style={{
                               backgroundColor: color,
