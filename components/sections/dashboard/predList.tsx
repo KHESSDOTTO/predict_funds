@@ -91,10 +91,18 @@ export default function PredList({
   }
 
   function handleDeleteRow(e: React.MouseEvent<HTMLButtonElement>) {
-    const updatedRows = predRows.filter((cE) => {
-      return cE.id.toString() != e.currentTarget.id.toString();
+    const rowId = e.currentTarget.dataset.id;
+    if (!rowId) {
+      console.warn("No row ID found for deletion.");
+      return;
+    }
+    console.log("Deleting row with id:", rowId);
+    console.log("Current rows:", predRows);
+    setPredRows((prevRows) => {
+      const updatedRows = prevRows.filter((cE) => cE.id.toString() !== rowId);
+      console.log("Updated rows:", updatedRows);
+      return updatedRows;
     });
-    setPredRows(updatedRows);
   }
 
   return (
@@ -159,9 +167,9 @@ export default function PredList({
                 </td>
                 <td className="text-red-800 p-1 text-base align-middle">
                   <button
-                    className="hover:text-red-600"
-                    id={cE.id.toString()}
-                    onClick={handleDeleteRow}
+                    className="z-10 hover:text-red-600"
+                    data-id={cE.id.toString()}
+                    onClick={(e) => handleDeleteRow(e)}
                   >
                     x
                   </button>
