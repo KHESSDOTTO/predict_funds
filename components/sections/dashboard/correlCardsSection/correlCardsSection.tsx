@@ -168,7 +168,7 @@ export default function CorrelCardsSection({
                 };
 
                 if (hiddenFields.includes(cE[0])) {
-                  return <></>;
+                  return <div className="hidden" key={index}></div>;
                 }
 
                 return (

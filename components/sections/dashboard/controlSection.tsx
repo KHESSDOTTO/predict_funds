@@ -173,6 +173,11 @@ export default function ControlSection({
   async function getCorrels(cnpj: string, anbimaClass: string) {
     const encodedCnpj = encodeURIComponent(cnpj);
     const encodedAnbimaClass = encodeURIComponent(anbimaClass);
+
+    if (!anbimaClass) {
+      return false;
+    }
+
     try {
       const resCnpj = await ax.get(
         `/correlations/getByCnpj?cnpj=${encodedCnpj}`

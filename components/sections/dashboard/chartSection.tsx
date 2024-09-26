@@ -135,8 +135,7 @@ export default function ChartSection({
 
   function prepareChartNFData(
     historic: HistoricType[],
-    predictions: PredictionsType[],
-    absOrPct: string
+    predictions: PredictionsType[]
   ) {
     // Unifying data
     const newUnifiedNFData = [...historic, ...predictions];
@@ -145,21 +144,6 @@ export default function ChartSection({
       (newUnifiedNFData.length - 1);
     setUnifiedNFData(newUnifiedNFData);
     setGradientOffset(newGradientOffset);
-  }
-
-  function getBarColor(dataPoint: PredictionsType | HistoricType): string {
-    if (!dataPoint.DT_COMPTC) {
-      return "#8884d8";
-    }
-    let barColor: string;
-    const currDate = dataPoint.DT_COMPTC;
-    const lastHistoricData = historic[historic.length - 1]["DT_COMPTC"];
-    if (currDate > lastHistoricData) {
-      barColor = "white";
-    } else {
-      barColor = "#8884d8";
-    }
-    return barColor;
   }
 
   function handleAbsOrPctChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -177,7 +161,7 @@ export default function ChartSection({
     }
     adjustValueQuotaChartAxis(historic, absOrPct);
     if (adjustNetFundingChartAxis(historic, absOrPct)) {
-      prepareChartNFData(historic, predictions, absOrPct);
+      prepareChartNFData(historic, predictions);
     }
   }, [historic, predictions, absOrPct]);
 
@@ -323,6 +307,7 @@ export default function ChartSection({
                 ].map((cE) => {
                   return (
                     <Area
+                      key={cE}
                       dataKey={cE}
                       type="linear"
                       fill="gray"
