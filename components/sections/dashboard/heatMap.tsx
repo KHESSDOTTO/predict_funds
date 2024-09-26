@@ -99,6 +99,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
           </div>
         </form>
       </div>
+
       {isLoadingCorrels && (
         <div className="flex justify-center items-center">
           <ClipLoader
