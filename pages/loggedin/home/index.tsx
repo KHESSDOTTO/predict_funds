@@ -10,6 +10,7 @@ import Header from "@/components/layout/header";
 import { ax } from "@/database/axios.config";
 import { UserContext } from "@/contexts/UserContext";
 import { UserType } from "@/utils/types";
+import { consoleLog } from "@/functions/functions";
 
 interface LoggedInHomePropsType {
   user: UserType;
@@ -25,14 +26,19 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   };
 
   useEffect(() => {
-    // console.log(user);
     if (!user) {
       console.log("There is no user!");
       router.push("/login");
       return;
-    } else {
+    }
+
+    const noUserInContext = userContext.user === null;
+
+    if (noUserInContext) {
+      console.log("Triggered home useEffect");
       userContext.setUser(user);
     }
+
     return;
   }, []);
 
@@ -72,9 +78,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   const token = req.cookies.loggedInUser;
   let user: string | false | JwtPayload = false;
+
   if (token) {
     user = verifyToken(token);
   }
+
   return {
     props: {
       user,
