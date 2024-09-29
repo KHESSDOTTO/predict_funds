@@ -4,7 +4,6 @@ import {
   DashboardControlFormType,
   PredictionsType,
 } from "@/utils/types";
-import CadastroFundosModel from "../models/cadastroFundosModel";
 import { buildPredKey, consoleLog } from "@/functions/functions";
 import ConfidenceIntervalModel from "../models/confidenceIntervalModel";
 
@@ -118,28 +117,6 @@ async function getPredictions(controlForm: DashboardControlFormType) {
   }
 }
 
-async function getCnpjsByAnbimaClass(anbimaClass: string) {
-  try {
-    const queryRes = await CadastroFundosModel.distinct("CNPJ_FUNDO", {
-      CLASSE_ANBIMA: anbimaClass,
-    });
-
-    if (!queryRes) {
-      console.log("No anbima class:" + anbimaClass + "found in the database.");
-      return false;
-    }
-
-    const idArr = queryRes.map((cE) => {
-      return cE.CNPJ_FUNDO;
-    });
-
-    return idArr;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
 async function getPredsForHistogram(controlForm: DashboardControlFormType) {
   /*
     Prediction of all CNPJs to 4 weeks forward. Prediction of the selected CNPJ are based on params (controlForm),
@@ -221,10 +198,4 @@ async function getCalcDatesPred() {
   return datahoraPredicao;
 }
 
-export {
-  getPredictions,
-  getPredsForHistogram,
-  getCnpjsByAnbimaClass,
-  getCalcDatesPred,
-  getAncoras,
-};
+export { getPredictions, getPredsForHistogram, getCalcDatesPred, getAncoras };

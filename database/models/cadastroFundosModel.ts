@@ -1,4 +1,16 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
+
+// Define the interface for the document, in here should go the instance methods
+interface ICadastroFundos extends Document {}
+
+// This is the interface for the model itself, including the static methods
+interface CadastroFundosModelType extends Model<ICadastroFundos> {
+  getCadastroByCnpj(cnpj: string): Promise<ICadastroFundos | null>;
+  getAnbimaClassByCnpj(cnpj: string): Promise<string | false>;
+  getArrCnpjName(
+    cnpjs: string[]
+  ): Promise<Array<{ CNPJ_FUNDO: string; DENOM_SOCIAL: string }> | false>; // THIS SHOULD BE AN INSTANCE METHOD
+}
 
 const CadastroFundosSchema = new Schema(
   {
@@ -72,9 +84,69 @@ const CadastroFundosSchema = new Schema(
   { timestamps: true }
 );
 
+CadastroFundosSchema.statics.getCadastroByCnpj = async function (cnpj: string) {
+  try {
+    const cadastro = await CadastroFundosModel.findOne({
+      CNPJ_FUNDO: cnpj,
+    });
+    return cadastro;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+CadastroFundosSchema.statics.getAnbimaClassByCnpj = async function (
+  cnpj: string
+) {
+  try {
+    const anbimaClass = (await CadastroFundosModel.findOne(
+      {
+        CNPJ_FUNDO: cnpj,
+      },
+      {
+        CLASSE_ANBIMA: 1,
+        _id: 0,
+      }
+    )) as { CLASSE_ANBIMA: string } | null;
+
+    if (!anbimaClass) {
+      return false;
+    }
+
+    return anbimaClass.CLASSE_ANBIMA;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
+  try {
+    const arrCnpjNames = await CadastroFundosModel.find(
+      {
+        CNPJ_FUNDO: { $in: cnpjs },
+      },
+      {
+        _id: 0,
+        CNPJ_FUNDO: 1,
+        DENOM_SOCIAL: 1,
+      }
+    );
+    return arrCnpjNames;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 CadastroFundosSchema.index({ CNPJ_FUNDO: 1 });
 
 const CadastroFundosModel =
-  models.cadastro_fundos || model("cadastro_fundos", CadastroFundosSchema);
+  (models.cadastro_fundos as CadastroFundosModelType) ||
+  model<ICadastroFundos, CadastroFundosModelType>(
+    "cadastro_fundos",
+    CadastroFundosSchema
+  );
 
 export default CadastroFundosModel;
