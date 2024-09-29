@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getCadastroByCnpj } from "@/database/functions/cadastroFundosFunctions";
+import CadastroFundosModel from "@/database/models/cadastroFundosModel";
 
 async function GetByCnpj(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -14,7 +14,9 @@ async function GetByCnpj(req: NextApiRequest, res: NextApiResponse) {
   }
   try {
     await connect();
-    const cadastro = await getCadastroByCnpj(req.query.cnpj);
+    const cadastro = await CadastroFundosModel.getCadastroByCnpj(
+      req.query.cnpj
+    );
     if (!cadastro) {
       return res.status(204).send("");
     }
