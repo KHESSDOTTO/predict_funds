@@ -111,7 +111,6 @@ async function getPredictions(controlForm: DashboardControlFormType) {
       return false;
     }
 
-    consoleLog({ finalPred });
     return finalPred;
   } catch (err) {
     console.log(err);

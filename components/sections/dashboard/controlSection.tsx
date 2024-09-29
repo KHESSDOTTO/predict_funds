@@ -15,6 +15,7 @@ import type {
   HistoricType,
   PredictionsType,
 } from "@/utils/types";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 interface ControlSectionProps {
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;
@@ -50,6 +51,7 @@ export default function ControlSection({
   const userContext = useContext(UserContext);
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
+  const screenWidth = useWindowWidth();
   const user = userContext.user;
   const arrWeeksPreds = [4];
 
@@ -143,8 +145,16 @@ export default function ControlSection({
     return false;
   }
 
-  async function getHistogram(controlForm: DashboardControlFormType) {
-    const numBins = 7; // Number of bins desired for the histogram
+  async function getHistogram(
+    controlForm: DashboardControlFormType,
+    windowWidth: number
+  ) {
+    let numBins = 13;
+
+    const isMobile = windowWidth <= 992;
+    if (isMobile) {
+      numBins = 7;
+    }
 
     setLoadingHistogram(true);
     if (!controlForm.anbimaClass) return; // Won't execute if there is no anbimaClass
@@ -265,8 +275,6 @@ export default function ControlSection({
         cnpjs: cnpjs,
       });
 
-      consoleLog({ arrCnpjName });
-
       if (!arrCnpjName.data) {
         return false;
       }
@@ -300,7 +308,7 @@ export default function ControlSection({
 
   // Get Histogram and correlations
   useEffect(() => {
-    getHistogram(controlForm);
+    getHistogram(controlForm, screenWidth);
     getCorrels(controlForm.buscaCnpj, controlForm.anbimaClass);
   }, [registration]);
 
