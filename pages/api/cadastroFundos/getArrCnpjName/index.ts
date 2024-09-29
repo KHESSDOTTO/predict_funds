@@ -21,7 +21,6 @@ async function GetArrCnpjName(req: NextApiRequest, res: NextApiResponse) {
     await connect();
     const { cnpjs } = req.body;
     const arrCnpjName = await getArrCnpjName(cnpjs);
-    consoleLog({ arrCnpjName });
     if (!arrCnpjName) {
       return res
         .status(204)

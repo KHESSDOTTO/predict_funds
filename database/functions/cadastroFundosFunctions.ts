@@ -37,7 +37,6 @@ async function getAnbimaClassByCnpj(cnpj: string) {
 }
 
 async function getArrCnpjName(cnpjs: string[]) {
-  consoleLog({ cnpjs });
   try {
     const arrCnpjNames = await CadastroFundosModel.find(
       {

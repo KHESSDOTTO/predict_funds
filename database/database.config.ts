@@ -6,7 +6,7 @@ mongoose.set("strictQuery", false);
 let connectionPromise: Promise<mongoose.Mongoose> | null = null;
 
 async function connect(): Promise<mongoose.Mongoose> {
-  if (cache.conn) {
+  if (cache.conn && process.env.NODE_ENV === "development") {
     console.log("Did not create new connection.");
     return cache.conn;
   }
@@ -40,9 +40,7 @@ function addListeners() {
 
   // Check if SIGINT listener is already added
   if (!hasSigintListener) {
-    console.log("Adding SIGINT listener.");
     process.on("SIGINT", async () => {
-      console.log("SIGINT received, shutting down...");
       await mongoose.disconnect();
       console.log("Disconnected from MongoDB.");
       process.exit(0);
@@ -51,11 +49,8 @@ function addListeners() {
 
   // Check if SIGTERM listener is already added
   if (!hasSigtermListener) {
-    console.log("Adding SIGTERM listener.");
     process.on("SIGTERM", async () => {
-      console.log("SIGTERM received, shutting down...");
       await mongoose.disconnect();
-      console.log("Disconnected from MongoDB.");
       process.exit(0);
     });
   }
