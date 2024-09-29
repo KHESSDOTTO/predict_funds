@@ -9,7 +9,7 @@ interface CadastroFundosModelType extends Model<ICadastroFundos> {
   getAnbimaClassByCnpj(cnpj: string): Promise<string | false>;
   getArrCnpjName(
     cnpjs: string[]
-  ): Promise<Array<{ CNPJ_FUNDO: string; DENOM_SOCIAL: string }> | false>;
+  ): Promise<Array<{ CNPJ_FUNDO: string; DENOM_SOCIAL: string }> | false>; // THIS SHOULD BE AN INSTANCE METHOD
 }
 
 const CadastroFundosSchema = new Schema(
