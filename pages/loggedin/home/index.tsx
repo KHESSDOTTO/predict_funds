@@ -35,7 +35,6 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
     const noUserInContext = userContext.user === null;
 
     if (noUserInContext) {
-      console.log("Triggered home useEffect");
       userContext.setUser(user);
     }
 
