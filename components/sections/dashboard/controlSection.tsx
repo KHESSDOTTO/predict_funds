@@ -149,11 +149,11 @@ export default function ControlSection({
     controlForm: DashboardControlFormType,
     windowWidth: number
   ) {
-    let numBins = 13;
+    let numBins = 14;
 
     const isMobile = windowWidth <= 992;
     if (isMobile) {
-      numBins = 7;
+      numBins = 8;
     }
 
     setLoadingHistogram(true);

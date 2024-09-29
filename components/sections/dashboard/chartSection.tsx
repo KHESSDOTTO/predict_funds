@@ -443,7 +443,7 @@ export default function ChartSection({
                   <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
                   <XAxis
                     dataKey="xTick"
-                    fontSize={isMobile ? 10 : 12}
+                    fontSize={isMobile ? 10 : 11}
                     className="text-white"
                     interval={isMobile ? 1 : 0}
                   />
