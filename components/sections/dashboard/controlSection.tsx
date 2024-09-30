@@ -583,7 +583,7 @@ export default function ControlSection({
             </ButtonIndigo>
             <div
               onClick={saveCenario}
-              className="absolute right-0 bottom-1 lg:right-40 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
+              className="absolute right-0 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
             >
               + Save Cenario
             </div>
@@ -777,12 +777,12 @@ export default function ControlSection({
                   Update
                 </div>
               </button>
-              <div
-                onClick={saveCenario}
-                className="absolute bottom-0 right-24 text-white italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
-              >
-                + Save Cenario
-              </div>
+            </div>
+            <div
+              onClick={saveCenario}
+              className="absolute bottom-0 right-0 xl:right-24 text-white italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
+            >
+              + Save Cenario
             </div>
           </div>
         </form>

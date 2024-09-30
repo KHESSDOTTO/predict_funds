@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getAllHistoricByCnpj } from "@/database/functions/historicFunctions";
+import HistoricModel from "@/database/models/historicModel";
 import { connect } from "@/database/database.config";
+import { consoleLog } from "@/functions/functions";
 
 async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -23,9 +24,12 @@ async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
         .json({ msg: "Wrong CNPJ or basedate (not string)" });
     }
 
-    const response = await getAllHistoricByCnpj(
-      req.query.cnpj,
-      req.query.baseDate
+    const { cnpj, baseDate } = req.query;
+    const formattedBaseDate = new Date(baseDate);
+
+    const response = await HistoricModel.getAllHistoricByCnpj(
+      cnpj,
+      formattedBaseDate
     );
 
     if (!response) {
