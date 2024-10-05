@@ -35,7 +35,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     [histogram, setHistogram] = useState<FinalHistogramData | false>(false),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
       baseDate: ancoras ? ancoras[0] : "2024-05-31T00:00:00.00Z",
-      buscaCnpj: user.cnpj,
+      buscaCnpj: user.cnpjs[0],
       varNF: 0,
       varCotistas: 0,
       varCota: 0,
