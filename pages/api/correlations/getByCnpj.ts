@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getMostRecentCorrelsByCnpj } from "@/database/functions/correlationsFunctions";
+import CorrelationsModel from "@/database/models/correlation/correlationsModel";
 
 async function GetMostRecentCorrelsByCnpj(
   req: NextApiRequest,
@@ -22,7 +22,8 @@ async function GetMostRecentCorrelsByCnpj(
       });
     }
 
-    const mostRecentCorrels = await getMostRecentCorrelsByCnpj(cnpj);
+    const mostRecentCorrels =
+      await CorrelationsModel.getMostRecentCorrelsByCnpj(cnpj);
 
     return res.status(200).json(mostRecentCorrels);
   } catch (err) {
