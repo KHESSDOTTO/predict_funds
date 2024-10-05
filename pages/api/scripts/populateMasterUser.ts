@@ -1,6 +1,6 @@
 import { connect } from "@/database/database.config";
-import PredictionsModel from "@/database/models/predictionsModel";
-import UserModel from "@/database/models/userModel";
+import PredictionsModel from "@/database/models/prediction/predictionsModel";
+import UserModel from "@/database/models/user/userModel";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function PopulateMasterUser(

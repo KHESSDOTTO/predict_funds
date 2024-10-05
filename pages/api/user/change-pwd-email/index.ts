@@ -4,7 +4,7 @@ import {
   insertUpdateChangeId,
   sendPwdUpdateEmail,
 } from "@/database/functions/userFunctions";
-import UserModel from "@/database/models/userModel";
+import UserModel from "@/database/models/user/userModel";
 
 async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {

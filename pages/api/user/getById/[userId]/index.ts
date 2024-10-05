@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import UserModel from "@/database/models/userModel";
+import UserModel from "@/database/models/user/userModel";
 
 async function GetUserById(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {

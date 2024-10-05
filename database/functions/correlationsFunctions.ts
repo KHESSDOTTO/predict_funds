@@ -1,4 +1,4 @@
-import CorrelationsModel from "../models/correlationsModel";
+import CorrelationsModel from "../models/correlation/correlationsModel";
 
 async function getMostRecentCorrelsByCnpj(cnpj: string) {
   const mostRecentCorrelations = [];

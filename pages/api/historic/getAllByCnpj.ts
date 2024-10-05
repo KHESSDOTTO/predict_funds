@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import HistoricModel from "@/database/models/historicModel";
+import HistoricModel from "@/database/models/historic/historicModel";
 import { connect } from "@/database/database.config";
 import { consoleLog } from "@/functions/functions";
 

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import HistoricModel from "@/database/models/historicModel";
+import HistoricModel from "@/database/models/historic/historicModel";
 
 export default async function CheckOlderHistoric(
   req: NextApiRequest,

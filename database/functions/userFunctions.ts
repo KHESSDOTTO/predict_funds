@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import UserModel from "../models/userModel";
+import UserModel from "../models/user/userModel";
 import { generateToken } from "../../utils/jwt.config";
 import { serialize } from "cookie";
 import transporter from "@/utils/transporter.config";

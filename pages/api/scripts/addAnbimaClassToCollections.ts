@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import CorrelationsModel from "@/database/models/correlationsModel";
-import PredictionsModel from "@/database/models/predictionsModel";
+import CorrelationsModel from "@/database/models/correlation/correlationsModel";
+import PredictionsModel from "@/database/models/prediction/predictionsModel";
 
 export default async function AddAnbimaClassToPreds(
   req: NextApiRequest,
