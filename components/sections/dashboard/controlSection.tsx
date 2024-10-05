@@ -223,9 +223,10 @@ export default function ControlSection({
 
   async function getRegistration() {
     if (!user) return;
-    const encodedParam = encodeURIComponent(user.cnpj);
+    const cnpj = user.cnpjs[0];
+    const encodedCnpj = encodeURIComponent(cnpj);
     try {
-      const registration = await selRegistration(encodedParam);
+      const registration = await selRegistration(encodedCnpj);
       setRegistration(registration);
       setNameSelectedFund(registration["DENOM_SOCIAL"]);
       setIsLoading(false);
@@ -240,15 +241,16 @@ export default function ControlSection({
     }
 
     const loadingToast = toast.loading("Fetching data...");
-    const encodedParam = encodeURIComponent(user.cnpj);
+    const cnpj = user.cnpjs[0];
+    const encodedCnpj = encodeURIComponent(cnpj);
     try {
       const slicedHistoricData = await getHistoricData(
-        encodedParam,
+        encodedCnpj,
         controlForm.baseDate
       );
       let predictions: PredictionsType[] | false = [];
       if (slicedHistoricData) {
-        predictions = await getPredictions(user.cnpj, slicedHistoricData);
+        predictions = await getPredictions(cnpj, slicedHistoricData);
       }
       if (predictions) {
         toast.success("Done.");
@@ -287,7 +289,7 @@ export default function ControlSection({
     }
   }
 
-  // Updates the controlForm with the logged in users CNPJ, initially.
+  // Updates the controlForm with the first CNPJ in CNPJs list, initially.
   // Get user registration and array with CNPJ and names of funds.
   // Get historic data and predictions
   useEffect(() => {
@@ -297,7 +299,7 @@ export default function ControlSection({
 
     setControlForm((prevForm) => ({
       ...prevForm,
-      buscaCnpj: user.cnpj || "",
+      buscaCnpj: user.cnpjs[0] || "",
     }));
 
     getData();
