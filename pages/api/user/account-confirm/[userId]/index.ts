@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { doConfirmEmail } from "@/database/functions/userFunctions";
+import UserModel from "@/database/models/user/userModel";
 import { connect } from "@/database/database.config";
 
 async function EmailAccountConfirm(req: NextApiRequest, res: NextApiResponse) {
@@ -7,10 +7,11 @@ async function EmailAccountConfirm(req: NextApiRequest, res: NextApiResponse) {
   if (typeof userId !== "string") {
     return res.status(500).send("Something went wrong with the user id.");
   }
+
   try {
     await connect();
-    const confirmation = await doConfirmEmail(userId);
-    // await disconnect();
+    const confirmation = await UserModel.doConfirmEmail(userId);
+
     return res.status(confirmation.status).send(confirmation.msg);
   } catch (err) {
     console.log(err);

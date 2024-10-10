@@ -63,6 +63,7 @@ function generateYaxisTicksBasedOnMaxMod(
   const newMaxFirstTime = isPct ? 0.1 : 200000;
   const newMaxSecondTime = isPct ? 0.15 : 500000;
   const defaultStep = isPct ? 0.05 : 500000;
+
   if (times == 1) {
     newMaxValueTick = newMaxFirstTime;
   } else if (times == 2) {
@@ -102,6 +103,7 @@ function generateYaxisDomainBasedOnMaxMod(
   const newMaxFirstTime = isPct ? 0.1 : 200000;
   const newMaxSecondTime = isPct ? 0.15 : 500000;
   const defaultStep = isPct ? 0.05 : 500000;
+
   if (times == 1) {
     newMaxValueTick = newMaxFirstTime;
   } else if (times == 2) {
@@ -129,18 +131,22 @@ function prepareHistogram(
   let cValAbs: number;
   let stepPct: number;
   let cValPct: number;
+
   const limits: { abs: number[]; pct: number[] } = {
     abs: [],
     pct: [],
   };
+
   const xTicks: { abs: string[]; pct: string[] } = {
     abs: [],
     pct: [],
   };
+
   const values: { abs: number[]; pct: number[] } = {
     abs: [],
     pct: [],
   };
+
   let selCnpjBin: { abs: boolean[]; pct: boolean[] } = {
     abs: [],
     pct: [],
@@ -214,9 +220,11 @@ function prepareHistogram(
     const indexAbs = limits.abs.findIndex(
       (limit) => cE["CAPTC_LIQ_ABS_ms"] <= limit
     );
+
     if (indexAbs !== -1) {
       values.abs[indexAbs]++;
     }
+
     if (cE.CNPJ_FUNDO === selCnpj && indexAbs !== -1) {
       selCnpjBin.abs[indexAbs] = true;
     }
@@ -225,9 +233,11 @@ function prepareHistogram(
     const indexPct = limits.pct.findIndex(
       (limit) => cE["CAPTC_LIQ_PCT_ms"] <= limit
     );
+
     if (indexPct !== -1) {
       values.pct[indexPct]++;
     }
+
     if (cE.CNPJ_FUNDO === selCnpj && indexPct !== -1) {
       selCnpjBin.pct[indexPct] = true;
     }

@@ -1,31 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { doLogin } from "@/database/functions/userFunctions";
+import UserModel from "@/database/models/user/userModel";
 import { connect } from "@/database/database.config";
 
 async function Login(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "POST") {
-    try {
-      await connect();
-      const user = await doLogin(req.body);
-      // await disconnect();
-      if (user) {
-        if (user.ok && user.authCookie) {
-          return res
-            .status(user.status)
-            .setHeader("Set-Cookie", user.authCookie)
-            .json({ ...user.msg, token: user.token });
-        } else {
-          return res.status(user.status).json(user.msg);
-        }
-      }
-      return res.status(500).json("user returned null/falsy.");
-    } catch (err) {
-      // await disconnect();
-      return res.status(500).json(err);
-    }
+  if (req.method !== "POST") {
+    return res.status(400).send("Only POST method accepted at this endpoint.");
   }
-  // disconnect();
-  return res.status(400).send("Only POST method accepted at this endpoint.");
+
+  try {
+    await connect();
+    const user = await UserModel.doLogin(req.body);
+
+    if (user && user.ok && user.authCookie && typeof user.msg !== "string") {
+      return res
+        .status(user.status)
+        .setHeader("Set-Cookie", user.authCookie)
+        .json({ ...user.msg, token: user.token });
+    } else {
+      return res.status(user.status).json(user.msg);
+    }
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 }
 
 export default Login;
