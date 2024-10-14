@@ -1,16 +1,8 @@
-import { Schema, model, models, Model } from "mongoose";
-
-// Define the interface for the document, in here should go the instance methods
-interface ICadastroFundos extends Document {}
-
-// This is the interface for the model itself, including the static methods
-interface CadastroFundosModelType extends Model<ICadastroFundos> {
-  getCadastroByCnpj(cnpj: string): Promise<ICadastroFundos | null>;
-  getAnbimaClassByCnpj(cnpj: string): Promise<string | false>;
-  getArrCnpjName(
-    cnpjs: string[]
-  ): Promise<Array<{ CNPJ_FUNDO: string; DENOM_SOCIAL: string }> | false>; // THIS SHOULD BE AN INSTANCE METHOD
-}
+import { Schema, model, models } from "mongoose";
+import type {
+  CadastroFundosDocType,
+  CadastroFundosModelType,
+} from "./cadastroFundosTypes";
 
 const CadastroFundosSchema = new Schema(
   {
@@ -144,9 +136,10 @@ CadastroFundosSchema.index({ CNPJ_FUNDO: 1 });
 
 const CadastroFundosModel =
   (models.cadastro_fundos as CadastroFundosModelType) ||
-  model<ICadastroFundos, CadastroFundosModelType>(
+  model<CadastroFundosDocType, CadastroFundosModelType>(
     "cadastro_fundos",
-    CadastroFundosSchema
+    CadastroFundosSchema,
+    "cadastro_fundos"
   );
 
 export default CadastroFundosModel;

@@ -1,12 +1,64 @@
+import { Schema, model, models } from "mongoose";
 import bcrypt from "bcrypt";
-import UserModel from "../models/userModel";
-import { generateToken } from "../../utils/jwt.config";
+import { generateToken } from "@/utils/jwt.config";
 import { serialize } from "cookie";
 import transporter from "@/utils/transporter.config";
 import { v4 as uuidv4 } from "uuid";
+import {
+  UserModelDocType,
+  UserModelType,
+  ClientInfoUpdateUserInfoNoPwd,
+  CreateUserInfoType,
+  GenericObjectReturnType,
+} from "./userType";
 
-// Cria um novo changeId e insere no usuário indicado
-async function insertUpdateChangeId(userId: string) {
+const UserSchema = new Schema(
+  {
+    username: { type: String, required: true, trim: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      match: /^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+    },
+    passwordHash: { type: String, required: true },
+    address: { type: String, rerquired: true, trim: true },
+    cnpj: {
+      type: String,
+      trim: true,
+      match: /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/gm,
+      unique: true,
+      sparse: true,
+      required: true,
+    },
+    contactPhone: {
+      type: String,
+      trim: true,
+      match: /^[0-9]{11,13}$/gm,
+      unique: false,
+      required: true,
+    },
+    cnpjs: [
+      {
+        type: String,
+        trim: true,
+        match: /\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/gm,
+        unique: false,
+        sparse: true,
+        required: true,
+      },
+    ],
+    changeId: { type: String, required: false, unique: false },
+    products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    emailConfirm: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true, required: true },
+  },
+  { timestamps: true }
+);
+
+// Creates a new changeId and inserts it in the indicated user
+UserSchema.statics.insertUpdateChangeId = async function (userId: string) {
   try {
     const newChangeId = uuidv4();
     const updUser = UserModel.findByIdAndUpdate(
@@ -23,22 +75,29 @@ async function insertUpdateChangeId(userId: string) {
     console.log(err);
     return false;
   }
-}
+};
 
-// Obter cnpj do cliente pelo id
-async function getUserCnpjById(userId: string) {
+// Get CNPJ by Id
+UserSchema.statics.getUserCnpjById = async function (userId: string) {
   try {
-    const user = await UserModel.findById(userId);
-    const cnpj: string = user._doc.cnpj;
-    return cnpj;
+    const user = await UserModel.findById(userId).lean().exec();
+
+    if (user) {
+      return user.cnpj;
+    }
+
+    return false;
   } catch (err) {
     console.log(err);
     return false;
   }
-}
+};
 
-// Enviar email de confirmação da conta/email
-async function sendConfirmEmail(userId: string, email: string) {
+// Send e-mail confirmation
+UserSchema.statics.sendConfirmEmail = async function (
+  userId: string,
+  email: string
+) {
   // console.log(transporter);
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,
@@ -50,22 +109,23 @@ async function sendConfirmEmail(userId: string, email: string) {
         : "https://predict-funds.vercel.app/api/user/account-confirm"
     }/${userId}>CLICK HERE</a>`,
   });
-}
+};
 
-// Envia e-mail de alteração de senha
-async function sendPwdUpdateEmail(userId: string, changeId: string) {
-  // console.log(transporter);
+// Send password change e-mail
+UserSchema.statics.sendPwdUpdateEmail = async function (
+  userId: string,
+  changeId: string
+) {
   try {
     const user = await UserModel.findById(userId);
+
     if (!user) {
       return false;
     }
-    // console.log(user);
-    // console.log(user._doc);
+
     const { email, cnpj } = user;
-    // console.log(email);
-    // console.log(cnpj);
-    transporter.sendMail({
+
+    await transporter.sendMail({
       from: process.env.EMAIL_ADDRESS,
       to: email,
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
@@ -75,24 +135,19 @@ async function sendPwdUpdateEmail(userId: string, changeId: string) {
           : `https://predict-funds.vercel.app/pwd-change/${userId}/${changeId}`
       }>CLICK HERE</a>`,
     });
+
     console.log("E-mail sent!");
+    return true;
   } catch (err) {
     console.log(err);
     return false;
   }
-}
+};
 
 // Signup
-async function doCreateUser(clientInfo: {
-  username: string;
-  email: string;
-  cnpj: string;
-  address: string;
-  password: string;
-  contactPhone: string;
-  passwordConfirm: string;
-  cnpjs: string[];
-}) {
+UserSchema.statics.doCreateUser = async function (
+  clientInfo: CreateUserInfoType
+) {
   const SALT_ROUNDS = 10;
   const { password, passwordConfirm } = clientInfo;
   if (
@@ -112,13 +167,19 @@ or password didn't match the required format",
   try {
     const salt = await bcrypt.genSalt(SALT_ROUNDS);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const createdUser = await UserModel.create({
+
+    const createdUserOriginal = await UserModel.create({
       ...clientInfo,
       passwordHash: hashedPassword,
     });
-    sendConfirmEmail(createdUser._doc._id, createdUser._doc.email);
-    delete createdUser._doc.passwordHash;
-    delete createdUser._doc._id;
+
+    const createdUser = createdUserOriginal.toObject();
+
+    UserModel.sendConfirmEmail(String(createdUser._id), createdUser.email);
+
+    delete createdUser.passwordHash;
+    delete createdUser._id;
+
     return {
       ok: true,
       status: 200,
@@ -132,16 +193,21 @@ or password didn't match the required format",
       msg: err,
     };
   }
-}
+};
 
 // Login
-async function doLogin(clientInfo: {
+UserSchema.statics.doLogin = async function (clientInfo: {
   username: string;
   password: string | Buffer;
-}) {
+}): Promise<GenericObjectReturnType> {
   try {
     const { username, password } = clientInfo;
-    const user = await UserModel.findOne({ username: username });
+    const user = await UserModel.findOne({
+      username: username,
+    })
+      .lean()
+      .exec();
+
     if (!user) {
       return {
         ok: false,
@@ -157,23 +223,32 @@ async function doLogin(clientInfo: {
         msg: "Account not yet confirmed.",
       };
     }
-    if (await bcrypt.compare(password, user.passwordHash)) {
+
+    if (
+      user.passwordHash &&
+      user._id &&
+      (await bcrypt.compare(password, user.passwordHash))
+    ) {
       const token = generateToken(user);
       const authCookie = serialize("loggedInUser", token, {
         httpOnly: true,
         maxAge: 60 * 60 * 12,
         path: "/",
       });
-      delete user._doc.passwordHash;
+      delete user.passwordHash;
       return {
         ok: true,
         status: 200,
-        msg: { ...user._doc },
+        msg: { ...user },
         token: token,
         authCookie: authCookie,
       };
     } else {
-      return false;
+      return {
+        ok: false,
+        status: 500,
+        msg: "Informations don't match",
+      };
     }
   } catch (err) {
     console.log(err);
@@ -183,12 +258,13 @@ async function doLogin(clientInfo: {
       msg: err,
     };
   }
-}
+};
 
 // Confirma email da conta - ativar conta
-async function doConfirmEmail(userId: string) {
+UserSchema.statics.doConfirmEmail = async function (userId: string) {
   try {
-    const user = await UserModel.findOne({ _id: userId });
+    const user = await UserModel.findById(userId).exec();
+
     if (!user) {
       return {
         ok: false,
@@ -196,6 +272,7 @@ async function doConfirmEmail(userId: string) {
         msg: "Couldn't confirm e-mail. Try again.",
       };
     }
+
     await UserModel.findByIdAndUpdate(userId, { emailConfirm: true });
     return {
       ok: true,
@@ -210,35 +287,42 @@ async function doConfirmEmail(userId: string) {
       msg: `Error: ${err}`,
     };
   }
-}
+};
 
-// Edita informações do usuário com exceção da senha
-async function doUpdateUserInfoNoPwd(
+// Update user without changing password
+UserSchema.statics.doUpdateUserInfoNoPwd = async function (
   userId: string,
-  clientInfo: {
-    username: string;
-    email: string;
-    cnpj: string;
-    address: string;
-    contactPhone: string;
-    pwd?: string;
-  }
+  clientInfo: ClientInfoUpdateUserInfoNoPwd
 ) {
-  // console.log("clientInfo");
-  // console.log(clientInfo);
   try {
     if (clientInfo.pwd && clientInfo.pwd !== "") {
-      const user = await UserModel.findOne({ username: clientInfo.username });
+      const user = (await UserModel.findOne({
+        username: clientInfo.username,
+      })
+        .lean()
+        .exec()) as UserModelDocType;
+
       if (!user) {
         return { ok: false, status: 500, msg: "User not found." };
       }
+
+      if (!user.passwordHash) {
+        return {
+          ok: false,
+          status: 500,
+          msg: "There is an error with the user document.",
+        };
+      }
+
       const match = await bcrypt.compare(clientInfo.pwd, user.passwordHash);
+
       if (!match) {
         return { ok: false, status: 500, msg: "Passwords didn't match." };
       }
     }
     delete clientInfo.pwd;
-    const updUser = await UserModel.findByIdAndUpdate(
+
+    const updUser = (await UserModel.findByIdAndUpdate(
       userId,
       {
         ...clientInfo,
@@ -246,7 +330,10 @@ async function doUpdateUserInfoNoPwd(
       {
         new: true,
       }
-    );
+    )
+      .lean()
+      .exec()) as UserModelDocType;
+
     const token = generateToken(updUser);
     const authCookie = serialize("loggedInUser", token, {
       httpOnly: true,
@@ -264,32 +351,37 @@ async function doUpdateUserInfoNoPwd(
     console.log(err);
     return { ok: false, status: 500, msg: err };
   }
-}
+};
 
-// Edita a senha do usuário (editar ou "Esqueceu sua senha")
-async function doUpdateUserPwd(
+// Update user's password only
+UserSchema.statics.doUpdateUserPwd = async function (
   userId: string,
   changeId: string,
   newPwdForm: {
     newPwd: string;
     confirmNewPwd: string;
   }
-) {
+): Promise<GenericObjectReturnType> {
   const { newPwd, confirmNewPwd } = newPwdForm;
   try {
     const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return { ok: false, status: 500, msg: "User not found." };
+    }
 
     if (changeId !== user.changeId) {
       return { ok: false, status: 500, msg: "Wrong changeId." };
     }
 
-    if (
+    const pwdValidation =
       !newPwd ||
       !newPwd.match(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
       ) ||
-      newPwd !== confirmNewPwd
-    ) {
+      newPwd !== confirmNewPwd;
+
+    if (!pwdValidation) {
       return {
         ok: false,
         status: 500,
@@ -306,15 +398,18 @@ or password didn't match the required format.",
       passwordHash: hashedPassword,
       changeId: "",
     });
+
     if (!done) {
       return { ok: false, status: 500, msg: "Something went wrong." };
     }
+
     const token = generateToken(user);
     const authCookie = serialize("loggedInUser", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 12,
       path: "/",
     });
+
     return {
       ok: true,
       status: 200,
@@ -325,15 +420,10 @@ or password didn't match the required format.",
   } catch (err) {
     return { ok: false, status: 500, msg: err };
   }
-}
-
-export {
-  insertUpdateChangeId,
-  doCreateUser,
-  doLogin,
-  doConfirmEmail,
-  doUpdateUserInfoNoPwd,
-  doUpdateUserPwd,
-  sendPwdUpdateEmail,
-  getUserCnpjById,
 };
+
+const UserModel =
+  (models.User as UserModelType) ||
+  model<UserModelDocType, UserModelType>("User", UserSchema, "users");
+
+export default UserModel;

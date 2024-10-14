@@ -1,19 +1,33 @@
-import PredictionsModel from "@/database/models/predictionsModel";
-import {
-  ConfidenceIntervalType,
-  DashboardControlFormType,
-  PredictionsType,
-} from "@/utils/types";
-import { buildPredKey, consoleLog } from "@/functions/functions";
-import ConfidenceIntervalModel from "../models/confidenceIntervalModel";
+import { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import { ConfidenceIntervalType } from "../confidenceInterval/confidenceIntervalType";
+import { Schema, model, models } from "mongoose";
+import { buildPredKey } from "@/functions/functions";
+import ConfidenceIntervalModel from "../confidenceInterval/confidenceIntervalModel";
+import { PredictionDocType, PredictionModelType } from "./predictionsType";
 
-async function getPredictions(controlForm: DashboardControlFormType) {
+const PredictionSchema = new Schema(
+  {
+    CNPJ_FUNDO: { type: String, required: true, trim: true, unique: false },
+    ancora: { type: Date, required: true, unique: false },
+    datahora_predicao: {
+      type: Date,
+      required: true,
+      unique: false,
+    },
+    notes: { type: String, required: true, trim: true, unique: false },
+  },
+  { strict: false, timestamps: true }
+);
+
+PredictionSchema.statics.getPredictions = async function (
+  controlForm: DashboardControlFormType
+) {
   const { varCota, varCotistas, varNF, baseDate, buscaCnpj } = controlForm;
   const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
   try {
-    let prediction: PredictionsType | null = null;
+    let prediction: PredictionDocType | null = null;
     prediction = await PredictionsModel.findOne(
       {
         CNPJ_FUNDO: buscaCnpj,
@@ -45,16 +59,15 @@ async function getPredictions(controlForm: DashboardControlFormType) {
         .sort({ datahora_calc_residual_abs: -1 })
         .exec();
 
-    // Calculating confidence intervals as % of Net Assets
-    // CAPTC_ABS / PL = CAPTC_PCT
-    // PL = CAPTC_ABS / CAPTC_PCT
-    // (CAPTC_ABS + CIX_ABS) / PL = CIX_PCT
-    // CIX_PCT = (CAPTC_ABS + CIX_ABS) * CAPTC_PCT / CAPTC_ABS
     for (const key in confidenceIntervalDoc) {
       if (key.slice(0, 2) === "CI" && prediction) {
         const CI_ABS = confidenceIntervalDoc[key] as number;
-        const CAPTC_ABS = prediction[predKeyAbs] as number;
-        const CAPTC_PCT_TIMES100 = prediction[predKeyPct] as number;
+        const CAPTC_ABS = prediction[
+          predKeyAbs as keyof PredictionDocType
+        ] as number;
+        const CAPTC_PCT_TIMES100 = prediction[
+          predKeyPct as keyof PredictionDocType
+        ] as number;
         const CAPTC_PCT = CAPTC_PCT_TIMES100 / 100;
         const PL = CAPTC_ABS / CAPTC_PCT;
 
@@ -62,7 +75,13 @@ async function getPredictions(controlForm: DashboardControlFormType) {
       }
     }
 
-    let finalPred = prediction;
+    let finalPred: PredictionsType | null;
+    if (prediction) {
+      finalPred = { ...prediction };
+    } else {
+      finalPred = prediction;
+    }
+
     if (prediction && confidenceIntervalDoc) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
@@ -115,9 +134,11 @@ async function getPredictions(controlForm: DashboardControlFormType) {
     console.log(err);
     return false;
   }
-}
+};
 
-async function getPredsForHistogram(controlForm: DashboardControlFormType) {
+PredictionSchema.statics.getPredsForHistogram = async function (
+  controlForm: DashboardControlFormType
+) {
   /*
     Prediction of all CNPJs to 4 weeks forward. Prediction of the selected CNPJ are based on params (controlForm),
       others default (zero), to build histogram
@@ -186,16 +207,26 @@ async function getPredsForHistogram(controlForm: DashboardControlFormType) {
     console.log(err);
     return false;
   }
-}
+};
 
-async function getAncoras() {
-  const ancoras = await PredictionsModel.distinct("ancora");
+PredictionSchema.statics.getAncoras = async function () {
+  const ancoras: Date[] = await PredictionsModel.distinct("ancora");
   return ancoras;
-}
+};
 
-async function getCalcDatesPred() {
-  const datahoraPredicao = await PredictionsModel.distinct("datahora_predicao");
+PredictionSchema.statics.getCalcDatesPred = async function () {
+  const datahoraPredicao: Date[] = await PredictionsModel.distinct(
+    "datahora_predicao"
+  );
   return datahoraPredicao;
-}
+};
 
-export { getPredictions, getPredsForHistogram, getCalcDatesPred, getAncoras };
+const PredictionsModel =
+  (models.predictions as PredictionModelType) ||
+  model<PredictionDocType, PredictionModelType>(
+    "predictions",
+    PredictionSchema,
+    "HN_predictions"
+  );
+
+export default PredictionsModel;

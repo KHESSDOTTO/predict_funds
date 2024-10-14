@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getCalcDatesPred } from "@/database/functions/predictionFunctions";
+import PredictionsModel from "@/database/models/prediction/predictionsModel";
 
 async function GetCalcDatesPred(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -9,7 +9,7 @@ async function GetCalcDatesPred(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
-    const predDates = await getCalcDatesPred();
+    const predDates = await PredictionsModel.getCalcDatesPred();
     return res.status(200).json(predDates);
   } catch (err) {
     console.error(err);

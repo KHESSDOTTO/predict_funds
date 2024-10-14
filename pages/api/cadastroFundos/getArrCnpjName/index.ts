@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import CadastroFundosModel from "@/database/models/cadastroFundosModel";
+import CadastroFundosModel from "@/database/models/cadastroFundos/cadastroFundosModel";
 
 async function GetArrCnpjName(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {

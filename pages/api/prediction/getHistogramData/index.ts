@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getPredsForHistogram } from "@/database/functions/predictionFunctions";
+import PredictionsModel from "@/database/models/prediction/predictionsModel";
 
 async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -15,7 +15,9 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
-    const predictions4Weeks = await getPredsForHistogram(req.body);
+    const predictions4Weeks = await PredictionsModel.getPredsForHistogram(
+      req.body
+    );
 
     if (!predictions4Weeks) {
       return res

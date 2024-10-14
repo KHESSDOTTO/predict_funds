@@ -1,11 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getAvgMostRecentCorrelsByAnbimaClass } from "@/database/functions/correlationsFunctions";
-
-interface CorrelDoc {
-  _doc: any[];
-  [key: string]: any;
-}
+import CorrelationsModel from "@/database/models/correlation/correlationsModel";
 
 async function GetMostRecentCorrelsByAnbimaClass(
   req: NextApiRequest,
@@ -27,9 +22,8 @@ async function GetMostRecentCorrelsByAnbimaClass(
       });
     }
 
-    const mostRecentCorrels = await getAvgMostRecentCorrelsByAnbimaClass(
-      anbimaClass
-    );
+    const mostRecentCorrels =
+      await CorrelationsModel.getAvgMostRecentCorrelsByAnbimaClass(anbimaClass);
 
     return res.status(200).json(mostRecentCorrels);
   } catch (err) {

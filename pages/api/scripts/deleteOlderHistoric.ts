@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import HistoricModel from "@/database/models/historicModel";
+import HistoricModel from "@/database/models/historic/historicModel";
 
 export default async function CheckOlderHistoric(
   req: NextApiRequest,
@@ -25,7 +25,7 @@ export default async function CheckOlderHistoric(
       return res.status(404).json({ msg: "No records found." });
     }
 
-    const lastImportDate = lastImport._doc.datahora_proc_informes;
+    const lastImportDate = lastImport.datahora_proc_informes;
 
     // Count documents that would be deleted
     const olderDocumentsCount = await HistoricModel.countDocuments({

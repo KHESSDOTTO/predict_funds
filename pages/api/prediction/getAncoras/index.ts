@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import { getAncoras } from "@/database/functions/predictionFunctions";
+import PredictionsModel from "@/database/models/prediction/predictionsModel";
 
 async function GetAncoras(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -9,7 +9,7 @@ async function GetAncoras(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
-    const ancoras = await getAncoras();
+    const ancoras = await PredictionsModel.getAncoras();
     return res.status(200).json(ancoras);
   } catch (err) {
     console.error(err);
