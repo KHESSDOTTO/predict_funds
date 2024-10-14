@@ -1,8 +1,5 @@
-import {
-  ConfidenceIntervalType,
-  DashboardControlFormType,
-  PredictionsType,
-} from "@/utils/types";
+import { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import { ConfidenceIntervalType } from "../confidenceInterval/confidenceIntervalType";
 import { Schema, model, models } from "mongoose";
 import { buildPredKey } from "@/functions/functions";
 import ConfidenceIntervalModel from "../confidenceInterval/confidenceIntervalModel";
