@@ -17,6 +17,8 @@ const HistoricSchema = new Schema(
     VL_PATRIM_LIQ_ms: { type: Number, required: false, unique: false },
     RESG_DIA_ms: { type: Number, required: false, unique: false },
     CAPTC_LIQ_ms: { type: Number, required: false, unique: false },
+    datahora_proc_informes: { type: Date, required: true, unique: false },
+    updated_at: { type: Date, required: false, unique: false },
   },
   {
     collection: "HN_informes_ms",

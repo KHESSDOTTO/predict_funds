@@ -1,4 +1,4 @@
-import { ConfidenceIntervalType } from "@/utils/types";
+import { ConfidenceIntervalType } from "./confidenceIntervalType";
 import { Schema, model, models } from "mongoose";
 
 const ConfidenceIntervalSchema = new Schema<ConfidenceIntervalType>(

@@ -11,6 +11,8 @@ export interface HistoricDocType_doc {
   VL_PATRIM_LIQ_ms: number;
   RESG_DIA_ms: number;
   CAPTC_LIQ_ms: number;
+  datahora_proc_informes: Date;
+  updated_at: Date;
 }
 
 // Interface to add custom instance methods and properties
