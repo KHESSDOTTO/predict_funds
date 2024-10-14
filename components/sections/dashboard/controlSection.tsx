@@ -378,7 +378,7 @@ export default function ControlSection({
   return (
     <>
       <div className="w-screen text-white/90 flex justify-center lg:block">
-        <h1 className="my-4 font-semibold text-xl text-center border-b border-white/90 pb-1 px-1 lg:indent-6 lg:mx-8 lg:text-left">
+        <h1 className="my-4 font-semibold text-xl text-center border-b border-white/90 p-2 lg:mx-4 lg:text-left">
           Control Section
         </h1>
       </div>
