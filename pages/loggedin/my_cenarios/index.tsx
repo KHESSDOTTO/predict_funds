@@ -1,16 +1,15 @@
 import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
-import ChartSection from "@/components/sections/dashboard/chartSection";
 import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 import type { HistoricType, UserType } from "@/utils/types";
-import ButtonRed from "@/components/UI/buttonRed";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { verifyToken } from "@/utils/jwt.config";
 import LogoPredict from "@/components/UI/logoPredict";
+import CenarioCard from "@/components/cenarioCard";
 
 interface MyCenariosPagePropsType {
   userJWT: UserType;
@@ -56,9 +55,13 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
     };
   }, []);
 
-  function excludeCenario(e: React.MouseEvent<HTMLDivElement>) {
+  function excludeCenario(cenarioId: string) {
     const updatedCenarios = cenarios.filter((cE) => {
-      return cE.id != e.currentTarget.id;
+      console.log("cE.id");
+      console.log(cE.id);
+      console.log("cenarioId");
+      console.log(cenarioId);
+      return cE.id != cenarioId;
     });
     setCenarios(updatedCenarios);
     toast.success("Removed cenario.");
@@ -151,94 +154,16 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
           </h1>
           <section
             id="cenarios"
-            className="mb-8 flex flex-col gap-12 lg:justify-center lg:items-center lg:gap-0 text-black"
+            className="mb-8 flex flex-col gap-12 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
           >
             {cenarios?.map((cE, cI) => {
               return (
-                <div
+                <CenarioCard
                   key={cE.id.toString()}
-                  className="border-black rounded-lg bg-white pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-[95%] lg:mb-12 lg:rounded-md"
-                >
-                  <h2 className="text-lg font-bold my-2 indent-1 w-2/3 pl-1 border-b-2 border-black lg:indent-4 lg:w-11/12">
-                    Cenario {cI + 1}
-                  </h2>
-                  <div className="flex flex-col items-center w-full justify-between text-sm lg:flex-row">
-                    <div className="lg:flex lg:flex-wrap border-gray-400/80 lg:border-r lg:py-6 lg:pr-4">
-                      <h3 className="font-bold mx-4 hidden lg:block lg:mx-0 lg:mb-2">
-                        Params:
-                      </h3>
-                      <ul className="lg:flex gap-4 lg:flex-col lg:gap-1 lg:ml-2">
-                        <li>
-                          Var. Quota:
-                          <span className="font-bold">
-                            {" "}
-                            {(cE.params.varCota * 100).toFixed(1)}%
-                          </span>
-                        </li>
-                        <li>
-                          Var. Sharehold.:
-                          <span className="font-bold">
-                            {" "}
-                            {(cE.params.varCotistas * 100).toFixed(1)}%
-                          </span>
-                        </li>
-                        <li>
-                          Var. Net Fund.:
-                          <span className="font-bold">
-                            {" "}
-                            {(cE.params.varNF * 100).toFixed(1)}%
-                          </span>
-                        </li>
-                        <li>
-                          CNPJ:
-                          <span className="font-bold">
-                            {" "}
-                            {cE.params.buscaCnpj}
-                          </span>
-                        </li>
-                        <li>
-                          Weeks back:
-                          <span className="font-bold">
-                            {" "}
-                            {cE.params.weeksBack}
-                          </span>
-                        </li>
-                        <li>
-                          Weeks forward:
-                          <span className="font-bold">
-                            {" "}
-                            {cE.params.weeksForward}
-                          </span>{" "}
-                        </li>
-                      </ul>
-                    </div>
-                    <div className=" lg:block lg:w-full">
-                      <ChartSection
-                        historic={cE.historicData}
-                        smallV={true}
-                        predictions={cE.predictionData}
-                      />
-                    </div>
-                    <div
-                      id={cE.id}
-                      className="mt-6 lg:hidden"
-                      onClick={excludeCenario}
-                    >
-                      <ButtonRed shadowColor="black" shadowSize="md">
-                        Delete
-                      </ButtonRed>
-                    </div>
-                  </div>
-                  <div
-                    id={cE.id}
-                    className="hidden my-2 lg:flex lg:justify-start lg:mx-12 lg:w-full"
-                    onClick={excludeCenario}
-                  >
-                    <ButtonRed shadowColor="black" shadowSize="md">
-                      Delete
-                    </ButtonRed>
-                  </div>
-                </div>
+                  cenarioData={cE}
+                  index={cI}
+                  excludeCenarioFunction={excludeCenario}
+                />
               );
             })}
             {cenarios?.length < 1 && (

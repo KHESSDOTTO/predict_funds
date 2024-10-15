@@ -1,8 +1,11 @@
 import LogoPredict from "@/components/UI/logoPredict";
 import Link from "next/link";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 export default function Home() {
   const smTextShadow = { textShadow: "2px 3px 3px rgba(0,0,0,0.9)" };
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth <= 992;
 
   return (
     <main className="bg-landing bg-cover z-0 relative">
