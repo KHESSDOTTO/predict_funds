@@ -23,8 +23,6 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user, ancoras }: DashboardProps) {
-  // console.log("this is the user:");
-  // console.log(user);
   const userContext = useContext(UserContext);
   const [historicData, setHistoricData] = useState<HistoricType[]>([]),
     [isLoading, setIsLoading] = useState(true),
@@ -79,7 +77,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
 
   return (
     <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <div className="w-full mt-12 lg:mt-16">
+      <div className="w-full mt-12 px-4 lg:mt-16">
         <LogoPredict bold={false} />
       </div>
       <div className="mt-4 lg:mt-10">

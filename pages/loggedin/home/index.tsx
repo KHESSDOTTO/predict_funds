@@ -56,7 +56,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
 
   return (
     <div className="bg-black">
-      <div className="min-h-screen w-screen overflow-x-hidden relative bg-gray-800/70">
+      <div className="min-h-screen w-screen overflow-x-hidden relative bg-gradient-to-br bg-fixed from-85% from-gray-800/60 to-indigo-900/60">
         <Header user={user} />
         <Dashboard {...dashboardProps} />
         <div className="flex justify-center px-4 pb-4 lg:justify-center">

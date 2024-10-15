@@ -10,7 +10,7 @@ export default function LogoPredict(props: LogoPredictPropsType) {
     <div
       className={`${
         bold ? "font-bold" : ""
-      } flex justify-center items-center font-serif text-4xl lg:text-5xl gap-2 lg:gap-4 lg:justify-start mx-4`}
+      } flex justify-center items-center font-serif text-4xl lg:text-5xl gap-2 lg:gap-4 lg:justify-start`}
       style={lgTextShadow}
     >
       <svg
