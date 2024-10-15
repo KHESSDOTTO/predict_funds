@@ -247,17 +247,17 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
               </div>
             )}
           </section>
-          <footer
-            ref={footerRef}
-            className={`bg-gradient-to-b from-black/30 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
-          >
-            <div onClick={exportCenarios}>
-              <ButtonGreen shadowSize="none" shadowColor="black">
-                Export
-              </ButtonGreen>
-            </div>
-          </footer>
         </div>
+        <footer
+          ref={footerRef}
+          className={`bg-gradient-to-b from-black/30 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+        >
+          <div onClick={exportCenarios}>
+            <ButtonGreen shadowSize="none" shadowColor="black">
+              Export
+            </ButtonGreen>
+          </div>
+        </footer>
       </div>
     </div>
   );
