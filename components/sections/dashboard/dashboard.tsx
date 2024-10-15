@@ -15,6 +15,7 @@ import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection/correlCardsSection";
 import HeatMap, { HeatMapObjType } from "./heatMap";
 import CenariosBtnSection from "./cenariosBtnSection";
+import LogoPredict from "@/components/UI/logoPredict";
 
 interface DashboardProps {
   user: UserType;
@@ -22,8 +23,6 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ user, ancoras }: DashboardProps) {
-  // console.log("this is the user:");
-  // console.log(user);
   const userContext = useContext(UserContext);
   const [historicData, setHistoricData] = useState<HistoricType[]>([]),
     [isLoading, setIsLoading] = useState(true),
@@ -78,13 +77,16 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
 
   return (
     <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <div className="mt-6 lg:mt-12">
+      <div className="w-full mt-12 px-4 lg:mt-16">
+        <LogoPredict bold={false} />
+      </div>
+      <div className="mt-4 lg:mt-10">
         <ControlSection {...controlSectionProps} />
       </div>
-      <div className="mt-10 w-screen">
+      <div className="mt-6 lg:mt-8 w-screen">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="mt-10 lg:mt-16 w-screen">
+      <div className="mt-6 lg:mt-16 w-screen">
         <ChartSection
           registration={registration}
           historic={historicData}
@@ -94,13 +96,13 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
           loadingHistogram={loadingHistogram}
         />
       </div>
-      <div className="mt-10 lg:mt-16 w-screen">
+      <div className="mt-6 lg:mt-12 w-screen">
         <CorrelCardsSection padding="5px 0" correls={correls} />
       </div>
-      <div className="mt-12 lg:mt-16 w-screen">
+      <div className="mt-8 lg:mt-12 w-screen">
         <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />
       </div>
-      <div className="w-screen mt-8 lg:mt-10 flex justify-center">
+      <div className="w-screen mt-6 lg:mt-8 flex justify-center">
         <CenariosBtnSection saveCenario={saveCenario} />
       </div>
     </main>

@@ -10,6 +10,7 @@ import { ax } from "@/database/axios.config";
 import { UserType } from "@/utils/types";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
 import { UserContext } from "@/contexts/UserContext";
+import LogoPredict from "@/components/UI/logoPredict";
 
 interface ProfilePagePropsType {
   user: UserType;
@@ -122,8 +123,8 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   }
 
   return (
-    <>
-      <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-black to-green-900 from-25% text-white">
+    <div className="bg-black">
+      <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-gray-800/60 to-green-900/60 from-85% text-white">
         <Header user={user}></Header>
         <PwdConfirmModal
           showModal={showModal}
@@ -132,8 +133,11 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           textBtn="Confirm"
           handleSubmitPwdConfirmForm={handleSubmitEmailChange}
         />
-        <main className="flex flex-col items-center py-8 lg:pt-12 lg:pb-24">
-          <h1 className="text-3xl font-bold my-6 font-serif px-4 pb-2 lg:w-[90vw] border-b lg:border-white lg:mt-0 lg:mb-12">
+        <main className="flex flex-col items-center py-8 px-4 lg:pt-12 lg:pb-24">
+          <div className="w-full mt-4 mb-8 lg:mb-16">
+            <LogoPredict bold={false} />
+          </div>
+          <h1 className="text-3xl my-6 px-4 pb-2 font-serif lg:w-full border-b lg:border-white lg:mt-0 lg:mb-12">
             Profile
           </h1>
           <div className="flex flex-col items-center lg:items-start">
@@ -227,7 +231,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           </div>
         </main>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -178,7 +178,7 @@ export default function ChartSection({
       className={`${
         smallV
           ? "w-full flex gap-0 flex-wrap flex-col lg:gap-2 lg:flex-row"
-          : "w-full flex flex-col justify-center items-center gap-8 lg:gap-10"
+          : "w-full flex flex-col justify-center items-center gap-6 lg:gap-8"
       } text-white`}
     >
       <div
