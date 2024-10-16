@@ -75,7 +75,7 @@ export default function CenarioCard({
             </li>
             <li>
               Weeks forward:
-              <span className="font-bold"> {params.weeksForward}</span>{" "}
+              <span className="font-bold"> {params.weeksAhead}</span>{" "}
             </li>
           </ul>
         </div>
