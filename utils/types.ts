@@ -136,21 +136,20 @@ interface RawHistogramData {
   CNPJ_FUNDO: string;
   CAPTC_LIQ_ABS_ms: number;
   CAPTC_LIQ_PCT_ms: number;
+  percentile?: number;
+}
+
+interface HistogramSingleTypeData {
+  xTick: string;
+  value: number;
+  limit: number;
+  selCnpjBin: boolean;
+  percentile: number;
 }
 
 interface FinalHistogramData {
-  abs: {
-    xTick: string;
-    value: number;
-    limit: number;
-    selCnpjBin: boolean;
-  }[];
-  pct: {
-    xTick: string;
-    value: number;
-    limit: number;
-    selCnpjBin: boolean;
-  }[];
+  abs: HistogramSingleTypeData[];
+  pct: HistogramSingleTypeData[];
 }
 
 interface CenarioType {
@@ -170,12 +169,17 @@ interface ToneColorsInterface {
   [key: string]: string;
 }
 
-interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
-  data?: (HistoricType | PredictionsType)[];
-  absOrPct?: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
-  isMobile?: boolean;
-  numWeeksPreds?: number;
+interface NFTooltipProps extends TooltipProps<ValueType, NameType> {
+  data: (HistoricType | PredictionsType)[];
+  absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+  numWeeksPreds: number;
 }
+
+interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {
+  isMobile: boolean;
+}
+
+interface ValueQuotaTooltipProps extends TooltipProps<ValueType, NameType> {}
 
 interface ChartSectionProps {
   registration?: CadastroFundosType | false;
@@ -206,10 +210,13 @@ export type {
   PredictionsType,
   CadastroFundosType,
   RawHistogramData,
+  HistogramSingleTypeData,
   FinalHistogramData,
   CardPropsType,
   ToneColorsInterface,
-  CustomTooltipProps,
+  NFTooltipProps,
+  ValueQuotaTooltipProps,
+  HistogramTooltipProps,
   ChartSectionProps,
   CustomCursorProps,
 };

@@ -6,7 +6,8 @@ import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks, format } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
-import { consoleLog, prepareHistogram } from "@/functions/functions";
+import { consoleLog } from "@/functions/functions";
+import { prepareHistogram } from "@/functions/histogramFunctions";
 import { predictionWeeks } from "@/utils/globalVars";
 
 import type { MouseEventHandler } from "react";
@@ -54,8 +55,6 @@ export default function ControlSection({
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
   const screenWidth = useWindowWidth();
   const user = userContext.user;
-
-  consoleLog({ controlForm });
 
   async function getHistoricData(encodedParam: string, baseDate: string) {
     try {

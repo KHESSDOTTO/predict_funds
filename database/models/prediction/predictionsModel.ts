@@ -147,8 +147,15 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       others default (zero), to build histogram
   */
 
-  const { varCota, varCotistas, varNF, anbimaClass, baseDate, buscaCnpj } =
-    controlForm;
+  const {
+    varCota,
+    varCotistas,
+    varNF,
+    anbimaClass,
+    baseDate,
+    buscaCnpj,
+    weeksAhead,
+  } = controlForm;
   const customPredKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const defaultPredKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
@@ -177,6 +184,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       {
         CLASSE_ANBIMA: anbimaClass,
         ancora: new Date(baseDate),
+        weeks_ahead: weeksAhead,
       },
       projection
     );
