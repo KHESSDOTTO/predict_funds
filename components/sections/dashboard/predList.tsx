@@ -24,11 +24,13 @@ export default function PredList({
     { id: uuidv4(), direction: "backward", numPer: 8 },
     { id: uuidv4(), direction: "backward", numPer: 4 },
   ]);
+
   const [newRow, setNewRow] = useState({
     id: uuidv4(),
     direction: "backward",
     numPer: 8,
   });
+
   const [showAddRow, setShowAddRow] = useState(false);
   const [lastHistoricDate, setLastHistoricDate] = useState(new Date());
   const isPct = varName === "CAPTC_LIQ_PCT_ms";
