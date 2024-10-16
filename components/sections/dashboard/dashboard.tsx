@@ -33,13 +33,15 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     [loadingHistogram, setLoadingHistogram] = useState<boolean>(true),
     [histogram, setHistogram] = useState<FinalHistogramData | false>(false),
     [controlForm, setControlForm] = useState<DashboardControlFormType>({
-      baseDate: ancoras ? ancoras[0] : "2024-05-31T00:00:00.00Z",
+      baseDate: ancoras
+        ? ancoras[ancoras.length - 1]
+        : "2024-05-31T00:00:00.00Z",
       buscaCnpj: user.cnpjs[0],
       varNF: 0,
       varCotistas: 0,
       varCota: 0,
       weeksBack: 8,
-      weeksForward: 4,
+      weeksAhead: 4,
       anbimaClass: "",
     }),
     [correls, setCorrels] = useState<any>(false),

@@ -334,6 +334,7 @@ export default function ChartSection({
                     <CustomTooltipIndigo
                       data={unifiedNFData}
                       absOrPct={absOrPct}
+                      numWeeksPreds={predictions.length}
                     />
                   }
                 />
@@ -571,10 +572,13 @@ function CustomTooltipIndigo({
   label,
   data,
   absOrPct,
+  numWeeksPreds,
 }: CustomTooltipProps) {
-  const numPreds = 4;
+  if (!numWeeksPreds) {
+    return;
+  }
   const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
-  const predsElements = data?.slice(data.length - numPreds, data.length);
+  const predsElements = data?.slice(data.length - numWeeksPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
   const adjustAbsOrPct = absOrPct || "CAPTC_LIQ_ABS_ms";
   const isPrediction = predsDates?.includes(label);

@@ -22,7 +22,8 @@ const PredictionSchema = new Schema(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const { varCota, varCotistas, varNF, baseDate, buscaCnpj } = controlForm;
+  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
+    controlForm;
   const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
@@ -32,6 +33,7 @@ PredictionSchema.statics.getPredictions = async function (
       {
         CNPJ_FUNDO: buscaCnpj,
         ancora: new Date(baseDate),
+        weeks_ahead: weeksAhead,
       },
       {
         _id: 0,
@@ -49,6 +51,7 @@ PredictionSchema.statics.getPredictions = async function (
         {
           CNPJ_FUNDO: buscaCnpj,
           ancora: new Date(baseDate),
+          weeks_ahead: weeksAhead,
         },
         {
           CI90: 1,

@@ -128,7 +128,7 @@ interface DashboardControlFormType {
   varCotistas: number;
   varCota: number;
   weeksBack: number;
-  weeksForward: number;
+  weeksAhead: number;
   anbimaClass: string;
 }
 
@@ -174,6 +174,7 @@ interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
   data?: (HistoricType | PredictionsType)[];
   absOrPct?: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
   isMobile?: boolean;
+  numWeeksPreds?: number;
 }
 
 interface ChartSectionProps {

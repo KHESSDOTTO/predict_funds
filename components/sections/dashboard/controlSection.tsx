@@ -7,6 +7,7 @@ import { subWeeks, addWeeks, format } from "date-fns";
 import { UserContext } from "@/contexts/UserContext";
 import { AxiosResponse } from "axios";
 import { consoleLog, prepareHistogram } from "@/functions/functions";
+import { predictionWeeks } from "@/utils/globalVars";
 
 import type { MouseEventHandler } from "react";
 import type {
@@ -53,7 +54,8 @@ export default function ControlSection({
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
   const screenWidth = useWindowWidth();
   const user = userContext.user;
-  const arrWeeksPreds = [4];
+
+  consoleLog({ controlForm });
 
   async function getHistoricData(encodedParam: string, baseDate: string) {
     try {
@@ -106,7 +108,7 @@ export default function ControlSection({
     if (responsePreds && responsePreds.data && slicedHistoricData) {
       let lastDate =
         slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
-      const endPredDate = addWeeks(lastDate, controlForm.weeksForward); // Last date for a 4 week prediction
+      const endPredDate = addWeeks(lastDate, controlForm.weeksAhead); // Last date for a 4 week prediction
 
       while (lastDate < endPredDate) {
         const newDate = addWeeks(lastDate, 1);
@@ -317,7 +319,13 @@ export default function ControlSection({
   function handleControlFormChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
-    let newVal = e.target.value;
+    let newVal: string | number = e.target.value;
+
+    if (e.target.name === "weeksAhead") {
+      newVal = Number(newVal);
+    }
+
+    consoleLog({ newVal });
     setControlForm({ ...controlForm, [e.target.name]: newVal });
 
     if (e.target.name === "buscaCnpj" && arrCnpjName) {
@@ -408,8 +416,8 @@ export default function ControlSection({
               <label htmlFor="weeksBack" className="h-8">
                 Weeks back
               </label>
-              <label htmlFor="weeksForward" className="h-8">
-                Weeks forward
+              <label htmlFor="weeksAhead" className="h-8">
+                Weeks ahead
               </label>
               <label
                 htmlFor="varNF"
@@ -484,13 +492,13 @@ export default function ControlSection({
               </div>
               <div className="h-8">
                 <select
-                  id="weeksForward"
-                  name="weeksForward"
+                  id="weeksAhead"
+                  name="weeksAhead"
                   className="rounded-md shadow-md shadow-gray-500 px-1 w-full"
-                  value={controlForm.weeksForward}
+                  value={controlForm.weeksAhead}
                   onChange={handleControlFormChange}
                 >
-                  {arrWeeksPreds.map((cE, cI) => {
+                  {predictionWeeks.map((cE, cI) => {
                     return (
                       <option key={cI} value={cE}>
                         {cE}
@@ -659,15 +667,15 @@ export default function ControlSection({
                   ></input>
                 </div>
                 <div className="flex flex-col font-semibold items-center gap-1">
-                  <label htmlFor="weeksForward">Weeks forward</label>
+                  <label htmlFor="weeksAhead">Weeks ahead</label>
                   <select
-                    id="weeksForward"
-                    name="weeksForward"
+                    id="weeksAhead"
+                    name="weeksAhead"
                     className="border-b-2 rounded-t-sm border-black text-center pl-4 w-40 bg-transparent text-black focus:outline-none lg:bg-gradient-to-r from-white/80 via-white to-white/80 lg:rounded-md"
-                    value={controlForm.weeksForward}
+                    value={controlForm.weeksAhead}
                     onChange={handleControlFormChange}
                   >
-                    {arrWeeksPreds.map((cE, cI) => {
+                    {predictionWeeks.map((cE, cI) => {
                       return (
                         <option key={cI} value={cE}>
                           {cE}
