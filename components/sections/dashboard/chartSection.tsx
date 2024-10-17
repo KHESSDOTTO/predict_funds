@@ -26,7 +26,9 @@ import { ClipLoader } from "react-spinners";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import type {
   ChartSectionProps,
-  CustomTooltipProps,
+  NFTooltipProps,
+  ValueQuotaTooltipProps,
+  HistogramTooltipProps,
   CustomCursorProps,
 } from "@/utils/types";
 import { formatterBrNumber } from "@/utils/numberFormatters";
@@ -331,7 +333,7 @@ export default function ChartSection({
 
                 <Tooltip
                   content={
-                    <CustomTooltipIndigo
+                    <NFTooltip
                       data={unifiedNFData}
                       absOrPct={absOrPct}
                       numWeeksPreds={predictions.length}
@@ -543,9 +545,7 @@ export default function ChartSection({
                   strokeWidth={1}
                   fill="url(#customYellow)"
                 ></Area>
-                <Tooltip
-                  content={<CustomTooltipYellow absOrPct={absOrPct} />}
-                />
+                <Tooltip content={<ValueQuotaTooltip />} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -566,14 +566,14 @@ export default function ChartSection({
   );
 }
 
-function CustomTooltipIndigo({
+function NFTooltip({
   active,
   payload,
   label,
   data,
   absOrPct,
   numWeeksPreds,
-}: CustomTooltipProps) {
+}: NFTooltipProps) {
   if (!numWeeksPreds) {
     return;
   }
@@ -676,7 +676,7 @@ function CustomTooltipIndigo({
   return <></>;
 }
 
-function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
+function ValueQuotaTooltip({ active, payload, label }: ValueQuotaTooltipProps) {
   if (active && label && payload) {
     return (
       <div className="bg-black/80 text-white p-2 rounded-md shadow-yellow-700 shadow-sm">
@@ -693,22 +693,19 @@ function CustomTooltipYellow({ active, payload, label }: CustomTooltipProps) {
   return <></>;
 }
 
-function HistogramTooltip({
-  active,
-  payload,
-  label,
-  isMobile,
-}: CustomTooltipProps) {
+function HistogramTooltip({ active, payload, label }: HistogramTooltipProps) {
   if (active && payload && payload.length) {
     const selCnpjBin = payload[0].payload.selCnpjBin;
+    const percentile = payload[0].payload.percentile;
     const msg1 = selCnpjBin ? `You are here.` : "";
-    const msg2 = `Count: ${payload[0].value}`;
+    const msg2 = selCnpjBin
+      ? `Percentile: ${(percentile * 100).toFixed()}%`
+      : "";
+    const msg3 = `Count: ${payload[0].value}`;
     const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
     const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
     let adjustedLabel = label;
-    if (isMobile) {
-      adjustedLabel = label.replace("|", "<br>");
-    }
+
     return (
       <div
         className="bg-black/80 p-2 rounded-md"
@@ -721,7 +718,13 @@ function HistogramTooltip({
               <br />
             </>
           )}
-          {msg2}
+          {msg2 && (
+            <>
+              {msg2}
+              <br />
+            </>
+          )}
+          {msg3}
         </p>
         <p>{"Interval: " + adjustedLabel}</p>
       </div>
