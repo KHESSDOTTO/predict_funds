@@ -175,9 +175,7 @@ interface NFTooltipProps extends TooltipProps<ValueType, NameType> {
   numWeeksPreds: number;
 }
 
-interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {
-  isMobile: boolean;
-}
+interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
 
 interface ValueQuotaTooltipProps extends TooltipProps<ValueType, NameType> {}
 

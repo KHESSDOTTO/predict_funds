@@ -48,7 +48,8 @@ function handleAbsPctHistogram(
     fieldVal,
     histogramData,
     lowerLimitOutliers,
-    upperLimitOutliers
+    upperLimitOutliers,
+    selCnpj
   );
 
   let step: number;
@@ -129,7 +130,8 @@ function removeOutliersAddPercentiles(
   fieldVal: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms",
   histogramData: RawHistogramData[],
   lowerLimit: number,
-  upperLimit: number
+  upperLimit: number,
+  selCnpj: string
 ) {
   const sortedHistogramData = [...histogramData].sort((a, b) => {
     return a[fieldVal] - b[fieldVal];
@@ -148,8 +150,9 @@ function removeOutliersAddPercentiles(
   const noOutliersSortedHistogramData =
     sortedHistogramDataWithPercentiles.filter((cE) => {
       return (
-        (cE.percentile as number) >= lowerLimit &&
-        (cE.percentile as number) <= upperLimit
+        ((cE.percentile as number) >= lowerLimit &&
+          (cE.percentile as number) <= upperLimit) ||
+        cE.CNPJ_FUNDO === selCnpj
       );
     });
 

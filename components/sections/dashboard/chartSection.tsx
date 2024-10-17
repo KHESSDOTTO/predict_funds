@@ -452,7 +452,7 @@ export default function ChartSection({
                   />
                   <YAxis />
                   <Tooltip
-                    content={<HistogramTooltip isMobile={isMobile} />}
+                    content={<HistogramTooltip />}
                     cursor={<CustomTooltipCursor />}
                   />
                   <Bar dataKey="value" color="black">
@@ -693,12 +693,7 @@ function ValueQuotaTooltip({ active, payload, label }: ValueQuotaTooltipProps) {
   return <></>;
 }
 
-function HistogramTooltip({
-  active,
-  payload,
-  label,
-  isMobile,
-}: HistogramTooltipProps) {
+function HistogramTooltip({ active, payload, label }: HistogramTooltipProps) {
   if (active && payload && payload.length) {
     const selCnpjBin = payload[0].payload.selCnpjBin;
     const percentile = payload[0].payload.percentile;
@@ -710,9 +705,7 @@ function HistogramTooltip({
     const txtColor = selCnpjBin ? `rgb(160, 200, 160)` : `rgb(180, 160, 230)`;
     const shadowColor = selCnpjBin ? `rgb(50, 100, 50)` : `rgb(55, 50, 100)`;
     let adjustedLabel = label;
-    if (isMobile) {
-      adjustedLabel = label;
-    }
+
     return (
       <div
         className="bg-black/80 p-2 rounded-md"
