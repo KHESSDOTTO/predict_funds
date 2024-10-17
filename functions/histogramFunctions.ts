@@ -98,9 +98,8 @@ function handleAbsPctHistogram(
   }
   // End of limits and xTicks arrays
 
-  // Count elements on each interval of values to be the Yaxis values (based on 'limits' array for both abs and Pct)
+  // Count elements on each interval of values to be the Yaxis values (based on 'limits' array)
   adjustedHistogramData.forEach((cE) => {
-    // Abs values
     const index = limits.findIndex((limit) => cE[fieldVal] <= limit);
 
     if (index !== -1) {
