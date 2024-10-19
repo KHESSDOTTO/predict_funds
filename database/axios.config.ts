@@ -1,11 +1,7 @@
 import axios from "axios";
 
-const apiURLs = {
-  development: "http://localhost:3000/api",
-  production: "https://predict-funds.vercel.app/api",
-  test: "",
-};
+const envBaseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-const ax = axios.create({ baseURL: apiURLs[process.env.NODE_ENV] });
+const ax = axios.create({ baseURL: envBaseUrl });
 
 export { ax };
