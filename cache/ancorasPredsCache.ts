@@ -21,6 +21,8 @@ export default async function getCachedAncoras() {
       lastSuccessfullyFetchedTime = currentTime;
       cachedAncoras = newAncoras;
     }
+  } else {
+    console.log("USED CACHED VALUE OF ANCORAS SUCCESSFULLY");
   }
 
   return cachedAncoras;

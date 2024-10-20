@@ -57,10 +57,6 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
 
   function excludeCenario(cenarioId: string) {
     const updatedCenarios = cenarios.filter((cE) => {
-      console.log("cE.id");
-      console.log(cE.id);
-      console.log("cenarioId");
-      console.log(cenarioId);
       return cE.id != cenarioId;
     });
     setCenarios(updatedCenarios);
