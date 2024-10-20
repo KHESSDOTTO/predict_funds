@@ -237,10 +237,22 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const token = req.cookies.loggedInUser;
+  const loginUrl = "/login";
   let user: string | false | JwtPayload = false;
+
   if (token) {
     user = verifyToken(token);
   }
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: loginUrl,
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       user,

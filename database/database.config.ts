@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import cache from "@/utils/mongoCache";
+import mongoConnCache from "@/cache/mongoConnCache";
 
 mongoose.set("strictQuery", false);
 
@@ -7,9 +7,9 @@ let connectionPromise: Promise<mongoose.Mongoose> | null = null;
 
 async function connect(): Promise<mongoose.Mongoose> {
   // Use cached connection only in development
-  if (process.env.NODE_ENV === "development" && cache.conn) {
+  if (process.env.NODE_ENV === "development" && mongoConnCache.conn) {
     console.log("Using cached connection in development.");
-    return cache.conn;
+    return mongoConnCache.conn;
   }
 
   if (!connectionPromise) {
@@ -25,7 +25,7 @@ async function connect(): Promise<mongoose.Mongoose> {
     connectionPromise = mongoose.connect(dbUri, opts).then((mongoose) => {
       // Only set cache for connection in development
       if (process.env.NODE_ENV === "development") {
-        cache.conn = mongoose;
+        mongoConnCache.conn = mongoose;
       }
       return mongoose;
     });

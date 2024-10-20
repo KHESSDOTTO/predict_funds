@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { LogInVerifyMiddleware } from "./logInVerifyMiddleware";
+import { LogInVerifyMiddleware } from "./middlewares/logInVerifyMiddleware";
 
 // Import middlewares from different files and combine them in the main middleware file
 
@@ -16,6 +16,7 @@ export function middleware(req: NextRequest) {
   }
   // End: Log In Middleware
 
+  console.log("finished verification");
   return NextResponse.next();
 }
 

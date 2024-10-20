@@ -12,10 +12,10 @@ import LogoPredict from "@/components/UI/logoPredict";
 import CenarioCard from "@/components/cenarioCard";
 
 interface MyCenariosPagePropsType {
-  userJWT: UserType;
+  userFromToken: UserType;
 }
 
-export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
+export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { cenarios, setCenarios } = useContext(UserContext);
   const [footerPosition, setFooterPosition] = useState("absolute");
   const footerRef = useRef<HTMLDivElement>(null);
@@ -139,7 +139,7 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
   return (
     <div className="bg-black">
       <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-gray-800/60 from-85% to-blue-900/60 text-white/90">
-        {userJWT && <Header user={userJWT} />}
+        {userFromToken && <Header user={userFromToken} />}
         <div className="px-4">
           <div className="mt-12 lg:mt-16 mb-8 lg:mb-12">
             <LogoPredict bold={false} />
@@ -190,13 +190,25 @@ export default function MyCenarios({ userJWT }: MyCenariosPagePropsType) {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const token = req.cookies.loggedInUser;
-  let userJWT: string | false | JwtPayload = false;
+  const loginUrl = "/login";
+  let userFromToken: string | false | JwtPayload = false;
+
   if (token) {
-    userJWT = verifyToken(token);
+    userFromToken = verifyToken(token);
   }
+
+  if (!userFromToken) {
+    return {
+      redirect: {
+        destination: loginUrl,
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
-      userJWT,
+      userFromToken,
     },
   };
 };

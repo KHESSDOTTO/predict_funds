@@ -11,6 +11,7 @@ import { ax } from "@/database/axios.config";
 import { UserContext } from "@/contexts/UserContext";
 import { UserType } from "@/utils/types";
 import { consoleLog } from "@/functions/functions";
+import getCachedAncoras from "@/cache/ancorasPredsCache";
 
 interface LoggedInHomePropsType {
   user: UserType;
@@ -72,15 +73,24 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const ancorasResponse: any = await ax.get("/prediction/getAncoras");
-  const ancoras = ancorasResponse.data;
-
-  const token = req.cookies.loggedInUser;
+  const token = req.cookies.loggedInUser as string; // Existence verification is made inside a middleware
+  const loginUrl = "/login";
   let user: string | false | JwtPayload = false;
 
   if (token) {
     user = verifyToken(token);
   }
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: loginUrl,
+        permanent: false,
+      },
+    };
+  }
+
+  const ancoras = await getCachedAncoras();
 
   return {
     props: {
