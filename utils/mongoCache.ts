@@ -1,4 +1,3 @@
-// lib/mongoCache.ts
 import mongoose from "mongoose";
 
 interface MongoCache {

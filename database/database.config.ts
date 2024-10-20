@@ -6,17 +6,16 @@ mongoose.set("strictQuery", false);
 let connectionPromise: Promise<mongoose.Mongoose> | null = null;
 
 async function connect(): Promise<mongoose.Mongoose> {
-  if (cache.conn && process.env.NODE_ENV === "development") {
-    console.log("Did not create new connection.");
+  // Use cached connection only in development
+  if (process.env.NODE_ENV === "development" && cache.conn) {
+    console.log("Using cached connection in development.");
     return cache.conn;
   }
 
   if (!connectionPromise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
+    const opts = { bufferCommands: false };
     const dbUri = process.env.MONGODB_URI;
+
     if (!dbUri) {
       throw new Error(
         "MONGODB_URI is not defined in your environment variables"
@@ -24,36 +23,31 @@ async function connect(): Promise<mongoose.Mongoose> {
     }
 
     connectionPromise = mongoose.connect(dbUri, opts).then((mongoose) => {
-      cache.conn = mongoose;
+      // Only set cache for connection in development
+      if (process.env.NODE_ENV === "development") {
+        cache.conn = mongoose;
+      }
       return mongoose;
     });
-    console.log("Created connection.");
+
+    console.log("Created new connection.");
   }
 
-  cache.conn = await connectionPromise;
-  return cache.conn;
+  return connectionPromise;
 }
 
 function addListeners() {
-  const hasSigintListener = process.rawListeners("SIGINT").length > 0;
-  const hasSigtermListener = process.rawListeners("SIGTERM").length > 0;
+  const signals = ["SIGINT", "SIGTERM"];
 
-  // Check if SIGINT listener is already added
-  if (!hasSigintListener) {
-    process.on("SIGINT", async () => {
-      await mongoose.disconnect();
-      console.log("Disconnected from MongoDB.");
-      process.exit(0);
-    });
-  }
-
-  // Check if SIGTERM listener is already added
-  if (!hasSigtermListener) {
-    process.on("SIGTERM", async () => {
-      await mongoose.disconnect();
-      process.exit(0);
-    });
-  }
+  signals.forEach((signal) => {
+    if (process.rawListeners(signal).length === 0) {
+      process.on(signal, async () => {
+        await mongoose.disconnect();
+        console.log(`Disconnected from MongoDB on ${signal}.`);
+        process.exit(0);
+      });
+    }
+  });
 }
 
 if (process.env.NODE_ENV === "development") {
