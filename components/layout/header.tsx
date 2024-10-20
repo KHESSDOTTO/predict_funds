@@ -9,9 +9,6 @@ function Header({ user }: HeaderPropsType) {
 
   const [showSideBar, setShowSideBar] = useState(false);
   let { username, cnpj } = user;
-  if (!user) {
-    (username = ""), (cnpj = "");
-  }
 
   function handleSideBar() {
     setShowSideBar(true);
