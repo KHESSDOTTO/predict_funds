@@ -33,7 +33,6 @@ HistoricSchema.statics.getAllHistoricByCnpj = async function (
   cnpj: string,
   baseDate: Date
 ) {
-  console.log("Running getAllHistoricById");
   try {
     const lastUpdateDateDoc = (await HistoricModel.findOne(
       {},

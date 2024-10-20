@@ -324,7 +324,6 @@ export default function ControlSection({
       newVal = Number(newVal);
     }
 
-    consoleLog({ newVal });
     setControlForm({ ...controlForm, [e.target.name]: newVal });
 
     if (e.target.name === "buscaCnpj" && arrCnpjName) {
