@@ -16,7 +16,6 @@ export function middleware(req: NextRequest) {
   }
   // End: Log In Middleware
 
-  console.log("finished verification");
   return NextResponse.next();
 }
 
