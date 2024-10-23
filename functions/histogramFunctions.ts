@@ -27,7 +27,6 @@ function prepareHistogram(
   );
 
   const finalData = { abs: finalDataAbs, pct: finalDataPct };
-  consoleLog({ finalData });
 
   return finalData;
 }
@@ -136,15 +135,11 @@ function removeOutliersAddPercentiles(
     return a[fieldVal] - b[fieldVal];
   });
 
-  consoleLog({ sortedHistogramData });
-
   const sortedHistogramDataWithPercentiles: RawHistogramData[] =
     sortedHistogramData.map((cE, cI, arr) => {
       const percentile = (cI + 1) / arr.length;
       return { ...cE, percentile: percentile };
     });
-
-  consoleLog({ sortedHistogramDataWithPercentiles });
 
   const noOutliersSortedHistogramData =
     sortedHistogramDataWithPercentiles.filter((cE) => {
@@ -154,8 +149,6 @@ function removeOutliersAddPercentiles(
         cE.CNPJ_FUNDO === selCnpj
       );
     });
-
-  consoleLog({ noOutliersSortedHistogramData });
 
   return noOutliersSortedHistogramData;
 }

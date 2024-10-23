@@ -1,8 +1,6 @@
 import { DashboardControlFormType, PredictionsType } from "@/utils/types";
-import { ConfidenceIntervalType } from "../confidenceInterval/confidenceIntervalType";
 import { Schema, model, models } from "mongoose";
 import { buildPredKey } from "@/functions/functions";
-import ConfidenceIntervalModel from "../confidenceInterval/confidenceIntervalModel";
 import { PredictionDocType, PredictionModelType } from "./predictionsType";
 
 const PredictionSchema = new Schema(
@@ -41,30 +39,18 @@ PredictionSchema.statics.getPredictions = async function (
         CLASSE_ANBIMA: 1,
         [predKeyAbs]: 1,
         [predKeyPct]: 1,
+        CI90: 1,
+        CI95: 1,
+        CI99: 1,
       }
     )
       .sort({ datahora_predicao: -1 })
+      .lean()
       .exec();
 
-    const confidenceIntervalDoc: ConfidenceIntervalType =
-      await ConfidenceIntervalModel.findOne(
-        {
-          CNPJ_FUNDO: buscaCnpj,
-          ancora: new Date(baseDate),
-          weeks_ahead: weeksAhead,
-        },
-        {
-          CI90: 1,
-          CI95: 1,
-          CI99: 1,
-        }
-      )
-        .sort({ datahora_calc_residual_abs: -1 })
-        .exec();
-
-    for (const key in confidenceIntervalDoc) {
-      if (key.slice(0, 2) === "CI" && prediction) {
-        const CI_ABS = confidenceIntervalDoc[key] as number;
+    for (const key in prediction) {
+      if (prediction && key.slice(0, 2) === "CI") {
+        const CI_ABS = prediction[key] as number;
         const CAPTC_ABS = prediction[
           predKeyAbs as keyof PredictionDocType
         ] as number;
@@ -74,7 +60,7 @@ PredictionSchema.statics.getPredictions = async function (
         const CAPTC_PCT = CAPTC_PCT_TIMES100 / 100;
         const PL = CAPTC_ABS / CAPTC_PCT;
 
-        confidenceIntervalDoc[`${key}_PCT`] = (CI_ABS / PL) * 100;
+        prediction[`${key}_PCT`] = (CI_ABS / PL) * 100;
       }
     }
 
@@ -85,47 +71,41 @@ PredictionSchema.statics.getPredictions = async function (
       finalPred = prediction;
     }
 
-    if (prediction && confidenceIntervalDoc) {
+    if (prediction) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
         CLASSE_ANBIMA: prediction.CLASSE_ANBIMA,
         CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
         CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
-        CI90_ABS: confidenceIntervalDoc.CI90,
-        CI95_ABS: confidenceIntervalDoc.CI95,
-        CI99_ABS: confidenceIntervalDoc.CI99,
-        CI90_PCT: confidenceIntervalDoc.CI90_PCT as number,
-        CI95_PCT: confidenceIntervalDoc.CI95_PCT as number,
-        CI99_PCT: confidenceIntervalDoc.CI99_PCT as number,
+        CI90_ABS: prediction.CI90,
+        CI95_ABS: prediction.CI95,
+        CI99_ABS: prediction.CI99,
+        CI90_PCT: prediction.CI90_PCT as number,
+        CI95_PCT: prediction.CI95_PCT as number,
+        CI99_PCT: prediction.CI99_PCT as number,
         CI90_ABS_limits: [
-          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI90,
-          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI90,
+          (prediction[predKeyAbs] as number) - prediction.CI90,
+          (prediction[predKeyAbs] as number) + prediction.CI90,
         ],
         CI95_ABS_limits: [
-          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI95,
-          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI95,
+          (prediction[predKeyAbs] as number) - prediction.CI95,
+          (prediction[predKeyAbs] as number) + prediction.CI95,
         ],
         CI99_ABS_limits: [
-          (prediction[predKeyAbs] as number) - confidenceIntervalDoc.CI99,
-          (prediction[predKeyAbs] as number) + confidenceIntervalDoc.CI99,
+          (prediction[predKeyAbs] as number) - prediction.CI99,
+          (prediction[predKeyAbs] as number) + prediction.CI99,
         ],
         CI90_PCT_limits: [
-          (prediction[predKeyPct] as number) -
-            (confidenceIntervalDoc.CI90_PCT as number),
-          (prediction[predKeyPct] as number) +
-            (confidenceIntervalDoc.CI90_PCT as number),
+          (prediction[predKeyPct] as number) - (prediction.CI90_PCT as number),
+          (prediction[predKeyPct] as number) + (prediction.CI90_PCT as number),
         ],
         CI95_PCT_limits: [
-          (prediction[predKeyPct] as number) -
-            (confidenceIntervalDoc.CI95_PCT as number),
-          (prediction[predKeyPct] as number) +
-            (confidenceIntervalDoc.CI95_PCT as number),
+          (prediction[predKeyPct] as number) - (prediction.CI95_PCT as number),
+          (prediction[predKeyPct] as number) + (prediction.CI95_PCT as number),
         ],
         CI99_PCT_limits: [
-          (prediction[predKeyPct] as number) -
-            (confidenceIntervalDoc.CI99_PCT as number),
-          (prediction[predKeyPct] as number) +
-            (confidenceIntervalDoc.CI99_PCT as number),
+          (prediction[predKeyPct] as number) - (prediction.CI99_PCT as number),
+          (prediction[predKeyPct] as number) + (prediction.CI99_PCT as number),
         ],
       };
     } else {
