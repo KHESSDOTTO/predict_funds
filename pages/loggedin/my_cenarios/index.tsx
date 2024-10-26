@@ -9,7 +9,7 @@ import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import { verifyToken } from "@/utils/jwt.config";
 import LogoPredict from "@/components/UI/logoPredict";
-import CenarioCard from "@/components/cenarioCard";
+import CenarioCard from "@/components/general/cenarioCard";
 
 interface MyCenariosPagePropsType {
   userFromToken: UserType;

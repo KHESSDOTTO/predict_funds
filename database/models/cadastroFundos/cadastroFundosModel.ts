@@ -125,9 +125,11 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
         DENOM_SOCIAL: 1,
       }
     );
+
     return arrCnpjNames;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 };
