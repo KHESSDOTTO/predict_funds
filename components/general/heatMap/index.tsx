@@ -68,7 +68,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
   return (
     <div className="w-full">
       <h2
-        className={`mt-4 text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left`}
+        className={`text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left`}
       >
         {title}
       </h2>
@@ -165,7 +165,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                             key={id}
                             className="py-3 px-6 text-center bg-opacity-20 text-black font-bold text-md"
                             style={{
-                              backgroundColor: color,
+                              backgroundColor: color ? color : "white",
                               color: valColor,
                             }}
                           >
@@ -223,7 +223,7 @@ export default function HeatMap({ title, heatMapArr }: HeatMapPropsType) {
                             key={id}
                             className="py-3 px-6 text-center bg-opacity-20 text-black font-bold text-md"
                             style={{
-                              backgroundColor: color,
+                              backgroundColor: color ? color : "white",
                               color: valColor,
                             }}
                           >

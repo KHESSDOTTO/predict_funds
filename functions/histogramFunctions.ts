@@ -3,12 +3,15 @@ import {
   FinalHistogramData,
   HistogramSingleTypeData,
 } from "@/utils/types";
-import { consoleLog, formatNumToPctStr, formatNumToStrMlnK } from "./functions";
+import { consoleLog } from "./functions";
+import { formatNumToPctStr, formatNumToStrMlnK } from "./formatNumbers";
 
 function prepareHistogram(
   histogramData: RawHistogramData[],
   numBars: number,
-  selCnpj: string
+  selCnpj: string,
+  lowerLimitOutliers: number,
+  upperLimitOutliers: number
 ): FinalHistogramData | false {
   if (!histogramData || histogramData.length === 0) return false; // Won't run if there is no histogramData or lenght of array = 0
 
@@ -16,14 +19,18 @@ function prepareHistogram(
     "abs",
     histogramData,
     numBars,
-    selCnpj
+    selCnpj,
+    lowerLimitOutliers,
+    upperLimitOutliers
   );
 
   const finalDataPct = handleAbsPctHistogram(
     "pct",
     histogramData,
     numBars,
-    selCnpj
+    selCnpj,
+    lowerLimitOutliers,
+    upperLimitOutliers
   );
 
   const finalData = { abs: finalDataAbs, pct: finalDataPct };
@@ -35,11 +42,10 @@ function handleAbsPctHistogram(
   absOrPct: "abs" | "pct",
   histogramData: RawHistogramData[],
   numBars: number,
-  selCnpj: string
+  selCnpj: string,
+  lowerLimitOutliers: number,
+  upperLimitOutliers: number
 ): HistogramSingleTypeData[] {
-  const lowerLimitOutliers = 0.05;
-  const upperLimitOutliers = 0.95;
-
   const abs = absOrPct === "abs";
   const fieldVal = abs ? "CAPTC_LIQ_ABS_ms" : "CAPTC_LIQ_PCT_ms";
 

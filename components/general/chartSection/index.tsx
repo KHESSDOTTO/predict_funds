@@ -15,13 +15,13 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
-import PredList from "./predList";
+import PredList from "../predList";
 import { useEffect, useState } from "react";
+import { consoleLog } from "@/functions/functions";
 import {
-  consoleLog,
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
-} from "@/functions/functions";
+} from "@/functions/axisFunctions";
 import { ClipLoader } from "react-spinners";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import type {
@@ -179,25 +179,27 @@ export default function ChartSection({
     <div
       className={`${
         smallV
-          ? "w-full flex gap-0 flex-wrap flex-col lg:gap-2 lg:flex-row"
+          ? "w-full flex gap-4 flex-wrap flex-col lg:gap-2 lg:flex-row"
           : "w-full flex flex-col justify-center items-center gap-6 lg:gap-8"
       } text-white`}
     >
       <div
         id="NetFundingDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "w-full"}`}
+        className={` ${smallV ? "pt-4 lg:w-[48.5%]" : "w-full"}`}
       >
-        <h1
-          className={`my-4 ${
-            smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
-        >
-          Net Funding
-        </h1>
+        <div className="flex justify-center lg:block">
+          <h2
+            className={`mb-4 ${
+              smallV
+                ? "text-md w-9/12 mx-auto text-black border-black"
+                : "text-lg w-fit p-2 text-white/90 border-white/90"
+            } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left`}
+          >
+            Net Funding
+          </h2>
+        </div>
         {!smallV && (
-          <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+          <div className="text-sm text-gray-200 pb-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
             <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
               <h4 className="mr-2 md:mr-6">Visualization: </h4>
               <div className="flex text-xs items-center gap-1 md:text-sm">
@@ -226,12 +228,12 @@ export default function ChartSection({
           </div>
         )}
         <div
-          className={`flex flex-col gap-6 lg:gap-4 lg:flex-row ${
+          className={`flex flex-col gap-4 lg:flex-row ${
             smallV ? "" : "lg:mx-6 lg:mt-6"
           }`}
         >
           <div
-            className={`bg-gray-900 pt-4 mx-2 rounded-sm overflow-hidden ${
+            className={`bg-gray-900 mx-2 pt-4 rounded-sm overflow-hidden ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
             } lg:rounded-xl`}
           >
@@ -359,17 +361,19 @@ export default function ChartSection({
 
       <div
         id="HistogramDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-4 w-full"}`}
+        className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-8 w-full"}`}
       >
-        <h1
-          className={`my-4 ${
-            smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
-        >
-          Preds. Histogram (Market - same ANBIMA Class)
-        </h1>
+        <div className="flex justify-center lg:block">
+          <h2
+            className={`mb-4 p-2 max-w-[75%] ${
+              smallV
+                ? "text-md w-9/12 mx-auto text-black border-black"
+                : "text-lg mx-[16vw] text-white/90 border-white/90"
+            } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left lg:max-w-full lg:w-full`}
+          >
+            Preds. Histogram (Market - same ANBIMA Class)
+          </h2>
+        </div>
         {registration && (
           <div className="relative top-1 flex justify-center lg:block lg:mb-2 lg:top-0">
             <ul className="list-inside lg:list-disc">
@@ -411,7 +415,7 @@ export default function ChartSection({
             </div>
           </form>
         </div>
-        <div className="flex flex-col gap-6 lg:gap-4 lg:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row">
           <div
             className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
               smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
@@ -473,23 +477,26 @@ export default function ChartSection({
 
       <div
         id="ValueQuotaDiv"
-        className={` ${smallV ? "px-2 lg:w-[48.5%]" : "pb-4 w-full"}`}
+        className={` ${smallV ? "pb-2 lg:w-[48.5%]" : "pb-4 w-full"}`}
       >
-        <h1
-          className={`my-4 ${
-            smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[32vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:indent-2 lg:mx-4 lg:text-left`}
-        >
-          Value - Quota
-          <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
-            {" "}
-            (historic)
-          </span>
-        </h1>
+        {!smallV}
+        <div className={`flex justify-center lg:block`}>
+          <h2
+            className={`mb-4 p-2 ${
+              smallV
+                ? "text-md w-9/12 mx-auto text-black border-black"
+                : "text-lg mx-[16vw] text-white/90 border-white/90"
+            } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left`}
+          >
+            Value - Quota
+            <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
+              {" "}
+              (historic)
+            </span>
+          </h2>
+        </div>
         <div
-          className={`flex flex-col gap-6 lg:gap-4 lg:flex-row ${
+          className={`flex flex-col gap-4 lg:flex-row ${
             smallV ? "" : "lg:mx-6 lg:mt-6"
           }`}
         >

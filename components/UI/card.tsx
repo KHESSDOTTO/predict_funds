@@ -24,7 +24,7 @@ export default function Card({ title, imgSrc, correlVal }: CardPropsType) {
           <div className="relative right-2 text-[0.9em]">Correl.</div>
           <div
             className="relative right-2 mb-1 text-[24px]"
-            style={{ color: color }}
+            style={{ color: color ? color : "white" }}
           >
             {Number(correlVal).toFixed(2)}
           </div>

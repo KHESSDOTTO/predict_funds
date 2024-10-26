@@ -1,7 +1,7 @@
 import { CenarioType } from "@/utils/types";
 import { useState } from "react";
-import ChartSection from "./sections/dashboard/chartSection";
-import ButtonRed from "./UI/buttonRed";
+import ChartSection from "../chartSection";
+import ButtonRed from "../../UI/buttonRed";
 import useWindowWidth from "@/hooks/useWindowWidth";
 
 export interface CenarioCardPropsType {
@@ -29,7 +29,7 @@ export default function CenarioCard({
 
   return (
     <div
-      className={`border-black rounded-lg bg-white pt-2 mx-8 pb-4 px-4 flex flex-col items-center lg:flex-row lg:flex-wrap lg:items-start lg:w-full lg:mb-12 lg:rounded-md ${
+      className={`border-black rounded-lg bg-white pt-2 mx-4 pb-4 px-4 flex flex-col items-center lg:mx-8 lg:flex-row lg:flex-wrap lg:items-start lg:w-full lg:mb-12 lg:rounded-md ${
         isFadingOut
           ? "opacity-0 transition-opacity duration-500"
           : "opacity-100"

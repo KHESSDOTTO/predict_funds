@@ -8,13 +8,13 @@ import {
   PredictionsType,
   UserType,
 } from "@/utils/types";
-import ControlSection from "./controlSection";
-import ChartSection from "./chartSection";
+import ControlSection from "../controlSection";
+import ChartSection from "../chartSection";
 import { UserContext } from "@/contexts/UserContext";
-import RegistrationInfos from "./registrationInfos";
-import CorrelCardsSection from "@/components/sections/dashboard/correlCardsSection/correlCardsSection";
-import HeatMap, { HeatMapObjType } from "./heatMap";
-import CenariosBtnSection from "./cenariosBtnSection";
+import RegistrationInfos from "../registrationInfos";
+import CorrelCardsSection from "@/components/general/correlCardsSection";
+import HeatMap, { HeatMapObjType } from "../heatMap";
+import CenariosBtnSection from "../cenarioBtnSection";
 import LogoPredict from "@/components/UI/logoPredict";
 
 interface DashboardProps {
@@ -98,7 +98,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
           loadingHistogram={loadingHistogram}
         />
       </div>
-      <div className="mt-6 lg:mt-12 w-screen">
+      <div className="lg:mt-12 w-screen">
         <CorrelCardsSection padding="5px 0" correls={correls} />
       </div>
       <div className="mt-8 lg:mt-12 w-screen">

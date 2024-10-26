@@ -1,5 +1,5 @@
 import { HistoricType } from "@/utils/types";
-import PredictCard from "../../UI/predictCard";
+import PredictCard from "./predictCard";
 
 interface PredictCardsSectionProps {
   data: HistoricType[];

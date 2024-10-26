@@ -27,6 +27,7 @@ async function connect(): Promise<mongoose.Mongoose> {
       if (process.env.NODE_ENV === "development") {
         mongoConnCache.conn = mongoose;
       }
+
       return mongoose;
     });
 
