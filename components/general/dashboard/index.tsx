@@ -45,7 +45,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       anbimaClass: "",
     }),
     [correls, setCorrels] = useState<any>(false),
-    [heatMapArr, setHeatMapArr] = useState<HeatMapObjType | false>(false);
+    [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
 
   const controlSectionProps = {
     setHistoricData: setHistoricData,
@@ -59,7 +59,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     setLoadingHistogram: setLoadingHistogram,
     setHistogram: setHistogram,
     setCorrels: setCorrels,
-    setHeatMapArr: setHeatMapArr,
+    setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
 
@@ -102,7 +102,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
         <CorrelCardsSection padding="5px 0" correls={correls} />
       </div>
       <div className="mt-8 lg:mt-12 w-screen">
-        <HeatMap title="Heat Map - Correlations" heatMapArr={heatMapArr} />
+        <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />
       </div>
       <div className="w-screen mt-6 lg:mt-8 flex justify-center">
         <CenariosBtnSection saveCenario={saveCenario} />

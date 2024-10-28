@@ -1,89 +1,12 @@
-import { CadastroFundosType } from "@/utils/types";
 import { ClipLoader } from "react-spinners";
-
-interface RegistrationInfosPropsType {
-  registration: CadastroFundosType | false;
-  isLoading: boolean;
-}
-
-type CadastroFundosKey =
-  | "CNPJ_FUNDO"
-  | "TP_FUNDO"
-  | "DENOM_SOCIAL"
-  | "DT_REG"
-  | "DT_CONST"
-  | "CD_CVM"
-  | "DT_CANCEL"
-  | "SIT"
-  | "DT_INI_SIT"
-  | "DT_INI_ATIV"
-  | "DT_INI_EXERC"
-  | "DT_FIM_EXERC"
-  | "CLASSE"
-  | "DT_INI_CLASSE"
-  | "RENTAB_FUNDO"
-  | "CONDOM"
-  | "FUNDO_COTAS"
-  | "FUNDO_EXCLUSIVO"
-  | "TRIB_LPRAZO"
-  | "PUBLICO_ALVO"
-  | "ENTID_INVEST"
-  | "TAXA_PERFM"
-  | "INF_TAXA_PERFM"
-  | "TAXA_ADM"
-  | "INF_TAXA_ADM"
-  | "VL_PATRIM_LIQ"
-  | "DT_PATRIM_LIQ"
-  | "DIRETOR"
-  | "CNPJ_ADMIN"
-  | "ADMIN"
-  | "PF_PJ_GESTOR"
-  | "CPF_CNPJ_GESTOR"
-  | "GESTOR"
-  | "CNPJ_AUDITOR"
-  | "AUDITOR"
-  | "CNPJ_CUSTODIANTE"
-  | "CUSTODIANTE"
-  | "CNPJ_CONTROLADOR"
-  | "CONTROLADOR"
-  | "INVEST_CEMPR_EXTER"
-  | "CLASSE_ANBIMA";
+import type { RegistrationInfosPropsType } from "./registrationInfosTypes";
 
 export default function RegistrationInfos({
   registration,
   isLoading,
 }: RegistrationInfosPropsType) {
-  const fieldsToShow: CadastroFundosKey[] = [
-    "CNPJ_FUNDO",
-    "DENOM_SOCIAL",
-    // "TP_FUNDO",
-    // "CLASSE",
-    "CLASSE_ANBIMA",
-    // "SIT",
-    // "DT_CONST",
-    // "DT_REG",
-    // "RENTAB_FUNDO",
-    // "CONDOM",
-    // "CD_CVM",
-    // "FUNDO_COTAS",
-    // "PUBLICO_ALVO",
-  ];
-
-  const titlesOfFields = [
-    "CNPJ",
-    "Fund Name",
-    // "Type",
-    // "Class",
-    "ANBIMA Class",
-    // "Situation",
-    // "Constitution date",
-    // "Registration date",
-    // "Fund Rentability",
-    // "Open/Closed",
-    // "CVM registration",
-    // "Fund of Funds",
-    // "Target Public",
-  ];
+  const fieldsToShow = ["CNPJ_FUNDO", "DENOM_SOCIAL", "CLASSE_ANBIMA"] as const;
+  const titlesOfFields = ["CNPJ", "Fund Name", "ANBIMA Class"];
 
   return (
     <div

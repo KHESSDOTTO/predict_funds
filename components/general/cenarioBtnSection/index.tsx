@@ -1,9 +1,5 @@
 import Link from "next/link";
-import type { MouseEventHandler } from "react";
-
-interface CenariosBtnSectionProps {
-  saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
-}
+import type { CenariosBtnSectionProps } from "./cenarioBtSectionTypes";
 
 export default function CenariosBtnSection({
   saveCenario,
@@ -11,7 +7,7 @@ export default function CenariosBtnSection({
   return (
     <>
       {/* MOBILE */}
-      <div className="flex flex-wrap gap-2 lg:gap-0 px-4 justify-center items-center lg:w-10/12 lg:pt-2 lg:mt-4 lg:px-0 lg:hidden">
+      <div className="flex flex-wrap gap-2 lg:hidden">
         <div className="w-full border-white/90 lg:border-white/20 mb-1 shadow-lg h-2 shadow-white lg:shadow-black lg:border-b-2 lg:mb-0 lg:hidden"></div>
         <div className="w-full flex justify-center items-start gap-4 lg:bg-gradient-to-b lg:from-black/50 lg:via-black/40 lg:via-50% lg:pt-[10px] lg:pb-4">
           <button
@@ -30,7 +26,7 @@ export default function CenariosBtnSection({
       {/* /MOBILE */}
       {/* DESK */}
       <div className="hidden lg:flex lg:flex-col lg:w-full">
-        <h2 className="text-lg text-white/90 mb-4 px-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left">
+        <h2 className="text-lg text-white/90 px-2 border-white/90 font-semibold border-b m-4 pb-2 text-left">
           Cenarios Control
         </h2>
         <div className="px-4">

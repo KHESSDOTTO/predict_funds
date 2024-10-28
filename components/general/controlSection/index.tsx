@@ -26,7 +26,7 @@ export default function ControlSection({
   setLoadingHistogram,
   setHistogram,
   setCorrels,
-  setHeatMapArr,
+  setHeatMapObj,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
@@ -81,7 +81,7 @@ export default function ControlSection({
       controlForm.buscaCnpj,
       controlForm.anbimaClass,
       setCorrels,
-      setHeatMapArr
+      setHeatMapObj
     );
   }, [registration]);
 

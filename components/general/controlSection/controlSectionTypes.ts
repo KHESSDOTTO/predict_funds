@@ -20,7 +20,7 @@ interface ControlSectionProps {
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
   setHistogram: Dispatch<SetStateAction<any>>;
   setCorrels: Dispatch<SetStateAction<any>>;
-  setHeatMapArr: Dispatch<SetStateAction<any>>;
+  setHeatMapObj: Dispatch<SetStateAction<any>>;
 }
 
 export type { ControlSectionProps };

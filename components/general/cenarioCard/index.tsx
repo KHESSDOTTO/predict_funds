@@ -1,14 +1,8 @@
-import { CenarioType } from "@/utils/types";
 import { useState } from "react";
 import ChartSection from "../chartSection";
 import ButtonRed from "../../UI/buttonRed";
 import useWindowWidth from "@/hooks/useWindowWidth";
-
-export interface CenarioCardPropsType {
-  cenarioData: CenarioType;
-  index: number;
-  excludeCenarioFunction(cenarioId: string): void;
-}
+import type { CenarioCardPropsType } from "./cenarioCardTypes";
 
 export default function CenarioCard({
   cenarioData,
