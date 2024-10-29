@@ -17,7 +17,6 @@ import { format } from "date-fns";
 import { PredictionsType, HistoricType } from "@/utils/types";
 import PredList from "../predList";
 import { useEffect, useState } from "react";
-import { consoleLog } from "@/functions/functions";
 import {
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
@@ -27,11 +26,12 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import type {
   ChartSectionProps,
   NFTooltipProps,
-  ValueQuotaTooltipProps,
   HistogramTooltipProps,
   CustomCursorProps,
 } from "@/utils/types";
 import { formatterBrNumber } from "@/utils/numberFormatters";
+import { adjustValueQuotaChartAxis } from "./valueQuotaChart/valueQuotaChartFunctions";
+import type { ValueQuotaTooltipProps } from "./valueQuotaChart/valueQuotaChartTypes";
 
 export default function ChartSection({
   registration,
@@ -54,41 +54,14 @@ export default function ChartSection({
     ),
     [absOrPctNFShort, setAbsOrPctNFShort] = useState<"abs" | "pct">("abs"),
     [absOrPctHist, setAbsOrPctHist] = useState<"abs" | "pct">("abs"),
-    [isMobile, setIsMobile] = useState<boolean>(false),
-    screenWidth = useWindowWidth();
-
-  function adjustValueQuotaChartAxis(
-    data: HistoricType[],
-    absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms"
-  ) {
-    // Margin to aply to find the domain of the Yaxis on the charts
-    const marginAbs = 0.05;
-    const marginPct = 0.01;
-    const marginForDomain =
-      absOrPct === "CAPTC_LIQ_ABS_ms" ? marginAbs : marginPct;
-    const ticksQntYaxisVQ = 7;
-
-    // Defining domain values for axis of Value Quota Chart
-    const minValueVQ = data.reduce((minObj, currObj) => {
-      return currObj["VL_QUOTA_ms"] < minObj["VL_QUOTA_ms"] ? currObj : minObj;
-    }, data[0])["VL_QUOTA_ms"];
-    const maxValueVQ = data.reduce((maxObj, currObj) => {
-      return currObj["VL_QUOTA_ms"] > maxObj["VL_QUOTA_ms"] ? currObj : maxObj;
-    }, data[0])["VL_QUOTA_ms"];
-
-    // Domain of the Yaxis
-    const minValYaxisVQ = minValueVQ * (1 - marginForDomain),
-      maxValYaxisVQ = maxValueVQ * (1 + marginForDomain);
-    setDomainYaxisVQ([minValYaxisVQ, maxValYaxisVQ]);
-
-    const ticksIntervalYaxisVQ =
-      (maxValYaxisVQ - minValYaxisVQ) / (ticksQntYaxisVQ - 1);
-    const newTicksYaxisVQ = Array.from(
-      { length: ticksQntYaxisVQ },
-      (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
-    );
-    setTicksYaxisVQ(newTicksYaxisVQ);
-  }
+    [isMobile, setIsMobile] = useState<boolean>(false);
+  const screenWidth = useWindowWidth();
+  const adjustVQAxisArgs = {
+    historic,
+    absOrPct,
+    setDomainYaxisVQ,
+    setTicksYaxisVQ,
+  };
 
   function adjustNetFundingChartAxis(
     historic: HistoricType[],
@@ -161,7 +134,7 @@ export default function ChartSection({
     if (historic.length === 0 || predictions.length === 0) {
       return;
     }
-    adjustValueQuotaChartAxis(historic, absOrPct);
+    adjustValueQuotaChartAxis(adjustVQAxisArgs);
     if (adjustNetFundingChartAxis(historic, absOrPct)) {
       prepareChartNFData(historic, predictions);
     }

@@ -25,7 +25,7 @@ export default function PredRow({
     });
   }
 
-  if (direction === "forward") {
+  if (direction === "forward" && entriesFront) {
     tgtDate = addWeeks(lastHistoricDate, cE.numPer);
     entriesFront = entriesFront.filter((cE) => {
       return (
@@ -37,7 +37,7 @@ export default function PredRow({
   }
 
   const currEntryBack = entriesBack[0];
-  const currEntryFront = entriesFront[0];
+  const currEntryFront = entriesFront ? entriesFront[0] : undefined;
   const formatValuePredListArgs = {
     isPct,
     direction,

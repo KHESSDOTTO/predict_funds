@@ -1,10 +1,14 @@
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { PredListPropsType, PredRowType } from "./predListTypes";
 import { handleAddRow } from "./predListFunctions";
 import PredRow from "./predRow";
 import AddRow from "./addRow";
+import type {
+  PredListPropsType,
+  PredRowStaticArgsType,
+  PredRowType,
+} from "./predListTypes";
 
 export default function PredList({
   title,
@@ -32,7 +36,7 @@ export default function PredList({
     setShowAddRow,
     setNewRow,
   };
-  const predRowStaticArgs = {
+  let predRowStaticArgs: PredRowStaticArgsType = {
     isPct,
     lastHistoricDate,
     historic,

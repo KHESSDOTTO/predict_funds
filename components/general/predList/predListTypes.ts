@@ -5,8 +5,18 @@ interface PredListPropsType {
   title: string;
   onlyBack: boolean;
   historic: HistoricType[];
-  predictions: PredictionsType[];
+  predictions?: PredictionsType[];
   varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+}
+
+interface PredRowStaticArgsType {
+  isPct: boolean;
+  lastHistoricDate: Date;
+  historic: HistoricType[];
+  predictions?: PredictionsType[];
+  varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+  predRows: PredRowType[];
+  setPredRows: Dispatch<SetStateAction<PredRowType[]>>;
 }
 
 interface PredRowType {
@@ -43,6 +53,7 @@ interface HandleDeleteRowArgsType {
 export type {
   PredListPropsType,
   PredRowType,
+  PredRowStaticArgsType,
   HandleAddRowArgsType,
   FormatValuePredListArgsType,
   HandleDeleteRowArgsType,

@@ -177,8 +177,6 @@ interface NFTooltipProps extends TooltipProps<ValueType, NameType> {
 
 interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
 
-interface ValueQuotaTooltipProps extends TooltipProps<ValueType, NameType> {}
-
 interface ChartSectionProps {
   registration?: CadastroFundosType | false;
   historic: HistoricType[];
@@ -213,7 +211,6 @@ export type {
   CardPropsType,
   ToneColorsInterface,
   NFTooltipProps,
-  ValueQuotaTooltipProps,
   HistogramTooltipProps,
   ChartSectionProps,
   CustomCursorProps,
