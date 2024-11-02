@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ValueQuotaChartPropsType } from "./valueQuotaChartTypes";
+import { format } from "date-fns";
+import { adjustValueQuotaChartAxis } from "./valueQuotaChartFunctions";
 import {
   XAxis,
   YAxis,
@@ -9,6 +11,8 @@ import {
   Area,
   ResponsiveContainer,
 } from "recharts";
+import PredList from "@/components/general/predList";
+import ValueQuotaTooltip from "./valueQuotaChartTooltip";
 
 export default function ValueQuotaChart({
   smallV,
@@ -17,6 +21,19 @@ export default function ValueQuotaChart({
 }: ValueQuotaChartPropsType) {
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]);
   const [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
+  const adjustVQAxisArgs = {
+    historic,
+    setDomainYaxisVQ,
+    setTicksYaxisVQ,
+  };
+
+  useEffect(() => {
+    if (historic.length === 0) {
+      return;
+    }
+
+    adjustValueQuotaChartAxis(adjustVQAxisArgs);
+  }, [historic]);
 
   return (
     <div
@@ -83,12 +100,7 @@ export default function ValueQuotaChart({
                 fontSize={12}
                 domain={domainYaxisVQ}
               />
-              {/* <CartesianGrid vertical={false} stroke="rgb(170, 150, 255)" /> */}
-              <CartesianGrid
-                // vertical={false}
-                stroke="rgb(170, 150, 255)"
-                strokeWidth={0.3}
-              />
+              <CartesianGrid stroke="rgb(170, 150, 255)" strokeWidth={0.3} />
               <Area
                 type="monotone"
                 dataKey="VL_QUOTA_ms"
@@ -106,7 +118,6 @@ export default function ValueQuotaChart({
               title="Value Quota (history)"
               onlyBack={true}
               historic={historic}
-              predictions={predictions}
               varName={"VL_QUOTA_ms"}
             />
           </div>

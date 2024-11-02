@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { formatterBrNumber } from "@/utils/numberFormatters";
-import type { ValueQuotaTooltipProps } from "../valueQuotaChartTypes";
+import type { ValueQuotaTooltipProps } from "./valueQuotaChartTypes";
 
 export default function ValueQuotaTooltip({
   active,

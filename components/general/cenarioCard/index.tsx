@@ -1,7 +1,9 @@
 import { useState } from "react";
-import ChartSection from "../chartSection";
-import ButtonRed from "../../UI/buttonRed";
+import { handleFadeOut } from "./cenarioCardFunction";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import ButtonRed from "../../UI/buttonRed";
+import NetFundingPredChart from "../netFundingPredChart";
+import ValueQuotaChart from "../valueQuotaChart";
 import type { CenarioCardPropsType } from "./cenarioCardTypes";
 
 export default function CenarioCard({
@@ -13,13 +15,6 @@ export default function CenarioCard({
   const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth <= 992;
-
-  const handleFadeOut = (e: React.MouseEvent<HTMLDivElement>): void => {
-    setIsFadingOut(true);
-    setTimeout(() => {
-      excludeCenarioFunction(id);
-    }, 200);
-  };
 
   return (
     <div
@@ -74,14 +69,28 @@ export default function CenarioCard({
           </ul>
         </div>
         <div className=" lg:block lg:w-full">
-          <ChartSection
-            historic={historicData}
-            smallV={true}
-            predictions={predictionData}
-          />
+          <div className="w-full flex gap-4 flex-wrap flex-col lg:gap-2 lg:flex-row text-white">
+            <NetFundingPredChart
+              {...{
+                smallV: true,
+                isMobile,
+                historic: historicData,
+                predictions: predictionData,
+              }}
+            />
+            <ValueQuotaChart
+              {...{ smallV: true, isMobile, historic: historicData }}
+            />
+          </div>
         </div>
         {isMobile && (
-          <div id={id} className="mt-6 lg:hidden" onClick={handleFadeOut}>
+          <div
+            id={id}
+            className="mt-6 lg:hidden"
+            onClick={() =>
+              handleFadeOut({ id, setIsFadingOut, excludeCenarioFunction })
+            }
+          >
             <ButtonRed shadowColor="black" shadowSize="md">
               Delete
             </ButtonRed>
@@ -92,7 +101,9 @@ export default function CenarioCard({
         <div
           id={id}
           className="hidden my-2 lg:flex lg:justify-start lg:mx-12 lg:w-full"
-          onClick={handleFadeOut}
+          onClick={() =>
+            handleFadeOut({ id, setIsFadingOut, excludeCenarioFunction })
+          }
         >
           <ButtonRed shadowColor="black" shadowSize="md">
             Delete

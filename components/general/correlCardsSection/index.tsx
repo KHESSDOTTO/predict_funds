@@ -10,7 +10,9 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import styles from "./correlCardsSection.module.css";
 import type { CorrelCardsSectionProps } from "./correlCardsSectionTypes";
-import SwiperChildren from "./swiperChildren";
+import type { CardPropsType } from "@/utils/types";
+import Card from "@/components/UI/card";
+import { SwiperSlide } from "swiper/react";
 
 SwiperCore.use([Navigation]);
 
@@ -37,6 +39,15 @@ export default function CorrelCardsSection({
       spaceBetween: 30,
     },
   };
+  const hiddenFields = [
+    "_id",
+    "CNPJ_FUNDO",
+    "janela_em_meses",
+    "ancora",
+    "data_calc_correlacao",
+    "CLASSE_ANBIMA",
+    "updated_at",
+  ];
 
   useEffect(() => {
     if (correls) {
@@ -114,10 +125,20 @@ export default function CorrelCardsSection({
               breakpoints={breakpoints}
             >
               {selCorrels.map((cE: any[], index: number) => {
+                const props: CardPropsType = {
+                  title: cE[0],
+                  imgSrc: "",
+                  correlVal: cE[1],
+                };
+
+                if (hiddenFields.includes(cE[0])) {
+                  return null;
+                }
+
                 return (
-                  <>
-                    <SwiperChildren cE={cE} index={index} />
-                  </>
+                  <SwiperSlide key={index}>
+                    <Card {...props} />
+                  </SwiperSlide>
                 );
               })}
             </Swiper>

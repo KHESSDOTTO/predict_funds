@@ -5,7 +5,7 @@ import type { RowDeskPropsType } from "./heatMapTypes";
 
 export default function RowDesk({
   id,
-  key,
+  name,
   tickers,
   selCorrels,
 }: RowDeskPropsType) {
@@ -17,11 +17,11 @@ export default function RowDesk({
       <td
         className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/5`}
       >
-        {capitalize(key)}
+        {capitalize(name)}
       </td>
       {tickers.map((ticker) => {
         const id = Math.random();
-        const value = selCorrels[key][ticker];
+        const value = selCorrels[name][ticker];
         const color = getToneColor(value, toneColorsMapTxtRGB, 0.9);
         const valColor = value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
         return (

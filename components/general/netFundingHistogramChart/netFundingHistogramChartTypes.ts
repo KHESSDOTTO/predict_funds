@@ -1,0 +1,30 @@
+import { FinalHistogramData } from "@/utils/types";
+import type { TooltipProps } from "recharts";
+import type {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
+
+interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
+
+interface NetFundingHistogramChartPropsType {
+  smallV: boolean;
+  anbimaClass: string;
+  isMobile: boolean;
+  loadingHistogram: boolean;
+  histogram: FinalHistogramData | false;
+}
+
+interface HistogramTooltipCursor {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  stroke?: string;
+}
+
+export type {
+  HistogramTooltipProps,
+  NetFundingHistogramChartPropsType,
+  HistogramTooltipCursor,
+};

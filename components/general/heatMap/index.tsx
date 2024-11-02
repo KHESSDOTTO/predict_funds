@@ -10,6 +10,7 @@ import { prepareHeatMap } from "./heatMapFunctions";
 import HeatMapForm from "./forms/heatMapForm";
 import RowDesk from "./rowDesk";
 import RowMobile from "./rowMobile";
+import { consoleLog } from "@/functions/functions";
 
 export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
@@ -92,9 +93,9 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
                 </tr>
               </thead>
               <tbody className="text-white text-sm font-light">
-                {selCorrelsKeys.map((key) => {
+                {selCorrelsKeys.map((name) => {
                   const id = Math.random();
-                  return <RowDesk {...{ id, key, tickers, selCorrels }} />;
+                  return <RowDesk {...{ id, name, tickers, selCorrels }} />;
                 })}
               </tbody>
             </table>

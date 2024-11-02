@@ -2,15 +2,11 @@ import { AdjustValueQuotaChartAxisArgsType } from "./valueQuotaChartTypes";
 
 function adjustValueQuotaChartAxis({
   historic,
-  absOrPct,
   setDomainYaxisVQ,
   setTicksYaxisVQ,
 }: AdjustValueQuotaChartAxisArgsType) {
   // Margin to aply to find the domain of the Yaxis on the charts
-  const marginAbs = 0.05;
-  const marginPct = 0.01;
-  const marginForDomain =
-    absOrPct === "CAPTC_LIQ_ABS_ms" ? marginAbs : marginPct;
+  const marginForDomain = 0.05;
   const ticksQntYaxisVQ = 7;
 
   // Defining domain values for axis of Value Quota Chart
@@ -32,6 +28,7 @@ function adjustValueQuotaChartAxis({
     { length: ticksQntYaxisVQ },
     (_, index) => minValYaxisVQ + ticksIntervalYaxisVQ * index
   );
+
   setTicksYaxisVQ(newTicksYaxisVQ);
 }
 

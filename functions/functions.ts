@@ -1,6 +1,10 @@
 import { ToneColorsInterface } from "../utils/types";
+import { ax } from "@/database/axios.config";
+import toast from "react-hot-toast";
+import type { DoLogoutArgsType } from "../utils/types";
 
 function capitalize(string: string) {
+  consoleLog({ string });
   switch (string.length) {
     case 0:
       return string;
@@ -68,4 +72,24 @@ function consoleLog(varObj: any): void {
   console.log(varObj[varName]);
 }
 
-export { capitalize, pushIfNew, getToneColor, buildPredKey, consoleLog };
+async function doLogout({ userContext, router }: DoLogoutArgsType) {
+  try {
+    userContext.setUser(null);
+    userContext.setCenarios([]);
+    await ax.post("/user/logout");
+    toast.success("Logged out.");
+    router.push("/");
+  } catch (err) {
+    console.log(err);
+    toast.error("Error logging out.");
+  }
+}
+
+export {
+  capitalize,
+  pushIfNew,
+  getToneColor,
+  buildPredKey,
+  consoleLog,
+  doLogout,
+};

@@ -1,9 +1,19 @@
 import { ReactNode } from "react";
 import { TooltipProps } from "recharts";
+import { NextRouter } from "next/router";
 import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
+
+type AbsOrPctType = "abs" | "pct";
+
+type AbsOrPctNFFieldsType = "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+
+interface DoLogoutArgsType {
+  userContext: UserContextType;
+  router: NextRouter;
+}
 
 interface SideBarPropsType {
   showSideBar: boolean;
@@ -175,25 +185,6 @@ interface NFTooltipProps extends TooltipProps<ValueType, NameType> {
   numWeeksPreds: number;
 }
 
-interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
-
-interface ChartSectionProps {
-  registration?: CadastroFundosType | false;
-  historic: HistoricType[];
-  smallV: boolean;
-  predictions: PredictionsType[];
-  loadingHistogram?: boolean;
-  histogram?: FinalHistogramData | false;
-}
-
-interface CustomCursorProps {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  stroke?: string;
-}
-
 export type {
   ButtonPropsType,
   UserType,
@@ -211,7 +202,7 @@ export type {
   CardPropsType,
   ToneColorsInterface,
   NFTooltipProps,
-  HistogramTooltipProps,
-  ChartSectionProps,
-  CustomCursorProps,
+  AbsOrPctType,
+  AbsOrPctNFFieldsType,
+  DoLogoutArgsType,
 };

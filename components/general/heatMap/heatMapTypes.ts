@@ -20,7 +20,7 @@ interface RowPropsType {
 }
 
 interface RowDeskPropsType extends RowPropsType {
-  key: keyof HeatMapObjType;
+  name: keyof HeatMapObjType;
   tickers: string[];
 }
 
