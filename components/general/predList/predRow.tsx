@@ -1,7 +1,7 @@
 import { addWeeks, subWeeks } from "date-fns";
 import { formatterBrNumber } from "@/utils/numberFormatters";
-import { formatValuePredList, handleDeleteRow } from "../predListFunctions";
-import { PredRowPropsType } from "./predRowTypes";
+import { formatValuePredList, handleDeleteRow } from "./predListFunctions";
+import { PredRowPropsType } from "./predListTypes";
 
 export default function PredRow({
   cE,

@@ -4,13 +4,13 @@ import { ClipLoader } from "react-spinners";
 import type {
   HeatMapObjType,
   HeatMapPropsType,
-  PrepareHeatMapArgsType,
+  PrepareHeatMapParamsType,
 } from "./heatMapTypes";
 import { prepareHeatMap } from "./heatMapFunctions";
 import HeatMapForm from "./forms/heatMapForm";
 import RowDesk from "./rowDesk";
 import RowMobile from "./rowMobile";
-import { consoleLog } from "@/functions/functions";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
@@ -29,7 +29,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
 
   useEffect(() => {
     if (heatMapObj) {
-      const prepareHeatMapArgs: PrepareHeatMapArgsType = {
+      const prepareHeatMapArgs: PrepareHeatMapParamsType = {
         heatMapObj,
         exclude,
         numMonths,
@@ -46,11 +46,9 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
 
   return (
     <div className="w-full">
-      <h2
-        className={`text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left`}
-      >
-        {title}
-      </h2>
+      <div>
+        <TitleComponent>{title}</TitleComponent>
+      </div>
       <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
         <HeatMapForm {...heatMapFormArgs} />
       </div>
@@ -77,10 +75,12 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               <thead>
                 <tr className="bg-gray-500 bg-opacity-60 text-white uppercase text-sm leading-normal">
                   <th className="text-center"></th>
+
                   {tickers.map((ticker) => {
                     const nameTicker = mapTickers[ticker]
                       ? mapTickers[ticker]
                       : ticker;
+
                     return (
                       <th
                         key={ticker}
@@ -95,6 +95,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               <tbody className="text-white text-sm font-light">
                 {selCorrelsKeys.map((name) => {
                   const id = Math.random();
+
                   return <RowDesk {...{ id, name, tickers, selCorrels }} />;
                 })}
               </tbody>
@@ -108,6 +109,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               <thead>
                 <tr className="bg-gray-700 bg-opacity-50 text-white uppercase text-sm leading-normal">
                   <th className="py-3 px-6 text-left w-1/3"></th>
+
                   {selCorrelsKeys.map((key) => (
                     <th key={key} className="py-3 px-6 text-center">
                       {key}

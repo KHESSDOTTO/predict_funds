@@ -1,7 +1,7 @@
 import {
-  HandleAddRowArgsType,
-  FormatValuePredListArgsType,
-  HandleDeleteRowArgsType,
+  HandleAddRowParamsType,
+  FormatValuePredListParamsType,
+  HandleDeleteRowParamsType,
 } from "./predListTypes";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,7 +12,7 @@ function formatValuePredList({
   currEntryBack,
   currEntryFront,
   formatter,
-}: FormatValuePredListArgsType): string {
+}: FormatValuePredListParamsType): string {
   let value = "";
   if (direction === "backward" && currEntryBack) {
     value = currEntryBack[varName];
@@ -39,7 +39,7 @@ function handleAddRow({
   setPredRows,
   setShowAddRow,
   setNewRow,
-}: HandleAddRowArgsType): void {
+}: HandleAddRowParamsType): void {
   const newPredRows = [...predRows];
   newPredRows.push(newRow);
   setPredRows(newPredRows);
@@ -55,7 +55,7 @@ function handleDeleteRow({
   e,
   predRows,
   setPredRows,
-}: HandleDeleteRowArgsType) {
+}: HandleDeleteRowParamsType) {
   const rowId = e.currentTarget.dataset.id;
   if (!rowId) {
     console.warn("No row ID found for deletion.");

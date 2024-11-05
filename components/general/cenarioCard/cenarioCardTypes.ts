@@ -1,16 +1,21 @@
+import { ExcludeCenarioParamsType } from "@/pages/loggedin/my_cenarios/myCenariosTypes";
 import { CenarioType } from "@/utils/types";
 import { Dispatch, SetStateAction } from "react";
 
 interface CenarioCardPropsType {
+  cenarios: CenarioType[];
+  setCenarios: (newData: CenarioType[]) => void;
   cenarioData: CenarioType;
   index: number;
-  excludeCenarioFunction(cenarioId: string): void;
+  excludeCenarioFunction(params: ExcludeCenarioParamsType): void;
 }
 
-interface HandleFadeOutArgsType {
+interface HandleFadeOutParamsType {
   id: string;
+  cenarios: CenarioType[];
+  setCenarios: (newData: CenarioType[]) => void;
   setIsFadingOut: Dispatch<SetStateAction<boolean>>;
-  excludeCenarioFunction(cenarioId: string): void;
+  excludeCenarioFunction(params: ExcludeCenarioParamsType): void;
 }
 
-export type { CenarioCardPropsType, HandleFadeOutArgsType };
+export type { CenarioCardPropsType, HandleFadeOutParamsType };

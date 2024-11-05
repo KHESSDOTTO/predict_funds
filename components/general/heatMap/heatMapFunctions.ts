@@ -1,5 +1,5 @@
 import { HeatMapObjType } from "./heatMapTypes";
-import type { PrepareHeatMapArgsType } from "./heatMapTypes";
+import type { PrepareHeatMapParamsType } from "./heatMapTypes";
 
 function prepareHeatMap({
   heatMapObj,
@@ -7,7 +7,7 @@ function prepareHeatMap({
   numMonths,
   setTickers,
   setSelCorrels,
-}: PrepareHeatMapArgsType): void {
+}: PrepareHeatMapParamsType): void {
   const keys = Object.keys(heatMapObj) as (keyof HeatMapObjType)[];
   let newSelCorrel: HeatMapObjType = {
     avg: {},

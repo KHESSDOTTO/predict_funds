@@ -1,7 +1,7 @@
 import { ToneColorsInterface } from "../utils/types";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-import type { DoLogoutArgsType } from "../utils/types";
+import type { DoLogoutParamsType } from "../utils/types";
 
 function capitalize(string: string) {
   consoleLog({ string });
@@ -72,7 +72,7 @@ function consoleLog(varObj: any): void {
   console.log(varObj[varName]);
 }
 
-async function doLogout({ userContext, router }: DoLogoutArgsType) {
+async function doLogout({ userContext, router }: DoLogoutParamsType) {
   try {
     userContext.setUser(null);
     userContext.setCenarios([]);

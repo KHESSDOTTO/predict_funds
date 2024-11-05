@@ -2,135 +2,42 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
 import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
-import * as XLSX from "xlsx";
-import toast from "react-hot-toast";
-import type { HistoricType, UserType } from "@/utils/types";
-import type { GetServerSideProps } from "next";
-import type { JwtPayload } from "jsonwebtoken";
 import { verifyToken } from "@/utils/jwt.config";
 import LogoPredict from "@/components/UI/logoPredict";
 import CenarioCard from "@/components/general/cenarioCard";
-
-interface MyCenariosPagePropsType {
-  userFromToken: UserType;
-}
+import {
+  excludeCenario,
+  exportCenarios,
+  updateFooterPosition,
+} from "./myCenariosFunctions";
+import type { GetServerSideProps } from "next";
+import type { JwtPayload } from "jsonwebtoken";
+import type { MyCenariosPagePropsType } from "./myCenariosTypes";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { cenarios, setCenarios } = useContext(UserContext);
-  const [footerPosition, setFooterPosition] = useState("absolute");
+  const [footerPosition, setFooterPosition] = useState<string>("absolute");
   const footerRef = useRef<HTMLDivElement>(null);
-
-  function updateFooterPosition() {
-    if (footerRef.current) {
-      const footerHeight = footerRef.current.clientHeight;
-      const atBottom =
-        window.scrollY + window.innerHeight - 20 >=
-        document.documentElement.scrollHeight;
-      const contentTooShort =
-        window.innerHeight >= document.body.offsetHeight - footerHeight;
-
-      if (atBottom) {
-        setFooterPosition("absolute");
-      } else if (contentTooShort) {
-        setFooterPosition("absolute");
-      } else {
-        setFooterPosition("sticky");
-      }
-    }
-  }
+  const updateFooterPositionArgs = {
+    footerRef,
+    setFooterPosition,
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      updateFooterPosition();
+      updateFooterPosition(updateFooterPositionArgs);
     };
     window.addEventListener("scroll", handleScroll);
     const resizeObserver = new ResizeObserver(() => {
-      updateFooterPosition();
+      updateFooterPosition(updateFooterPositionArgs);
     });
     resizeObserver.observe(document.body);
-    updateFooterPosition();
+    updateFooterPosition(updateFooterPositionArgs);
     return () => {
       window.removeEventListener("scroll", handleScroll);
       resizeObserver.disconnect();
     };
   }, []);
-
-  function excludeCenario(cenarioId: string) {
-    const updatedCenarios = cenarios.filter((cE) => {
-      return cE.id != cenarioId;
-    });
-    setCenarios(updatedCenarios);
-    toast.success("Removed cenario.");
-  }
-
-  function exportCenarios() {
-    if (cenarios.length === 0) {
-      toast.error("No cenarios were saved to export.");
-      return;
-    }
-    const workbook = XLSX.utils.book_new();
-    cenarios.forEach((cenario, i) => {
-      const ws_name = "Cenario " + (i + 1);
-      const colsToHide = ["TP_FUNDO", "_id"];
-      const paramsArray = Object.entries(cenario.params).map(([cK, cV]) => [
-        cK,
-        cV,
-      ]);
-
-      // <Adjusting_predictions>
-      const predsArray: any = [];
-      cenario.predictionData
-        .slice(cenario.predictionData.length - 1)
-        .forEach((cE) => {
-          const predsSubArray = Object.entries(cE).map(([cK, cV]) => {
-            if (Array.isArray(cV)) {
-              return [cK, ...cV];
-            }
-            return [cK, cV];
-          });
-          predsArray.push(...predsSubArray);
-        });
-      // </Adjusting_predictions>
-      const historicDataHeader: (keyof HistoricType)[] = [
-        "DT_COMPTC",
-        "CNPJ_FUNDO",
-        "VL_TOTAL_ms",
-        "VL_PATRIM_LIQ_ms",
-        "NR_COTST_ms",
-        "VL_QUOTA_ms",
-        "CAPTC_DIA_ms",
-        "RESG_DIA_ms",
-        "CAPTC_LIQ_ms",
-      ];
-      const historicDataArray = cenario.historicData.map((dataRow) => {
-        const orderedDataRow = historicDataHeader.map((key) => {
-          return [key, dataRow[key]];
-        });
-        const result = orderedDataRow.map(([cK, cV]) => {
-          if (typeof cK == "string" && !colsToHide.includes(cK)) {
-            return cV;
-          }
-          return false;
-        });
-
-        return result.filter((cE) => cE !== false);
-      });
-      const data = [
-        ["Params"],
-        ...paramsArray,
-        [],
-        ["Prediction"],
-        ...predsArray,
-        [],
-        ["Historic"],
-        historicDataHeader,
-        ...historicDataArray,
-      ];
-      const worksheet = XLSX.utils.aoa_to_sheet(data);
-      XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
-    });
-    XLSX.writeFile(workbook, "export-cenarios.xlsx");
-  }
 
   return (
     <div className="bg-black">
@@ -156,6 +63,8 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
               return (
                 <CenarioCard
                   key={cE.id.toString()}
+                  cenarios={cenarios}
+                  setCenarios={setCenarios}
                   cenarioData={cE}
                   index={cI}
                   excludeCenarioFunction={excludeCenario}
@@ -173,7 +82,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
           ref={footerRef}
           className={`bg-gradient-to-b from-black/30 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
         >
-          <div onClick={exportCenarios}>
+          <div onClick={() => exportCenarios({ cenarios })}>
             <ButtonGreen shadowSize="none" shadowColor="black">
               Export
             </ButtonGreen>

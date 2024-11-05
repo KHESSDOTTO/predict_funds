@@ -10,7 +10,7 @@ type AbsOrPctType = "abs" | "pct";
 
 type AbsOrPctNFFieldsType = "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
 
-interface DoLogoutArgsType {
+interface DoLogoutParamsType {
   userContext: UserContextType;
   router: NextRouter;
 }
@@ -204,5 +204,5 @@ export type {
   NFTooltipProps,
   AbsOrPctType,
   AbsOrPctNFFieldsType,
-  DoLogoutArgsType,
+  DoLogoutParamsType,
 };

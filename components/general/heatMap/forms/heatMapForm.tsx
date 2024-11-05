@@ -1,4 +1,4 @@
-import { HeatMapFormPropsType } from "./heatMapFormTypes";
+import { HeatMapFormPropsType } from "../heatMapTypes";
 
 export default function HeatMapForm({
   numMonths,

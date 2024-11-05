@@ -12,7 +12,7 @@ interface ValueQuotaChartPropsType {
   historic: HistoricType[];
 }
 
-interface AdjustValueQuotaChartAxisArgsType {
+interface AdjustValueQuotaChartAxisParamsType {
   historic: HistoricType[];
   setDomainYaxisVQ: Dispatch<SetStateAction<number[]>>;
   setTicksYaxisVQ: Dispatch<SetStateAction<number[]>>;
@@ -22,6 +22,6 @@ interface ValueQuotaTooltipProps extends TooltipProps<ValueType, NameType> {}
 
 export type {
   ValueQuotaChartPropsType,
-  AdjustValueQuotaChartAxisArgsType,
+  AdjustValueQuotaChartAxisParamsType,
   ValueQuotaTooltipProps,
 };

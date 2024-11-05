@@ -28,8 +28,13 @@ interface RowMobilePropsType extends RowPropsType {
   ticker: string;
 }
 
+interface HeatMapFormPropsType {
+  numMonths: number;
+  setNumMonths: Dispatch<SetStateAction<number>>;
+}
+
 // Types used in functions
-interface PrepareHeatMapArgsType {
+interface PrepareHeatMapParamsType {
   heatMapObj: HeatMapObjType;
   exclude: string[];
   numMonths: number;
@@ -42,8 +47,9 @@ export type {
   CorrelAssocArrType,
   HeatMapObjType,
   HeatMapPropsType,
-  PrepareHeatMapArgsType,
+  PrepareHeatMapParamsType,
   RowPropsType,
   RowDeskPropsType,
   RowMobilePropsType,
+  HeatMapFormPropsType,
 };

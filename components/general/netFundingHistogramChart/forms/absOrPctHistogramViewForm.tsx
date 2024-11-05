@@ -1,4 +1,4 @@
-import type { AbsOrPctHistogramViewFormPropsType } from "./absOrPctHistogramViewFormTypes";
+import type { AbsOrPctHistogramViewFormPropsType } from "../netFundingHistogramChartTypes";
 
 export default function AbsOrPctHistogramViewForm({
   absOrPct,

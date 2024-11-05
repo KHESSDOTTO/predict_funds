@@ -1,10 +1,10 @@
-import { AdjustValueQuotaChartAxisArgsType } from "./valueQuotaChartTypes";
+import { AdjustValueQuotaChartAxisParamsType } from "./valueQuotaChartTypes";
 
 function adjustValueQuotaChartAxis({
   historic,
   setDomainYaxisVQ,
   setTicksYaxisVQ,
-}: AdjustValueQuotaChartAxisArgsType) {
+}: AdjustValueQuotaChartAxisParamsType) {
   // Margin to aply to find the domain of the Yaxis on the charts
   const marginForDomain = 0.05;
   const ticksQntYaxisVQ = 7;

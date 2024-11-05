@@ -7,6 +7,8 @@ import ValueQuotaChart from "../valueQuotaChart";
 import type { CenarioCardPropsType } from "./cenarioCardTypes";
 
 export default function CenarioCard({
+  cenarios,
+  setCenarios,
   cenarioData,
   index,
   excludeCenarioFunction,
@@ -15,6 +17,13 @@ export default function CenarioCard({
   const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth <= 992;
+  const handleFadeoutArgsType = {
+    id,
+    cenarios,
+    setCenarios,
+    setIsFadingOut,
+    excludeCenarioFunction,
+  };
 
   return (
     <div
@@ -87,9 +96,7 @@ export default function CenarioCard({
           <div
             id={id}
             className="mt-6 lg:hidden"
-            onClick={() =>
-              handleFadeOut({ id, setIsFadingOut, excludeCenarioFunction })
-            }
+            onClick={() => handleFadeOut(handleFadeoutArgsType)}
           >
             <ButtonRed shadowColor="black" shadowSize="md">
               Delete
@@ -101,9 +108,7 @@ export default function CenarioCard({
         <div
           id={id}
           className="hidden my-2 lg:flex lg:justify-start lg:mx-12 lg:w-full"
-          onClick={() =>
-            handleFadeOut({ id, setIsFadingOut, excludeCenarioFunction })
-          }
+          onClick={() => handleFadeOut(handleFadeoutArgsType)}
         >
           <ButtonRed shadowColor="black" shadowSize="md">
             Delete

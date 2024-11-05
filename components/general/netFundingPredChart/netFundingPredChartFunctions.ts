@@ -1,9 +1,9 @@
-import { AdjustNetFundingChartAxisArgsType } from "./netFundingPredChartTypes";
+import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes";
 import {
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
 } from "@/functions/axisFunctions";
-import type { PrepareChartNFDataArgsType } from "./netFundingPredChartTypes";
+import type { PrepareChartNFDataParamsType } from "./netFundingPredChartTypes";
 
 function adjustNetFundingChartAxis({
   historic,
@@ -11,7 +11,7 @@ function adjustNetFundingChartAxis({
   predictions,
   setDomainYaxisNF,
   setTicksYaxisNF,
-}: AdjustNetFundingChartAxisArgsType) {
+}: AdjustNetFundingChartAxisParamsType) {
   const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
 
   // Defining values for domain/axis in Net Funding Chart
@@ -59,7 +59,7 @@ function prepareChartNFData({
   predictions,
   setUnifiedNFData,
   setGradientOffset,
-}: PrepareChartNFDataArgsType) {
+}: PrepareChartNFDataParamsType) {
   // Unifying data
   const newUnifiedNFData = [...historic, ...predictions];
   const newGradientOffset =

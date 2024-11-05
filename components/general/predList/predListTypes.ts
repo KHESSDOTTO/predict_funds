@@ -9,7 +9,7 @@ interface PredListPropsType {
   varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
 }
 
-interface PredRowStaticArgsType {
+interface PredRowStaticParamsType {
   isPct: boolean;
   lastHistoricDate: Date;
   historic: HistoricType[];
@@ -25,8 +25,25 @@ interface PredRowType {
   numPer: number;
 }
 
+interface AddRowPropsType {
+  newRow: PredRowType;
+  setNewRow: Dispatch<SetStateAction<PredRowType>>;
+  onlyBack: boolean;
+}
+
+interface PredRowPropsType {
+  cE: PredRowType;
+  isPct: boolean;
+  lastHistoricDate: Date;
+  historic: HistoricType[];
+  predictions?: PredictionsType[];
+  varName: "VL_QUOTA_ms" | "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
+  predRows: PredRowType[];
+  setPredRows: Dispatch<SetStateAction<PredRowType[]>>;
+}
+
 // Types used by functions
-interface HandleAddRowArgsType {
+interface HandleAddRowParamsType {
   predRows: PredRowType[];
   newRow: PredRowType;
   setPredRows: Dispatch<SetStateAction<PredRowType[]>>;
@@ -34,7 +51,7 @@ interface HandleAddRowArgsType {
   setNewRow: Dispatch<SetStateAction<PredRowType>>;
 }
 
-interface FormatValuePredListArgsType {
+interface FormatValuePredListParamsType {
   isPct: boolean;
   direction: string;
   varName: string;
@@ -43,7 +60,7 @@ interface FormatValuePredListArgsType {
   formatter: Intl.NumberFormat;
 }
 
-interface HandleDeleteRowArgsType {
+interface HandleDeleteRowParamsType {
   e: React.MouseEvent<HTMLButtonElement>;
   predRows: PredRowType[];
   setPredRows: Dispatch<SetStateAction<PredRowType[]>>;
@@ -53,8 +70,10 @@ interface HandleDeleteRowArgsType {
 export type {
   PredListPropsType,
   PredRowType,
-  PredRowStaticArgsType,
-  HandleAddRowArgsType,
-  FormatValuePredListArgsType,
-  HandleDeleteRowArgsType,
+  PredRowStaticParamsType,
+  HandleAddRowParamsType,
+  FormatValuePredListParamsType,
+  HandleDeleteRowParamsType,
+  AddRowPropsType,
+  PredRowPropsType,
 };

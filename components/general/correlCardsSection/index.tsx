@@ -13,6 +13,7 @@ import type { CorrelCardsSectionProps } from "./correlCardsSectionTypes";
 import type { CardPropsType } from "@/utils/types";
 import Card from "@/components/UI/card";
 import { SwiperSlide } from "swiper/react";
+import TitleComponent from "@/components/UI/titleComponent";
 
 SwiperCore.use([Navigation]);
 
@@ -72,7 +73,7 @@ export default function CorrelCardsSection({
 
   return (
     <div>
-      <h2 className="text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left">
+      <TitleComponent>
         Quota - Correlations
         <Tippy content={tippyContent}>
           <span className="ml-2 cursor-pointer text-blue-600 font-bold text-base">
@@ -92,7 +93,7 @@ export default function CorrelCardsSection({
             </svg>
           </span>
         </Tippy>
-      </h2>
+      </TitleComponent>
       <section className="relative w-screen" style={{ padding: padding }}>
         <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />

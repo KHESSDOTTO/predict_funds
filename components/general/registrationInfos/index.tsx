@@ -1,5 +1,6 @@
 import { ClipLoader } from "react-spinners";
 import type { RegistrationInfosPropsType } from "./registrationInfosTypes";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function RegistrationInfos({
   registration,
@@ -13,9 +14,9 @@ export default function RegistrationInfos({
       id="registrationInfos"
       className="text-white flex flex-col items-center w-full lg:items-start"
     >
-      <h2 className="text-lg mx-[16vw] text-white/90 mb-4 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left lg:w-[97.5vw]">
-        Fund Infos.
-      </h2>
+      <div className="w-full">
+        <TitleComponent>Fund Infos.</TitleComponent>
+      </div>
       {!isLoading && registration ? (
         <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-12 lg:px-2">
           {fieldsToShow.map((cE, cI) => {

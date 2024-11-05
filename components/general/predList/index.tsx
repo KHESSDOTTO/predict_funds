@@ -6,7 +6,7 @@ import PredRow from "./predRow";
 import AddRow from "./addRow";
 import type {
   PredListPropsType,
-  PredRowStaticArgsType,
+  PredRowStaticParamsType,
   PredRowType,
 } from "./predListTypes";
 
@@ -36,7 +36,7 @@ export default function PredList({
     setShowAddRow,
     setNewRow,
   };
-  let predRowStaticArgs: PredRowStaticArgsType = {
+  let predRowStaticArgs: PredRowStaticParamsType = {
     isPct,
     lastHistoricDate,
     historic,

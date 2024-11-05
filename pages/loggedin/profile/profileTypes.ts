@@ -5,12 +5,12 @@ interface ProfilePagePropsType {
   user: UserType;
 }
 
-interface HandleSubmitOutsideArgsType {
+interface HandleSubmitOutsideParamsType {
   user: UserType;
   form: ProfileFormType;
   formRef: React.RefObject<HTMLFormElement>;
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  handleSubmitNoEmail: (params: HandleSubmitNoEmailArgsType) => Promise<void>;
+  handleSubmitNoEmail: (params: HandleSubmitNoEmailParamsType) => Promise<void>;
 }
 
 interface ProfileFormType {
@@ -27,33 +27,33 @@ interface ProfileFormPropsType {
   form: ProfileFormType;
   setForm: Dispatch<SetStateAction<ProfileFormType>>;
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  handleSubmitNoEmail: (params: HandleSubmitNoEmailArgsType) => Promise<void>;
+  handleSubmitNoEmail: (params: HandleSubmitNoEmailParamsType) => Promise<void>;
 }
 
-interface HandleSubmitNoEmailArgsType {
+interface HandleSubmitNoEmailParamsType {
   e: React.FormEvent<HTMLFormElement>;
   user: UserType;
   form: ProfileFormType;
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-interface DoSubmitEmailChangeArgsType {
+interface DoSubmitEmailChangeParamsType {
   e: React.FormEvent<HTMLFormElement>;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   form: ProfileFormType;
   user: UserType;
 }
 
-interface HandleChangePwdArgsType {
+interface HandleChangePwdParamsType {
   user: UserType;
 }
 
 export type {
   ProfilePagePropsType,
-  HandleSubmitOutsideArgsType,
+  HandleSubmitOutsideParamsType,
   ProfileFormType,
   ProfileFormPropsType,
-  HandleSubmitNoEmailArgsType,
-  DoSubmitEmailChangeArgsType,
-  HandleChangePwdArgsType,
+  HandleSubmitNoEmailParamsType,
+  DoSubmitEmailChangeParamsType,
+  HandleChangePwdParamsType,
 };

@@ -1,10 +1,10 @@
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
 import type {
-  HandleSubmitOutsideArgsType,
-  HandleSubmitNoEmailArgsType,
-  DoSubmitEmailChangeArgsType,
-  HandleChangePwdArgsType,
+  HandleSubmitOutsideParamsType,
+  HandleSubmitNoEmailParamsType,
+  DoSubmitEmailChangeParamsType,
+  HandleChangePwdParamsType,
 } from "./profileTypes";
 
 function handleSubmitOutside({
@@ -13,7 +13,7 @@ function handleSubmitOutside({
   user,
   form,
   setShowModal,
-}: HandleSubmitOutsideArgsType) {
+}: HandleSubmitOutsideParamsType) {
   const fakeSubmitEvent: React.FormEvent<HTMLFormElement> = {
     ...new Event("submit", { bubbles: true, cancelable: true }),
     currentTarget: formRef.current,
@@ -29,7 +29,7 @@ async function doSubmitEmailChange({
   setShowModal,
   form,
   user,
-}: DoSubmitEmailChangeArgsType) {
+}: DoSubmitEmailChangeParamsType) {
   e.preventDefault();
   setShowModal(false);
 
@@ -55,7 +55,7 @@ async function doSubmitEmailChange({
   toast.dismiss(loading);
 }
 
-async function handleChangePwd({ user }: HandleChangePwdArgsType) {
+async function handleChangePwd({ user }: HandleChangePwdParamsType) {
   const loading = toast.loading("Sending e-mail...");
 
   try {
@@ -74,7 +74,7 @@ async function handleSubmitNoEmail({
   user,
   form,
   setShowModal,
-}: HandleSubmitNoEmailArgsType) {
+}: HandleSubmitNoEmailParamsType) {
   e.preventDefault();
 
   if (user.email != form.email) {

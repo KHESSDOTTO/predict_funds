@@ -1,3 +1,5 @@
+import { AbsOrPctType } from "@/utils/types";
+import { Dispatch, SetStateAction } from "react";
 import { FinalHistogramData } from "@/utils/types";
 import type { TooltipProps } from "recharts";
 import type {
@@ -23,8 +25,14 @@ interface HistogramTooltipCursor {
   stroke?: string;
 }
 
+interface AbsOrPctHistogramViewFormPropsType {
+  absOrPct: AbsOrPctType;
+  setAbsOrPct: Dispatch<SetStateAction<AbsOrPctType>>;
+}
+
 export type {
   HistogramTooltipProps,
   NetFundingHistogramChartPropsType,
   HistogramTooltipCursor,
+  AbsOrPctHistogramViewFormPropsType,
 };

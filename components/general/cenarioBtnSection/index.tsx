@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CenariosBtnSectionProps } from "./cenarioBtSectionTypes";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function CenariosBtnSection({
   saveCenario,
@@ -26,9 +27,7 @@ export default function CenariosBtnSection({
       {/* /MOBILE */}
       {/* DESK */}
       <div className="hidden lg:flex lg:flex-col lg:w-full">
-        <h2 className="text-lg text-white/90 px-2 border-white/90 font-semibold border-b m-4 pb-2 text-left">
-          Cenarios Control
-        </h2>
+        <TitleComponent>Cenarios Control</TitleComponent>
         <div className="px-4">
           <ul className="px-2 flex flex-col gap-2 list-disc list-inside">
             <li className="w-fit transition-all duration-200 hover:text-indigo-400">

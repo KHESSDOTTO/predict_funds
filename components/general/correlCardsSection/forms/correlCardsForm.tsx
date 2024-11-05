@@ -1,4 +1,4 @@
-import type { CorrelCardsFormPropsType } from "./correlCardsFormTypes";
+import type { CorrelCardsFormPropsType } from "../correlCardsSectionTypes";
 
 export default function CorrelCardsForm({
   numMonths,

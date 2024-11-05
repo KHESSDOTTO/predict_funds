@@ -1,12 +1,10 @@
 import { useContext, useState, useEffect } from "react";
-import toast from "react-hot-toast";
 import {
   CadastroFundosType,
   DashboardControlFormType,
   FinalHistogramData,
   HistoricType,
   PredictionsType,
-  UserType,
 } from "@/utils/types";
 import ControlSection from "../controlSection";
 import { UserContext } from "@/contexts/UserContext";
@@ -20,13 +18,13 @@ import NetFundingPredChart from "../netFundingPredChart";
 import NetFundingHistogramChart from "../netFundingHistogramChart";
 import ValueQuotaChart from "../valueQuotaChart";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import type {
+  DashboardPropsType,
+  SaveCenarioParamsType,
+} from "./dashboardTypes";
+import { saveCenario } from "./dashboardFunctions";
 
-interface DashboardProps {
-  user: UserType;
-  ancoras: string[] | null;
-}
-
-export default function Dashboard({ user, ancoras }: DashboardProps) {
+export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   const userContext = useContext(UserContext);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const screenWidth = useWindowWidth();
@@ -52,12 +50,18 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
     }),
     [correls, setCorrels] = useState<any>(false),
     [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
+  const saveCenariosArgs: SaveCenarioParamsType = {
+    userContext,
+    controlForm,
+    historicData,
+    predictionData,
+  };
   const controlSectionProps = {
     setHistoricData: setHistoricData,
     setPredictionData: setPredictionData,
     controlForm: controlForm,
     setControlForm: setControlForm,
-    saveCenario: saveCenario,
+    saveCenario: () => saveCenario(saveCenariosArgs),
     setIsLoading: setIsLoading,
     registration: registration,
     setRegistration: setRegistration,
@@ -75,20 +79,6 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
       setIsMobile(true);
     }
   }, [screenWidth]);
-
-  function saveCenario() {
-    userContext.setCenarios([
-      ...userContext.cenarios,
-      {
-        id: Math.random().toString(),
-        params: controlForm,
-        historicData: historicData,
-        predictionData: predictionData,
-      },
-    ]);
-    toast.success("Saved cenario!");
-    return;
-  }
 
   return (
     <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
@@ -132,7 +122,7 @@ export default function Dashboard({ user, ancoras }: DashboardProps) {
         <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />
       </div>
       <div className="w-screen lg:mt-8 flex justify-center">
-        <CenariosBtnSection saveCenario={saveCenario} />
+        <CenariosBtnSection saveCenario={() => saveCenario(saveCenariosArgs)} />
       </div>
     </main>
   );

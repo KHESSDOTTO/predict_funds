@@ -1,4 +1,4 @@
-import { AddRowPropsType } from "./addRowTypes";
+import { AddRowPropsType } from "./predListTypes";
 
 export default function AddRow({
   onlyBack,

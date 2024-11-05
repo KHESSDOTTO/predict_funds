@@ -1,13 +1,15 @@
-import { HandleFadeOutArgsType } from "./cenarioCardTypes";
+import { HandleFadeOutParamsType } from "./cenarioCardTypes";
 
 function handleFadeOut({
   id,
+  cenarios,
+  setCenarios,
   setIsFadingOut,
   excludeCenarioFunction,
-}: HandleFadeOutArgsType): void {
+}: HandleFadeOutParamsType): void {
   setIsFadingOut(true);
   setTimeout(() => {
-    excludeCenarioFunction(id);
+    excludeCenarioFunction({ cenarioId: id, cenarios, setCenarios });
   }, 300);
 }
 

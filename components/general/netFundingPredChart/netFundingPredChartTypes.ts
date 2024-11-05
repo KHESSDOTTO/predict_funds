@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction } from "react";
 
 type UnifiedDataPredsType = HistoricType | PredictionsType;
 
-interface AdjustNetFundingChartAxisArgsType {
+interface AdjustNetFundingChartAxisParamsType {
   historic: HistoricType[];
   absOrPct: "CAPTC_LIQ_ABS_ms" | "CAPTC_LIQ_PCT_ms";
   predictions: PredictionsType[];
@@ -16,14 +16,14 @@ interface AdjustNetFundingChartAxisArgsType {
   setTicksYaxisNF: Dispatch<SetStateAction<number[]>>;
 }
 
-interface PrepareChartNFDataArgsType {
+interface PrepareChartNFDataParamsType {
   historic: HistoricType[];
   predictions: PredictionsType[];
   setUnifiedNFData: Dispatch<SetStateAction<UnifiedDataPredsType[]>>;
   setGradientOffset: Dispatch<SetStateAction<number>>;
 }
 
-interface HandleAbsOrPctChangeArgsType {
+interface HandleAbsOrPctChangeParamsType {
   e: React.ChangeEvent<HTMLInputElement>;
   setAbsOrPct: Dispatch<SetStateAction<AbsOrPctNFFieldsType>>;
   setAbsOrPctShort: Dispatch<SetStateAction<AbsOrPctType>>;
@@ -33,7 +33,7 @@ interface AbsOrPctPredsViewFormPropsType {
   absOrPct: AbsOrPctNFFieldsType;
   setAbsOrPct: Dispatch<SetStateAction<AbsOrPctNFFieldsType>>;
   setAbsOrPctShort: Dispatch<SetStateAction<AbsOrPctType>>;
-  handleAbsOrPctChange: (params: HandleAbsOrPctChangeArgsType) => void;
+  handleAbsOrPctChange: (params: HandleAbsOrPctChangeParamsType) => void;
 }
 
 interface NetFundingPredChartPropsType {
@@ -45,9 +45,9 @@ interface NetFundingPredChartPropsType {
 
 export type {
   UnifiedDataPredsType,
-  AdjustNetFundingChartAxisArgsType,
-  PrepareChartNFDataArgsType,
-  HandleAbsOrPctChangeArgsType,
+  AdjustNetFundingChartAxisParamsType,
+  PrepareChartNFDataParamsType,
+  HandleAbsOrPctChangeParamsType,
   AbsOrPctPredsViewFormPropsType,
   NetFundingPredChartPropsType,
 };
