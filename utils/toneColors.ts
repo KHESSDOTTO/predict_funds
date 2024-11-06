@@ -1,4 +1,4 @@
-const toneColorsMapTxtRG = {
+const toneColorsMapTxtRGB = {
   "-1.0": "rgba(185, 28, 28, 1)", // dark red
   "-0.9": "rgba(200, 60, 60, 1)", // medium dark red
   "-0.8": "rgba(220, 90, 90, 1)", // red
@@ -23,4 +23,4 @@ const toneColorsMapTxtRG = {
   "1.0": "rgba(20, 110, 20, 1)", // very dark green
 };
 
-export { toneColorsMapTxtRG };
+export { toneColorsMapTxtRGB };

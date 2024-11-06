@@ -1,4 +1,4 @@
-import { SideBarPropsType } from "@/utils/types";
+import { SideBarPropsType } from "@/utils/types/generalTypes/types";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 

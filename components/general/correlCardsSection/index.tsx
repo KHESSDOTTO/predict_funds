@@ -1,39 +1,54 @@
 import React, { useEffect, useState } from "react";
-import Card from "@/components/UI/card";
-import type { CardPropsType } from "@/utils/types";
+import CorrelCardsForm from "./forms/correlCardsForm";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import { ClipLoader } from "react-spinners";
 import SwiperCore from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import styles from "./correlCardsSection.module.css";
-import { ClipLoader } from "react-spinners";
+import type { CorrelCardsSectionProps } from "./correlCardsSectionTypes";
+import type { CardPropsType } from "@/utils/types/generalTypes/types";
+import Card from "@/components/UI/card";
+import { SwiperSlide } from "swiper/react";
+import TitleComponent from "@/components/UI/titleComponent";
 
 SwiperCore.use([Navigation]);
-
-interface CorrelCardsSectionProps {
-  padding: string;
-  correls: any[];
-}
 
 export default function CorrelCardsSection({
   padding,
   correls,
 }: CorrelCardsSectionProps) {
-  const h2Class =
-    "mt-4 text-lg mx-[16vw] text-white/90 p-2 border-white/90 font-semibold text-center border-b lg:m-4 lg:pb-2 lg:text-left";
   const tippyContent =
     "This section refers to the correlation between the returns on the benchmarks, given the same initial investment over the course of 6 or 12 months, as choosen below.";
-
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [selCorrels, setSelCorrels] = useState<any>([]);
   const [numMonths, setNumMonths] = useState(6);
-
-  function handleNumMonthsChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setNumMonths(Number(e.target.value));
-  }
+  const breakpoints = {
+    320: {
+      slidesPerView: 1,
+      spaceBetween: 20,
+    },
+    992: {
+      slidesPerView: 2,
+      spaceBetween: 30,
+    },
+    1200: {
+      slidesPerView: 3,
+      spaceBetween: 30,
+    },
+  };
+  const hiddenFields = [
+    "_id",
+    "CNPJ_FUNDO",
+    "janela_em_meses",
+    "ancora",
+    "data_calc_correlacao",
+    "CLASSE_ANBIMA",
+    "updated_at",
+  ];
 
   useEffect(() => {
     if (correls) {
@@ -56,12 +71,9 @@ export default function CorrelCardsSection({
     }
   }, [correls, numMonths]);
 
-  // Definindo classes CSS para o contêiner superior
-  const topWrapperClass = `w-full flex justify-center items-center py-8 px-4`;
-
   return (
     <div>
-      <h2 className={h2Class}>
+      <TitleComponent>
         Quota - Correlations
         <Tippy content={tippyContent}>
           <span className="ml-2 cursor-pointer text-blue-600 font-bold text-base">
@@ -81,34 +93,10 @@ export default function CorrelCardsSection({
             </svg>
           </span>
         </Tippy>
-      </h2>
+      </TitleComponent>
       <section className="relative w-screen" style={{ padding: padding }}>
         <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
-          <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
-            <h4 className="mr-2 md:mr-6">Correlation period: </h4>
-            <div className="flex text-xs items-center gap-1 md:text-sm">
-              <input
-                type="radio"
-                name="monthsCorrel"
-                id="monthsCorrel6"
-                value={6}
-                onChange={handleNumMonthsChange}
-                checked={numMonths === 6}
-              />
-              <label htmlFor="monthsCorrel6">6 months</label>
-            </div>
-            <div className="flex items-center gap-1 text-xs md:text-sm">
-              <input
-                type="radio"
-                name="monthsCorrel"
-                id="monthsCorrel12"
-                value={12}
-                onChange={handleNumMonthsChange}
-                checked={numMonths === 12}
-              />
-              <label>12 months</label>
-            </div>
-          </form>
+          <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
         </div>
         {isLoadingCorrels && (
           <div className="flex justify-center items-center">
@@ -126,7 +114,7 @@ export default function CorrelCardsSection({
         {!isLoadingCorrels && (
           <>
             <Swiper
-              className={topWrapperClass}
+              className={"w-full flex justify-center items-center py-8 px-4"}
               slidesPerGroup={1}
               loop={true}
               navigation={{
@@ -135,32 +123,9 @@ export default function CorrelCardsSection({
               }}
               speed={600}
               style={{ width: "80%", height: "auto" }}
-              breakpoints={{
-                320: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                992: {
-                  slidesPerView: 2,
-                  spaceBetween: 30,
-                },
-                1200: {
-                  slidesPerView: 3,
-                  spaceBetween: 30,
-                },
-              }}
+              breakpoints={breakpoints}
             >
               {selCorrels.map((cE: any[], index: number) => {
-                const hiddenFields = [
-                  "_id",
-                  "CNPJ_FUNDO",
-                  "janela_em_meses",
-                  "ancora",
-                  "data_calc_correlacao",
-                  "CLASSE_ANBIMA",
-                  "updated_at",
-                ];
-
                 const props: CardPropsType = {
                   title: cE[0],
                   imgSrc: "",
@@ -168,7 +133,7 @@ export default function CorrelCardsSection({
                 };
 
                 if (hiddenFields.includes(cE[0])) {
-                  return <div className="hidden" key={index}></div>;
+                  return null;
                 }
 
                 return (

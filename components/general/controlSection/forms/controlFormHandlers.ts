@@ -9,7 +9,7 @@ import type {
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 
 function handleControlFormChange(
   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,

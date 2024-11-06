@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HeaderPropsType } from "@/utils/types";
+import { HeaderPropsType } from "@/utils/types/generalTypes/types";
 import { useState } from "react";
 import SideBar from "../modals/sideBarHeaderModal";
 // import DisconnectBtn from "../UI/disconnectBtn";

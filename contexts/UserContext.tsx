@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import type { CenarioType, UserContextType, UserType } from "@/utils/types";
+import type { CenarioType, UserContextType, UserType } from "@/utils/types/generalTypes/types";
 import type { ReactNode } from "react";
 
 export const UserContext = createContext<UserContextType>({

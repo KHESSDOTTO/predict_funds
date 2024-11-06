@@ -2,8 +2,7 @@ import {
   RawHistogramData,
   FinalHistogramData,
   HistogramSingleTypeData,
-} from "@/utils/types";
-import { consoleLog } from "./functions";
+} from "@/utils/types/generalTypes/types";
 import { formatNumToPctStr, formatNumToStrMlnK } from "./formatNumbers";
 
 function prepareHistogram(

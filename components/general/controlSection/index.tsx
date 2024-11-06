@@ -12,6 +12,7 @@ import ControlFormDesk from "./forms/controlFormDesk";
 import ControlFormMobile from "./forms/controlFormMobile";
 import type { ControlSectionProps } from "./controlSectionTypes";
 import type { ControlFormPropsType } from "./forms/controlFormType";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function ControlSection({
   controlForm,
@@ -26,7 +27,7 @@ export default function ControlSection({
   setLoadingHistogram,
   setHistogram,
   setCorrels,
-  setHeatMapArr,
+  setHeatMapObj,
 }: ControlSectionProps) {
   const userContext = useContext(UserContext);
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
@@ -81,16 +82,14 @@ export default function ControlSection({
       controlForm.buscaCnpj,
       controlForm.anbimaClass,
       setCorrels,
-      setHeatMapArr
+      setHeatMapObj
     );
   }, [registration]);
 
   return (
     <>
       <div className="w-screen text-white/90 flex justify-center lg:block">
-        <h1 className="my-4 font-semibold text-xl text-center border-b border-white/90 p-2 lg:mx-4 lg:text-left">
-          Control Section
-        </h1>
+        <TitleComponent>Control Section</TitleComponent>
       </div>
       <div
         id="controls"

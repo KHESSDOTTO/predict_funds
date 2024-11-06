@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { prepareHistogram } from "@/functions/histogramFunctions";
+import { prepareHistogram } from "@/utils/functions/histogramFunctions";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks } from "date-fns";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ import type {
   HistoricType,
   PredictionsType,
   UserType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 
 async function getHistoricData(
@@ -156,7 +156,7 @@ async function getCorrels(
   cnpj: string,
   anbimaClass: string,
   setCorrels: Dispatch<SetStateAction<any>>,
-  setHeatMapArr: Dispatch<SetStateAction<any>>
+  setHeatMapObj: Dispatch<SetStateAction<any>>
 ) {
   const encodedCnpj = encodeURIComponent(cnpj);
   const encodedAnbimaClass = encodeURIComponent(anbimaClass);
@@ -182,11 +182,11 @@ async function getCorrels(
     );
 
     if (resCnpj && resAvgAnbimaClass) {
-      const newHeatMapArr = {
+      const newheatMapObj = {
         fund: resCnpj.data,
         avg: resAvgAnbimaClass.data,
       };
-      setHeatMapArr(newHeatMapArr);
+      setHeatMapObj(newheatMapObj);
     }
 
     return true;

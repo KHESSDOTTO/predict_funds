@@ -17,6 +17,13 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/general/valueQuotaChart",
+    "components/general/netFundingHistogramChart",
+    "components/general/netFundingPredChart"
+  ],
   "exclude": ["node_modules"]
 }
