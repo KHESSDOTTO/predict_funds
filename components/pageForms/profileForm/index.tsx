@@ -1,4 +1,4 @@
-import type { ProfileFormPropsType } from "../profileTypes";
+import type { ProfileFormPropsType } from "@/utils/types/pageTypes/profileTypes";
 
 export default function ProfileForm({
   user,
