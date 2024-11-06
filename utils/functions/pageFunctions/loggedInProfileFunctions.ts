@@ -5,7 +5,7 @@ import type {
   HandleSubmitNoEmailParamsType,
   DoSubmitEmailChangeParamsType,
   HandleChangePwdParamsType,
-} from "./profileTypes";
+} from "../../types/pageTypes/profileTypes";
 
 function handleSubmitOutside({
   formRef,

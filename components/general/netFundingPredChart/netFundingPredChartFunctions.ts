@@ -2,7 +2,7 @@ import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes"
 import {
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
-} from "@/functions/axisFunctions";
+} from "@/utils/functions/axisFunctions";
 import type { PrepareChartNFDataParamsType } from "./netFundingPredChartTypes";
 
 function adjustNetFundingChartAxis({

@@ -1,6 +1,6 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import { getToneColor } from "@/functions/functions";
-import { capitalize } from "@/functions/functions";
+import { getToneColor } from "@/utils/functions/genericFunctions";
+import { capitalize } from "@/utils/functions/genericFunctions";
 import type { RowDeskPropsType } from "./heatMapTypes";
 
 export default function RowDesk({

@@ -1,5 +1,5 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import { getToneColor } from "@/functions/functions";
+import { getToneColor } from "@/utils/functions/genericFunctions";
 import { HeatMapObjType } from "./heatMapTypes";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import type { RowMobilePropsType } from "./heatMapTypes";

@@ -1,4 +1,4 @@
-import type { HistoricType, PredictionsType } from "@/utils/types";
+import type { HistoricType, PredictionsType } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 
 interface PredListPropsType {

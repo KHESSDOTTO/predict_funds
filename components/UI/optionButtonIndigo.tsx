@@ -1,4 +1,4 @@
-import { ButtonPropsType } from "@/utils/types";
+import { ButtonPropsType } from "@/utils/types/generalTypes/types";
 
 function OptionButtonIndigo(props: ButtonPropsType) {
   const btnClass =

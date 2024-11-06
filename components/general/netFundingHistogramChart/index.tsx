@@ -13,7 +13,7 @@ import {
   Bar,
   Cell,
 } from "recharts";
-import { AbsOrPctType, FinalHistogramData } from "@/utils/types";
+import { AbsOrPctType, FinalHistogramData } from "@/utils/types/generalTypes/types";
 import { useState } from "react";
 
 export default function NetFundingHistogramChart({

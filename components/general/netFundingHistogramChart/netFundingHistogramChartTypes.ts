@@ -1,6 +1,6 @@
-import { AbsOrPctType } from "@/utils/types";
+import { AbsOrPctType } from "@/utils/types/generalTypes/types";
 import { Dispatch, SetStateAction } from "react";
-import { FinalHistogramData } from "@/utils/types";
+import { FinalHistogramData } from "@/utils/types/generalTypes/types";
 import type { TooltipProps } from "recharts";
 import type {
   ValueType,

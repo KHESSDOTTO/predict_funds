@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import styles from "./correlCardsSection.module.css";
 import type { CorrelCardsSectionProps } from "./correlCardsSectionTypes";
-import type { CardPropsType } from "@/utils/types";
+import type { CardPropsType } from "@/utils/types/generalTypes/types";
 import Card from "@/components/UI/card";
 import { SwiperSlide } from "swiper/react";
 import TitleComponent from "@/components/UI/titleComponent";

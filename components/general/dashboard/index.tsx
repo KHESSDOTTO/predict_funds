@@ -5,7 +5,7 @@ import {
   FinalHistogramData,
   HistoricType,
   PredictionsType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 import ControlSection from "../controlSection";
 import { UserContext } from "@/contexts/UserContext";
 import RegistrationInfos from "../registrationInfos";

@@ -1,5 +1,5 @@
-import { ExcludeCenarioParamsType } from "@/pages/loggedin/my_cenarios/myCenariosTypes";
-import { CenarioType } from "@/utils/types";
+import { ExcludeCenarioParamsType } from "@/utils/types/pageTypes/myCenariosTypes";
+import { CenarioType } from "@/utils/types/generalTypes/types";
 import { Dispatch, SetStateAction } from "react";
 
 interface CenarioCardPropsType {

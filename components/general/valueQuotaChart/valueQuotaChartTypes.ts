@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import type { HistoricType } from "@/utils/types";
+import type { HistoricType } from "@/utils/types/generalTypes/types";
 import type { TooltipProps } from "recharts";
 import {
   ValueType,

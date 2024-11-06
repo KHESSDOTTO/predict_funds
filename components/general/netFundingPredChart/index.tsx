@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { UnifiedDataPredsType } from "./netFundingPredChartTypes";
-import { AbsOrPctNFFieldsType, AbsOrPctType } from "@/utils/types";
+import { AbsOrPctNFFieldsType, AbsOrPctType } from "@/utils/types/generalTypes/types";
 import { NFTooltip } from "./netFundingPredChartTooltip";
 import { handleAbsOrPctChange } from "./forms/absOrPctPredsViewFormFunctions";
 import { format } from "date-fns";

@@ -5,7 +5,7 @@ import type {
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 
 interface ControlSectionProps {
   controlForm: DashboardControlFormType;

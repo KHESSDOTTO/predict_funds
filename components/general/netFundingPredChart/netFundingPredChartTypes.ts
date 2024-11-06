@@ -3,7 +3,7 @@ import {
   AbsOrPctType,
   HistoricType,
   PredictionsType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 import { Dispatch, SetStateAction } from "react";
 
 type UnifiedDataPredsType = HistoricType | PredictionsType;

@@ -9,10 +9,10 @@ import {
   excludeCenario,
   exportCenarios,
   updateFooterPosition,
-} from "./myCenariosFunctions";
+} from "@/utils/functions/pageFunctions/loggedInMyCenariosFunctions";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import type { MyCenariosPagePropsType } from "./myCenariosTypes";
+import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenariosTypes";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { cenarios, setCenarios } = useContext(UserContext);

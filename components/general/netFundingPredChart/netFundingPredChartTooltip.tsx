@@ -1,4 +1,4 @@
-import type { NFTooltipProps } from "@/utils/types";
+import type { NFTooltipProps } from "@/utils/types/generalTypes/types";
 import { formatterBrNumber } from "@/utils/numberFormatters";
 import { format } from "date-fns";
 

@@ -1,7 +1,7 @@
-import { ToneColorsInterface } from "../utils/types";
+import { ToneColorsInterface } from "../utils/types/generalTypes/types";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-import type { DoLogoutParamsType } from "../utils/types";
+import type { DoLogoutParamsType } from "../utils/types/generalTypes/types";
 
 function capitalize(string: string) {
   consoleLog({ string });

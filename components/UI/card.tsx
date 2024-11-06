@@ -1,6 +1,6 @@
-import { CardPropsType } from "@/utils/types";
+import { CardPropsType } from "@/utils/types/generalTypes/types";
 import Image from "next/image";
-import { getToneColor } from "@/functions/functions";
+import { getToneColor } from "@/utils/functions/genericFunctions";
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 

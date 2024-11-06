@@ -1,4 +1,4 @@
-import type { CenarioType, UserType } from "@/utils/types";
+import type { CenarioType, UserType } from "@/utils/types/generalTypes/types";
 import type { Dispatch, RefObject, SetStateAction } from "react";
 
 interface UpdateFooterPositionParamsType {

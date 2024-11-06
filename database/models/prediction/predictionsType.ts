@@ -1,5 +1,5 @@
 import { Document, Model } from "mongoose";
-import { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
 
 // Interface of original document on collection
 export interface PredictionDocType_doc {

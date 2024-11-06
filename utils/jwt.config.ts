@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import type { UserModelDocType } from "@/database/models/user/userType";
-import { consoleLog } from "@/functions/functions";
 
 function generateToken(user: UserModelDocType) {
   let signature: string;

@@ -1,6 +1,6 @@
-import { DashboardControlFormType, PredictionsType } from "@/utils/types";
+import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
 import { Schema, model, models } from "mongoose";
-import { buildPredKey } from "@/functions/functions";
+import { buildPredKey } from "@/utils/functions/genericFunctions";
 import { PredictionDocType, PredictionModelType } from "./predictionsType";
 
 const PredictionSchema = new Schema(

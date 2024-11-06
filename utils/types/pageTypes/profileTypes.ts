@@ -1,4 +1,4 @@
-import { UserType } from "@/utils/types";
+import { UserType } from "@/utils/types/generalTypes/types";
 import { Dispatch, SetStateAction } from "react";
 
 interface ProfilePagePropsType {

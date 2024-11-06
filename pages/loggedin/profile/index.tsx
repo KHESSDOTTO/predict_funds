@@ -8,15 +8,15 @@ import ButtonRed from "@/components/UI/buttonRed";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
 import { UserContext } from "@/contexts/UserContext";
 import LogoPredict from "@/components/UI/logoPredict";
-import type { ProfileFormType, ProfilePagePropsType } from "./profileTypes";
+import type { ProfileFormType, ProfilePagePropsType } from "@/utils/types/pageTypes/profileTypes";
 import {
   handleSubmitOutside,
   handleSubmitNoEmail,
   handleChangePwd,
   doSubmitEmailChange,
-} from "./profileFunctions";
-import ProfileForm from "./forms/profileForm";
-import { doLogout } from "@/functions/functions";
+} from "@/utils/functions/pageFunctions/loggedInProfileFunctions";
+import ProfileForm from "@/components/pageForms/profileForm";
+import { doLogout } from "@/utils/functions/genericFunctions";
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
   const router = useRouter();

@@ -4,7 +4,7 @@ import {
   PredictionsType,
   UserContextType,
   UserType,
-} from "@/utils/types";
+} from "@/utils/types/generalTypes/types";
 
 interface DashboardPropsType {
   user: UserType;

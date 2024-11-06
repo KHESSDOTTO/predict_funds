@@ -1,11 +1,11 @@
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
-import type { HistoricType } from "@/utils/types";
+import type { HistoricType } from "@/utils/types/generalTypes/types";
 import type {
   UpdateFooterPositionParamsType,
   ExcludeCenarioParamsType,
   ExportCenariosParamsType,
-} from "./myCenariosTypes";
+} from "@/utils/types/pageTypes/myCenariosTypes";
 
 function updateFooterPosition({
   footerRef,

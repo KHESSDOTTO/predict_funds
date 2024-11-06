@@ -2,15 +2,15 @@ import { verifyToken } from "@/utils/jwt.config";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/UserContext";
-import { doLogout } from "@/functions/functions";
+import { doLogout } from "@/utils/functions/genericFunctions";
 import Dashboard from "@/components/general/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 import getCachedAncoras from "@/cache/ancorasPredsCache";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import type { LoggedInHomePropsType } from "./homeType";
-import type { DoLogoutParamsType } from "@/utils/types";
+import type { LoggedInHomePropsType } from "@/utils/types/pageTypes/homeType";
+import type { DoLogoutParamsType } from "@/utils/types/generalTypes/types";
 
 export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   const router = useRouter();
