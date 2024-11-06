@@ -3,7 +3,6 @@ import {
   FinalHistogramData,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
-import { consoleLog } from "./genericFunctions";
 import { formatNumToPctStr, formatNumToStrMlnK } from "./formatNumbers";
 
 function prepareHistogram(
