@@ -25,7 +25,7 @@ interface HistogramTooltipCursor {
   stroke?: string;
 }
 
-interface AbsOrPctHistogramViewFormPropsType {
+interface VisualizationFormPropsType {
   absOrPct: AbsOrPctType;
   setAbsOrPct: Dispatch<SetStateAction<AbsOrPctType>>;
 }
@@ -34,5 +34,5 @@ export type {
   HistogramTooltipProps,
   NetFundingHistogramChartPropsType,
   HistogramTooltipCursor,
-  AbsOrPctHistogramViewFormPropsType,
+  VisualizationFormPropsType,
 };

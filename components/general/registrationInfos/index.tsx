@@ -14,7 +14,7 @@ export default function RegistrationInfos({
       id="registrationInfos"
       className="text-white flex flex-col items-center w-full lg:items-start"
     >
-      <div className="w-full">
+      <div className="flex justify-center lg:block w-full">
         <TitleComponent>Fund Infos.</TitleComponent>
       </div>
       {!isLoading && registration ? (

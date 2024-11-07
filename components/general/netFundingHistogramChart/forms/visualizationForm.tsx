@@ -1,9 +1,11 @@
-import type { AbsOrPctHistogramViewFormPropsType } from "../netFundingHistogramChartTypes";
+import { useState } from "react";
+import type { VisualizationFormPropsType } from "../netFundingHistogramChartTypes";
+import DualRangeSliderWithTippy from "./filterForm";
 
-export default function AbsOrPctHistogramViewForm({
+export default function VisualizationForm({
   absOrPct,
   setAbsOrPct,
-}: AbsOrPctHistogramViewFormPropsType) {
+}: VisualizationFormPropsType) {
   return (
     <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
       <h4 className="mr-2 md:mr-6">Visualization: </h4>

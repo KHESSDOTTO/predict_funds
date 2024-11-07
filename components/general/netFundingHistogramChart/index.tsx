@@ -1,6 +1,6 @@
 import { NetFundingHistogramChartPropsType } from "./netFundingHistogramChartTypes";
 import { ClipLoader } from "react-spinners";
-import AbsOrPctHistogramViewForm from "./forms/absOrPctHistogramViewForm";
+import VisualizationForm from "./forms/visualizationForm";
 import HistogramTooltip from "./netFundingHistogramChartTooltip";
 import HistogramTooltipCursor from "./netFundingHistogramChartCursorTooltip";
 import {
@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { AbsOrPctType, FinalHistogramData } from "@/utils/types/generalTypes/types";
 import { useState } from "react";
+import FilterForm from "./forms/filterForm";
 
 export default function NetFundingHistogramChart({
   smallV,
@@ -38,23 +39,14 @@ export default function NetFundingHistogramChart({
               : "text-lg mx-[16vw] text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left lg:max-w-full lg:w-full`}
         >
-          Preds. Histogram (Market - same ANBIMA Class)
+          Preds. Histogram <br /> (Market comparison)
         </h2>
       </div>
-      {anbimaClass && (
-        <div className="relative top-1 flex justify-center lg:block lg:mb-2 lg:top-0">
-          <ul className="list-inside lg:list-disc">
-            <li className="text-sm lg:ml-12">
-              <span className="mr-2 font-semibold italic lg:not-italic lg:text-base">
-                Anbima class:
-              </span>
-              <span className="text-white/80 italic">{anbimaClass}</span>
-            </li>
-          </ul>
-        </div>
-      )}
+      <div className="w-full">
+        <FilterForm />
+      </div>
       <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
-        <AbsOrPctHistogramViewForm {...{ absOrPct, setAbsOrPct }} />
+        <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
       </div>
       <div className="flex flex-col gap-4 lg:flex-row">
         <div
@@ -99,7 +91,9 @@ export default function NetFundingHistogramChart({
                   className="text-white"
                   interval={isMobile ? 1 : 0}
                 />
-                <YAxis />
+                <YAxis
+                  width={24}
+                />
                 <Tooltip
                   content={<HistogramTooltip />}
                   cursor={<HistogramTooltipCursor />}
