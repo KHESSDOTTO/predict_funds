@@ -1,5 +1,14 @@
+import { Dispatch, SetStateAction } from "react";
+
 interface DualRangeSliderWithTippyPropsType {
-    title: string;
+    minValSlider: number;
+    maxValSlider: number;
+    step: number;
+    controlForm: any;
+    controlFormKey: number | string;
+    setControlForm: Dispatch<SetStateAction<any>>;
 }
 
-export type { DualRangeSliderWithTippyPropsType }
+export type {
+  DualRangeSliderWithTippyPropsType,
+}

@@ -3,6 +3,7 @@ import Header from "@/components/layout/header";
 import { UserContext } from "@/contexts/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import { verifyToken } from "@/utils/jwt.config";
+import toast from "react-hot-toast";
 import LogoPredict from "@/components/UI/logoPredict";
 import CenarioCard from "@/components/general/cenarioCard";
 import {
@@ -34,6 +35,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
     resizeObserver.observe(document.body);
     updateFooterPosition(updateFooterPositionArgs);
     return () => {
+      toast.dismiss();
       window.removeEventListener("scroll", handleScroll);
       resizeObserver.disconnect();
     };

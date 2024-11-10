@@ -6,6 +6,7 @@ export default function VisualizationForm({
   absOrPct,
   setAbsOrPct,
 }: VisualizationFormPropsType) {
+  
   return (
     <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
       <h4 className="mr-2 md:mr-6">Visualization: </h4>

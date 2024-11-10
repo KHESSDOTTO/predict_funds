@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/UserContext";
 import { doLogout } from "@/utils/functions/genericFunctions";
+import toast from "react-hot-toast";
 import Dashboard from "@/components/general/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
@@ -34,7 +35,9 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
       userContext.setUser(user);
     }
 
-    return;
+    return () => {
+      toast.dismiss();
+    };
   }, []);
 
   return (

@@ -142,13 +142,6 @@ interface DashboardControlFormType {
   anbimaClass: string;
 }
 
-interface RawHistogramData {
-  CNPJ_FUNDO: string;
-  CAPTC_LIQ_ABS_ms: number;
-  CAPTC_LIQ_PCT_ms: number;
-  percentile?: number;
-}
-
 interface HistogramSingleTypeData {
   xTick: string;
   value: number;
@@ -157,7 +150,7 @@ interface HistogramSingleTypeData {
   percentile: number;
 }
 
-interface FinalHistogramData {
+interface FinalHistogramDataType {
   abs: HistogramSingleTypeData[];
   pct: HistogramSingleTypeData[];
 }
@@ -196,9 +189,8 @@ export type {
   CenarioType,
   PredictionsType,
   CadastroFundosType,
-  RawHistogramData,
   HistogramSingleTypeData,
-  FinalHistogramData,
+  FinalHistogramDataType,
   CardPropsType,
   ToneColorsInterface,
   NFTooltipProps,

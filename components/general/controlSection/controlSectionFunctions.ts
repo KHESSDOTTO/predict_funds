@@ -111,45 +111,31 @@ async function selRegistration(
   return false;
 }
 
-async function getHistogram(
+async function getDataForHistogram(
   controlForm: DashboardControlFormType,
-  windowWidth: number,
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>,
-  setHistogram: Dispatch<SetStateAction<any>>
+  setDataForHistogram: Dispatch<SetStateAction<any>>
 ) {
-  let numBins = 14;
-  const lowerLimitOutliers = 0.05;
-  const upperLimitOutliers = 0.95;
-
-  const isMobile = windowWidth <= 992;
-  if (isMobile) {
-    numBins = 8;
-  }
-
   setLoadingHistogram(true);
-  if (!controlForm.anbimaClass) return; // Won't execute if there is no anbimaClass
+
   let responsePreds: AxiosResponse<any, any> | undefined;
+
   try {
     responsePreds = await ax.post(`/prediction/getHistogramData`, {
       ...controlForm,
     });
 
     if (responsePreds) {
-      const histogram = prepareHistogram(
-        responsePreds.data,
-        numBins,
-        controlForm.buscaCnpj,
-        lowerLimitOutliers,
-        upperLimitOutliers
-      );
-
-      setHistogram(histogram);
+      setDataForHistogram(responsePreds.data);
     }
+
   } catch (err) {
     console.log(err);
+
+    return false;
   }
-  setLoadingHistogram(false);
-  return;
+  
+  return true;
 }
 
 async function getCorrels(
@@ -230,6 +216,7 @@ async function getData(
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
 ) {
+
   if (!user) {
     return;
   }
@@ -300,7 +287,7 @@ export {
   getHistoricData,
   getPredictions,
   selRegistration,
-  getHistogram,
+  getDataForHistogram,
   getCorrels,
   getRegistration,
   getData,
