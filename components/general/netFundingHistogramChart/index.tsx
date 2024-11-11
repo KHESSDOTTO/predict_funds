@@ -40,8 +40,8 @@ export default function NetFundingHistogramChart({
       vol_252: [0, 100],
       QT_DIA_CONVERSAO_COTA: [0, 100],
       QT_DIA_PAGTO_RESGATE: [0, 720],
-      NR_COTST: [0, 999999999],
-      VL_PATRIM_LIQ: [0, 9999999999999],
+      NR_COTST: [0, 1000000],
+      VL_PATRIM_LIQ: [0, 9000000000],
       // CLASSE_ANBIMA: "",
     }
   );
