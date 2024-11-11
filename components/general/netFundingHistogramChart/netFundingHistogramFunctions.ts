@@ -80,16 +80,31 @@ function initializeSliders({
     const controlFormKey = currKey;
     const title = sliderTitles[currKey as keyof SliderTitlesType];
     const startingValue = Number(dataForHistogram[0][currKey as keyof RawHistogramData]);
-    const minValSlider = dataForHistogram.reduce((min, cE) => {
-      const value = Number(cE[currKey as keyof RawHistogramData]);
 
-      return value < min ? value : min;
-    }, startingValue) as number;
-    const maxValSlider = dataForHistogram.reduce((max, cE) => {
-      const value = Number(cE[currKey as keyof RawHistogramData]);
+    const minValSlider = dataForHistogram.reduce(
+      (min, cE) => {
+        const value = Number(cE[currKey as keyof RawHistogramData]);
 
-      return value > max ? value : max;
-    }, startingValue) as number;
+        return value < min ? value : min;
+      }, startingValue
+    ) as number;
+    const maxValSlider = dataForHistogram.reduce(
+      (max, cE) => {
+      const value = Number(cE[currKey as keyof RawHistogramData]);
+      let isOutlier: boolean = false;
+
+      // Remove outliers
+      if (
+        currKey === "QT_DIA_CONVERSAO_COTA" &&
+        value >= 999
+      ) {
+        isOutlier = true;
+      }
+      // End: Remove outliers
+
+      return (value > max && !isOutlier) ? value : max;
+      }, startingValue
+    ) as number;
 
     let step: number = 1;
 
