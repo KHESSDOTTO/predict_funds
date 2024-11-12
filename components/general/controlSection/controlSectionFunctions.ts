@@ -1,8 +1,7 @@
+import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
-import { prepareHistogram } from "@/utils/functions/histogramFunctions";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks } from "date-fns";
-import toast from "react-hot-toast";
 import type {
   DashboardControlFormType,
   HistoricType,
