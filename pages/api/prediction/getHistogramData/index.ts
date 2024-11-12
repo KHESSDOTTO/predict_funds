@@ -7,12 +7,6 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).send("Only POST method accepted at this endpoint.");
   }
 
-  if (!req.body.anbimaClass) {
-    return res
-      .status(500)
-      .json({ status: "500", message: "There is no anbima class." });
-  }
-
   try {
     await connect();
     const predictions4Weeks = await PredictionsModel.getPredsForHistogram(
@@ -28,6 +22,7 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(predictions4Weeks);
   } catch (err) {
     console.error(err);
+    
     return res.status(500).json({ error: err });
   }
 }

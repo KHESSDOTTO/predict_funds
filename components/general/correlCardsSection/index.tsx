@@ -73,29 +73,31 @@ export default function CorrelCardsSection({
 
   return (
     <div>
-      <TitleComponent>
-        Quota - Correlations
-        <Tippy content={tippyContent}>
-          <span className="ml-2 cursor-pointer text-blue-600 font-bold text-base">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-6 inline relative bottom-[2px]"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
-              />
-            </svg>
-          </span>
-        </Tippy>
-      </TitleComponent>
+      <div className="flex justify-center lg:block lg:w-full">        
+        <TitleComponent>
+          Quota - Correlations
+          <Tippy content={tippyContent}>
+            <span className="ml-2 cursor-pointer text-blue-600 font-bold text-base">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-6 inline relative bottom-[2px]"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+                />
+              </svg>
+            </span>
+          </Tippy>
+        </TitleComponent>
+      </div>
       <section className="relative w-screen" style={{ padding: padding }}>
-        <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+        <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
         </div>
         {isLoadingCorrels && (

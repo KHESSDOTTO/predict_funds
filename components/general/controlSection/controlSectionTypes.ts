@@ -18,7 +18,7 @@ interface ControlSectionProps {
   saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
-  setHistogram: Dispatch<SetStateAction<any>>;
+  setDataForHistogram: Dispatch<SetStateAction<any>>;
   setCorrels: Dispatch<SetStateAction<any>>;
   setHeatMapObj: Dispatch<SetStateAction<any>>;
 }

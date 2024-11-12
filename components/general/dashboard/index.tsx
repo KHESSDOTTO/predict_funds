@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from "react";
 import {
   CadastroFundosType,
   DashboardControlFormType,
-  FinalHistogramData,
   HistoricType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
@@ -18,11 +17,12 @@ import NetFundingPredChart from "../netFundingPredChart";
 import NetFundingHistogramChart from "../netFundingHistogramChart";
 import ValueQuotaChart from "../valueQuotaChart";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import { saveCenario } from "./dashboardFunctions";
 import type {
   DashboardPropsType,
   SaveCenarioParamsType,
 } from "./dashboardTypes";
-import { saveCenario } from "./dashboardFunctions";
+import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 
 export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   const userContext = useContext(UserContext);
@@ -35,7 +35,7 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   );
   const [predictionData, setPredictionData] = useState<PredictionsType[]>([]);
   const [loadingHistogram, setLoadingHistogram] = useState<boolean>(true);
-  const [histogram, setHistogram] = useState<FinalHistogramData | false>(false);
+  const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>([]);
   const [controlForm, setControlForm] = useState<DashboardControlFormType>({
       baseDate: ancoras
         ? ancoras[ancoras.length - 1]
@@ -66,7 +66,7 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
     registration: registration,
     setRegistration: setRegistration,
     setLoadingHistogram: setLoadingHistogram,
-    setHistogram: setHistogram,
+    setDataForHistogram: setDataForHistogram,
     setCorrels: setCorrels,
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
@@ -103,11 +103,13 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
           />
           <NetFundingHistogramChart
             {...{
+              currCnpj: controlForm.buscaCnpj,
               smallV: false,
               anbimaClass: registration ? registration["CLASSE_ANBIMA"] : "",
               isMobile,
-              histogram,
+              dataForHistogram,
               loadingHistogram,
+              setLoadingHistogram,
             }}
           />
           <ValueQuotaChart

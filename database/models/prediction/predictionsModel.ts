@@ -131,7 +131,6 @@ PredictionSchema.statics.getPredsForHistogram = async function (
     varCota,
     varCotistas,
     varNF,
-    anbimaClass,
     baseDate,
     buscaCnpj,
     weeksAhead,
@@ -141,61 +140,77 @@ PredictionSchema.statics.getPredsForHistogram = async function (
   const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
   const defaultPredKeyPct = "pct_PL__0_0__0_0__0_0";
 
-  // Erro se não tiver classe anbima
-  if (!anbimaClass) {
-    console.log("There is no anbima class.");
-    return false;
-  }
-  // Fim: Erro se não tiver classe anbima
-
   try {
-    let prediction4weeks: PredictionsType[] | null = null;
+    let predictions: PredictionsType[] | null = null;
 
     const projection = {
       CNPJ_FUNDO: 1,
       CLASSE_ANBIMA: 1,
+      vol_252: 1,
+      VL_PATRIM_LIQ: 1,
+      NR_COTST: 1,
+      QT_DIA_CONVERSAO_COTA: 1,
+      QT_DIA_PAGTO_RESGATE: 1,
       [customPredKeyAbs]: 1,
       [defaultPredKeyAbs]: 1,
       [customPredKeyPct]: 1,
       [defaultPredKeyPct]: 1,
     };
 
-    prediction4weeks = await PredictionsModel.find(
+    predictions = await PredictionsModel.find(
       {
-        CLASSE_ANBIMA: anbimaClass,
         ancora: new Date(baseDate),
         weeks_ahead: weeksAhead,
       },
       projection
     );
 
-    if (!prediction4weeks) {
+    if (!predictions) {
       return false;
     }
 
-    const finalPred4weeks = prediction4weeks.map((cE) => {
+    const finalPredictions = predictions.map((cE) => {
       let predKeyAbs;
       let predKeyPct;
+      let newElement;
 
       if (cE.CNPJ_FUNDO === buscaCnpj) {
         predKeyAbs = customPredKeyAbs;
         predKeyPct = customPredKeyPct;
+        newElement = {
+          CNPJ_FUNDO: cE['CNPJ_FUNDO'],
+          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
+          vol_252: cE['vol_252'],
+          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
+          NR_COTST: cE['NR_COTST'],
+          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
+          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
+          CAPTC_LIQ_PCT_ms: cE[predKeyPct],
+        }
       } else {
         predKeyAbs = defaultPredKeyAbs;
         predKeyPct = defaultPredKeyPct;
+        newElement = {
+          CNPJ_FUNDO: "",
+          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
+          vol_252: cE['vol_252'],
+          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
+          NR_COTST: cE['NR_COTST'],
+          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
+          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
+          CAPTC_LIQ_PCT_ms: cE[predKeyPct],
+        }
       }
 
-      return {
-        CNPJ_FUNDO: cE.CNPJ_FUNDO,
-        CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
-        CAPTC_LIQ_PCT_ms: cE[predKeyPct],
-        CLASSE_ANBIMA: cE.CLASSE_ANBIMA,
-      };
+      return newElement;
     });
 
-    return finalPred4weeks;
+    return finalPredictions;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 };

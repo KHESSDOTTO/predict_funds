@@ -5,7 +5,7 @@ import {
   getData,
   getRegistration,
   getArrCnpjFundName,
-  getHistogram,
+  getDataForHistogram,
   getCorrels,
 } from "./controlSectionFunctions";
 import ControlFormDesk from "./forms/controlFormDesk";
@@ -25,7 +25,7 @@ export default function ControlSection({
   saveCenario,
   setIsLoading,
   setLoadingHistogram,
-  setHistogram,
+  setDataForHistogram,
   setCorrels,
   setHeatMapObj,
 }: ControlSectionProps) {
@@ -61,7 +61,13 @@ export default function ControlSection({
       buscaCnpj: user.cnpjs[0] || "",
     }));
 
-    getData(user, controlForm, setHistoricData, setPredictionData);
+    getData(
+      user,
+      controlForm,
+      setHistoricData,
+      setPredictionData
+    );
+
     getRegistration(
       user,
       controlForm,
@@ -70,20 +76,31 @@ export default function ControlSection({
       setNameSelectedFund,
       setIsLoading
     );
-    getArrCnpjFundName(user.cnpjs, setArrCnpjName);
+
+    getArrCnpjFundName(
+      user.cnpjs,
+      setArrCnpjName
+    );
 
     return;
   }, [user]);
 
   // Get Histogram and correlations
   useEffect(() => {
-    getHistogram(controlForm, screenWidth, setLoadingHistogram, setHistogram);
+
+    getDataForHistogram(
+      controlForm,
+      setLoadingHistogram,
+      setDataForHistogram
+    );
+
     getCorrels(
       controlForm.buscaCnpj,
       controlForm.anbimaClass,
       setCorrels,
       setHeatMapObj
     );
+
   }, [registration]);
 
   return (

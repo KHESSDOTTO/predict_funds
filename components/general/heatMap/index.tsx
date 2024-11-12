@@ -46,10 +46,10 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
 
   return (
     <div className="w-full">
-      <div>
+      <div className="flex justify-center lg:block lg:w-full">
         <TitleComponent>{title}</TitleComponent>
       </div>
-      <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+      <div className="text-sm text-gray-200 pb-4 pt-2 flex relative justify-center lg:py-6 lg:mb-6 lg:pt-4 lg:text-base">
         <HeatMapForm {...heatMapFormArgs} />
       </div>
 

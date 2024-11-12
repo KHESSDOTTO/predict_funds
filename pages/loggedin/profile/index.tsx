@@ -3,6 +3,7 @@ import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 import Header from "@/components/layout/header";
 import ButtonRed from "@/components/UI/buttonRed";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
@@ -54,7 +55,9 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
       router.push("/login");
       return;
     }
-    return;
+    return () => {
+      toast.dismiss();
+    };
   }, []);
 
   return (
