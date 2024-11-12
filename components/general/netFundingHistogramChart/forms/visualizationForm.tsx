@@ -8,7 +8,7 @@ export default function VisualizationForm({
 }: VisualizationFormPropsType) {
   
   return (
-    <form className="flex gap-2 left-24 md:gap-8 lg:absolute">
+    <form className="flex items-center gap-2 md:gap-8">
       <h4 className="mr-2 md:mr-6">Visualization: </h4>
       <div className="flex text-xs items-center gap-1 md:text-sm">
         <input
@@ -19,7 +19,7 @@ export default function VisualizationForm({
           onChange={(e) => setAbsOrPct(e.target.value as "abs" | "pct")}
           checked={absOrPct === "abs"}
         />
-        <label htmlFor="monthsCorrel6">Absolute values</label>
+        <label className="whitespace-nowrap">Absolute values</label>
       </div>
       <div className="flex items-center gap-1 text-xs md:text-sm">
         <input
@@ -30,7 +30,7 @@ export default function VisualizationForm({
           onChange={(e) => setAbsOrPct(e.target.value as "abs" | "pct")}
           checked={absOrPct === "pct"}
         />
-        <label>Percentage of Net Asset</label>
+        <label className="whitespace-nowrap">Percentage of Net Asset</label>
       </div>
     </form>
   );

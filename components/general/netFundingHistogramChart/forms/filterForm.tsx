@@ -28,8 +28,8 @@ export default function FilterForm ({
   // consoleLog({ sliderInfos });
 
   return (
-    <form className='relative p-4 flex flex-col lg:flex-row items-start lg:items-stretch gap-4 lg:gap-12'>
-      <h3 className='mx-auto lg:ml-4 lg:mr-0 text-lg lg:text-base'>Filters:</h3> 
+    <form className='relative flex flex-col lg:flex-row items-start lg:items-stretch gap-4 lg:gap-12'>
+      <h3 className='mx-auto lg:ml-0 lg:mr-0 text-lg lg:text-base'>Filters:</h3> 
       <div className='w-full flex flex-col items-center gap-4 lg:gap-8 lg:w-fit lg:items-center justify-center'>
       {
         titles.map((title, currIndex) => {

@@ -1,4 +1,5 @@
 import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
+import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { FilterDataForHistogramParamsType, PrepareDualRangeSlidersDataParamsType, InitializeSlidersParamsType, HistogramSliderInfosType, SliderTitlesType } from "./netFundingHistogramChartTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
@@ -160,7 +161,7 @@ function prepareHistogram(
     selCnpj,
     lowerLimitOutliers,
     upperLimitOutliers
-  );
+  );  
 
   const finalData = { abs: finalDataAbs, pct: finalDataPct };
 
@@ -297,9 +298,9 @@ function removeOutliersAddPercentiles(
 function getNumBinsForHistogram(isMobile: boolean): number {
 
   if (isMobile) {
-    return 8;
+    return numBinsMobile;
   } else {
-    return 14;
+    return numBinsDesktop;
   }
 
 }
