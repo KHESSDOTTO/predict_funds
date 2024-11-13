@@ -19,6 +19,7 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 import { prepareHistogram, initializeSliders, getNumBinsForHistogram } from "./netFundingHistogramFunctions";
 import { lowerLimitOutliersHistogram, upperLimitOutliersHistogram } from "./histogramSettings";
 import type { AbsOrPctType, FinalHistogramDataType } from "@/utils/types/generalTypes/types";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function NetFundingHistogramChart({
   currCnpj,
@@ -109,27 +110,36 @@ export default function NetFundingHistogramChart({
       className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-8 w-full"}`}
     >
       <div className="flex justify-center lg:block">
-        <h2
-          className={`mb-4 p-2 max-w-[75%] ${
-            smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg mx-[16vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left lg:max-w-full lg:w-full`}
-        >
+        <TitleComponent>
           Preds. Histogram <br /> (Market comparison)
-        </h2>
+        </TitleComponent>
       </div>
-      <div className="w-full">
-        <FilterForm {...filterFormProps} />
-      </div>
-      <div className="text-sm text-gray-200 py-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
-        <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
+      <div className="py-4 px-8 flex flex-col gap-8">
+        <div className="w-full">
+          <FilterForm {...filterFormProps} />
+        </div>
+        <div className="text-sm text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
+          <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
+        </div>
+        <div className="text-center text-sm lg:text-base lg:text-left">
+          <p>
+            Funds quantity:
+            &nbsp;
+            {
+              <>
+                {
+                  histogram[absOrPct].reduce((acc, cE) => {
+                    return acc += cE.value;
+                  }, 0)
+                }
+              </>
+            }
+          </p>
+        </div>
       </div>
       <div className="flex flex-col gap-4 lg:flex-row">
         <div
-          className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
-            smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[95%]"
-          } lg:rounded-xl lg:mx-8`}
+          className="bg-gray-900 pt-4 mx-2 rounded-sm lg:w-[95%] lg:rounded-xl lg:mx-8"
           style={{ height: isMobile ? 300 : 500 }}
         >
           {loadingHistogram && (
