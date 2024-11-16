@@ -1,8 +1,14 @@
 import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
-import type { FilterDataForHistogramParamsType, PrepareDualRangeSlidersDataParamsType, InitializeSlidersParamsType, HistogramSliderInfosType, SliderTitlesType } from "./netFundingHistogramChartTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
+import type {
+  FilterDataForHistogramParamsType,
+  PrepareDualRangeSlidersDataParamsType,
+  InitializeSlidersParamsType,
+  HistogramSliderInfosType,
+  SliderInitialInfosType
+} from "./netFundingHistogramChartTypes";
 import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
@@ -65,21 +71,23 @@ function filterDataForHistogram({
 function initializeSliders({
   dataForHistogram,
   histogramControlForm,
-  sliderTitles,
+  sliderInitialInfos,
   setHistogramControlForm,
   setSliderInfos,
 }: InitializeSlidersParamsType): HistogramSliderInfosType[] {
 
-  if (!dataForHistogram) {
+  if (! dataForHistogram) {
     return [];
   }
 
   const sliderKeys = Object.keys(histogramControlForm);
+  
   let newSliderInfos: HistogramSliderInfosType[] = [];
 
   sliderKeys.forEach((currKey) => {
     const controlFormKey = currKey;
-    const title = sliderTitles[currKey as keyof SliderTitlesType];
+    const title = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['title'];
+    const formatterFunction = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['formatterFunction'];
     const startingValue = Number(dataForHistogram[0][currKey as keyof RawHistogramData]);
 
     const minValSlider = dataForHistogram.reduce(
@@ -118,6 +126,7 @@ function initializeSliders({
       minValSlider,
       maxValSlider,
       step,
+      formatterFunction,
       controlForm: histogramControlForm,
       controlFormKey,
       setControlForm: setHistogramControlForm,

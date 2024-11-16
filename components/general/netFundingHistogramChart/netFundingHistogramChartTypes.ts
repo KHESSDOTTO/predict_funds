@@ -35,6 +35,7 @@ interface VisualizationFormPropsType {
 
 interface HistogramSliderInfosType extends DualRangeSliderWithTippyPropsType {
   title: string;
+  formatterFunction: (number: number) => string | number;
 } 
 
 interface FilterFormPropsType {
@@ -53,7 +54,7 @@ interface PrepareDualRangeSlidersDataParamsType {
 interface InitializeSlidersParamsType {
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
-  sliderTitles: SliderTitlesType,
+  sliderInitialInfos: SliderInitialInfosType,
   setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>,
   setSliderInfos: Dispatch<SetStateAction<HistogramSliderInfosType[]>>;
 }
@@ -67,12 +68,17 @@ interface HistogramControlFormType {
   // CLASSE_ANBIMA: [number, number];
 }
 
-interface SliderTitlesType {
-  vol_252: string;
-  QT_DIA_CONVERSAO_COTA: string;
-  QT_DIA_PAGTO_RESGATE: string;
-  NR_COTST: string;
-  VL_PATRIM_LIQ: string;
+interface SliderInitialInfosItemType {
+  title: string;
+  formatterFunction: (number: number) => string | number;
+}
+
+interface SliderInitialInfosType {
+  vol_252: SliderInitialInfosItemType;
+  QT_DIA_CONVERSAO_COTA: SliderInitialInfosItemType;
+  QT_DIA_PAGTO_RESGATE: SliderInitialInfosItemType;
+  NR_COTST: SliderInitialInfosItemType;
+  VL_PATRIM_LIQ: SliderInitialInfosItemType;
   // CLASSE_ANBIMA: string;
 }
 
@@ -89,6 +95,12 @@ interface HandleSubmitParamsType {
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
 
+interface SelFundInfosPropsType {
+  currCnpj: string;
+  dataForHistogram: RawHistogramData[];
+  sliderInitialInfos: SliderInitialInfosType;
+}
+
 export type {
   HistogramTooltipProps,
   NetFundingHistogramChartPropsType,
@@ -100,6 +112,8 @@ export type {
   PrepareDualRangeSlidersDataParamsType,
   InitializeSlidersParamsType,
   HistogramSliderInfosType,
-  SliderTitlesType,
+  SliderInitialInfosItemType,
+  SliderInitialInfosType,
   HandleSubmitParamsType,
+  SelFundInfosPropsType,
 };

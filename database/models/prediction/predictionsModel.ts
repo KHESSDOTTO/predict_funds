@@ -1,7 +1,7 @@
 import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
 import { Schema, model, models } from "mongoose";
 import { buildPredKey } from "@/utils/functions/genericFunctions";
-import { PredictionDocType, PredictionModelType } from "./predictionsType";
+import { PredictionDocType, PredictionModelType, RawHistogramData } from "./predictionsType";
 
 const PredictionSchema = new Schema(
   {
@@ -121,9 +121,9 @@ PredictionSchema.statics.getPredictions = async function (
 
 PredictionSchema.statics.getPredsForHistogram = async function (
   controlForm: DashboardControlFormType
-) {
+): Promise<RawHistogramData[]> {
   /*
-    Prediction of all CNPJs to 4 weeks forward. Prediction of the selected CNPJ are based on params (controlForm),
+    Prediction of all CNPJs for the selected period. Prediction of the selected CNPJ are based on params (controlForm),
       others default (zero), to build histogram
   */
 
@@ -165,8 +165,8 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       projection
     );
 
-    if (!predictions) {
-      return false;
+    if (! predictions) {
+      return [];
     }
 
     const finalPredictions = predictions.map((cE) => {
@@ -211,7 +211,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
   } catch (err) {
     console.log(err);
 
-    return false;
+    return [];
   }
 };
 

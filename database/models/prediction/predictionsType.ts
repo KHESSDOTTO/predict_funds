@@ -31,6 +31,12 @@ interface RawHistogramData {
   CNPJ_FUNDO: string;
   CAPTC_LIQ_ABS_ms: number;
   CAPTC_LIQ_PCT_ms: number;
+  CLASSE_ANBIMA: string;
+  vol_252: number;
+  VL_PATRIM_LIQ: number;
+  NR_COTST: number;
+  QT_DIA_CONVERSAO_COTA: number;
+  QT_DIA_PAGTO_RESGATE: number;
   percentile?: number;
 }
 

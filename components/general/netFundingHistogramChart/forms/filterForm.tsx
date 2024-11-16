@@ -41,7 +41,14 @@ export default function FilterForm ({
               <h4 className='mb-2 px-1 lg:m-0 lg:relative top-1'>
                 {title}
               </h4>
-              <DualRangeSliderWithTippy {...{ ...dualRangeSliderWithTippyProps[currIndex], controlForm: histogramControlForm }} />
+              <DualRangeSliderWithTippy
+                {
+                  ...{
+                    ...dualRangeSliderWithTippyProps[currIndex],
+                    controlForm: histogramControlForm
+                  }
+                }
+              />
             </div>
           )
         })
