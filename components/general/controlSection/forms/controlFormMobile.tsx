@@ -20,6 +20,9 @@ export default function ControlFormMobile({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
+  const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const inputRangeClass = "px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  
   return (
     <form
       id="controlFormMobile"
@@ -42,41 +45,41 @@ export default function ControlFormMobile({
         id="anbimaClass"
         value={controlForm.anbimaClass}
       />
-      <div className="flex flex-row justify-center gap-4 lg:gap-16">
-        <div className="flex flex-col gap-1 font-semibold max-w-24 lg:gap-0 text-sm">
-          <label htmlFor="baseDate" className="h-8">
+      <div className="flex flex-row justify-center gap-4">
+        <div className="flex flex-col gap-4 font-semibold max-w-32 lg:gap-0 text-sm">
+          <label htmlFor="baseDate" className="flex items-center h-8">
             Base Date
           </label>
-          <label htmlFor="buscaCnpj" className="h-8">
+          <label htmlFor="buscaCnpj" className="flex items-center h-8">
             Fund Name
           </label>
-          <label htmlFor="weeksBack" className="h-8">
+          <label htmlFor="weeksBack" className="flex items-center h-8">
             Weeks back
           </label>
-          <label htmlFor="weeksAhead" className="h-8">
+          <label htmlFor="weeksAhead" className="flex items-center h-8">
             Weeks ahead
           </label>
           <label
             htmlFor="varNF"
-            className="h-8 whitespace-nowrap overflow-scroll"
+            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
           >
             N. Funding var (%)
           </label>
           <label
             htmlFor="varCotistas overflow-scroll"
-            className="h-8 whitespace-nowrap overflow-scroll"
+            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
           >
             Shareholders qnt. var (%)
           </label>
           <label
             htmlFor="varCota"
-            className="h-8 whitespace-nowrap overflow-scroll"
+            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
           >
             Quota var (%)
           </label>
         </div>
-        <div className="flex flex-col items-stretch gap-1 lg:gap-0 overflow-hidden">
-          <div className="h-8">
+        <div className="flex flex-col items-stretch gap-4 lg:gap-0 overflow-hidden">
+          <div className="flex items-center h-8 px-1">
             <select
               id="baseDate"
               name="baseDate"
@@ -90,7 +93,7 @@ export default function ControlFormMobile({
                   setNameSelectedFund
                 )
               }
-              className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
+              className={ selectInputClass }
             >
               {ancoras?.map((cE, cI) => {
                 const ancora = new Date(cE);
@@ -102,7 +105,7 @@ export default function ControlFormMobile({
               })}
             </select>
           </div>
-          <div className="h-8">
+          <div className="flex items-center h-8 px-1">
             <select
               id="buscaCnpj"
               name="buscaCnpj"
@@ -116,7 +119,7 @@ export default function ControlFormMobile({
                   setNameSelectedFund
                 )
               }
-              className="rounded-md shadow-md shadow-gray-500 px-1 bg-white w-full"
+              className={ selectInputClass }
               title={nameSelectedFund}
             >
               {arrCnpjName &&
@@ -133,12 +136,12 @@ export default function ControlFormMobile({
                 })}
             </select>
           </div>
-          <div className="h-8">
+          <div className="flex items-center h-8 px-1">
             <input
               type="text"
               id="weeksBack"
               name="weeksBack"
-              className="rounded-md shadow-md shadow-gray-500 px-2 w-full"
+              className={ selectInputClass }
               value={controlForm.weeksBack}
               onChange={(e) =>
                 handleControlFormChange(
@@ -151,11 +154,11 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="h-8">
+          <div className="flex items-center h-8 px-1">
             <select
               id="weeksAhead"
               name="weeksAhead"
-              className="rounded-md shadow-md shadow-gray-500 px-1 w-full"
+              className={ selectInputClass }
               value={controlForm.weeksAhead}
               onChange={(e) =>
                 handleControlFormChange(
@@ -170,13 +173,13 @@ export default function ControlFormMobile({
               {predictionWeeks.map((cE, cI) => {
                 return (
                   <option key={cI} value={cE}>
-                    {cE}
+                    {cE + " weeks"}
                   </option>
                 );
               })}
             </select>
           </div>
-          <div className="flex h-8 gap-4 text-sm">
+          <div className="flex h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -197,7 +200,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className="indigo-500"
+              className={ inputRangeClass }
               value={controlForm.varNF}
               onChange={(e) =>
                 handleControlFormChange(
@@ -210,7 +213,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex h-8 gap-4 text-sm">
+          <div className="flex h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -231,7 +234,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className="indigo-500"
+              className={ inputRangeClass }
               value={controlForm.varCotistas}
               onChange={(e) =>
                 handleControlFormChange(
@@ -244,7 +247,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex h-8 gap-4">
+          <div className="flex px-1 h-8 gap-4">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -265,7 +268,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className="indigo-500"
+              className={ inputRangeClass }
               value={controlForm.varCota}
               onChange={(e) =>
                 handleControlFormChange(

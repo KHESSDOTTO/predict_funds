@@ -145,6 +145,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
     const projection = {
       CNPJ_FUNDO: 1,
+      CLASSE: 1,
       CLASSE_ANBIMA: 1,
       vol_252: 1,
       VL_PATRIM_LIQ: 1,
@@ -179,6 +180,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
         predKeyPct = customPredKeyPct;
         newElement = {
           CNPJ_FUNDO: cE['CNPJ_FUNDO'],
+          CLASSE: cE['CLASSE'],
           CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
           vol_252: cE['vol_252'],
           VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
@@ -192,7 +194,8 @@ PredictionSchema.statics.getPredsForHistogram = async function (
         predKeyAbs = defaultPredKeyAbs;
         predKeyPct = defaultPredKeyPct;
         newElement = {
-          CNPJ_FUNDO: "",
+          CNPJ_FUNDO: '',
+          CLASSE: cE['CLASSE'],
           CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
           vol_252: cE['vol_252'],
           VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],

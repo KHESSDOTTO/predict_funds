@@ -1,6 +1,9 @@
-import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
+import { formatNumToPctStr } from "@/utils/functions/formatNumbers";
 import { SliderInitialInfosType } from "./netFundingHistogramChartTypes";
-import { formatterBrNumber } from "@/utils/numberFormatters";
+import {
+  formatterBrNumber,
+  formatterBrInteger
+} from "@/utils/numberFormatters";
 
 const lowerLimitOutliersHistogram: number = 0.05;
 const upperLimitOutliersHistogram: number = 0.95;
@@ -8,23 +11,23 @@ const numBinsMobile: number = 10;
 const numBinsDesktop: number = 14;
 const sliderInitialInfos: SliderInitialInfosType = {
   vol_252: {
-    title: '',
-    formatterFunction: (number) => formatNumToPctStr(number, 2),
+    title: 'Volatility',
+    formatterFunction: (number) => formatNumToPctStr(number * 100, 1),
   },
   QT_DIA_CONVERSAO_COTA: {
-    title: '',
-    formatterFunction: (number) => formatterBrNumber.format(number),
+    title: 'Quota conversion period',
+    formatterFunction: (number) => formatterBrInteger.format(number),
   },
   QT_DIA_PAGTO_RESGATE: {
-    title: '',
-    formatterFunction: (number) => formatterBrNumber.format(number),
+    title: 'Redemption period',
+    formatterFunction: (number) => formatterBrInteger.format(number),
   },
   NR_COTST: {
-    title: '',
-    formatterFunction: (number) => formatterBrNumber.format(number),
+    title: 'Shareholders quantity',
+    formatterFunction: (number) => formatterBrInteger.format(number),
   },
   VL_PATRIM_LIQ: {
-    title: '',
+    title: 'Net Asset',
     formatterFunction: (number) => formatterBrNumber.format(number),
   },
 }

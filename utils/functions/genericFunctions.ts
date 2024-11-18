@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import type { DoLogoutParamsType } from "@/utils/types/generalTypes/types";
 
 function capitalize(string: string) {
-  consoleLog({ string });
+
   switch (string.length) {
     case 0:
       return string;
@@ -13,6 +13,7 @@ function capitalize(string: string) {
     default:
       return string[0].toUpperCase() + string.slice(1);
   }
+  
 }
 
 function getToneColor(

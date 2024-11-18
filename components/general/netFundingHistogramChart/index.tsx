@@ -51,12 +51,12 @@ export default function NetFundingHistogramChart({
   const [sliderInfos, setSliderInfos] = useState<HistogramSliderInfosType[]>([]);
   const [histogramControlForm, setHistogramControlForm] = useState<HistogramControlFormType>(
     {
-      vol_252: [0, 100],
+      vol_252: [0, 1],
       QT_DIA_CONVERSAO_COTA: [0, 100],
       QT_DIA_PAGTO_RESGATE: [0, 720],
       NR_COTST: [0, 1000000],
       VL_PATRIM_LIQ: [0, 9000000000],
-      // CLASSE_ANBIMA: "",
+      CLASSE: "",
     }
   );
   const filterFormProps: FilterFormPropsType = {
@@ -64,18 +64,15 @@ export default function NetFundingHistogramChart({
     isMobile,
     sliderInfos,
     histogramControlForm,
+    setHistogramControlForm,
     dataForHistogram,
     setHistogram,
   }
-
-  consoleLog({ histogramControlForm });
 
   useEffect(() => {
     if (dataForHistogram.length === 0) {
       return;
     }
-
-    consoleLog({ dataForHistogram });
 
     const newHistogram = prepareHistogram(
       dataForHistogram,
@@ -92,8 +89,6 @@ export default function NetFundingHistogramChart({
       setHistogramControlForm,
       setSliderInfos
     });
-
-    consoleLog({ newHistogram });
 
     setHistogram(
       newHistogram ?

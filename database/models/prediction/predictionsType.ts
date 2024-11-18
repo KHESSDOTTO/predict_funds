@@ -31,6 +31,7 @@ interface RawHistogramData {
   CNPJ_FUNDO: string;
   CAPTC_LIQ_ABS_ms: number;
   CAPTC_LIQ_PCT_ms: number;
+  CLASSE: string;
   CLASSE_ANBIMA: string;
   vol_252: number;
   VL_PATRIM_LIQ: number;

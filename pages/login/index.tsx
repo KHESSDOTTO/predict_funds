@@ -23,7 +23,7 @@ export default function LoginPage() {
     formClass =
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 lg:pt-8",
     divClass = "flex flex-col gap-1 align-center justify-center w-72",
-    labelClass = "text-center lg:text-left lg:indent-1",
+    labelClass = "text-center lg:text-left lg:indent-2",
     inputClass = "rounded-full px-4 py-1 shadow-md shadow-gray-400/50 text-black";
   // /css - classes
   const smTextShadow = { textShadow: "2px 2px 5px rgba(200,200,200,0.9)" };

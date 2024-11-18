@@ -33,6 +33,7 @@ function prepareDualRangeSlidersData ({
 }
 
 function filterDataForHistogram({
+  currCnpj,
   dataForHistogram,
   histogramControlForm
 }: FilterDataForHistogramParamsType): RawHistogramData[] {
@@ -43,27 +44,41 @@ function filterDataForHistogram({
 
   const filterKeys = Object.keys(histogramControlForm);
   const filterRangesValues = Object.values(histogramControlForm);
-  const newFilteredDataForHistogram: RawHistogramData[] = dataForHistogram.filter((cE) => {
-    const isInRange = !filterKeys.some((currKey, currKeyIndex) => {
-      const currVal = cE[currKey as keyof RawHistogramData];
 
+  const newFilteredDataForHistogram: RawHistogramData[] = dataForHistogram.filter((cE) => {
+    let isSelectedCnpj: boolean = Boolean(cE['CNPJ_FUNDO'] === currCnpj);
+
+    const isOk = !filterKeys.some((currKey, currKeyIndex) => {
+      const currVal = cE[currKey as keyof RawHistogramData];
+      const filterVal = filterRangesValues[currKeyIndex];
+
+      if (!filterVal) {
+        return false;
+      }
+
+      // Filter by CVM class (and text fields)
+      if (typeof currVal === 'string') {
+        return currVal !== filterVal;
+      }
+      // End: filter by CVM class (and text fields)
+
+      // Filter by sliders
       if (typeof currVal !== "number") {
         return true;
       }
 
-      const lowerLimit: number = filterRangesValues[currKeyIndex][0];
-      const upperLimit: number = filterRangesValues[currKeyIndex][1];
-      
+      const lowerLimit: number = filterVal[0];
+      const upperLimit: number = filterVal[1];
       const isLowerThanRangeSelected: boolean = currVal < lowerLimit;
       const isHigherThanRangeSelected: boolean = currVal > upperLimit;
   
-      // If out of range, return true to exclude from filtered data
       return isLowerThanRangeSelected || isHigherThanRangeSelected;
+      // End: filter by sliders
     });
 
-    return isInRange;
+    return isOk || isSelectedCnpj;
   });
-  
+
 
   return newFilteredDataForHistogram ? newFilteredDataForHistogram : [];
 }
@@ -80,7 +95,10 @@ function initializeSliders({
     return [];
   }
 
-  const sliderKeys = Object.keys(histogramControlForm);
+  const onlySliders = { ...histogramControlForm };
+  delete onlySliders['CLASSE'];
+
+  const sliderKeys = Object.keys(onlySliders);
   
   let newSliderInfos: HistogramSliderInfosType[] = [];
 
@@ -97,6 +115,7 @@ function initializeSliders({
         return value < min ? value : min;
       }, startingValue
     ) as number;
+
     const maxValSlider = dataForHistogram.reduce(
       (max, cE) => {
       const value = Number(cE[currKey as keyof RawHistogramData]);
@@ -118,7 +137,7 @@ function initializeSliders({
     let step: number = 1;
 
     if (maxValSlider < 10) {
-      step = 0.01;
+      step = 0.005;
     }
     
     const sliderInfoElement: HistogramSliderInfosType = {
@@ -136,8 +155,6 @@ function initializeSliders({
   });
 
   setSliderInfos(newSliderInfos);
-
-  consoleLog({ newSliderInfos });
 
   return newSliderInfos;
 }
@@ -199,8 +216,6 @@ function handleAbsPctHistogram(
   if (histogramData.length === 0 || adjustedHistogramData.length === 0) {
     return [];
   }
-
-  consoleLog({ adjustedHistogramData });
 
   let step: number;
   let currVal: number;

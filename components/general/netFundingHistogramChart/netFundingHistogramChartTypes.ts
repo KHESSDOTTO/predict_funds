@@ -1,4 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  MouseEvent,
+} from "react";
 import type { TooltipProps } from "recharts";
 import type {
   ValueType,
@@ -44,6 +48,7 @@ interface FilterFormPropsType {
   sliderInfos: HistogramSliderInfosType[];
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
+  setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
 
@@ -65,7 +70,7 @@ interface HistogramControlFormType {
   QT_DIA_PAGTO_RESGATE: [number, number];
   NR_COTST: [number, number];
   VL_PATRIM_LIQ: [number, number];
-  // CLASSE_ANBIMA: [number, number];
+  CLASSE?: string;
 }
 
 interface SliderInitialInfosItemType {
@@ -79,20 +84,24 @@ interface SliderInitialInfosType {
   QT_DIA_PAGTO_RESGATE: SliderInitialInfosItemType;
   NR_COTST: SliderInitialInfosItemType;
   VL_PATRIM_LIQ: SliderInitialInfosItemType;
-  // CLASSE_ANBIMA: string;
 }
 
 interface FilterDataForHistogramParamsType {
+  currCnpj: string;
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
 }
 
-interface HandleSubmitParamsType {
+interface HandleSubmitStaticParamsType {
   currCnpj: string;
   isMobile: boolean;
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
+}
+
+interface HandleSubmitParamsType extends HandleSubmitStaticParamsType {
+  e: MouseEvent<HTMLDivElement>;
 }
 
 interface SelFundInfosPropsType {
@@ -114,6 +123,7 @@ export type {
   HistogramSliderInfosType,
   SliderInitialInfosItemType,
   SliderInitialInfosType,
+  HandleSubmitStaticParamsType,
   HandleSubmitParamsType,
   SelFundInfosPropsType,
 };
