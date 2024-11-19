@@ -1,7 +1,6 @@
 import { formatNumToPctStr } from "@/utils/functions/formatNumbers";
 import { SliderInitialInfosType } from "./netFundingHistogramChartTypes";
 import {
-  formatterBrNumber,
   formatterBrInteger
 } from "@/utils/numberFormatters";
 
@@ -28,7 +27,7 @@ const sliderInitialInfos: SliderInitialInfosType = {
   },
   VL_PATRIM_LIQ: {
     title: 'Net Asset',
-    formatterFunction: (number) => formatterBrNumber.format(number),
+    formatterFunction: (number) => formatterBrInteger.format(number),
   },
 }
 
