@@ -19,6 +19,8 @@ export default function ControlFormDesk({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
+  const selectInputClass = "border-b-2 px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+
   return (
     <form
       id="controlFormDesk"
@@ -62,7 +64,7 @@ export default function ControlFormDesk({
                     setNameSelectedFund
                   )
                 }
-                className="border-b-2 rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                className={ selectInputClass }
               >
                 {ancoras?.map((cE, cI) => {
                   const ancora = new Date(cE);
@@ -89,7 +91,7 @@ export default function ControlFormDesk({
                     setNameSelectedFund
                   )
                 }
-                className="border-b-2 text-ellipsis rounded-t-sm lg:rounded-md lg:text-black border-black text-center w-40 bg-transparent lg:bg-gradient-to-r from-white/80 via-white to-white/80 focus:outline-none"
+                className={ selectInputClass }
                 title={nameSelectedFund}
               >
                 {arrCnpjName &&
@@ -108,7 +110,7 @@ export default function ControlFormDesk({
                 type="text"
                 id="weeksBack"
                 name="weeksBack"
-                className="border-b-2 rounded-t-sm border-black px-2 text-center w-40 bg-transparent focus:outline-none lg:bg-gradient-to-r from-white/80 via-white to-white/80 lg:rounded-md lg:text-black"
+                className={ selectInputClass }
                 value={controlForm.weeksBack}
                 onChange={(e) =>
                   handleControlFormChange(
@@ -126,7 +128,7 @@ export default function ControlFormDesk({
               <select
                 id="weeksAhead"
                 name="weeksAhead"
-                className="border-b-2 rounded-t-sm border-black text-center pl-4 w-40 bg-transparent text-black focus:outline-none lg:bg-gradient-to-r from-white/80 via-white to-white/80 lg:rounded-md"
+                className={ selectInputClass }
                 value={controlForm.weeksAhead}
                 onChange={(e) =>
                   handleControlFormChange(
@@ -141,7 +143,7 @@ export default function ControlFormDesk({
                 {predictionWeeks.map((cE, cI) => {
                   return (
                     <option key={cI} value={cE}>
-                      {cE}
+                      {cE + " weeks"}
                     </option>
                   );
                 })}
@@ -175,7 +177,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className="indigo-500"
+                  className={ selectInputClass }
                   value={controlForm.varNF}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -212,7 +214,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className="indigo-500"
+                  className={ selectInputClass }
                   value={controlForm.varCotistas}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -249,7 +251,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className="indigo-500"
+                  className={ selectInputClass }
                   value={controlForm.varCota}
                   onChange={(e) =>
                     handleControlFormChange(

@@ -86,10 +86,10 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
         <LogoPredict bold={false} />
       </div>
       <div className="mt-4 lg:mt-10">
-        <ControlSection {...controlSectionProps} />
+        <ControlSection { ...controlSectionProps } />
       </div>
       <div className="mt-6 lg:mt-8 w-screen">
-        <RegistrationInfos isLoading={isLoading} registration={registration} />
+        <RegistrationInfos isLoading={ isLoading } registration={ registration } />
       </div>
       <div className="mt-6 lg:mt-16 w-screen">
         <div className="w-full flex flex-col justify-center items-center gap-6 lg:gap-8 text-white">
@@ -117,14 +117,14 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
           />
         </div>
       </div>
-      <div className="lg:mt-12 w-screen">
-        <CorrelCardsSection padding="5px 0" correls={correls} />
+      <div className="mt-6 lg:mt-12 w-screen">
+        <CorrelCardsSection padding="5px 0" correls={ correls } />
       </div>
       <div className="mt-8 lg:mt-12 w-screen">
-        <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />
+        <HeatMap title="Heat Map - Correlations" heatMapObj={ heatMapObj } />
       </div>
       <div className="w-screen lg:mt-8 flex justify-center">
-        <CenariosBtnSection saveCenario={() => saveCenario(saveCenariosArgs)} />
+        <CenariosBtnSection saveCenario={ () => saveCenario(saveCenariosArgs) } />
       </div>
     </main>
   );

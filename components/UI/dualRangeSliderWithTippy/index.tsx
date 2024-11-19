@@ -12,6 +12,7 @@ export default function DualRangeSliderWithTippy ({
   controlForm,
   controlFormKey,
   setControlForm,
+  formatterFunction,
 }: DualRangeSliderWithTippyPropsType) {
   const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
   const [selRange, setSelRange] = useState<number | number[]>(controlForm[controlFormKey]);
@@ -37,7 +38,7 @@ export default function DualRangeSliderWithTippy ({
         >
           <Tippy
             className='lg:hidden'
-            content={`Lower: ${selRange[0].toFixed(2)}`}
+            content={`Lower: ${formatterFunction(selRange[0])}`}
             placement="bottom"
             visible={tooltipVisible}
           >
@@ -52,7 +53,7 @@ export default function DualRangeSliderWithTippy ({
           </Tippy>
           <Tippy
             className='lg:hidden'
-            content={`Higher: ${selRange[1].toFixed(2)}`}
+            content={`Higher: ${formatterFunction(selRange[1])}`}
             placement="bottom"
             visible={tooltipVisible}
           >
@@ -71,7 +72,9 @@ export default function DualRangeSliderWithTippy ({
             max={maxValSlider}
             step={step}
             value={selRange}
-            onChange={(newSelRange) => {setControlForm({...controlForm, [controlFormKey]: newSelRange})}}
+            onChange={(newSelRange) => {
+              setControlForm({...controlForm, [controlFormKey]: newSelRange})
+            }}
             styles={{
               track: {
                 backgroundColor: '#3b82f6',
@@ -93,10 +96,10 @@ export default function DualRangeSliderWithTippy ({
         </div>
         <div className="hidden lg:flex px-4 gap-1 flex-col w-72 overflow-hidden">
           <p className='flex'>
-            <span className='mr-1'>Lower:</span> {selRange[0].toFixed(2)}
+            <span className='mr-1'>Lower:</span> {formatterFunction(selRange[0])}
           </p>
           <p className='flex'>
-            <span className='mr-1'>Higher:</span> {selRange[1].toFixed(2)}
+            <span className='mr-1'>Higher:</span> {formatterFunction(selRange[1])}
           </p>
         </div>
       </div>

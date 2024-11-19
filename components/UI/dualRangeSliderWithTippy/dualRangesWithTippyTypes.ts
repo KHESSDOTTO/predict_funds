@@ -7,6 +7,7 @@ interface DualRangeSliderWithTippyPropsType {
     controlForm: any;
     controlFormKey: number | string;
     setControlForm: Dispatch<SetStateAction<any>>;
+    formatterFunction: (number: number) => string | number;
 }
 
 export type {

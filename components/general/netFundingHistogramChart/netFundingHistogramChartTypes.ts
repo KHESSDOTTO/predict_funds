@@ -1,4 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  MouseEvent,
+} from "react";
 import type { TooltipProps } from "recharts";
 import type {
   ValueType,
@@ -35,6 +39,7 @@ interface VisualizationFormPropsType {
 
 interface HistogramSliderInfosType extends DualRangeSliderWithTippyPropsType {
   title: string;
+  formatterFunction: (number: number) => string | number;
 } 
 
 interface FilterFormPropsType {
@@ -43,6 +48,7 @@ interface FilterFormPropsType {
   sliderInfos: HistogramSliderInfosType[];
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
+  setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
 
@@ -53,7 +59,7 @@ interface PrepareDualRangeSlidersDataParamsType {
 interface InitializeSlidersParamsType {
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
-  sliderTitles: SliderTitlesType,
+  sliderInitialInfos: SliderInitialInfosType,
   setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>,
   setSliderInfos: Dispatch<SetStateAction<HistogramSliderInfosType[]>>;
 }
@@ -64,29 +70,44 @@ interface HistogramControlFormType {
   QT_DIA_PAGTO_RESGATE: [number, number];
   NR_COTST: [number, number];
   VL_PATRIM_LIQ: [number, number];
-  // CLASSE_ANBIMA: [number, number];
+  CLASSE?: string;
 }
 
-interface SliderTitlesType {
-  vol_252: string;
-  QT_DIA_CONVERSAO_COTA: string;
-  QT_DIA_PAGTO_RESGATE: string;
-  NR_COTST: string;
-  VL_PATRIM_LIQ: string;
-  // CLASSE_ANBIMA: string;
+interface SliderInitialInfosItemType {
+  title: string;
+  formatterFunction: (number: number) => string | number;
+}
+
+interface SliderInitialInfosType {
+  vol_252: SliderInitialInfosItemType;
+  QT_DIA_CONVERSAO_COTA: SliderInitialInfosItemType;
+  QT_DIA_PAGTO_RESGATE: SliderInitialInfosItemType;
+  NR_COTST: SliderInitialInfosItemType;
+  VL_PATRIM_LIQ: SliderInitialInfosItemType;
 }
 
 interface FilterDataForHistogramParamsType {
+  currCnpj: string;
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
 }
 
-interface HandleSubmitParamsType {
+interface HandleSubmitStaticParamsType {
   currCnpj: string;
   isMobile: boolean;
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
+}
+
+interface HandleSubmitParamsType extends HandleSubmitStaticParamsType {
+  e: MouseEvent<HTMLDivElement>;
+}
+
+interface SelFundInfosPropsType {
+  currCnpj: string;
+  dataForHistogram: RawHistogramData[];
+  sliderInitialInfos: SliderInitialInfosType;
 }
 
 export type {
@@ -100,6 +121,9 @@ export type {
   PrepareDualRangeSlidersDataParamsType,
   InitializeSlidersParamsType,
   HistogramSliderInfosType,
-  SliderTitlesType,
+  SliderInitialInfosItemType,
+  SliderInitialInfosType,
+  HandleSubmitStaticParamsType,
   HandleSubmitParamsType,
+  SelFundInfosPropsType,
 };

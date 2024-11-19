@@ -1,4 +1,9 @@
-import { FilterFormPropsType, HistogramControlFormType, HistogramSliderInfosType, NetFundingHistogramChartPropsType } from "./netFundingHistogramChartTypes";
+import {
+  FilterFormPropsType,
+  HistogramControlFormType,
+  HistogramSliderInfosType,
+  NetFundingHistogramChartPropsType
+} from "./netFundingHistogramChartTypes";
 import { ClipLoader } from "react-spinners";
 import VisualizationForm from "./forms/visualizationForm";
 import HistogramTooltip from "./netFundingHistogramChartTooltip";
@@ -17,9 +22,17 @@ import { useEffect, useState } from "react";
 import FilterForm from "./forms/filterForm";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import { prepareHistogram, initializeSliders, getNumBinsForHistogram } from "./netFundingHistogramFunctions";
-import { lowerLimitOutliersHistogram, upperLimitOutliersHistogram } from "./histogramSettings";
-import type { AbsOrPctType, FinalHistogramDataType } from "@/utils/types/generalTypes/types";
+import {
+  lowerLimitOutliersHistogram,
+  upperLimitOutliersHistogram,
+  sliderInitialInfos
+} from "./histogramSettings";
 import TitleComponent from "@/components/UI/titleComponent";
+import SelFundInfos from "./selFundInfos";
+import type {
+  AbsOrPctType,
+  FinalHistogramDataType
+} from "@/utils/types/generalTypes/types";
 
 export default function NetFundingHistogramChart({
   currCnpj,
@@ -38,39 +51,28 @@ export default function NetFundingHistogramChart({
   const [sliderInfos, setSliderInfos] = useState<HistogramSliderInfosType[]>([]);
   const [histogramControlForm, setHistogramControlForm] = useState<HistogramControlFormType>(
     {
-      vol_252: [0, 100],
+      vol_252: [0, 1],
       QT_DIA_CONVERSAO_COTA: [0, 100],
       QT_DIA_PAGTO_RESGATE: [0, 720],
       NR_COTST: [0, 1000000],
       VL_PATRIM_LIQ: [0, 9000000000],
-      // CLASSE_ANBIMA: "",
+      CLASSE: "",
     }
   );
-  const sliderTitles = {
-    vol_252: "Volatility",
-    QT_DIA_CONVERSAO_COTA: "Quota conversion period",
-    QT_DIA_PAGTO_RESGATE: "Redemption period",
-    NR_COTST: "Shareholders quantity",
-    VL_PATRIM_LIQ: "Net Asset",
-    // CLASSE_ANBIMA: "ANBIMA class",
-  };
   const filterFormProps: FilterFormPropsType = {
     currCnpj,
     isMobile,
     sliderInfos,
     histogramControlForm,
+    setHistogramControlForm,
     dataForHistogram,
     setHistogram,
   }
-
-  consoleLog({ histogramControlForm });
 
   useEffect(() => {
     if (dataForHistogram.length === 0) {
       return;
     }
-
-    consoleLog({ dataForHistogram });
 
     const newHistogram = prepareHistogram(
       dataForHistogram,
@@ -83,12 +85,10 @@ export default function NetFundingHistogramChart({
     initializeSliders({
       dataForHistogram,
       histogramControlForm,
-      sliderTitles,
+      sliderInitialInfos,
       setHistogramControlForm,
       setSliderInfos
     });
-
-    consoleLog({ newHistogram });
 
     setHistogram(
       newHistogram ?
@@ -115,6 +115,17 @@ export default function NetFundingHistogramChart({
         </TitleComponent>
       </div>
       <div className="py-4 px-8 flex flex-col gap-8">
+        <div>
+          <SelFundInfos
+            {
+              ...{
+                currCnpj,
+                dataForHistogram,
+                sliderInitialInfos
+              }
+            }
+          />
+        </div>
         <div className="w-full">
           <FilterForm {...filterFormProps} />
         </div>

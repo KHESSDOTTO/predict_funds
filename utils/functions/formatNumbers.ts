@@ -36,9 +36,9 @@ function formatNumToPctStr(number: number, decimalPlaces: number) {
   let formattedNum: string;
 
   if (number < 0) {
-    formattedNum = number.toFixed(decimalPlaces) + "%";
-  } else {
     formattedNum = "(" + number.toFixed(decimalPlaces) + "%" + ")";
+  } else {
+    formattedNum = number.toFixed(decimalPlaces) + "%";
   }
 
   return formattedNum;

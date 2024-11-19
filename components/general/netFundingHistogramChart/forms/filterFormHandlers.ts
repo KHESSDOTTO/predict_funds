@@ -3,14 +3,18 @@ import { HandleSubmitParamsType } from "../netFundingHistogramChartTypes";
 import { filterDataForHistogram, getNumBinsForHistogram, prepareHistogram } from "../netFundingHistogramFunctions";
 
 function handleSubmit({
+  e,
   currCnpj,
   isMobile,
   dataForHistogram,
   histogramControlForm,
   setHistogram,
 }: HandleSubmitParamsType) {
+  e.preventDefault();
+
   const numBins = getNumBinsForHistogram(isMobile)
   const filteredDataForHistogram = filterDataForHistogram({
+    currCnpj,
     dataForHistogram,
     histogramControlForm
   });
