@@ -19,7 +19,7 @@ export default function ControlFormDesk({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
-  const selectInputClass = "border-b-2 px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+  const selectInputClass = "px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
 
   return (
     <form

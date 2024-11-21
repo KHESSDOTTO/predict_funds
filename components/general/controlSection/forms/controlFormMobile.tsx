@@ -46,7 +46,7 @@ export default function ControlFormMobile({
         value={controlForm.anbimaClass}
       />
       <div className="flex flex-row justify-center gap-4">
-        <div className="flex flex-col gap-4 font-semibold max-w-32 lg:gap-0 text-sm">
+        <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
           <label htmlFor="baseDate" className="flex items-center h-8">
             Base Date
           </label>
@@ -78,7 +78,7 @@ export default function ControlFormMobile({
             Quota var (%)
           </label>
         </div>
-        <div className="flex flex-col items-stretch gap-4 lg:gap-0 overflow-hidden">
+        <div className="flex flex-col items-stretch gap-2 lg:gap-0 overflow-hidden">
           <div className="flex items-center h-8 px-1">
             <select
               id="baseDate"

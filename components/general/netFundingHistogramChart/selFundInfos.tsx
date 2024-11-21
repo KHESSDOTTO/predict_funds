@@ -17,12 +17,12 @@ export default function SelFundInfos({
 
   return (
     <div className="text-center lg:text-left">
-      <h3 className="font-semibold mb-4 lg:mb-2 text-base">
+      <h3 className="mb-2 text-base lg:text-lg">
         Selected fund infos:
       </h3>
-      <ul className="flex flex-col gap-4 text-base lg:text-sm lg:gap-2">
+      <ul className="flex flex-col gap-1 text-base lg:px-2 lg:text-sm">
         <li>
-          <span className="lg:font-semibold">
+          <span>
             CVM Class
           </span>
           :
@@ -36,7 +36,7 @@ export default function SelFundInfos({
           infosArr.map(([currField, currInfos]) => {
             return(
               <li>
-                <span className="lg:font-semibold">
+                <span>
                   { currInfos['title'] }
                 </span>
                 :

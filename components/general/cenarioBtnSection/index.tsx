@@ -28,8 +28,8 @@ export default function CenariosBtnSection({
       {/* DESK */}
       <div className="hidden lg:flex lg:flex-col lg:w-full">
         <TitleComponent>Cenarios Control</TitleComponent>
-        <div className="px-4">
-          <ul className="px-2 flex flex-col gap-2 list-disc list-inside">
+        <div className="px-8">
+          <ul className="flex flex-col gap-2 list-disc list-inside">
             <li className="w-fit transition-all duration-200 hover:text-indigo-400">
               <button onClick={saveCenario}>Save Cenario</button>
             </li>

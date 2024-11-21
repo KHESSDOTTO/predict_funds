@@ -1,13 +1,13 @@
 import { CardPropsType } from "@/utils/types/generalTypes/types";
 import Image from "next/image";
 import { getToneColor } from "@/utils/functions/genericFunctions";
-import { toneColorsMapTxtRGB } from "@/utils/toneColors";
+import { toneColorsMapTxtRGBDarker } from "@/utils/toneColors";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 
 export default function Card({ title, imgSrc, correlVal }: CardPropsType) {
   const withImg = imgSrc;
   const adjustTitle = mapTickers[title] ? mapTickers[title] : title;
-  const color = getToneColor(Number(correlVal), toneColorsMapTxtRGB, 1);
+  const color = getToneColor(Number(correlVal), toneColorsMapTxtRGBDarker, 1);
 
   return (
     <article className="w-full rounded-lg border border-white py-6 px-8 flex flex-col justify-between gap-6 items-center lg:min-w-80">

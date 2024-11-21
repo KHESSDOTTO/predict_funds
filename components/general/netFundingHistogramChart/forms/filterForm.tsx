@@ -31,29 +31,31 @@ export default function FilterForm ({
   }
 
   return (
-    <form>
-      <div className='relative flex flex-col lg:flex-row items-start lg:items-stretch gap-4 lg:gap-12'>
-        <h3 className='mx-auto lg:ml-0 lg:mr-0 text-lg lg:text-base'>Filters:</h3> 
-        <div className='w-full flex flex-col items-center gap-4 lg:gap-8 lg:w-fit lg:items-center justify-center'>
-        <div className='mt-4 lg:mt-0 flex items-center gap-4 lg:w-full'>
-          <h4>
-            CVM Class:
-          </h4>
-          <select
-            className='text-black rounded-full px-4 py-1'
-              name='CLASSE'
-              value={histogramControlForm['CLASSE']}
-              onChange={(e) => setHistogramControlForm({
-                ...histogramControlForm,
-                [e.target.name]: e.target.value
-              })}
-          >
-            <option value=''>All</option>
-            <option value='Ações'>Ações</option>
-            <option value='Multimercado'>Multimercado</option>
-            <option value='Renda Fixa'>Renda Fixa</option>
-          </select>
-        </div>
+    <form className='w-fit max-w-full'>
+      <h3 className='mx-auto lg:mb-4 lg:mr-0 text-lg'>
+        Filters:
+      </h3> 
+      <div className='relative flex flex-col items-start lg:items-stretch gap-4 lg:px-2'>
+        <div className='w-full flex flex-col items-center gap-4 lg:gap-2 lg:w-fit lg:items-center justify-center'>
+          <div className='mt-4 lg:mt-0 flex items-center gap-4 lg:w-full'>
+            <h4>
+              CVM Class:
+            </h4>
+            <select
+              className='text-black rounded-full px-4 py-1'
+                name='CLASSE'
+                value={histogramControlForm['CLASSE']}
+                onChange={(e) => setHistogramControlForm({
+                  ...histogramControlForm,
+                  [e.target.name]: e.target.value
+                })}
+            >
+              <option value=''>All</option>
+              <option value='Ações'>Ações</option>
+              <option value='Multimercado'>Multimercado</option>
+              <option value='Renda Fixa'>Renda Fixa</option>
+            </select>
+          </div>
           
           {
             titles.map((title, currIndex) => {
@@ -77,7 +79,7 @@ export default function FilterForm ({
             })
           }
         </div>
-        <div className='hidden lg:flex ml-24'>
+        {/* <div className='hidden lg:flex ml-24'>
           <div
             className='flex px-4 items-center border-l-2 hover:border-yellow-600 hover:text-yellow-600 transition-all duration-300 hover:cursor-pointer'
             onClick={(e) => {
@@ -86,9 +88,9 @@ export default function FilterForm ({
           >
             <span>Apply</span>
           </div>
-        </div>
+        </div> */}
         <div
-          className='flex w-full justify-center items-center lg:hidden'
+          className='flex w-full justify-center items-center lg:relative lg:right-[120px]'
           onClick={(e) => {
             handleSubmit({ e, ...handleSubmitArgs })
           }} 
