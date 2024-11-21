@@ -27,7 +27,7 @@ export default function DualRangeSliderWithTippy ({
 
   return (
     <>
-      <div className="w-72 overflow-hidden lg:px-2 lg:w-[720px] flex gap-4 lg:gap-12">
+      <div className="w-72 overflow-hidden lg:px-2 lg:w-[600px] flex gap-4 lg:gap-12">
         <div
           className='relative p-4 w-full flex items-center overflow-hidden'
           onMouseEnter={() => setTooltipVisible(true)}

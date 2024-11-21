@@ -18,7 +18,7 @@ export default function RegistrationInfos({
         <TitleComponent>Fund Infos.</TitleComponent>
       </div>
       {!isLoading && registration ? (
-        <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-12 lg:px-2">
+        <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-8 lg:px-0">
           {fieldsToShow.map((cE, cI) => {
             return (
               <li key={titlesOfFields[cI]}>

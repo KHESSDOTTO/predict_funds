@@ -22,7 +22,7 @@ export default function LoginPage() {
       "py-auto text-4xl flex flex-col justify-end items-center mt-8 lg:mt-0 lg:relative lg:top-2",
     formClass =
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 lg:pt-8",
-    divClass = "flex flex-col gap-1 align-center justify-center w-72",
+    divClass = "flex flex-col gap-2 lg:gap-1 align-center justify-center w-72",
     labelClass = "text-center lg:text-left lg:indent-2",
     inputClass = "rounded-full px-4 py-1 shadow-md shadow-gray-400/50 text-black";
   // /css - classes
