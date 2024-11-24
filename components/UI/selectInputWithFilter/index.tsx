@@ -3,12 +3,22 @@ import {
   useEffect,
   useRef
 } from 'react';
-import { SelectWithFilterProps } from './selectInputWithFilterTypes';
+import {
+  handleBlur,
+  handleFocus,
+  handleInputChange,
+  handleKeyDown,
+  handleOptionClick
+} from './selectInputWithFilterFunctions';
 import type {
-  MouseEvent,
-  MutableRefObject
-} from 'react';
-import { consoleLog } from '@/utils/functions/genericFunctions';
+  HandleBlurParamsType,
+  HandleFocusParamsType,
+  HandleInputChangeStaticParamsType,
+  HandleKeyDownStaticParamsType,
+  HandleOptionClickStaticParamsType,
+  SelectWithFilterProps,
+  SelectWithFiltersOptionType
+} from './selectInputWithFilterTypes';
 
 export default function SelectWithFilter ({
   options,
@@ -17,77 +27,60 @@ export default function SelectWithFilter ({
   setForm,
   placeholder = "Select or search...",
 }: SelectWithFilterProps) {
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const initialSearchTerm = options.find(cE => cE.value === value)?.name ?? '';
+  const [filteredOptions, setFilteredOptions] = useState<SelectWithFiltersOptionType[]>(options);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(value || "");
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  consoleLog({value});
+  const handleInputChangeStaticArgs: HandleInputChangeStaticParamsType = {
+    setSearchTerm,
+    setDropdownOpen
+  }
+  const handleFocusArgs: HandleFocusParamsType = {
+    setSearchTerm,
+    setDropdownOpen,
+  }
+  const handleBlurArgs: HandleBlurParamsType = {
+    blurTimeoutRef,
+    options,
+    value,
+    varNameForm,
+    searchTerm,
+    setSearchTerm,
+    setForm,
+    setDropdownOpen,
+  }
+  const handleKeyDownStaticArgs: HandleKeyDownStaticParamsType = {
+    options,
+    value,
+    searchTerm,
+    varNameForm,
+    setSearchTerm,
+    setDropdownOpen,
+    setForm,
+  }
+  const handleOptionClickArgs: HandleOptionClickStaticParamsType = {
+    varNameForm,
+    blurTimeoutRef,
+    setSearchTerm,
+    setForm,
+    setDropdownOpen,
+  }
 
   useEffect(() => {
     setFilteredOptions(
       options.filter((option) =>
-        option.toLowerCase().includes(searchTerm.toLowerCase())
+        option.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, options]);
 
   useEffect(() => {
-    setSearchTerm(value || ""); // Sync the input with the selected value
+    const selectedOption = options.find(cE => cE.value === value);
+
+    setSearchTerm(selectedOption?.name || "");
   }, [value]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setDropdownOpen(true); // Show dropdown when typing
-  };
-
-  const handleOptionClick = (option: string, varNameForm: string) => {
-    if (blurTimeoutRef.current) {
-      clearTimeout(blurTimeoutRef.current); // Clear any pending blur logic
-    }
-
-    const newForm = {
-      [varNameForm]: option
-    };
-
-    setSearchTerm(option);
-    setForm(newForm);
-    setDropdownOpen(false);
-  };
-
-  const handleBlur = () => {
-    // Delay to allow clicks on dropdown items to register
-    blurTimeoutRef.current = setTimeout(() => {
-
-      if (! options.includes(searchTerm)) {
-        setSearchTerm(value || ""); // Reset to the last valid value
-      } else {
-        const newFormInput = {
-          [varNameForm]: searchTerm
-        };
-
-        consoleLog({newFormInput})
-        setForm({ [varNameForm]: searchTerm });
-      }
-  
-      setDropdownOpen(false);
-    }, 200);
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      if (!options.includes(searchTerm)) {
-        setSearchTerm(value || ""); // Reset to last valid value if invalid
-      }
-      setDropdownOpen(false); // Close dropdown on Enter
-    }
-  };
-
-  const handleFocus = () => {
-    setSearchTerm('');
-    setDropdownOpen(true);
-  };
 
   return (
     <div className='relative w-full'>
@@ -95,23 +88,33 @@ export default function SelectWithFilter ({
         ref={inputRef}
         type="text"
         value={searchTerm}
-        onChange={handleInputChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
+        onChange={(e) => handleInputChange({ e, ...handleInputChangeStaticArgs })}
+        onFocus={() => handleFocus(handleFocusArgs)}
+        onBlur={() => handleBlur(handleBlurArgs)}
+        onKeyDown={(e) => handleKeyDown({ e, ...handleKeyDownStaticArgs })}
         placeholder={placeholder}
-        className='w-full py-1 px-4 rounded-full outline-none z-10'
+        className='w-full py-1 pl-4 pr-5 rounded-full outline-none z-10 text-sm'
       />
       {isDropdownOpen && filteredOptions.length > 0 && (
-        <ul className='absolute list-none top-[120%] left-0 right-0 max-h-32 overflow-y-auto bg-white z-50 rounded-b-sm'>
+        <ul className='absolute list-none top-[110%] right-0 lg:left-0 lg:right-auto max-h-64 lg:max-h-48 max-w-[80vw] lg:max-w-[80vw] overflow-y-auto bg-white z-50 rounded-b-sm'>
           {filteredOptions.map((option) => (
             <li
-              key={option}
+              key={option.name}
+              data-name={option.name}
+              data-value={option.value}
               onMouseDown={(e) => e.preventDefault()} // Prevent blur on click
-              onClick={() => handleOptionClick(option, varNameForm)}
-              className='p-2 cursor-pointer bg-transparent hover:bg[rgba(0, 0, 0, 0.1)] rounded-b-sm'
+              onClick={(e) => {
+                let currOption: SelectWithFiltersOptionType = {
+                  name: e.currentTarget.dataset.name ?? '',
+                  value: e.currentTarget.dataset.value ?? '',
+                };
+
+                handleOptionClick({ option: currOption, ...handleOptionClickArgs })
+              }}
+              className='p-2 cursor-pointer bg-transparent hover:bg-[rgba(0,0,0,0.1)] rounded-b-sm whitespace-nowrap mx-w-32'
+              title={option.name}
             >
-              {option}
+              {option.name}
             </li>
           ))}
         </ul>
@@ -123,8 +126,8 @@ export default function SelectWithFilter ({
           viewBox="0 0 24 24"
           stroke-width="3"
           stroke="black"
-          className="size-4 z-0"
-          onClick={handleFocus}
+          className="size-3 z-0"
+          onClick={() => handleFocus(handleFocusArgs)}
         >
           <path
             stroke-linecap="round"

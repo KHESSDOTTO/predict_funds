@@ -5,6 +5,7 @@ import {
   handleControlFormSubmit,
   handleControlFormChange,
 } from "./controlFormHandlers";
+import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 
 export default function ControlFormDesk({
   controlForm,
@@ -20,6 +21,12 @@ export default function ControlFormDesk({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+  const fundOptions = arrCnpjName.map(cE => (
+    {
+      name: cE['DENOM_SOCIAL'],
+      value: cE['CNPJ_FUNDO']
+    }
+  ));
 
   return (
     <form
@@ -78,31 +85,18 @@ export default function ControlFormDesk({
             </div>
             <div className="flex flex-col font-semibold items-center gap-1">
               <label htmlFor="buscaCnpj">Fund Name</label>
-              <select
-                id="buscaCnpj"
-                name="buscaCnpj"
-                value={controlForm.buscaCnpj}
-                onChange={(e) =>
-                  handleControlFormChange(
-                    e,
-                    arrCnpjName,
-                    controlForm,
-                    setControlForm,
-                    setNameSelectedFund
-                  )
-                }
-                className={ selectInputClass }
-                title={nameSelectedFund}
-              >
-                {arrCnpjName &&
-                  arrCnpjName.map((cE: any, cI: number) => {
-                    return (
-                      <option key={cI} value={cE["CNPJ_FUNDO"]}>
-                        {cE["DENOM_SOCIAL"]}
-                      </option>
-                    );
-                  })}
-              </select>
+              <div className="w-40 text-black">
+                <SelectWithFilter
+                  {
+                    ...{
+                      options: fundOptions,
+                      value: controlForm.buscaCnpj,
+                      varNameForm: 'buscaCnpj',
+                      setForm: setControlForm,
+                    }
+                  }
+                />
+              </div>
             </div>
             <div className="flex flex-col font-semibold items-center gap-1">
               <label htmlFor="weeksBack">Weeks back</label>

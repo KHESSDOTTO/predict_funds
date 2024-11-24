@@ -37,12 +37,17 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateX(-10%)" },
           "100%": { opacity: "1", transform: "translateX(0%)" },
         },
+        growHeight: {
+          "0%": { innerHeight: "0" },
+          "100%": { innerHeight: "100%" },
+        }
       },
       // Define the animation utility using the keyframes
       animation: {
         fadeIn: "fadeIn 0.25s ease-out forwards",
         slideIn: "fadeIn 0.25s ease-out forwards",
         "fadeIn-l-r": "fadeInLeftToRight 0.5s ease-out forwards",
+        growHeight: "growHeight 0.25s linear forwards",
       },
     },
   },
