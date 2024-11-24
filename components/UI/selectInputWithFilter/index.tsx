@@ -19,6 +19,7 @@ import type {
   SelectWithFilterProps,
   SelectWithFiltersOptionType
 } from './selectInputWithFilterTypes';
+import { consoleLog } from '@/utils/functions/genericFunctions';
 
 export default function SelectWithFilter ({
   options,
@@ -27,10 +28,9 @@ export default function SelectWithFilter ({
   setForm,
   placeholder = "Select or search...",
 }: SelectWithFilterProps) {
-  const initialSearchTerm = options.find(cE => cE.value === value)?.name ?? '';
   const [filteredOptions, setFilteredOptions] = useState<SelectWithFiltersOptionType[]>(options);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [searchTerm, setSearchTerm] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const handleInputChangeStaticArgs: HandleInputChangeStaticParamsType = {
@@ -80,7 +80,7 @@ export default function SelectWithFilter ({
     const selectedOption = options.find(cE => cE.value === value);
 
     setSearchTerm(selectedOption?.name || "");
-  }, [value]);
+  }, [value, options]);
 
   return (
     <div className='relative w-full'>
