@@ -21,7 +21,7 @@ async function GetArrCnpjName(req: NextApiRequest, res: NextApiResponse) {
     const { cnpjs } = req.body;
     const arrCnpjName = await CadastroFundosModel.getArrCnpjName(cnpjs);
 
-    if (!arrCnpjName) {
+    if (! arrCnpjName) {
       return res
         .status(204)
         .json({ msg: "No CNPJ found ('false' was returned)" });

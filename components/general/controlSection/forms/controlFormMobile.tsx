@@ -6,6 +6,7 @@ import {
   handleControlFormSubmit,
   handleControlFormChange,
 } from "./controlFormHandlers";
+import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 
 export default function ControlFormMobile({
   controlForm,
@@ -22,6 +23,12 @@ export default function ControlFormMobile({
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const inputRangeClass = "px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const fundOptions = arrCnpjName.map(cE => (
+    {
+      name: cE['DENOM_SOCIAL'],
+      value: cE['CNPJ_FUNDO']
+    }
+  ));
   
   return (
     <form
@@ -78,7 +85,7 @@ export default function ControlFormMobile({
             Quota var (%)
           </label>
         </div>
-        <div className="flex flex-col items-stretch gap-2 lg:gap-0 overflow-hidden">
+        <div className="flex flex-col items-stretch gap-2 lg:gap-0">
           <div className="flex items-center h-8 px-1">
             <select
               id="baseDate"
@@ -106,7 +113,17 @@ export default function ControlFormMobile({
             </select>
           </div>
           <div className="flex items-center h-8 px-1">
-            <select
+            <SelectWithFilter
+              {
+                ...{
+                  options: fundOptions,
+                  value: controlForm.buscaCnpj,
+                  varNameForm: 'buscaCnpj',
+                  setForm: setControlForm,
+                }
+              }
+            />
+            {/* <select
               id="buscaCnpj"
               name="buscaCnpj"
               value={controlForm.buscaCnpj}
@@ -134,7 +151,7 @@ export default function ControlFormMobile({
                     </option>
                   );
                 })}
-            </select>
+            </select> */}
           </div>
           <div className="flex items-center h-8 px-1">
             <input
