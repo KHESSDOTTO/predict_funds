@@ -13,6 +13,7 @@ export default function FilterForm ({
   currCnpj,
   isMobile,
   sliderInfos,
+  sliderInitialInfos,
   dataForHistogram,
   histogramControlForm,
   setHistogramControlForm,
@@ -26,17 +27,18 @@ export default function FilterForm ({
     isMobile,
     dataForHistogram,
     histogramControlForm,
+    sliderInitialInfos,
     setHistogram,
   }
 
   return (
     <form className='w-full flex flex-col items-center lg:w-fit max-w-full'>
-      <h3 className='mx-auto lg:mb-4 lg:mr-0 text-lg'>
+      <h3 className='mx-auto mb-2 lg:mb-6 lg:mr-0 lg:w-full text-lg'>
         Filters:
-      </h3> 
+      </h3>
       <div className='relative flex flex-col items-start lg:items-stretch gap-4 w-full lg:w-fit lg:px-2'>
         <div className='w-full flex flex-col items-center gap-4 lg:gap-2 lg:w-fit lg:items-center justify-center'>
-          <div className='mt-4 mb-2 lg:mb-0 lg:mt-0 flex items-center gap-4 lg:w-full'>
+          <div className='mt-4 mb-2 lg:my-0 flex items-center gap-4 lg:w-full'>
             <h4>
               CVM Class:
             </h4>
