@@ -35,10 +35,11 @@ function prepareDualRangeSlidersData ({
 function filterDataForHistogram({
   currCnpj,
   dataForHistogram,
-  histogramControlForm
+  histogramControlForm,
+  sliderInitialInfos,
 }: FilterDataForHistogramParamsType): RawHistogramData[] {
 
-  if (dataForHistogram.length === 0 || !histogramControlForm) {
+  if (dataForHistogram.length === 0 || ! histogramControlForm) {
     return [];
   }
 
@@ -62,25 +63,28 @@ function filterDataForHistogram({
       }
       // End: filter by CVM class (and text fields)
 
-      // Filter by sliders
+      // Numeric value check
       if (typeof currVal !== "number") {
-        return true;
+        return false; // Include null/NaN values
       }
+      // End: Numeric value check
 
+      // Filter by sliders
+      const maxValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['upperLimit'];
       const lowerLimit: number = filterVal[0];
       const upperLimit: number = filterVal[1];
       const isLowerThanRangeSelected: boolean = currVal < lowerLimit;
       const isHigherThanRangeSelected: boolean = currVal > upperLimit;
+      const isHigherThanMaxValSlider: boolean = currVal > maxValSlider;
   
-      return isLowerThanRangeSelected || isHigherThanRangeSelected;
+      return (isLowerThanRangeSelected || (isHigherThanRangeSelected && ! isHigherThanMaxValSlider));
       // End: filter by sliders
     });
 
     return isOk || isSelectedCnpj;
   });
 
-
-  return newFilteredDataForHistogram ? newFilteredDataForHistogram : [];
+  return newFilteredDataForHistogram || [];
 }
 
 function initializeSliders({
@@ -104,35 +108,10 @@ function initializeSliders({
 
   sliderKeys.forEach((currKey) => {
     const controlFormKey = currKey;
+    const minValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['lowerLimit'];
+    const maxValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['upperLimit'];
     const title = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['title'];
     const formatterFunction = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['formatterFunction'];
-    const startingValue = Number(dataForHistogram[0][currKey as keyof RawHistogramData]);
-
-    const minValSlider = dataForHistogram.reduce(
-      (min, cE) => {
-        const value = Number(cE[currKey as keyof RawHistogramData]);
-
-        return value < min ? value : min;
-      }, startingValue
-    ) as number;
-
-    const maxValSlider = dataForHistogram.reduce(
-      (max, cE) => {
-      const value = Number(cE[currKey as keyof RawHistogramData]);
-      let isOutlier: boolean = false;
-
-      // Remove outliers
-      if (
-        currKey === "QT_DIA_CONVERSAO_COTA" &&
-        value >= 999
-      ) {
-        isOutlier = true;
-      }
-      // End: Remove outliers
-
-      return (value > max && !isOutlier) ? value : max;
-      }, startingValue
-    ) as number;
 
     let step: number = 1;
 
@@ -152,6 +131,7 @@ function initializeSliders({
     }
 
     newSliderInfos.push(sliderInfoElement)
+    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }))
   });
 
   setSliderInfos(newSliderInfos);

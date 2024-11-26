@@ -39,12 +39,12 @@ interface VisualizationFormPropsType {
 
 interface HistogramSliderInfosType extends DualRangeSliderWithTippyPropsType {
   title: string;
-  formatterFunction: (number: number) => string | number;
 } 
 
 interface FilterFormPropsType {
   currCnpj: string;
   isMobile: boolean;
+  sliderInitialInfos: SliderInitialInfosType;
   sliderInfos: HistogramSliderInfosType[];
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
@@ -76,6 +76,8 @@ interface HistogramControlFormType {
 interface SliderInitialInfosItemType {
   title: string;
   formatterFunction: (number: number) => string | number;
+  lowerLimit: number;
+  upperLimit: number;
 }
 
 interface SliderInitialInfosType {
@@ -90,6 +92,7 @@ interface FilterDataForHistogramParamsType {
   currCnpj: string;
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
+  sliderInitialInfos: SliderInitialInfosType,
 }
 
 interface HandleSubmitStaticParamsType {
@@ -97,6 +100,7 @@ interface HandleSubmitStaticParamsType {
   isMobile: boolean;
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
+  sliderInitialInfos: SliderInitialInfosType;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
 

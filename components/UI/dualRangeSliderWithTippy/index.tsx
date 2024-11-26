@@ -53,7 +53,7 @@ export default function DualRangeSliderWithTippy ({
           </Tippy>
           <Tippy
             className='lg:hidden'
-            content={`Higher: ${formatterFunction(selRange[1])}`}
+            content={`Higher: ${formatterFunction(selRange[1]) + (selRange[1] == maxValSlider ? " +" : "")}`}
             placement="bottom"
             visible={tooltipVisible}
           >
@@ -95,11 +95,27 @@ export default function DualRangeSliderWithTippy ({
           />
         </div>
         <div className="hidden lg:flex px-4 gap-1 flex-col w-72 overflow-hidden">
-          <p className='flex'>
-            <span className='mr-1'>Lower:</span> {formatterFunction(selRange[0])}
+          <p className='flex whitespace-nowrap overflow-visible'>
+            <span className='mr-1'>
+              Lower:
+            </span>
+            <span>
+              { formatterFunction(selRange[0]) }
+            </span>
           </p>
-          <p className='flex'>
-            <span className='mr-1'>Higher:</span> {formatterFunction(selRange[1])}
+          <p className='flex whitespace-nowrap overflow-visible'>
+            <span className='mr-1'>
+              Higher:
+            </span>
+            <span>
+              { formatterFunction(selRange[1]) }
+            </span>
+            {
+              selRange[1] == maxValSlider &&
+              <span className='text-base ml-1' style={{lineHeight: "20px"}}>
+                +
+              </span>
+            }
           </p>
         </div>
       </div>

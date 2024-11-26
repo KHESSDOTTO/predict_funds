@@ -54,14 +54,15 @@ export default function NetFundingHistogramChart({
       vol_252: [0, 1],
       QT_DIA_CONVERSAO_COTA: [0, 100],
       QT_DIA_PAGTO_RESGATE: [0, 720],
-      NR_COTST: [0, 1000000],
-      VL_PATRIM_LIQ: [0, 9000000000],
+      NR_COTST: [0, 100000],
+      VL_PATRIM_LIQ: [0, 9999999999],
       CLASSE: "",
     }
   );
   const filterFormProps: FilterFormPropsType = {
     currCnpj,
     isMobile,
+    sliderInitialInfos,
     sliderInfos,
     histogramControlForm,
     setHistogramControlForm,
@@ -127,10 +128,10 @@ export default function NetFundingHistogramChart({
           />
         </div>
         <div className="w-full">
-          <FilterForm {...filterFormProps} />
+          <FilterForm { ...filterFormProps } />
         </div>
         <div className="text-sm text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
-          <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
+          <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
         </div>
         <div className="text-center text-sm lg:text-base lg:text-left">
           <p>
@@ -138,11 +139,7 @@ export default function NetFundingHistogramChart({
             &nbsp;
             {
               <>
-                {
-                  histogram[absOrPct].reduce((acc, cE) => {
-                    return acc += cE.value;
-                  }, 0)
-                }
+                { histogram[absOrPct].reduce((acc, cE) => (acc += cE.value), 0) }
               </>
             }
           </p>
