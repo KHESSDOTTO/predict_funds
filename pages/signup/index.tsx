@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import BackLink from "@/components/UI/backLink";
+import { SignUpFormType } from "@/utils/types/pageTypes/signupTypes";
+import { handleChangeSignUpForm, handleSubmitSignUpForm } from "@/utils/functions/pageFunctions/signupFunctions";
 
 export default function SignUpPage() {
   const router = useRouter(),
-    [form, setForm] = useState({
+    [form, setForm] = useState<SignUpFormType>({
       username: "",
       cnpj: "",
       email: "",
@@ -27,92 +29,6 @@ export default function SignUpPage() {
       "rounded-md border border-gray-400 px-1 shadow-white/30 shadow-sm text-black";
   const lgTextShadow = { textShadow: "1px 1px 2px gray" };
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    let newVal = e.target.value;
-    if (e.target.name === "cnpj") {
-      const cnpjNum = e.target.value.replaceAll(/[.\/-]/gm, ""),
-        lenNum = cnpjNum.length,
-        len = e.target.value.length,
-        specialChars = [".", "/", "-"];
-      if (!specialChars.includes(e.target.value[len - 2])) {
-        switch (lenNum) {
-          case 3:
-            newVal =
-              e.target.value.slice(0, lenNum - 1) +
-              "." +
-              e.target.value.slice(lenNum - 1, lenNum);
-            break;
-          case 6:
-            newVal =
-              e.target.value.slice(0, lenNum) +
-              "." +
-              e.target.value.slice(lenNum, lenNum + 1);
-            break;
-          case 9:
-            newVal =
-              e.target.value.slice(0, lenNum + 1) +
-              "/" +
-              e.target.value.slice(lenNum + 1, lenNum + 2);
-            break;
-          case 13:
-            newVal =
-              e.target.value.slice(0, lenNum + 2) +
-              "-" +
-              e.target.value.slice(lenNum + 2, lenNum + 3);
-            break;
-          case 15:
-            newVal = e.target.value.slice(0, len - 1);
-            break;
-          default:
-            break;
-        }
-      }
-      setForm({ ...form, [e.target.name]: newVal });
-    } else if (e.target.name === "contactPhone") {
-      const len = e.target.value.length,
-        lastChar = e.target.value[len - 1];
-      if (len === 1 && lastChar !== "+") {
-        newVal = "+" + newVal;
-      }
-      if (len > 14) {
-        newVal = e.target.value.slice(0, len - 1);
-      }
-      setForm({ ...form, [e.target.name]: newVal });
-    } else {
-      setForm({ ...form, [e.target.name]: newVal });
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const clone = {
-      ...form,
-      contactPhone: form.contactPhone.replaceAll(/[+]/gm, ""),
-      cnpjs: [form.cnpj],
-    };
-    if (clone.password !== clone.passwordConfirm) {
-      console.log(
-        "The 'password confirm' field does not match the 'password' field."
-      );
-      toast.error(
-        "The 'password confirm' field does not match the 'password' field."
-      );
-      return;
-    }
-    const loading = toast.loading("Creating user...");
-    try {
-      await ax.post("/user/create", { ...clone });
-      toast.success("User created successfully!");
-      router.push("/login");
-    } catch (err) {
-      console.log(err);
-      toast.error(
-        "Error creating the user. Please, check the informations provided."
-      );
-    }
-    toast.dismiss(loading);
-  }
-
   return (
     <div className="bg-gradient-to-br from-black via-[rgb(30,50,70)] from-25% lg:from-0% to-black">
       <BackLink color="white" />
@@ -120,7 +36,7 @@ export default function SignUpPage() {
         <h1 className={h1Class} style={lgTextShadow}>
           Sign up
         </h1>
-        <form className={formClass} onSubmit={handleSubmit}>
+        <form className={formClass} onSubmit={(e) => handleSubmitSignUpForm({ e, form, ax, router })}>
           <div className={divClass}>
             <label className={labelClass} htmlFor="username">
               Username
@@ -131,7 +47,7 @@ export default function SignUpPage() {
               name="username"
               type="text"
               value={form.username}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
             ></input>
           </div>
           <div className={divClass}>
@@ -144,7 +60,7 @@ export default function SignUpPage() {
               name="cnpj"
               type="text"
               value={form.cnpj}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
               placeholder=" xx.xxx.xxx/xxxx-xx"
             ></input>
           </div>
@@ -158,7 +74,7 @@ export default function SignUpPage() {
               name="email"
               type="email"
               value={form.email}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
               placeholder=" example@ex.com"
             ></input>
           </div>
@@ -175,7 +91,7 @@ export default function SignUpPage() {
               name="contactPhone"
               type="text"
               value={form.contactPhone}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
               placeholder=" +xxxxxxxxxxxxx"
             ></input>
           </div>
@@ -189,7 +105,7 @@ export default function SignUpPage() {
               name="address"
               type="text"
               value={form.address}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
             ></input>
           </div>
           <div className={divClass}>
@@ -206,7 +122,7 @@ export default function SignUpPage() {
               name="password"
               type="password"
               value={form.password}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
             ></input>
           </div>
           <div className={divClass}>
@@ -219,11 +135,11 @@ export default function SignUpPage() {
               name="passwordConfirm"
               type="password"
               value={form.passwordConfirm}
-              onChange={handleChange}
+              onChange={(e) => handleChangeSignUpForm({ e, setForm })}
             ></input>
           </div>
           <div className="self-center mt-6">
-            <ButtonIndigo shadowSize="md" shadowColor="white">
+            <ButtonIndigo shadowSize="md" shadowColor="white/30">
               Create user
             </ButtonIndigo>
           </div>

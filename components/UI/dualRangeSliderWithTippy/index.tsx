@@ -27,7 +27,7 @@ export default function DualRangeSliderWithTippy ({
 
   return (
     <>
-      <div className="w-72 overflow-hidden lg:px-2 lg:w-[600px] flex gap-4 lg:gap-12">
+      <div className="w-72 overflow-hidden flex flex-col lg:px-2 lg:w-[360px] lg:relative">
         <div
           className='relative p-4 w-full flex items-center overflow-hidden'
           onMouseEnter={() => setTooltipVisible(true)}
@@ -94,29 +94,31 @@ export default function DualRangeSliderWithTippy ({
             }}
           />
         </div>
-        <div className="hidden lg:flex px-4 gap-1 flex-col w-72 overflow-hidden">
-          <p className='flex whitespace-nowrap overflow-visible'>
-            <span className='mr-1'>
-              Lower:
-            </span>
-            <span>
-              { formatterFunction(selRange[0]) }
-            </span>
-          </p>
-          <p className='flex whitespace-nowrap overflow-visible'>
-            <span className='mr-1'>
-              Higher:
-            </span>
-            <span>
-              { formatterFunction(selRange[1]) }
-            </span>
-            {
-              selRange[1] == maxValSlider &&
-              <span className='text-base ml-1' style={{lineHeight: "20px"}}>
-                +
+        <div className="hidden lg:block h-4 w-full relative justify-center text-xs px-4 overflow-hidden">
+          <div className='absolute flex w-fit bottom-0 right-[50%] translate-x-[50%]'>
+            <p className='flex whitespace-nowrap overflow-visible mr-2'>
+              <span className='mr-1'>
+                Lower:
               </span>
-            }
-          </p>
+              <span>
+                { formatterFunction(selRange[0]) }
+              </span>
+            </p>
+            <p className='flex whitespace-nowrap overflow-visible relative'>
+              <span className='mr-1'>
+                Higher:
+              </span>
+              <span>
+                { formatterFunction(selRange[1]) }
+              </span>
+              {
+                selRange[1] == maxValSlider &&
+                <span className='absolute bottom-[50%] translate-y-[50%] left-[102%]'>
+                  +
+                </span>
+              }
+            </p>
+          </div>
         </div>
       </div>
     </>
