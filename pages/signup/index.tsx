@@ -139,7 +139,7 @@ export default function SignUpPage() {
             ></input>
           </div>
           <div className="self-center mt-6">
-            <ButtonIndigo shadowSize="md" shadowColor="white">
+            <ButtonIndigo shadowSize="md" shadowColor="white/30">
               Create user
             </ButtonIndigo>
           </div>

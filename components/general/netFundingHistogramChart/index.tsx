@@ -108,7 +108,7 @@ export default function NetFundingHistogramChart({
   return (
     <div
       id="HistogramDiv"
-      className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "py-8 w-full"}`}
+      className={` ${smallV ? "px-2 lg:w-[48.5%] hidden" : "w-full"}`}
     >
       <div className="flex justify-center lg:block">
         <TitleComponent>
@@ -136,81 +136,94 @@ export default function NetFundingHistogramChart({
 
           (
             <>
-              <div className="py-4 px-8 flex flex-col gap-8">
-                <div>
-                  <SelFundInfos
-                    {
-                      ...{
-                        currCnpj,
-                        dataForHistogram,
-                        sliderInitialInfos
-                      }
-                    }
-                  />
-                </div>
-                <div className="w-full">
-                  <FilterForm { ...filterFormProps } />
-                </div>
-                <div className="text-sm text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
-                  <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
-                </div>
-                <div className="text-center text-sm lg:text-base lg:text-left">
-                  <p>
-                    Funds quantity:
-                    &nbsp;
-                    {
-                      <>
-                        { histogram[absOrPct].reduce((acc, cE) => (acc += cE.value), 0) }
-                      </>
-                    }
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 lg:flex-row">
-                <div
-                  className="bg-gray-900 pt-4 mx-2 rounded-sm lg:w-[95%] lg:rounded-xl lg:mx-8"
-                  style={{ height: isMobile ? 300 : 500 }}
-                >
-                  {!loadingHistogram && (
-                    <ResponsiveContainer
-                      height={smallV ? 200 : isMobile ? 300 : 500}
-                      minWidth={250}
-                    >
-                      <BarChart
-                        width={900}
-                        height={isMobile ? 300 : 500}
-                        data={
-                          histogram
-                            ? histogram[absOrPct]
-                            : []
+              <div className="py-4 px-8 flex flex-col gap-6">
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <SelFundInfos
+                      {
+                        ...{
+                          currCnpj,
+                          dataForHistogram,
+                          sliderInitialInfos
                         }
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col lg:flex-row">
+                  <div className="w-full lg:w-fit">
+                    <FilterForm { ...filterFormProps } />
+                  </div>
+                  <div className="flex flex-grow mt-2 flex-col lg:mt-0 lg:relative">
+                    <div className="text-sm lg:px-1 py-4 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
+                      <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
+                    </div>
+                    <div className="hidden lg:block text-center text-gray-400 text-sm lg:text-base lg:text-left lg:absolute lg:top-2 lg:right-1">
+                      <p>
+                        Funds count:
+                        &nbsp;
+                        {
+                          <>
+                            { histogram[absOrPct].reduce((acc, cE) => (acc += cE.value), 0) }
+                          </>
+                        }
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <div
+                        className="bg-gray-900 pt-4 mx-2 lg:mx-0 rounded-sm lg:w-full lg:rounded-xl relative"
                       >
-                        <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
-                        <XAxis
-                          dataKey="xTick"
-                          fontSize={isMobile ? 10 : 11}
-                          className="text-white"
-                          interval={isMobile ? 1 : 0}
-                        />
-                        <YAxis
-                          width={24}
-                        />
-                        <Tooltip
-                          content={<HistogramTooltip />}
-                          cursor={<HistogramTooltipCursor />}
-                        />
-                        <Bar dataKey="value" color="black">
-                          {histogram &&
-                            histogram[absOrPct]?.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
-                              />
-                            ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  )}
+                        <ResponsiveContainer
+                          height={smallV ? 200 : isMobile ? 350 : 500}
+                          minWidth={250}
+                        >
+                          <BarChart
+                            data={
+                              histogram
+                                ? histogram[absOrPct]
+                                : []
+                            }
+                          >
+                            <CartesianGrid strokeLinecap="round" strokeWidth={0.5} />
+                            <XAxis
+                              dataKey="xTick"
+                              fontSize={isMobile ? 10 : 11}
+                              className="text-white"
+                              interval={isMobile ? 1 : 0}
+                            />
+                            <YAxis
+                              width={isMobile ? 28 : 48}
+                            />
+                            <Tooltip
+                              content={<HistogramTooltip />}
+                              cursor={<HistogramTooltipCursor />}
+                            />
+                            <Bar dataKey="value" color="black">
+                              {histogram &&
+                                histogram[absOrPct]?.map((entry, index) => (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
+                                  />
+                                ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                        <div className="block lg:hidden text-gray-400 text-base absolute bottom-[-8px] right-[50%] translate-x-[50%]">
+                          <p>
+                            Funds count:
+                            &nbsp;
+                            {
+                              <>
+                                { histogram[absOrPct].reduce((acc, cE) => (acc += cE.value), 0) }
+                              </>
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>

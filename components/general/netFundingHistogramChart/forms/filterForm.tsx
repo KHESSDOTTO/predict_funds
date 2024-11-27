@@ -33,7 +33,7 @@ export default function FilterForm ({
 
   return (
     <form className='w-full flex flex-col items-center lg:w-fit max-w-full'>
-      <h3 className='mx-auto mb-2 lg:mb-6 lg:mr-0 lg:w-full text-lg'>
+      <h3 className='mx-auto mb-2 lg:mb-4 lg:mr-0 lg:w-full text-lg'>
         Filters:
       </h3>
       <div className='relative flex flex-col items-start lg:items-stretch gap-4 w-full lg:w-fit lg:px-2'>
@@ -81,12 +81,12 @@ export default function FilterForm ({
           }
         </div>
         <div
-          className='flex w-full justify-center items-center lg:relative lg:right-[120px]'
+          className='flex w-full justify-center items-center lg:mt-2'
           onClick={(e) => {
             handleSubmit({ e, ...handleSubmitArgs })
           }} 
         >
-          <ButtonIndigo shadowColor='white/30' shadowSize='sm'>
+          <ButtonIndigo shadowColor='white/30' shadowSize='md'>
             Apply
           </ButtonIndigo>
         </div>
