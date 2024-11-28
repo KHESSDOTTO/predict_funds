@@ -41,6 +41,8 @@ interface NetFundingPredChartPropsType {
   predictions: PredictionsType[];
   smallV: boolean;
   isMobile: boolean;
+  predList?: boolean;
+  title?: string;
 }
 
 export type {
