@@ -42,11 +42,14 @@ function excludeCenario({
 }
 
 function exportCenarios({ cenarios }: ExportCenariosParamsType) {
+
   if (cenarios.length === 0) {
     toast.error("No cenarios were saved to export.");
     return;
   }
+
   const workbook = XLSX.utils.book_new();
+
   cenarios.forEach((cenario, i) => {
     const ws_name = "Cenario " + (i + 1);
     const colsToHide = ["TP_FUNDO", "_id"];
@@ -61,9 +64,11 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
       .slice(cenario.predictionData.length - 1)
       .forEach((cE) => {
         const predsSubArray = Object.entries(cE).map(([cK, cV]) => {
+
           if (Array.isArray(cV)) {
             return [cK, ...cV];
           }
+          
           return [cK, cV];
         });
         predsArray.push(...predsSubArray);
@@ -85,9 +90,11 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
         return [key, dataRow[key]];
       });
       const result = orderedDataRow.map(([cK, cV]) => {
+
         if (typeof cK == "string" && !colsToHide.includes(cK)) {
           return cV;
         }
+
         return false;
       });
 
@@ -107,6 +114,7 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
     const worksheet = XLSX.utils.aoa_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
   });
+
   XLSX.writeFile(workbook, "export-cenarios.xlsx");
 }
 
