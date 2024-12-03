@@ -94,6 +94,7 @@ function initializeSliders({
   dataForHistogram,
   histogramControlForm,
   sliderInitialInfos,
+  setCurrAppliedFilters,
   setHistogramControlForm,
   setSliderInfos,
 }: InitializeSlidersParamsType): HistogramSliderInfosType[] {
@@ -134,7 +135,8 @@ function initializeSliders({
     }
 
     newSliderInfos.push(sliderInfoElement)
-    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }))
+    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
+    setCurrAppliedFilters(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
   });
 
   setSliderInfos(newSliderInfos);
@@ -313,28 +315,42 @@ function getNumBinsForHistogram(isMobile: boolean): number {
 }
 
 function exportHistogram ({
-  histogram
+  filters,
+  histogram,
 }: ExportHistogramParamsType) {
-  consoleLog({ histogram });
   
   if (! histogram || ! histogram['abs'].length) {
     return;
   }
 
   const workbook = XLSX.utils.book_new();
+  const dataForSheet: any[][] = [];
   const visualizations = Object.keys(histogram) as (keyof FinalHistogramDataType)[];
+  const filterArr = Object.entries(filters);
+  const filterTable = filterArr.map((cE) => {
+    const isSlider = typeof cE[1] === 'object';
+
+    if (cE[0] === 'CLASSE' && cE[1] === '') {
+      cE[1] = 'All';
+    }
+
+    return isSlider ? [cE[0], ...cE[1]] : cE;
+  });
+
+  dataForSheet.push(['Filters'], ...filterTable, [], ['Histograms']);
+
   const tableHeaders = [
     'interval',
+    'exact_upper_limit',
     'cnpj_count',
     'is_selected_cnpj_bin',
     'percentile',
   ]
-  const dataForSheet: (string | number)[][] = [];
   const tableHeaderRow: string[] = []; // Mounting first row
   const visualizationsRow: string[] = [];
 
   visualizations.forEach((currV) => {
-    visualizationsRow.push(currV, '', '', '', '');
+    visualizationsRow.push('visualization', currV, '', '', '', '');
     tableHeaderRow.push(...tableHeaders, '');
   })
 
@@ -342,13 +358,14 @@ function exportHistogram ({
   dataForSheet.push(tableHeaderRow); // Added first row table headers for all visualizations
 
   histogram[visualizations[0]].forEach((currTick, currIndex) => {
-    const newRow: (string | number)[] = [];
+    const newRow: (string | number | boolean)[] = [];
 
     visualizations.forEach((currV, currIndexV) => {
       newRow.push(
         histogram[currV][currIndex]['xTick'],
+        histogram[currV][currIndex]['limit'],
         histogram[currV][currIndex]['value'],
-        Number(histogram[currV][currIndex]['selCnpjBin']),
+        histogram[currV][currIndex]['selCnpjBin'],
         histogram[currV][currIndex]['percentile'],
         '',
       ); // Build row with infos. from all tables/visualizations
@@ -357,8 +374,6 @@ function exportHistogram ({
 
     dataForSheet.push(newRow); // Add row to tables
   })
-
-  consoleLog({ dataForSheet });
 
   const sheet = XLSX.utils.aoa_to_sheet(dataForSheet);
 

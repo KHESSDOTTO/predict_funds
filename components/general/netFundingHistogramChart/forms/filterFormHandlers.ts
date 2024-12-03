@@ -10,6 +10,7 @@ function handleSubmit({
   dataForHistogram,
   histogramControlForm,
   sliderInitialInfos,
+  setCurrAppliedFilters,
   setHistogram,
 }: HandleSubmitParamsType) {
   e.preventDefault();
@@ -21,12 +22,6 @@ function handleSubmit({
     histogramControlForm,
     sliderInitialInfos
   });
-
-  const dataForHistogramCount = dataForHistogram.length;
-  const filteredDataForHistogramCount = filteredDataForHistogram.length;
-
-  consoleLog({ dataForHistogramCount });
-  consoleLog({ filteredDataForHistogramCount });
 
   const newHistogram = prepareHistogram(
     filteredDataForHistogram,
@@ -44,6 +39,8 @@ function handleSubmit({
         pct: [],
       }
   );
+
+  setCurrAppliedFilters(histogramControlForm);
 }
 
 export { handleSubmit };

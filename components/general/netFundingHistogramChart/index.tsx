@@ -61,6 +61,7 @@ export default function NetFundingHistogramChart({
       CLASSE: "",
     }
   );
+  const [currAppliedFilters, setCurrAppliedFilters] = useState<HistogramControlFormType>(histogramControlForm);
   const filterFormProps: FilterFormPropsType = {
     currCnpj,
     isMobile,
@@ -68,6 +69,7 @@ export default function NetFundingHistogramChart({
     sliderInfos,
     histogramControlForm,
     setHistogramControlForm,
+    setCurrAppliedFilters,
     dataForHistogram,
     setHistogram,
   }
@@ -89,6 +91,7 @@ export default function NetFundingHistogramChart({
       dataForHistogram,
       histogramControlForm,
       sliderInitialInfos,
+      setCurrAppliedFilters,
       setHistogramControlForm,
       setSliderInfos
     });
@@ -226,9 +229,9 @@ export default function NetFundingHistogramChart({
                         </div>
                       </div>
                       <div
-                        onClick={() => exportHistogram({ histogram })}
+                        onClick={() => exportHistogram({ filters: currAppliedFilters, histogram })}
                         className="
-                          lg:absolute lg:right-[50%] 0lg:translate-x-[50%] lg:block lg:w-fit
+                          lg:absolute lg:right-1 lg:block lg:w-fit
                           mt-4 bottom-0 w-full flex justify-center
                         "
                       >
