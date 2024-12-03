@@ -1,6 +1,5 @@
 import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import * as XLSX from 'xlsx';
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
@@ -16,7 +15,6 @@ import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
-import { relative } from "path";
 
 function prepareDualRangeSlidersData ({
   sliderInfos
@@ -315,6 +313,7 @@ function getNumBinsForHistogram(isMobile: boolean): number {
 }
 
 function exportHistogram ({
+  selCnpj,
   filters,
   histogram,
 }: ExportHistogramParamsType) {
@@ -337,6 +336,7 @@ function exportHistogram ({
     return isSlider ? [cE[0], ...cE[1]] : cE;
   });
 
+  dataForSheet.push(['sel_cnpj', selCnpj], []);
   dataForSheet.push(['Filters'], ...filterTable, [], ['Histograms']);
 
   const tableHeaders = [

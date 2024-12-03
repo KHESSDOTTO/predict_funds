@@ -229,7 +229,7 @@ export default function NetFundingHistogramChart({
                         </div>
                       </div>
                       <div
-                        onClick={() => exportHistogram({ filters: currAppliedFilters, histogram })}
+                        onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
                         className="
                           lg:absolute lg:right-1 lg:block lg:w-fit
                           mt-4 bottom-0 w-full flex justify-center

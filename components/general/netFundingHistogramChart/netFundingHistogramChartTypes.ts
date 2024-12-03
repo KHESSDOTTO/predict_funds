@@ -118,6 +118,7 @@ interface SelFundInfosPropsType {
 }
 
 interface ExportHistogramParamsType {
+  selCnpj: string;
   filters: HistogramControlFormType;
   histogram: FinalHistogramDataType;
 }
