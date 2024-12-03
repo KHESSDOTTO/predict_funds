@@ -62,7 +62,7 @@ export default function ValueQuotaChart({
         }`}
       >
         <div
-          className={`bg-gray-900 pt-4 mx-2 rounded-sm ${
+          className={`bg-gray-900 pt-4 px-4 rounded-sm ${
             smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
           } lg:rounded-xl`}
         >
@@ -113,7 +113,7 @@ export default function ValueQuotaChart({
           </ResponsiveContainer>
         </div>
         {!smallV && (
-          <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
+          <div className="px-4 mt-1 lg:w-[40%] lg:mr-4">
             <PredList
               title="Value Quota (history)"
               onlyBack={true}

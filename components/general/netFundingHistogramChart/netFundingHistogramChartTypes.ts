@@ -114,6 +114,10 @@ interface SelFundInfosPropsType {
   sliderInitialInfos: SliderInitialInfosType;
 }
 
+interface ExportHistogramParamsType {
+  histogram: FinalHistogramDataType;
+}
+
 export type {
   HistogramTooltipProps,
   NetFundingHistogramChartPropsType,
@@ -130,4 +134,5 @@ export type {
   HandleSubmitStaticParamsType,
   HandleSubmitParamsType,
   SelFundInfosPropsType,
+  ExportHistogramParamsType,
 };

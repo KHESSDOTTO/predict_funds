@@ -21,7 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import FilterForm from "./forms/filterForm";
 import { consoleLog } from "@/utils/functions/genericFunctions";
-import { prepareHistogram, initializeSliders, getNumBinsForHistogram } from "./netFundingHistogramFunctions";
+import { prepareHistogram, initializeSliders, getNumBinsForHistogram, exportHistogram } from "./netFundingHistogramFunctions";
 import {
   lowerLimitOutliersHistogram,
   upperLimitOutliersHistogram,
@@ -33,6 +33,8 @@ import type {
   AbsOrPctType,
   FinalHistogramDataType
 } from "@/utils/types/generalTypes/types";
+import ButtonGreen from "@/components/UI/buttonGreen";
+import OptionButtonGreen from "@/components/UI/optionButtonGreen";
 
 export default function NetFundingHistogramChart({
   currCnpj,
@@ -136,9 +138,9 @@ export default function NetFundingHistogramChart({
 
           (
             <>
-              <div className="py-4 px-8 flex flex-col gap-6">
+              <div className="py-4 px-4 lg:px-8 flex flex-col lg:flex-row gap-6 lg:gap-12">
                 <div className="flex flex-col gap-6">
-                  <div>
+                  <div className="relative">
                     <SelFundInfos
                       {
                         ...{
@@ -149,13 +151,13 @@ export default function NetFundingHistogramChart({
                       }
                     />
                   </div>
-                </div>
-                <div className="flex flex-col lg:flex-row">
                   <div className="w-full lg:w-fit">
                     <FilterForm { ...filterFormProps } />
                   </div>
-                  <div className="flex flex-grow mt-2 flex-col lg:mt-0 lg:relative">
-                    <div className="text-sm lg:px-1 py-4 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
+                </div>
+                <div className="flex flex-grow flex-col lg:flex-row">
+                  <div className="flex mt-2 flex-col w-full lg:mt-0 lg:relative">
+                    <div className="text-sm lg:px-1 py-4 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
                       <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
                     </div>
                     <div className="hidden lg:block text-center text-gray-400 text-sm lg:text-base lg:text-left lg:absolute lg:top-2 lg:right-1">
@@ -170,12 +172,12 @@ export default function NetFundingHistogramChart({
                       </p>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 lg:pb-6 relative">
                       <div
-                        className="bg-gray-900 pt-4 mx-2 lg:mx-0 rounded-sm lg:w-full lg:rounded-xl relative"
+                        className="bg-gray-900 pt-4 rounded-sm lg:w-full lg:rounded-xl relative"
                       >
                         <ResponsiveContainer
-                          height={smallV ? 200 : isMobile ? 350 : 500}
+                          height={smallV ? 200 : isMobile ? 350 : 700}
                           minWidth={250}
                         >
                           <BarChart
@@ -193,7 +195,8 @@ export default function NetFundingHistogramChart({
                               interval={isMobile ? 1 : 0}
                             />
                             <YAxis
-                              width={isMobile ? 28 : 48}
+                              width={isMobile ? 36 : 48}
+                              tickCount={8}
                             />
                             <Tooltip
                               content={<HistogramTooltip />}
@@ -221,6 +224,17 @@ export default function NetFundingHistogramChart({
                             }
                           </p>
                         </div>
+                      </div>
+                      <div
+                        onClick={() => exportHistogram({ histogram })}
+                        className="
+                          lg:absolute lg:right-[50%] 0lg:translate-x-[50%] lg:block lg:w-fit
+                          mt-4 bottom-0 w-full flex justify-center
+                        "
+                      >
+                        <ButtonGreen shadowColor="white/30" shadowSize="md">
+                          Export
+                        </ButtonGreen>
                       </div>
                     </div>
                   </div>

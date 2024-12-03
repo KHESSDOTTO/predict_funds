@@ -15,14 +15,14 @@ export default function Home() {
         <div className="relative h-28 w-full text-xl lg:top-16 font-semibold">
           <Link
             href={"/signup"}
-            className="py-1 absolute top-0 right-[50%] translate-x-[50%] hover:text-yellow-600 md:hover:scale-125 w-28 text-center transition-all duration-300"
+            className="py-1 absolute top-0 right-[50%] translate-x-[50%] hover:text-yellow-600 md:hover:scale-110 w-28 text-center transition-all duration-200"
             style={smTextShadow}
           >
             Sign up
           </Link>
           <Link
             href={"/login"}
-            className="py-1 absolute bottom-0 right-[50%] translate-x-[50%] hover:text-yellow-600 md:hover:scale-125 w-28 text-center transition-all duration-300"
+            className="py-1 absolute bottom-0 right-[50%] translate-x-[50%] hover:text-yellow-600 md:hover:scale-110 w-28 text-center transition-all duration-200"
             style={smTextShadow}
           >
             Login

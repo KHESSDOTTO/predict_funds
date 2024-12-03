@@ -1,5 +1,7 @@
 import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
+import { consoleLog } from "@/utils/functions/genericFunctions";
+import * as XLSX from 'xlsx';
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import type {
@@ -7,13 +9,14 @@ import type {
   PrepareDualRangeSlidersDataParamsType,
   InitializeSlidersParamsType,
   HistogramSliderInfosType,
-  SliderInitialInfosType
+  SliderInitialInfosType,
+  ExportHistogramParamsType
 } from "./netFundingHistogramChartTypes";
 import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
-import { consoleLog } from "@/utils/functions/genericFunctions";
+import { relative } from "path";
 
 function prepareDualRangeSlidersData ({
   sliderInfos
@@ -309,10 +312,67 @@ function getNumBinsForHistogram(isMobile: boolean): number {
 
 }
 
+function exportHistogram ({
+  histogram
+}: ExportHistogramParamsType) {
+  consoleLog({ histogram });
+  
+  if (! histogram || ! histogram['abs'].length) {
+    return;
+  }
+
+  const workbook = XLSX.utils.book_new();
+  const visualizations = Object.keys(histogram) as (keyof FinalHistogramDataType)[];
+  const tableHeaders = [
+    'interval',
+    'cnpj_count',
+    'is_selected_cnpj_bin',
+    'percentile',
+  ]
+  const dataForSheet: (string | number)[][] = [];
+  const tableHeaderRow: string[] = []; // Mounting first row
+  const visualizationsRow: string[] = [];
+
+  visualizations.forEach((currV) => {
+    visualizationsRow.push(currV, '', '', '', '');
+    tableHeaderRow.push(...tableHeaders, '');
+  })
+
+  dataForSheet.push(visualizationsRow); // Added first row to identify table visualization
+  dataForSheet.push(tableHeaderRow); // Added first row table headers for all visualizations
+
+  histogram[visualizations[0]].forEach((currTick, currIndex) => {
+    const newRow: (string | number)[] = [];
+
+    visualizations.forEach((currV, currIndexV) => {
+      newRow.push(
+        histogram[currV][currIndex]['xTick'],
+        histogram[currV][currIndex]['value'],
+        Number(histogram[currV][currIndex]['selCnpjBin']),
+        histogram[currV][currIndex]['percentile'],
+        '',
+      ); // Build row with infos. from all tables/visualizations
+
+    })
+
+    dataForSheet.push(newRow); // Add row to tables
+  })
+
+  consoleLog({ dataForSheet });
+
+  const sheet = XLSX.utils.aoa_to_sheet(dataForSheet);
+
+  XLSX.utils.book_append_sheet(workbook, sheet);
+  XLSX.writeFile(workbook, 'export_histogram.xlsx');
+
+  return;
+}
+
 export {
   prepareDualRangeSlidersData,
   filterDataForHistogram,
   prepareHistogram,
   initializeSliders,
   getNumBinsForHistogram,
+  exportHistogram,
 };

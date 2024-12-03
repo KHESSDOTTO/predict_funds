@@ -102,7 +102,7 @@ export default function NetFundingPredChart({
         }`}
       >
         <div
-          className={`bg-gray-900 mx-2 pt-4 rounded-sm overflow-hidden ${
+          className={`bg-gray-900 px-4 pt-4 rounded-sm overflow-hidden ${
             (smallV ? "lg:w-full lg:h-[210px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
           } lg:rounded-xl`}
         >
@@ -218,7 +218,7 @@ export default function NetFundingPredChart({
         {
           ! smallV && predList &&
             (
-              <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
+              <div className="px-4 mt-1 lg:w-[40%] lg:mr-4">
                 <PredList
                   title="Net Funding"
                   onlyBack={false}
