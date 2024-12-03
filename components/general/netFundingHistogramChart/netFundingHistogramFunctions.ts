@@ -1,5 +1,6 @@
 import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
+import * as XLSX from 'xlsx';
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import type {
@@ -7,13 +8,13 @@ import type {
   PrepareDualRangeSlidersDataParamsType,
   InitializeSlidersParamsType,
   HistogramSliderInfosType,
-  SliderInitialInfosType
+  SliderInitialInfosType,
+  ExportHistogramParamsType
 } from "./netFundingHistogramChartTypes";
 import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 function prepareDualRangeSlidersData ({
   sliderInfos
@@ -91,6 +92,7 @@ function initializeSliders({
   dataForHistogram,
   histogramControlForm,
   sliderInitialInfos,
+  setCurrAppliedFilters,
   setHistogramControlForm,
   setSliderInfos,
 }: InitializeSlidersParamsType): HistogramSliderInfosType[] {
@@ -131,7 +133,8 @@ function initializeSliders({
     }
 
     newSliderInfos.push(sliderInfoElement)
-    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }))
+    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
+    setCurrAppliedFilters(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
   });
 
   setSliderInfos(newSliderInfos);
@@ -309,10 +312,82 @@ function getNumBinsForHistogram(isMobile: boolean): number {
 
 }
 
+function exportHistogram ({
+  selCnpj,
+  filters,
+  histogram,
+}: ExportHistogramParamsType) {
+  
+  if (! histogram || ! histogram['abs'].length) {
+    return;
+  }
+
+  const workbook = XLSX.utils.book_new();
+  const dataForSheet: any[][] = [];
+  const visualizations = Object.keys(histogram) as (keyof FinalHistogramDataType)[];
+  const filterArr = Object.entries(filters);
+  const filterTable = filterArr.map((cE) => {
+    const isSlider = typeof cE[1] === 'object';
+
+    if (cE[0] === 'CLASSE' && cE[1] === '') {
+      cE[1] = 'All';
+    }
+
+    return isSlider ? [cE[0], ...cE[1]] : cE;
+  });
+
+  dataForSheet.push(['sel_cnpj', selCnpj], []);
+  dataForSheet.push(['Filters'], ...filterTable, [], ['Histograms']);
+
+  const tableHeaders = [
+    'interval',
+    'exact_upper_limit',
+    'cnpj_count',
+    'is_selected_cnpj_bin',
+    'percentile',
+  ]
+  const tableHeaderRow: string[] = []; // Mounting first row
+  const visualizationsRow: string[] = [];
+
+  visualizations.forEach((currV) => {
+    visualizationsRow.push('visualization', currV, '', '', '', '');
+    tableHeaderRow.push(...tableHeaders, '');
+  })
+
+  dataForSheet.push(visualizationsRow); // Added first row to identify table visualization
+  dataForSheet.push(tableHeaderRow); // Added first row table headers for all visualizations
+
+  histogram[visualizations[0]].forEach((currTick, currIndex) => {
+    const newRow: (string | number | boolean)[] = [];
+
+    visualizations.forEach((currV, currIndexV) => {
+      newRow.push(
+        histogram[currV][currIndex]['xTick'],
+        histogram[currV][currIndex]['limit'],
+        histogram[currV][currIndex]['value'],
+        histogram[currV][currIndex]['selCnpjBin'],
+        histogram[currV][currIndex]['percentile'],
+        '',
+      ); // Build row with infos. from all tables/visualizations
+
+    })
+
+    dataForSheet.push(newRow); // Add row to tables
+  })
+
+  const sheet = XLSX.utils.aoa_to_sheet(dataForSheet);
+
+  XLSX.utils.book_append_sheet(workbook, sheet);
+  XLSX.writeFile(workbook, 'export_histogram.xlsx');
+
+  return;
+}
+
 export {
   prepareDualRangeSlidersData,
   filterDataForHistogram,
   prepareHistogram,
   initializeSliders,
   getNumBinsForHistogram,
+  exportHistogram,
 };

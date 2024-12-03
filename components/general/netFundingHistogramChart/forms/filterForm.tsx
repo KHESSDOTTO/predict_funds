@@ -16,6 +16,7 @@ export default function FilterForm ({
   sliderInitialInfos,
   dataForHistogram,
   histogramControlForm,
+  setCurrAppliedFilters,
   setHistogramControlForm,
   setHistogram,
 }: FilterFormPropsType) {
@@ -28,6 +29,7 @@ export default function FilterForm ({
     dataForHistogram,
     histogramControlForm,
     sliderInitialInfos,
+    setCurrAppliedFilters,
     setHistogram,
   }
 

@@ -71,6 +71,11 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
+  const cvmClasses = [
+    "Ações",
+    "Multimercado",
+    "Renda Fixa"
+  ];
 
   useEffect(() => {
     if (screenWidth > 992) {
@@ -91,10 +96,31 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
       <div className="mt-6 lg:mt-8 w-screen">
         <RegistrationInfos isLoading={ isLoading } registration={ registration } />
       </div>
+      {/* <div className="flex flex-col w-full mt-6 lg:mt-8 lg:flex-row gap-4">
+        {
+          cvmClasses.map((currClass) => {
+            return (
+              <div className="w-full lg:w-1/3">
+                <NetFundingPredChart
+                  {...{
+                    title: `Net Funding CVM Class - ${currClass}`,
+                    smallV: false,
+                    isMobile,
+                    historic: historicData,
+                    predictions: predictionData,
+                    predList: false,
+                  }}
+                />
+              </div>
+            )
+          })
+        }
+      </div> */}
       <div className="mt-6 lg:mt-16 w-screen">
         <div className="w-full flex flex-col justify-center items-center gap-6 lg:gap-8 text-white">
           <NetFundingPredChart
             {...{
+              title: `Net Funding ${registration ? "- CNPJ: " + registration['CNPJ_FUNDO'] : ''}`,
               smallV: false,
               isMobile,
               historic: historicData,

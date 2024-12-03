@@ -48,6 +48,7 @@ interface FilterFormPropsType {
   sliderInfos: HistogramSliderInfosType[];
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
+  setCurrAppliedFilters: Dispatch<SetStateAction<HistogramControlFormType>>;
   setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
@@ -60,6 +61,7 @@ interface InitializeSlidersParamsType {
   dataForHistogram: RawHistogramData[],
   histogramControlForm: HistogramControlFormType,
   sliderInitialInfos: SliderInitialInfosType,
+  setCurrAppliedFilters: Dispatch<SetStateAction<HistogramControlFormType>>,
   setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>,
   setSliderInfos: Dispatch<SetStateAction<HistogramSliderInfosType[]>>;
 }
@@ -101,6 +103,7 @@ interface HandleSubmitStaticParamsType {
   dataForHistogram: RawHistogramData[];
   histogramControlForm: HistogramControlFormType;
   sliderInitialInfos: SliderInitialInfosType;
+  setCurrAppliedFilters: Dispatch<SetStateAction<HistogramControlFormType>>;
   setHistogram: Dispatch<SetStateAction<FinalHistogramDataType>>;
 }
 
@@ -112,6 +115,12 @@ interface SelFundInfosPropsType {
   currCnpj: string;
   dataForHistogram: RawHistogramData[];
   sliderInitialInfos: SliderInitialInfosType;
+}
+
+interface ExportHistogramParamsType {
+  selCnpj: string;
+  filters: HistogramControlFormType;
+  histogram: FinalHistogramDataType;
 }
 
 export type {
@@ -130,4 +139,5 @@ export type {
   HandleSubmitStaticParamsType,
   HandleSubmitParamsType,
   SelFundInfosPropsType,
+  ExportHistogramParamsType,
 };

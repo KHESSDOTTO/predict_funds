@@ -24,10 +24,12 @@ import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
 import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
 
 export default function NetFundingPredChart({
+  title = 'Net Funding',
   historic,
   predictions,
   smallV,
   isMobile,
+  predList = true,
 }: NetFundingPredChartPropsType) {
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
   const [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]);
@@ -86,7 +88,7 @@ export default function NetFundingPredChart({
               : "text-lg max-w-fit p-2 text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-2 lg:mx-4 lg:text-left`}
         >
-          Net Funding
+          { title }
         </h2>
       </div>
       {!smallV && (
@@ -100,8 +102,8 @@ export default function NetFundingPredChart({
         }`}
       >
         <div
-          className={`bg-gray-900 mx-2 pt-4 rounded-sm overflow-hidden ${
-            smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
+          className={`bg-gray-900 px-4 pt-4 rounded-sm overflow-hidden ${
+            (smallV ? "lg:w-full lg:h-[210px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
           } lg:rounded-xl`}
         >
           <ResponsiveContainer
@@ -212,17 +214,22 @@ export default function NetFundingPredChart({
             </ComposedChart>
           </ResponsiveContainer>
         </div>
-        {!smallV && (
-          <div className="mx-2 mt-1 lg:w-[40%] lg:mr-4">
-            <PredList
-              title="Net Funding"
-              onlyBack={false}
-              historic={historic}
-              predictions={predictions}
-              varName={absOrPct}
-            />
-          </div>
-        )}
+
+        {
+          ! smallV && predList &&
+            (
+              <div className="px-4 mt-1 lg:w-[40%] lg:mr-4">
+                <PredList
+                  title="Net Funding"
+                  onlyBack={false}
+                  historic={historic}
+                  predictions={predictions}
+                  varName={absOrPct}
+                />
+              </div>
+            )
+        }
+
       </div>
     </div>
   );
