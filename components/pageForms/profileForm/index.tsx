@@ -9,7 +9,9 @@ export default function ProfileForm({
   setShowModal,
 }: ProfileFormPropsType) {
   const inputClass =
-    "rounded-sm px-2 shadow-sm shadow-gray-600 text-black lg:w-[60vw]";
+    "rounded-full px-4 py-1 shadow-sm shadow-gray-600 text-black lg:w-[60vw]";
+  const labelClass = 
+    "w-24";
 
   return (
     <form
@@ -17,15 +19,9 @@ export default function ProfileForm({
       className="flex py-8 gap-4 lg:gap-12"
       onSubmit={(e) => handleSubmitNoEmail({ e, user, form, setShowModal })}
     >
-      <div className="flex flex-col gap-8 lg:gap-12 lg:items-end">
-        <label htmlFor="username">Username:</label>
-        <label htmlFor="email">Email:</label>
-        <label htmlFor="address">Address:</label>
-        <label htmlFor="cnpj">CNPJ:</label>
-        <label htmlFor="contactPhone">Phone:</label>
-      </div>
       <div className="flex flex-col gap-8 lg:gap-12">
-        <div className="flex gap-2">
+        <div className="flex items-center">
+          <label className={labelClass} htmlFor="username">Username:</label>
           <input
             type="text"
             id="username"
@@ -37,7 +33,9 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex gap-2 italic">
+        <div className="flex italic">
+        <label className={labelClass} htmlFor="email">Email:</label>
+
           <input
             type="text"
             id="email"
@@ -49,7 +47,9 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex">
+        <label className={labelClass} htmlFor="address">Address:</label>
+
           <input
             type="text"
             id="address"
@@ -61,12 +61,14 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex">
+        <label className={labelClass} htmlFor="cnpj">CNPJ:</label>
+
           <input
             type="text"
             id="cnpj"
             name="cnpj"
-            className={inputClass + " bg-gray-400 italic w-full"}
+            className={inputClass + " bg-gray-400 italic"}
             value={form.cnpj}
             onChange={(e) =>
               setForm({ ...form, [e.target.name]: e.target.value })
@@ -74,7 +76,8 @@ export default function ProfileForm({
             disabled
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex">
+        <label className={labelClass} htmlFor="contactPhone">Phone:</label>
           <input
             type="text"
             id="contactPhone"
