@@ -6,9 +6,6 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId, changeId } = req.query;
 
-  console.log("req.body");
-  console.log(req.body);
-
   if (req.method !== "POST") {
     return res.status(500).send("Only post method accepted on this endpoint.");
   }
