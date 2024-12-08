@@ -34,8 +34,7 @@ export default function ProfileForm({
           />
         </div>
         <div className="flex italic">
-        <label className={labelClass} htmlFor="email">Email:</label>
-
+          <label className={labelClass} htmlFor="email">Email:</label>
           <input
             type="text"
             id="email"
@@ -48,8 +47,7 @@ export default function ProfileForm({
           />
         </div>
         <div className="flex">
-        <label className={labelClass} htmlFor="address">Address:</label>
-
+          <label className={labelClass} htmlFor="address">Address:</label>
           <input
             type="text"
             id="address"
@@ -62,8 +60,7 @@ export default function ProfileForm({
           />
         </div>
         <div className="flex">
-        <label className={labelClass} htmlFor="cnpj">CNPJ:</label>
-
+          <label className={labelClass} htmlFor="cnpj">CNPJ:</label>
           <input
             type="text"
             id="cnpj"
@@ -77,7 +74,7 @@ export default function ProfileForm({
           />
         </div>
         <div className="flex">
-        <label className={labelClass} htmlFor="contactPhone">Phone:</label>
+          <label className={labelClass} htmlFor="contactPhone">Phone:</label>
           <input
             type="text"
             id="contactPhone"
