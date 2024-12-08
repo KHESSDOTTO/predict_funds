@@ -33,7 +33,7 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex italic">
+        <div className="flex items-center italic">
           <label className={labelClass} htmlFor="email">Email:</label>
           <input
             type="text"
@@ -46,7 +46,7 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <label className={labelClass} htmlFor="address">Address:</label>
           <input
             type="text"
@@ -59,7 +59,7 @@ export default function ProfileForm({
             }
           />
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <label className={labelClass} htmlFor="cnpj">CNPJ:</label>
           <input
             type="text"
@@ -73,7 +73,7 @@ export default function ProfileForm({
             disabled
           />
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <label className={labelClass} htmlFor="contactPhone">Phone:</label>
           <input
             type="text"
