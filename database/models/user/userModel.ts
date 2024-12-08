@@ -98,16 +98,11 @@ UserSchema.statics.sendConfirmEmail = async function (
   userId: string,
   email: string
 ) {
-  // console.log(transporter);
   transporter.sendMail({
     from: process.env.EMAIL_ADDRESS,
     to: email,
     subject: "Confirm Your E-mail - PREDICT FUNDS",
-    html: `<p>Click here to activate your account:<p> <a href=${
-      process.env.NODE_ENV == "development"
-        ? "http://localhost:3000/api/user/account-confirm"
-        : "https://predict-funds.vercel.app/api/user/account-confirm"
-    }/${userId}>CLICK HERE</a>`,
+    html: `<p>Click here to activate your account:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_API_URL }/user/account-confirm/${ userId }">CLICK HERE</a>`,
   });
 };
 
@@ -129,11 +124,7 @@ UserSchema.statics.sendPwdUpdateEmail = async function (
       from: process.env.EMAIL_ADDRESS,
       to: email,
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
-      html: `<p>Click here to change your password:<p> <a href=${
-        process.env.NODE_ENV == "development"
-          ? `http://localhost:3000/pwd-change/${userId}/${changeId}`
-          : `https://predict-funds.vercel.app/pwd-change/${userId}/${changeId}`
-      }>CLICK HERE</a>`,
+      html: `<p>Click here to change your password:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_URL }/pwd-change/${ userId }/${ changeId }">CLICK HERE</a>`,
     });
 
     console.log("E-mail sent!");
@@ -363,6 +354,7 @@ UserSchema.statics.doUpdateUserPwd = async function (
   }
 ): Promise<GenericObjectReturnType> {
   const { newPwd, confirmNewPwd } = newPwdForm;
+
   try {
     const user = await UserModel.findById(userId);
 
@@ -375,11 +367,12 @@ UserSchema.statics.doUpdateUserPwd = async function (
     }
 
     const pwdValidation =
-      !newPwd ||
-      !newPwd.match(
+      newPwd &&
+      newPwd.match(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
-      ) ||
-      newPwd !== confirmNewPwd;
+      ) &&
+      newPwd === confirmNewPwd
+    ;
 
     if (!pwdValidation) {
       return {

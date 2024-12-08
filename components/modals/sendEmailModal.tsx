@@ -123,7 +123,7 @@ export default function SendEmailModal({
               Information to send e-mail
             </label>
             <select
-              className="text-center bg-white border border-gray-500 w-fit rounded-md my-1"
+              className="text-center bg-white border border-gray-500 w-fit rounded-full my-1 px-4 py-1"
               name="field"
               id="field"
               value={changePwdForm.field}
@@ -143,7 +143,7 @@ export default function SendEmailModal({
             <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
               <label className={labelClass}>Username</label>
               <input
-                className="rounded-md text-black px-2"
+                className="rounded-full text-black px-4 py-1"
                 type="text"
                 name="username"
                 id="username"
@@ -156,7 +156,7 @@ export default function SendEmailModal({
             <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
               <label className={labelClass}>E-mail</label>
               <input
-                className="rounded-md text-black px-2"
+                className="rounded-full text-black px-4 py-1"
                 type="text"
                 name="email"
                 id="email"
