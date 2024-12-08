@@ -8,9 +8,8 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_ADDRESS,
     pass: process.env.EMAIL_PWD,
   },
-  tls: {
-    ciphers: 'SSLv3',
-  },
+  logger: true, // Enable logging
+  debug: true, // Enable debug output
 });
 
 export default transporter;
