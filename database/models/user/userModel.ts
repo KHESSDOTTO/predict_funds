@@ -355,17 +355,6 @@ UserSchema.statics.doUpdateUserPwd = async function (
 ): Promise<GenericObjectReturnType> {
   const { newPwd, confirmNewPwd } = newPwdForm;
 
-  console.log("userId");
-  console.log(userId);
-  console.log("changeId");
-  console.log(changeId);
-  console.log("newPwdForm");
-  console.log(newPwdForm);
-  console.log("newPwd");
-  console.log(newPwd);
-  console.log("confirmNewPwd");
-  console.log(confirmNewPwd);
-
   try {
     const user = await UserModel.findById(userId);
 
@@ -376,17 +365,6 @@ UserSchema.statics.doUpdateUserPwd = async function (
     if (changeId !== user.changeId) {
       return { ok: false, status: 500, msg: "Wrong changeId." };
     }
-
-    console.log("userId");
-    console.log(userId);
-    console.log("changeId");
-    console.log(changeId);
-    console.log("newPwdForm");
-    console.log(newPwdForm);
-    console.log("newPwd");
-    console.log(newPwd);
-    console.log("confirmNewPwd");
-    console.log(confirmNewPwd);
 
     const pwdValidation =
       newPwd &&
