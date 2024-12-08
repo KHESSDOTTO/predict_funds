@@ -30,7 +30,7 @@ export default function PwdChangePage({
     newPwd: "",
     confirmNewPwd: "",
   });
-  const inputClass = "rounded-lg border border-black px-2";
+  const inputClass = "rounded-full px-4 py-1 text-black";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPwdChangeForm({ ...pwdChangeForm, [e.target.name]: e.target.value });
@@ -54,38 +54,45 @@ export default function PwdChangePage({
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 min-h-screen justify-center">
-      <h1 className="text-xl font-semibold py-2 px-4 border-b mx-[25%] border-black">
-        Change your password - CNPJ: {user.cnpj}
-      </h1>
+    <div className="pb-2 flex flex-col items-center gap-4 lg:gap-12 min-h-screen px-12 justify-center bg-black text-white">
+      <div className="lg:mx-[25%]">
+        <h1 className="text-xl mb-2 text-center font-semibold py-2 px-4 border-b border-white">
+          Change your password - CNPJ: {user.cnpj}
+        </h1>
+        <div className="text-sm relative lg:top-2 text-gray-400">
+          * At least 8 characters, including lowercase and uppercase letters, numbers, special characters.
+        </div>
+      </div>
       <form
         id="pwdChangeForm"
-        className="flex flex-col gap-4 items-center"
+        className="flex flex-col gap-8 lg:gap-12 items-center"
         onSubmit={handleSubmit}
       >
-        <div className="flex gap-2">
-          <label className="w-36">New Password</label>
-          <input
-            type="password"
-            name="newPwd"
-            id="newPwd"
-            className={inputClass}
-            value={pwdChangeForm.newPwd}
-            onChange={handleChange}
-          ></input>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col justify-center lg:flex-row gap-2 lg:gap-2 items-center">
+            <label className="text-center lg:text-left w-48">New Password</label>
+            <input
+              type="password"
+              name="newPwd"
+              id="newPwd"
+              className={inputClass}
+              value={pwdChangeForm.newPwd}
+              onChange={handleChange}
+            ></input>
+          </div>
+          <div className="flex flex-col justify-center lg:flex-row gap-2 lg:gap-2 items-center">
+            <label className="text-center lg:text-left w-48">Confirm new Password</label>
+            <input
+              type="password"
+              name="confirmNewPwd"
+              id="confirmNewPwd"
+              className={inputClass}
+              value={pwdChangeForm.confirmNewPwd}
+              onChange={handleChange}
+            ></input>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <label className="w-44">Confirm new Password</label>
-          <input
-            type="password"
-            name="confirmNewPwd"
-            id="confirmNewPwd"
-            className={inputClass}
-            value={pwdChangeForm.confirmNewPwd}
-            onChange={handleChange}
-          ></input>
-        </div>
-        <button className="transition-all font-semibold p-1 border-b border-black hover:text-yellow-700 hover:border-yellow-700">
+        <button className="transition-all font-semibold p-1 border-b border-white duration-300 hover:scale-105 hover:text-yellow-700 hover:border-yellow-700">
           Update
         </button>
       </form>
