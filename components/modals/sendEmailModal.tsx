@@ -32,7 +32,7 @@ export default function SendEmailModal({
   });
   const [showUsernameInput, setShowUsernameInput] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
-  const labelClass = "text-white lg:py-1";
+  const labelClass = "text-white lg:py-1 lg:w-96";
   const arrOptions = ["username", "email"];
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function SendEmailModal({
   return (
     <div className={containerClass}>
       <div
-        className={`bg-black pointer-event-none sticky z-30 min-h-96 w-[80%] top-[20vh] bottom-[20vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col justify-center items-center px-[5vw] py-[5vh] lg:top-[30vh] lg:left-[25vw] lg:min-h-[50vh] lg:w-[50vw] gap-8`}
+        className={`bg-black pointer-event-none sticky z-30 min-h-96 w-[80%] top-[20vh] bottom-[20vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col justify-center items-center px-8 py-[5vh] lg:top-[30vh] lg:left-[25vw] lg:min-h-[50vh] lg:w-[50vw] gap-8`}
       >
         <div className="flex justify-center items-center">
           <h1 className="text-xl font-semibold text-center">{title}</h1>
@@ -116,55 +116,57 @@ export default function SendEmailModal({
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col justify-center items-center gap-8 text-black"
+          className="flex flex-col justify-center items-center gap-8 text-black w-full"
         >
-          <div className="flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
-            <label htmlFor="field" className={labelClass}>
-              Information to send e-mail
-            </label>
-            <select
-              className="text-center bg-white border border-gray-500 w-fit rounded-full my-1 px-4 py-1"
-              name="field"
-              id="field"
-              value={changePwdForm.field}
-              onChange={handleChange}
-            >
-              <option value=""></option>
-              {arrOptions.map((cE) => {
-                return (
-                  <option key={cE} value={cE}>
-                    {cE}
-                  </option>
-                );
-              })}
-            </select>
+          <div className="flex flex-col gap-4 lg:gap-4">
+            <div className="flex flex-col gap-2 justify-start items-center lg:gap-4 lg:flex-row w-full lg:max-w-[480px] px-4">
+              <label htmlFor="field" className={labelClass}>
+                Information to send e-mail
+              </label>
+              <select
+                className="text-center bg-white border border-gray-500 rounded-full my-1 px-4 py-1 w-full"
+                name="field"
+                id="field"
+                value={changePwdForm.field}
+                onChange={handleChange}
+              >
+                <option value=""></option>
+                {arrOptions.map((cE) => {
+                  return (
+                    <option key={cE} value={cE}>
+                      {cE}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            {showUsernameInput && (
+              <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row w-full lg:max-w-[480px] px-4">
+                <label className={labelClass}>Username</label>
+                <input
+                  className="rounded-full text-black px-4 py-1 w-full"
+                  type="text"
+                  name="username"
+                  id="username"
+                  value={changePwdForm.username}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+            {showEmailInput && (
+              <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row w-full lg:max-w-[480px] px-4">
+                <label className={labelClass}>E-mail</label>
+                <input
+                  className="rounded-full text-black px-4 py-1 w-full"
+                  type="text"
+                  name="email"
+                  id="email"
+                  value={changePwdForm.email}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
           </div>
-          {showUsernameInput && (
-            <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
-              <label className={labelClass}>Username</label>
-              <input
-                className="rounded-full text-black px-4 py-1"
-                type="text"
-                name="username"
-                id="username"
-                value={changePwdForm.username}
-                onChange={handleChange}
-              />
-            </div>
-          )}
-          {showEmailInput && (
-            <div className="animate-fadeIn flex flex-col gap-2 justify-center items-center lg:gap-4 lg:flex-row">
-              <label className={labelClass}>E-mail</label>
-              <input
-                className="rounded-full text-black px-4 py-1"
-                type="text"
-                name="email"
-                id="email"
-                value={changePwdForm.email}
-                onChange={handleChange}
-              />
-            </div>
-          )}
           <div className="mt-4 lg:mt-0">
             <ButtonGreen shadowSize="md" shadowColor="none">
               {textBtn}
