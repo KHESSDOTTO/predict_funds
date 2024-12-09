@@ -98,15 +98,7 @@ UserSchema.statics.sendConfirmEmail = async function (
   userId: string,
   email: string
 ) {
-  transporter.verify((error, success) => {
-    if (error) {
-      console.error('SMTP Configuration Error:', error);
-    } else {
-      console.log('SMTP Configuration is valid:', success);
-    }
-  });
-
-  transporter.sendMail({
+  await transporter.sendMail({
     from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
     to: email,
     subject: "Confirm Your E-mail - PREDICT FUNDS",
@@ -127,14 +119,6 @@ UserSchema.statics.sendPwdUpdateEmail = async function (
     }
 
     const { email, cnpj } = user;
-
-    transporter.verify((error, success) => {
-      if (error) {
-        console.error('SMTP Configuration Error:', error);
-      } else {
-        console.log('SMTP Configuration is valid:', success);
-      }
-    });
 
     await transporter.sendMail({
       from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
