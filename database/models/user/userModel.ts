@@ -137,7 +137,7 @@ UserSchema.statics.sendPwdUpdateEmail = async function (
     });
 
     await transporter.sendMail({
-      from: process.env.EMAIL_ADDRESS,
+      from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
       to: email,
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
       html: `<p>Click here to change your password:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_URL }/pwd-change/${ userId }/${ changeId }">CLICK HERE</a>`,
