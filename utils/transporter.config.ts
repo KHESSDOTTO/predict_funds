@@ -1,11 +1,10 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: 'smtppro.zoho.com',
+  host: 'smtp.zeptomail.com',
   port: 587,
-  secure: false,
   auth: {
-    user: process.env.EMAIL_ADDRESS,
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PWD,
   },
 });
