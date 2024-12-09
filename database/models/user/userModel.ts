@@ -11,6 +11,7 @@ import {
   CreateUserInfoType,
   GenericObjectReturnType,
 } from "./userType";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const UserSchema = new Schema(
   {
@@ -98,12 +99,23 @@ UserSchema.statics.sendConfirmEmail = async function (
   userId: string,
   email: string
 ) {
-  await transporter.sendMail({
-    from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
-    to: email,
-    subject: "Confirm Your E-mail - PREDICT FUNDS",
-    html: `<p>Click here to activate your account:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_API_URL }/user/account-confirm/${ userId }">CLICK HERE</a>`,
-  });
+  try {
+    console.log("env Var");
+    console.log(process.env.NEXT_PUBLIC_EMAIL_ADDRESS)
+    consoleLog({ email });
+    await transporter.sendMail({
+      from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
+      to: email,
+      subject: "Confirm Your E-mail - PREDICT FUNDS",
+      html: `<p>Click here to activate your account:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_API_URL }/user/account-confirm/${ userId }">CLICK HERE</a>`,
+    });
+
+    return true;
+  } catch ($err) {
+    console.log($err);
+    
+    return false;
+  }
 };
 
 // Send password change e-mail
