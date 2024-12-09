@@ -105,9 +105,9 @@ UserSchema.statics.sendConfirmEmail = async function (
       console.log('SMTP Configuration is valid:', success);
     }
   });
-  
+
   transporter.sendMail({
-    from: process.env.EMAIL_ADDRESS,
+    from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
     to: email,
     subject: "Confirm Your E-mail - PREDICT FUNDS",
     html: `<p>Click here to activate your account:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_API_URL }/user/account-confirm/${ userId }">CLICK HERE</a>`,
