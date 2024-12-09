@@ -100,9 +100,6 @@ UserSchema.statics.sendConfirmEmail = async function (
   email: string
 ) {
   try {
-    console.log("env Var");
-    console.log(process.env.NEXT_PUBLIC_EMAIL_ADDRESS)
-    consoleLog({ email });
     await transporter.sendMail({
       from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
       to: email,
@@ -113,7 +110,7 @@ UserSchema.statics.sendConfirmEmail = async function (
     return true;
   } catch ($err) {
     console.log($err);
-    
+
     return false;
   }
 };
@@ -178,7 +175,7 @@ or password didn't match the required format",
 
     const createdUser = createdUserOriginal.toObject();
 
-    UserModel.sendConfirmEmail(String(createdUser._id), createdUser.email);
+    await UserModel.sendConfirmEmail(String(createdUser._id), createdUser.email);
 
     delete createdUser.passwordHash;
     delete createdUser._id;
