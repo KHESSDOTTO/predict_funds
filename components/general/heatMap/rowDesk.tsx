@@ -15,7 +15,8 @@ export default function RowDesk({
       className={`border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50 last:rounded-b-sm`}
     >
       <td
-        className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/5`}
+        className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/12 border-r-2`}
+        style={{width: '30px'}}
       >
         {capitalize(name)}
       </td>
@@ -33,7 +34,9 @@ export default function RowDesk({
               color: valColor,
             }}
           >
-            {value.toFixed(2)}
+            <span>
+              { value.toFixed(2) }
+            </span>
           </td>
         );
       })}

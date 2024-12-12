@@ -23,10 +23,12 @@
 
 @media (min-width: 992px) {
   .swiperButtonNext {
-    right: 6%;
+    right: 0;
+    transform: translateX(-100%);
   }
 
   .swiperButtonPrev {
-    left: 6%;
+    left: 0;
+    transform: translateX(100%);
   }
 }

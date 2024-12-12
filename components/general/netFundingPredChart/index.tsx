@@ -78,7 +78,7 @@ export default function NetFundingPredChart({
   return (
     <div
       id="NetFundingDiv"
-      className={` ${smallV ? "pt-4 lg:w-[48.5%]" : "w-full"}`}
+      className={` ${smallV ? "pt-4 lg:w-[45%]" : "w-full"}`}
     >
       <div className="flex justify-center lg:block">
         <h2
@@ -86,7 +86,7 @@ export default function NetFundingPredChart({
             smallV
               ? "text-md w-9/12 mx-auto text-black border-black"
               : "text-lg max-w-fit p-2 text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-2 lg:mx-4 lg:text-left`}
+          } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-4 lg:text-left`}
         >
           { title }
         </h2>
@@ -103,11 +103,11 @@ export default function NetFundingPredChart({
       >
         <div
           className={`bg-gray-900 px-4 pt-4 rounded-sm overflow-hidden ${
-            (smallV ? "lg:w-full lg:h-[210px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
+            (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
           } lg:rounded-xl`}
         >
           <ResponsiveContainer
-            height={smallV ? 200 : isMobile ? 300 : 400}
+            height={smallV ? 240 : isMobile ? 300 : 400}
             minWidth={250}
           >
             <ComposedChart data={unifiedNFData}>
@@ -218,7 +218,7 @@ export default function NetFundingPredChart({
         {
           ! smallV && predList &&
             (
-              <div className="px-4 mt-1 lg:w-[40%] lg:mr-4">
+              <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
                 <PredList
                   title="Net Funding"
                   onlyBack={false}

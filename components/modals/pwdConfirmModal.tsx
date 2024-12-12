@@ -19,18 +19,18 @@ export default function PwdConfirmModal({
   // For the component to work properly, it should be placed inside a container that has position: relative.
 
   const [containerClass, setContainerClass] = useState(
-    `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
+    `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-0 -z-10`
   );
   const [pwdForm, setPwdForm] = useState({ pwd: "" });
 
   useEffect(() => {
     if (showModal) {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-100 z-20`
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-100 z-20`
       );
     } else {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-0 -z-10`
       );
     }
   }, [showModal]);

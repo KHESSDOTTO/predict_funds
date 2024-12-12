@@ -86,17 +86,17 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   }, [screenWidth]);
 
   return (
-    <main className="flex flex-col items-center gap-4 min-w-full text-sm lg:gap-0">
-      <div className="w-full mt-12 px-4 lg:mt-16">
+    <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm">
+      <div className="mt-14 w-full">
         <LogoPredict bold={false} />
       </div>
-      <div className="mt-4 lg:mt-10">
+      <div className="w-full">
         <ControlSection { ...controlSectionProps } />
       </div>
-      <div className="mt-6 lg:mt-8 w-screen">
+      <div className="w-full">
         <RegistrationInfos isLoading={ isLoading } registration={ registration } />
       </div>
-      {/* <div className="flex flex-col w-full mt-6 lg:mt-8 lg:flex-row gap-4">
+      {/* <div className="flex flex-col w-full lg:flex-row gap-4">
         {
           cvmClasses.map((currClass) => {
             return (
@@ -116,40 +116,42 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
           })
         }
       </div> */}
-      <div className="mt-6 lg:mt-16 w-screen">
-        <div className="w-full flex flex-col justify-center items-center gap-6 lg:gap-8 text-white">
-          <NetFundingPredChart
-            {...{
-              title: `Net Funding ${registration ? "- CNPJ: " + registration['CNPJ_FUNDO'] : ''}`,
-              smallV: false,
-              isMobile,
-              historic: historicData,
-              predictions: predictionData,
-            }}
-          />
-          <NetFundingHistogramChart
-            {...{
-              currCnpj: controlForm.buscaCnpj,
-              smallV: false,
-              anbimaClass: registration ? registration["CLASSE_ANBIMA"] : "",
-              isMobile,
-              dataForHistogram,
-              loadingHistogram,
-              setLoadingHistogram,
-            }}
-          />
-          <ValueQuotaChart
-            {...{ smallV: false, isMobile, historic: historicData }}
-          />
-        </div>
+      <div className="w-full">
+        <NetFundingPredChart
+          {...{
+            title: `Net Funding ${registration ? "- CNPJ: " + registration['CNPJ_FUNDO'] : ''}`,
+            smallV: false,
+            isMobile,
+            historic: historicData,
+            predictions: predictionData,
+          }}
+        />
       </div>
-      <div className="mt-6 lg:mt-12 w-screen">
+      <div className="w-full">
+        <NetFundingHistogramChart
+          {...{
+            currCnpj: controlForm.buscaCnpj,
+            smallV: false,
+            anbimaClass: registration ? registration["CLASSE_ANBIMA"] : "",
+            isMobile,
+            dataForHistogram,
+            loadingHistogram,
+            setLoadingHistogram,
+          }}
+        />
+      </div>
+      <div className="w-full">
+        <ValueQuotaChart
+          {...{ smallV: false, isMobile, historic: historicData }}
+        />
+      </div>
+      <div className="w-full">
         <CorrelCardsSection padding="5px 0" correls={ correls } />
       </div>
-      <div className="mt-8 lg:mt-12 w-screen">
+      <div className="w-full">
         <HeatMap title="Heat Map - Correlations" heatMapObj={ heatMapObj } />
       </div>
-      <div className="w-screen lg:mt-8 flex justify-center">
+      <div className="w-full flex justify-center lg:hidden">
         <CenariosBtnSection saveCenario={ () => saveCenario(saveCenariosArgs) } />
       </div>
     </main>
