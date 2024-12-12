@@ -4,7 +4,7 @@ interface LogoPredictPropsType {
 
 export default function LogoPredict(props: LogoPredictPropsType) {
   const { bold } = props;
-  const lgTextShadow = { textShadow: "2px 3px 3px rgba(200,200,200,0.9)" };
+  const lgTextShadow = { textShadow: "2px 2px 3px rgba(200,200,200,0.8)" };
 
   return (
     <div

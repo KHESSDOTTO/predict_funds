@@ -13,6 +13,7 @@ export default function VisualizationForm({
       <div className="flex text-xs items-center gap-1 md:text-sm">
         <input
           type="radio"
+          className="cursor-pointer"
           name="absOrPct"
           id="inpAbsOrPctABS"
           value={"abs"}
@@ -24,6 +25,7 @@ export default function VisualizationForm({
       <div className="flex items-center gap-1 text-xs md:text-sm">
         <input
           type="radio"
+          className="cursor-pointer"
           name="absOrPct"
           id="inpAbsOrPctPCT"
           value={"pct"}

@@ -45,7 +45,7 @@ export default function FilterForm ({
               CVM Class:
             </h4>
             <select
-              className='text-black rounded-full px-4 py-1'
+              className='cursor-pointer text-black rounded-full px-4 py-1'
                 name='CLASSE'
                 value={histogramControlForm['CLASSE']}
                 onChange={(e) => setHistogramControlForm({

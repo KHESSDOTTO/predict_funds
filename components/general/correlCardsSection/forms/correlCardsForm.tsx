@@ -10,6 +10,7 @@ export default function CorrelCardsForm({
       <div className="flex text-xs items-center gap-1 md:text-sm">
         <input
           type="radio"
+          className="cursor-pointer"
           name="monthsCorrel"
           id="monthsCorrel6"
           value={6}
@@ -21,6 +22,7 @@ export default function CorrelCardsForm({
       <div className="flex items-center gap-1 text-xs md:text-sm">
         <input
           type="radio"
+          className="cursor-pointer"
           name="monthsCorrel"
           id="monthsCorrel12"
           value={12}

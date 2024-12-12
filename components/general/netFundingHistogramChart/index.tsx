@@ -180,7 +180,7 @@ export default function NetFundingHistogramChart({
                         className="bg-gray-900 pt-4 rounded-sm lg:w-full lg:rounded-xl relative"
                       >
                         <ResponsiveContainer
-                          height={smallV ? 200 : isMobile ? 350 : 700}
+                          height={smallV ? 200 : isMobile ? 350 : 680}
                           minWidth={250}
                         >
                           <BarChart
@@ -199,7 +199,7 @@ export default function NetFundingHistogramChart({
                             />
                             <YAxis
                               width={isMobile ? 36 : 48}
-                              tickCount={8}
+                              tickCount={10}
                             />
                             <Tooltip
                               content={<HistogramTooltip />}
@@ -232,7 +232,7 @@ export default function NetFundingHistogramChart({
                         onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
                         className="
                           lg:absolute lg:right-1 lg:block lg:w-fit
-                          mt-4 bottom-0 w-full flex justify-center
+                          mt-4 bottom-0 lg:-bottom-4 w-full flex justify-center
                         "
                       >
                         <ButtonGreen shadowColor="white/30" shadowSize="md">

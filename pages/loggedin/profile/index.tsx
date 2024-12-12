@@ -62,7 +62,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
 
   return (
     <div className="bg-black">
-      <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-gray-800/60 to-green-900/60 from-85% text-white">
+      <div className="min-h-screen relative text-white">
         <Header user={user}></Header>
         <PwdConfirmModal
           showModal={showModal}
@@ -73,13 +73,15 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
             doSubmitEmailChange({ e, setShowModal, form, user })
           }
         />
-        <main className="flex flex-col items-center py-8 px-4 lg:pt-12 lg:pb-24">
+        <main className="flex flex-col items-center py-8 px-8 lg:pt-12 lg:pb-24">
           <div className="w-full mt-4 mb-8 lg:mb-16">
             <LogoPredict bold={false} />
           </div>
-          <h1 className="text-3xl my-6 px-4 pb-2 font-serif lg:w-full border-b lg:border-white lg:mt-0 lg:mb-12">
-            Profile
-          </h1>
+          <div className="lg:px-28 flex justify-center w-full">
+            <h1 className="text-center lg:text-left w-fit text-3xl my-6 px-8 pb-2 font-serif lg:w-full border-b lg:border-white lg:mt-0 lg:mb-12">
+              Profile
+            </h1>
+          </div>
           <div className="flex flex-col items-center lg:items-start">
             <section id="userInfos" className="relative lg:px-16">
               <ProfileForm {...profileFormArgs} />
@@ -93,7 +95,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
             </div>
             <div className="flex flex-col w-[100vw] justify-center items-center gap-8 pt-2 lg:flex-row lg:absolute lg:bottom-12 lg:left-0">
               <div
-                className="text-indigo-100 transition-all underline hover:cursor-pointer hover:text-yellow-600 hover:duration-300 hover:-translate-y-px"
+                className="text-gray-300 transition-all border-white/50 px-2 pb-1 hover:cursor-pointer hover:text-yellow-600 hover:duration-300 hover:scale-105"
                 onClick={() => handleChangePwd({ user })}
               >
                 Change Password

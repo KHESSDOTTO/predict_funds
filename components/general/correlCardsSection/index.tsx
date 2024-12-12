@@ -11,7 +11,7 @@ import { Navigation } from "swiper/modules";
 import styles from "./correlCardsSection.module.css";
 import type { CorrelCardsSectionProps } from "./correlCardsSectionTypes";
 import type { CardPropsType } from "@/utils/types/generalTypes/types";
-import Card from "@/components/UI/card";
+import Card from "@/components/UI/card/card";
 import { SwiperSlide } from "swiper/react";
 import TitleComponent from "@/components/UI/titleComponent";
 
@@ -29,15 +29,15 @@ export default function CorrelCardsSection({
   const breakpoints = {
     320: {
       slidesPerView: 1,
-      spaceBetween: 20,
+      spaceBetween: 10,
     },
     992: {
-      slidesPerView: 2,
-      spaceBetween: 30,
+      slidesPerView: 3,
+      spaceBetween: 10,
     },
     1200: {
       slidesPerView: 3,
-      spaceBetween: 30,
+      spaceBetween: 10,
     },
   };
   const hiddenFields = [
@@ -96,7 +96,7 @@ export default function CorrelCardsSection({
           </Tippy>
         </TitleComponent>
       </div>
-      <section className="relative w-screen" style={{ padding: padding }}>
+      <section className="relative w-full" style={{ padding: padding }}>
         <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
         </div>
@@ -116,7 +116,6 @@ export default function CorrelCardsSection({
         {!isLoadingCorrels && (
           <>
             <Swiper
-              className={"w-full flex justify-center items-center py-8 px-4"}
               slidesPerGroup={1}
               loop={true}
               navigation={{
@@ -124,7 +123,7 @@ export default function CorrelCardsSection({
                 prevEl: ".swiper-button-prev",
               }}
               speed={600}
-              style={{ width: "80%", height: "auto" }}
+              style={{ width: "90%", height: "auto" }}
               breakpoints={breakpoints}
             >
               {selCorrels.map((cE: any[], index: number) => {
@@ -139,7 +138,7 @@ export default function CorrelCardsSection({
                 }
 
                 return (
-                  <SwiperSlide key={index}>
+                  <SwiperSlide key={index} className="px-4 py-2">
                     <Card {...props} />
                   </SwiperSlide>
                 );

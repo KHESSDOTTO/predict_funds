@@ -23,7 +23,7 @@ export default function SendEmailModal({
   textBtn,
 }: SendEmailModalProsType) {
   const [containerClass, setContainerClass] = useState(
-    `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
+    `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-0 -z-10`
   );
   const [changePwdForm, setChangePwdForm] = useState<ChangePwdFormType>({
     field: "",
@@ -38,11 +38,11 @@ export default function SendEmailModal({
   useEffect(() => {
     if (showModal) {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-100 z-20`
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-100 z-20`
       );
     } else {
       setContainerClass(
-        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-screen opacity-0 -z-10`
+        `transition-all duration-300 absolute top-0 bottom-0 backdrop-blur-md min-h-screen w-full opacity-0 -z-10`
       );
     }
   }, [showModal]);
@@ -124,7 +124,7 @@ export default function SendEmailModal({
                 Information to send e-mail
               </label>
               <select
-                className="text-center bg-white border border-gray-500 rounded-full my-1 px-4 py-1 w-full"
+                className="cursor-pointer text-center bg-white border border-gray-500 rounded-full my-1 px-4 py-1 w-full"
                 name="field"
                 id="field"
                 value={changePwdForm.field}

@@ -43,14 +43,14 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
 
   return (
     <div className="bg-black">
-      <div className="min-h-screen relative bg-gradient-to-br bg-fixed from-gray-800/60 from-85% to-blue-900/60 text-white/90">
+      <div className="min-h-screen relative text-white/90">
         {userFromToken && <Header user={userFromToken} />}
         <div className="px-4">
           <div className="mt-12 lg:mt-16 mb-8 lg:mb-12">
             <LogoPredict bold={false} />
           </div>
           <div className="flex justify-center lg:hidden">
-            <h1 className="text-center text-3xl font-semibold pt-6 pb-2 mb-4 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
+            <h1 className="text-center text-3xl border-b px-8 border-white font-semibold pb-2 mb-8 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
               My Cenarios
             </h1>
           </div>
@@ -59,7 +59,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
           </h1>
           <section
             id="cenarios"
-            className="mb-8 flex flex-col gap-12 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
+            className="mb-8 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
           >
             {cenarios?.map((cE, cI) => {
               return (
@@ -82,10 +82,10 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
         </div>
         <footer
           ref={footerRef}
-          className={`bg-gradient-to-b from-black/30 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+          className={`bg-gradient-to-b from-black/50 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
         >
           <div onClick={() => exportCenarios({ cenarios })}>
-            <ButtonGreen shadowSize="none" shadowColor="black">
+            <ButtonGreen shadowSize="none" shadowColor="">
               Export
             </ButtonGreen>
           </div>

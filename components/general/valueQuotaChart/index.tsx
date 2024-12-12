@@ -38,16 +38,16 @@ export default function ValueQuotaChart({
   return (
     <div
       id="ValueQuotaDiv"
-      className={` ${smallV ? "pb-2 lg:w-[48.5%]" : "pb-4 w-full"}`}
+      className={` ${smallV ? "pt-4 lg:w-[45%]" : "pb-4 w-full"}`}
     >
       {!smallV}
       <div className={`flex justify-center lg:block`}>
         <h2
           className={`mb-4 p-2 ${
             smallV
-              ? "text-md w-9/12 mx-auto text-black border-black"
+              ? "pt-0 text-md w-9/12 mx-auto text-black border-black"
               : "text-lg mx-[16vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:px-2 lg:mx-4 lg:text-left`}
+          } font-semibold text-center border-b lg:pb-2 lg:px-4 lg:mx-4 lg:text-left`}
         >
           Value - Quota
           <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
@@ -63,10 +63,10 @@ export default function ValueQuotaChart({
       >
         <div
           className={`bg-gray-900 pt-4 px-4 rounded-sm ${
-            smallV ? "lg:w-full lg:h-[210px]" : "lg:w-[60%] lg:h-[412px]"
+            smallV ? "lg:w-full lg:h-[250px]" : "lg:w-[60%] lg:h-[412px]"
           } lg:rounded-xl`}
         >
-          <ResponsiveContainer height={smallV ? 200 : isMobile ? 300 : 400}>
+          <ResponsiveContainer height={smallV ? 240 : isMobile ? 300 : 400}>
             <AreaChart data={historic}>
               <defs>
                 <linearGradient id="customYellow" x1="0" y1="0" x2="0" y2="1">
@@ -113,7 +113,7 @@ export default function ValueQuotaChart({
           </ResponsiveContainer>
         </div>
         {!smallV && (
-          <div className="px-4 mt-1 lg:w-[40%] lg:mr-4">
+          <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
             <PredList
               title="Value Quota (history)"
               onlyBack={true}

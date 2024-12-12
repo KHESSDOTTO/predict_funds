@@ -22,7 +22,7 @@ export default function ControlFormMobile({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const inputRangeClass = "px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const inputRangeClass = "cursor-pointer px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const fundOptions = arrCnpjName.map(cE => (
     {
       name: cE['DENOM_SOCIAL'],
