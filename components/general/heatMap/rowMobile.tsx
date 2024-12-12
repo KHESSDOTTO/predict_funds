@@ -15,7 +15,7 @@ export default function RowMobile({
   return (
     <tr
       key={id}
-      className="border-b border-gray-600 hover:bg-gray-700 hover:bg-opacity-50"
+      className="border-b border-gray-600 hover:bg-gray-800 hover:bg-opacity-50"
     >
       <td className="py-3 px-6 bg-gradient-to-r from-gray-100 to-gray-300 text-black text-center whitespace-nowrap font-medium w-1/3">
         {nameTicker}

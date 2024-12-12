@@ -61,7 +61,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   }, []);
 
   return (
-    <div className="bg-black">
+    <div className="bg-black/90">
       <div className="min-h-screen relative text-white">
         <Header user={user}></Header>
         <PwdConfirmModal
@@ -74,7 +74,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           }
         />
         <main className="flex flex-col items-center py-8 px-8 lg:pt-12 lg:pb-24">
-          <div className="w-full mt-4 mb-8 lg:mb-16">
+          <div className="w-full mt-6 mb-4 lg:mb-12">
             <LogoPredict bold={false} />
           </div>
           <div className="lg:px-28 flex justify-center w-full">
@@ -95,7 +95,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
             </div>
             <div className="flex flex-col w-[100vw] justify-center items-center gap-8 pt-2 lg:flex-row lg:absolute lg:bottom-12 lg:left-0">
               <div
-                className="text-gray-300 transition-all border-white/50 px-2 pb-1 hover:cursor-pointer hover:text-yellow-600 hover:duration-300 hover:scale-105"
+                className="text-gray-300 transition-all border-white/50 px-2 pb-1 hover:cursor-pointer hover:text-yellow-600 hover:duration-200 hover:scale-105"
                 onClick={() => handleChangePwd({ user })}
               >
                 Change Password

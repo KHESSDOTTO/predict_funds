@@ -86,7 +86,7 @@ export default function NetFundingPredChart({
             smallV
               ? "text-md w-9/12 mx-auto text-black border-black"
               : "text-lg max-w-fit p-2 text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-4 lg:text-left`}
+          } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-0 lg:text-left`}
         >
           { title }
         </h2>
@@ -102,7 +102,7 @@ export default function NetFundingPredChart({
         }`}
       >
         <div
-          className={`bg-gray-900 px-4 pt-4 rounded-sm overflow-hidden ${
+          className={`bg-gray-800 px-4 pt-4 rounded-sm overflow-hidden ${
             (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
           } lg:rounded-xl`}
         >

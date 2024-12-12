@@ -42,19 +42,19 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   }, []);
 
   return (
-    <div className="bg-black">
+    <div className="bg-black/90">
       <div className="min-h-screen relative text-white/90">
         {userFromToken && <Header user={userFromToken} />}
-        <div className="px-4">
-          <div className="mt-12 lg:mt-16 mb-8 lg:mb-12">
+        <div className="px-4 lg:px-8">
+          <div className="mt-12 lg:mt-14 mb-8 lg:mb-8">
             <LogoPredict bold={false} />
           </div>
           <div className="flex justify-center lg:hidden">
-            <h1 className="text-center text-3xl border-b px-8 border-white font-semibold pb-2 mb-8 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
+            <h1 className="text-center text-2xl border-b px-8 border-white font-semibold pb-2 mb-8 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
               My Cenarios
             </h1>
           </div>
-          <h1 className="hidden text-3xl px-2 font-bold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:w-full">
+          <h1 className="hidden text-xl px-8 font-bold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:w-full">
             My Cenarios
           </h1>
           <section
@@ -82,7 +82,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
         </div>
         <footer
           ref={footerRef}
-          className={`bg-gradient-to-b from-black/50 via-black/80 to-black flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+          className={`bg-gradient-to-b from-black/50 via-black/80 to-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
         >
           <div onClick={() => exportCenarios({ cenarios })}>
             <ButtonGreen shadowSize="none" shadowColor="">

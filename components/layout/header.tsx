@@ -19,7 +19,7 @@ function Header({ user }: HeaderPropsType) {
       <SideBar showSideBar={showSideBar} setShowSideBar={setShowSideBar} />
 
       <header className="h-16">
-        <div className="grid grid-cols-12 text-xs bg-black border-b-2 border-white/10 items-center text-white h-16 px-4 fixed w-full top-0 z-20 md:text-sm">
+        <div className="grid grid-cols-12 text-xs bg-black/90 border-b-2 border-white/70 items-center text-white h-16 px-4 fixed w-full top-0 z-20 md:text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -37,7 +37,7 @@ function Header({ user }: HeaderPropsType) {
           className="cursor-pointer">
             <Link
               href={"/loggedin/home"}
-              className="flex items-center duration-300 justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
+              className="flex items-center duration-200 justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +58,7 @@ function Header({ user }: HeaderPropsType) {
           <div>
             <Link
               href={"/loggedin/profile"}
-              className="flex cursor-pointer duration-300 items-center justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
+              className="flex cursor-pointer duration-200 items-center justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
