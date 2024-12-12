@@ -70,7 +70,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
       {!isLoadingCorrels && (
         <>
           {/* Desk */}
-          <div className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto rounded-md hover:scale-[101%] duration-300 transition-all" style={{boxShadow: '0 3px 10px 0 rgba(255,255,255,0.8)'}}>
+          <div className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto rounded-md hover:scale-[101%] duration-200 transition-all" style={{boxShadow: '0 3px 10px 0 rgba(255,255,255,0.8)'}}>
             <table className="text-center border border-gray-500 rounded-md border-separate border-spacing-0 overflow-hidden">
               <thead>
                 <tr className="bg-gray-500 bg-opacity-60 text-white uppercase text-sm leading-normal">
@@ -104,10 +104,10 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
           {/* End Desk */}
 
           {/* Mobile */}
-          <div className="overflow-x-auto lg:hidden hover:scale-[101%] duration-300 transition-all">
+          <div className="overflow-x-auto lg:hidden hover:scale-[101%] duration-200 transition-all">
             <table className="text-center border border-gray-500 rounded-lg w-full">
               <thead>
-                <tr className="bg-gray-700 bg-opacity-50 text-white uppercase text-sm leading-normal">
+                <tr className="bg-gray-800 bg-opacity-50 text-white uppercase text-sm leading-normal">
                   <th className="py-3 px-6 text-left w-1/3"></th>
 
                   {selCorrelsKeys.map((key) => (

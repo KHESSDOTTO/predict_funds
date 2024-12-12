@@ -13,7 +13,7 @@ export default function CenariosBtnSection({
         <div className="w-full flex justify-center items-start gap-4 lg:bg-gradient-to-b lg:from-black/50 lg:via-black/40 lg:via-50% lg:pt-[10px] lg:pb-4">
           <button
             onClick={saveCenario}
-            className="text-indigo-400 px-1 transition-all duration-300 border-indigo-400 hover:text-indigo-300 lg:hover:border-indigo-500 hover:-translate-y-px"
+            className="text-indigo-400 px-1 transition-all duration-200 border-indigo-400 hover:text-indigo-300 lg:hover:border-indigo-500 hover:-translate-y-px"
           >
             + Save Cenario
           </button>

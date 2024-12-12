@@ -141,7 +141,7 @@ export default function NetFundingHistogramChart({
 
           (
             <>
-              <div className="py-4 px-4 lg:px-8 flex flex-col lg:flex-row gap-6 lg:gap-12">
+              <div className="py-4 px-0 lg:px-8 flex flex-col lg:flex-row gap-6 lg:gap-12">
                 <div className="flex flex-col gap-6">
                   <div className="relative">
                     <SelFundInfos
@@ -177,7 +177,7 @@ export default function NetFundingHistogramChart({
 
                     <div className="flex flex-col gap-4 lg:pb-6 relative">
                       <div
-                        className="bg-gray-900 pt-4 rounded-sm lg:w-full lg:rounded-xl relative"
+                        className="bg-gray-800 pt-4 rounded-sm lg:w-full lg:rounded-xl relative"
                       >
                         <ResponsiveContainer
                           height={smallV ? 200 : isMobile ? 350 : 680}
@@ -216,7 +216,7 @@ export default function NetFundingHistogramChart({
                             </Bar>
                           </BarChart>
                         </ResponsiveContainer>
-                        <div className="block lg:hidden text-gray-400 text-base absolute bottom-[-8px] right-[50%] translate-x-[50%]">
+                        <div className="block lg:hidden text-gray-400 text-base absolute bottom-0 translate-y-8 right-[50%] translate-x-[50%]">
                           <p>
                             Funds count:
                             &nbsp;
@@ -232,7 +232,7 @@ export default function NetFundingHistogramChart({
                         onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
                         className="
                           lg:absolute lg:right-1 lg:block lg:w-fit
-                          mt-4 bottom-0 lg:-bottom-4 w-full flex justify-center
+                          mt-6 bottom-0 lg:-bottom-4 w-full flex justify-center
                         "
                       >
                         <ButtonGreen shadowColor="white/30" shadowSize="md">

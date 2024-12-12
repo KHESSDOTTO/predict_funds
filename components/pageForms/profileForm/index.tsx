@@ -87,7 +87,7 @@ export default function ProfileForm({
           />
         </div>
       </div>
-      <div className="hidden text-gray-100 lg:flex text-lg justify-center mb-4 underline font-semibold transition-all duration-300 hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-32 lg:border-l-2 lg:border-gray-100 lg:no-underline lg:pl-4 lg:right-[-45px] lg:bottom-[50%] lg:translate-y-[50%] lg:text-base lg:mb-0">
+      <div className="hidden text-gray-100 lg:flex text-lg justify-center mb-4 underline font-semibold transition-all duration-200 hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-32 lg:border-l-2 lg:border-gray-100 lg:no-underline lg:pl-4 lg:right-[-45px] lg:bottom-[50%] lg:translate-y-[50%] lg:text-base lg:mb-0">
         <button type="submit">Save</button>
       </div>
     </form>

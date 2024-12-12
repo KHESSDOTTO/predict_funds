@@ -12,7 +12,7 @@ export default function RowDesk({
   return (
     <tr
       key={id}
-      className={`border-t border-gray-600 hover:bg-gray-700 hover:bg-opacity-50 last:rounded-b-sm`}
+      className={`border-t border-gray-600 hover:bg-gray-800 hover:bg-opacity-50 last:rounded-b-sm`}
     >
       <td
         className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/12 border-r-2`}

@@ -47,7 +47,7 @@ export default function ValueQuotaChart({
             smallV
               ? "pt-0 text-md w-9/12 mx-auto text-black border-black"
               : "text-lg mx-[16vw] text-white/90 border-white/90"
-          } font-semibold text-center border-b lg:pb-2 lg:px-4 lg:mx-4 lg:text-left`}
+          } font-semibold text-center border-b lg:pb-2 lg:px-4 lg:mx-0 lg:text-left`}
         >
           Value - Quota
           <span className={`italic ${smallV ? "text-xs" : "text-sm"}`}>
@@ -62,7 +62,7 @@ export default function ValueQuotaChart({
         }`}
       >
         <div
-          className={`bg-gray-900 pt-4 px-4 rounded-sm ${
+          className={`bg-gray-800 pt-4 px-4 rounded-sm ${
             smallV ? "lg:w-full lg:h-[250px]" : "lg:w-[60%] lg:h-[412px]"
           } lg:rounded-xl`}
         >
