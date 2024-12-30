@@ -16,11 +16,12 @@ import { SwiperSlide } from "swiper/react";
 import TitleComponent from "@/components/UI/titleComponent";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { exportCorrels } from "./correlCardsSectionFunctions";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 SwiperCore.use([Navigation]);
 
 export default function CorrelCardsSection({
-  padding,
   correls,
 }: CorrelCardsSectionProps) {
   const tippyContent =
@@ -28,6 +29,8 @@ export default function CorrelCardsSection({
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [selCorrels, setSelCorrels] = useState<any>([]);
   const [numMonths, setNumMonths] = useState(6);
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth <= 992;
   const breakpoints = {
     320: {
       slidesPerView: 1,
@@ -98,7 +101,7 @@ export default function CorrelCardsSection({
           </Tippy>
         </TitleComponent>
       </div>
-      <section className="relative w-full" style={{ padding: padding }}>
+      <section className="relative w-full py-2 mb-8 lg:mb-2">
         <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
@@ -162,6 +165,14 @@ export default function CorrelCardsSection({
               <div
                 className={`swiper-button-next ${styles.swiperButtonNext}`}
               ></div>
+              <div
+                onClick={() => exportCorrels({ correls })}
+                className="lg:hidden absolute right-[50%] bottom-0 translate-x-[50%] translate-y-full"
+              >
+                <ButtonGreen shadowColor="white/30" shadowSize="md">
+                  Export
+                </ButtonGreen>
+              </div>
             </>
           )
         }
