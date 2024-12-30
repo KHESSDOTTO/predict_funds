@@ -11,8 +11,12 @@ import HeatMapForm from "./forms/heatMapForm";
 import RowDesk from "./rowDesk";
 import RowMobile from "./rowMobile";
 import TitleComponent from "@/components/UI/titleComponent";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
-export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
+export default function HeatMap({
+  title,
+  heatMapObj
+}: HeatMapPropsType) {
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [tickers, setTickers] = useState<string[]>([]);
   const [numMonths, setNumMonths] = useState(6);
@@ -47,7 +51,9 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   return (
     <div className="w-full">
       <div className="flex justify-center lg:block lg:w-full">
-        <TitleComponent>{title}</TitleComponent>
+        <TitleComponent>
+          { title }
+        </TitleComponent>
       </div>
       <div className="text-sm text-gray-200 pb-4 pt-2 flex relative justify-center lg:py-6 lg:mb-6 lg:pt-4 lg:text-base">
         <HeatMapForm {...heatMapFormArgs} />

@@ -1,5 +1,6 @@
 import { HeatMapObjType } from "./heatMapTypes";
-import type { PrepareHeatMapParamsType } from "./heatMapTypes";
+import type { ExportHeatMapParams, PrepareHeatMapParamsType } from "./heatMapTypes";
+import * as XLSX from 'xlsx';
 
 function prepareHeatMap({
   heatMapObj,
@@ -34,4 +35,27 @@ function prepareHeatMap({
   }
 }
 
-export { prepareHeatMap };
+function exportHeatMap({
+    heatMapObj
+}: ExportHeatMapParams): void {
+  const workbook = XLSX.utils.book_new();
+  const currTime = new Date();
+  const fileName = "export_heatmap_" + currTime.toISOString() + ".xlsx";
+  const sheetTitles = Object.keys(heatMapObj) as (keyof HeatMapObjType)[];
+
+  sheetTitles.forEach(currTitle => {
+    const sheetContent = Object.entries(heatMapObj[currTitle])
+    const currSheet = XLSX.utils.aoa_to_sheet(sheetContent);
+
+    XLSX.utils.book_append_sheet(workbook, currSheet, currTitle);
+  })
+
+  XLSX.writeFile(workbook, fileName);
+
+  return;
+}
+
+export {
+  prepareHeatMap,
+  exportHeatMap,
+};

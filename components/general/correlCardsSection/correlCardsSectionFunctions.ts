@@ -10,7 +10,7 @@ function exportCorrels({
 
   const workbook = XLSX.utils.book_new();
   const currTime = new Date();
-  const fileName = "export_" + currTime.toISOString() + ".xlsx";
+  const fileName = "export_correls_" + currTime.toISOString() + ".xlsx";
   
   correls.forEach(currCorrelPeriod => {
     const periodElement = currCorrelPeriod.filter(currField => currField[0] === 'janela_em_meses');

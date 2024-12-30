@@ -41,6 +41,10 @@ interface PrepareHeatMapParamsType {
   setTickers: Dispatch<SetStateAction<string[]>>;
   setSelCorrels: Dispatch<SetStateAction<HeatMapObjType>>;
 }
+
+interface ExportHeatMapParams {
+  heatMapObj: HeatMapObjType;
+}
 // End: types used in functions
 
 export type {
@@ -52,4 +56,5 @@ export type {
   RowDeskPropsType,
   RowMobilePropsType,
   HeatMapFormPropsType,
+  ExportHeatMapParams,
 };
