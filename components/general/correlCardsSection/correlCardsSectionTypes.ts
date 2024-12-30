@@ -15,8 +15,13 @@ interface CorrelCardsFormPropsType {
   setNumMonths: Dispatch<SetStateAction<number>>;
 }
 
+interface ExportCorrelsParamsType {
+  correls: any[][];
+}
+
 export type {
   CorrelCardsSectionProps,
   SwiperChildrenPropsType,
   CorrelCardsFormPropsType,
+  ExportCorrelsParamsType,
 };
