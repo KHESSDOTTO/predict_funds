@@ -45,6 +45,10 @@ interface PrepareHeatMapParamsType {
 interface ExportHeatMapParams {
   heatMapObj: HeatMapObjType;
 }
+
+interface ReshapedHeatMapObjType {
+  [key: string]: HeatMapObjType;
+}
 // End: types used in functions
 
 export type {
@@ -57,4 +61,5 @@ export type {
   RowMobilePropsType,
   HeatMapFormPropsType,
   ExportHeatMapParams,
+  ReshapedHeatMapObjType,
 };

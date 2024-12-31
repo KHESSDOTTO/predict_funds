@@ -86,7 +86,7 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   }, [screenWidth]);
 
   return (
-    <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm">
+    <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm py-2">
       <div className="mt-14 w-full">
         <LogoPredict bold={false} />
       </div>

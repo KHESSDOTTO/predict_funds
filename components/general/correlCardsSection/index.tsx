@@ -106,7 +106,7 @@ export default function CorrelCardsSection({
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
             onClick={() => exportCorrels({ correls })}
-            className="hidden lg:block absolute right-8 scale-[90%] bottom-[50%] translate-y-[50%]"
+            className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
           >
             <ButtonGreen shadowColor="white/30" shadowSize="md">
               Export
