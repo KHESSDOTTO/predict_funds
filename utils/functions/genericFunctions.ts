@@ -86,6 +86,11 @@ async function doLogout({ userContext, router }: DoLogoutParamsType) {
   }
 }
 
+function arrUnique(arr: any[]): any[] {
+  const newSet = new Set(arr);
+  return Array(newSet);
+}
+
 export {
   capitalize,
   pushIfNew,
@@ -93,4 +98,5 @@ export {
   buildPredKey,
   consoleLog,
   doLogout,
+  arrUnique,
 };

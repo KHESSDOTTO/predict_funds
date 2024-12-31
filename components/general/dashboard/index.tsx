@@ -86,7 +86,7 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   }, [screenWidth]);
 
   return (
-    <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm">
+    <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm py-2">
       <div className="mt-14 w-full">
         <LogoPredict bold={false} />
       </div>
@@ -96,26 +96,28 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={ isLoading } registration={ registration } />
       </div>
-      {/* <div className="flex flex-col w-full lg:flex-row gap-4">
-        {
+      {
+        /* <div className="flex flex-col w-full lg:flex-row gap-4">
+          {
           cvmClasses.map((currClass) => {
-            return (
+              return (
               <div className="w-full lg:w-1/3">
-                <NetFundingPredChart
+                  <NetFundingPredChart
                   {...{
-                    title: `Net Funding CVM Class - ${currClass}`,
-                    smallV: false,
-                    isMobile,
-                    historic: historicData,
-                    predictions: predictionData,
-                    predList: false,
+                      title: `Net Funding CVM Class - ${currClass}`,
+                      smallV: false,
+                      isMobile,
+                      historic: historicData,
+                      predictions: predictionData,
+                      predList: false,
                   }}
-                />
+                  />
               </div>
-            )
+              )
           })
-        }
-      </div> */}
+          }
+        </div> */
+      }
       <div className="w-full">
         <NetFundingPredChart
           {...{

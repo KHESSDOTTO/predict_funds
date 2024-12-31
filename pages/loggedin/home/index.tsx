@@ -47,7 +47,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
         <div className="px-4 lg:px-8">
           <Dashboard {...dashboardProps} />
         </div>
-        <div className="flex justify-center px-4 py-8 lg:justify-center">
+        <div className="flex justify-center px-4 py-8 lg:justify-center lg:mt-4">
           <div onClick={() => doLogout(doLogoutArgs)} className="w-fit">
             <ButtonRed shadowColor="white/30" shadowSize="md">
               Log Out

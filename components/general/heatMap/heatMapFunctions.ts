@@ -1,5 +1,8 @@
+import { consoleLog } from "@/utils/functions/genericFunctions";
 import { HeatMapObjType } from "./heatMapTypes";
-import type { PrepareHeatMapParamsType } from "./heatMapTypes";
+import type { ExportHeatMapParams, PrepareHeatMapParamsType, ReshapedHeatMapObjType } from "./heatMapTypes";
+import * as XLSX from 'xlsx';
+import { mapTickers } from "@/utils/mapTickersCorrels";
 
 function prepareHeatMap({
   heatMapObj,
@@ -34,4 +37,86 @@ function prepareHeatMap({
   }
 }
 
-export { prepareHeatMap };
+function exportHeatMap({
+    heatMapObj
+}: ExportHeatMapParams): void {
+  consoleLog({ heatMapObj });
+  const workbook = XLSX.utils.book_new();
+  const currTime = new Date();
+  const fileName = "export_heatmap_" + currTime.toISOString() + ".xlsx";
+  const heatMapKeys = Object.keys(heatMapObj) as (keyof HeatMapObjType)[];
+  const reshapedHeatMapObj: ReshapedHeatMapObjType = {};
+
+  consoleLog({ heatMapKeys });
+
+  heatMapKeys.forEach(currKey => {
+    heatMapObj[currKey].forEach((currobj: any) => {
+      consoleLog({ currobj });
+      const periodString = 'janela_em_meses_' + currobj['janela_em_meses'];
+      const copy = {...currobj};
+      delete copy['janela_em_meses'];
+
+      const content = Object.entries(copy);
+    
+      if (! reshapedHeatMapObj[periodString]) {
+        reshapedHeatMapObj[periodString] = {
+          avg: [{}],
+          fund: [{}],
+        }
+      }
+    
+      reshapedHeatMapObj[periodString][currKey] = content;
+    })
+  })
+
+  consoleLog({ reshapedHeatMapObj });
+
+  const sheetTitles = Object.keys(reshapedHeatMapObj) as (keyof ReshapedHeatMapObjType)[];
+
+  consoleLog({ sheetTitles });
+
+  sheetTitles.forEach(currTitle => {
+    const currData = reshapedHeatMapObj[currTitle];
+    const sheetContent: (number | string)[][] = [];
+    sheetContent.push([ '', 'fund', 'avg' ]);
+    
+    currData['fund'].forEach((cE: (string | number)[]) => {
+      const fundFieldName = cE[0];
+      const fundFieldValue = cE[1];
+      const avgFieldElement = currData['avg'].find((el: (string | number)[]) => el[0] === fundFieldName);
+
+      if (! avgFieldElement || avgFieldElement.length < 2) {
+        console.log(
+            'Did not find corresponding avg correl on heat map on element: ' +
+            fundFieldName
+        );
+        return;
+      }
+
+      sheetContent.push([
+        mapTickers[fundFieldName] ?
+            mapTickers[fundFieldName]
+            :
+            fundFieldName
+        ,
+        fundFieldValue,
+        avgFieldElement[1],
+      ])
+    })
+
+    consoleLog({ sheetContent });
+
+    const currSheet = XLSX.utils.aoa_to_sheet(sheetContent);
+
+    XLSX.utils.book_append_sheet(workbook, currSheet, String(currTitle));
+  });
+
+  XLSX.writeFile(workbook, fileName);
+
+  return;
+}
+
+export {
+  prepareHeatMap,
+  exportHeatMap,
+};

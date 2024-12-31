@@ -14,11 +14,14 @@ import type { CardPropsType } from "@/utils/types/generalTypes/types";
 import Card from "@/components/UI/card/card";
 import { SwiperSlide } from "swiper/react";
 import TitleComponent from "@/components/UI/titleComponent";
+import ButtonGreen from "@/components/UI/buttonGreen";
+import { exportCorrels } from "./correlCardsSectionFunctions";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 SwiperCore.use([Navigation]);
 
 export default function CorrelCardsSection({
-  padding,
   correls,
 }: CorrelCardsSectionProps) {
   const tippyContent =
@@ -26,6 +29,8 @@ export default function CorrelCardsSection({
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [selCorrels, setSelCorrels] = useState<any>([]);
   const [numMonths, setNumMonths] = useState(6);
+  const windowWidth = useWindowWidth();
+  const isMobile = windowWidth <= 992;
   const breakpoints = {
     320: {
       slidesPerView: 1,
@@ -96,62 +101,81 @@ export default function CorrelCardsSection({
           </Tippy>
         </TitleComponent>
       </div>
-      <section className="relative w-full" style={{ padding: padding }}>
+      <section className="relative w-full py-2 mb-8 lg:mb-2">
         <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
-        </div>
-        {isLoadingCorrels && (
-          <div className="flex justify-center items-center">
-            <ClipLoader
-              color={"white"}
-              loading={isLoadingCorrels}
-              size={50}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-              className="my-4"
-              speedMultiplier={0.75}
-            />
+          <div
+            onClick={() => exportCorrels({ correls })}
+            className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
+          >
+            <ButtonGreen shadowColor="white/30" shadowSize="md">
+              Export
+            </ButtonGreen>
           </div>
-        )}
-        {!isLoadingCorrels && (
-          <>
-            <Swiper
-              slidesPerGroup={1}
-              loop={true}
-              navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              }}
-              speed={600}
-              style={{ width: "90%", height: "auto" }}
-              breakpoints={breakpoints}
-            >
-              {selCorrels.map((cE: any[], index: number) => {
-                const props: CardPropsType = {
-                  title: cE[0],
-                  imgSrc: "",
-                  correlVal: cE[1],
-                };
+        </div>
+        {isLoadingCorrels ?
+          (
+            <div className="flex justify-center items-center">
+              <ClipLoader
+                color={"white"}
+                loading={isLoadingCorrels}
+                size={50}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+                className="my-4"
+                speedMultiplier={0.75}
+              />
+            </div>
+          )
+        :
+          (
+            <>
+              <Swiper
+                slidesPerGroup={1}
+                loop={true}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                speed={600}
+                style={{ width: "90%", height: "auto" }}
+                breakpoints={breakpoints}
+              >
+                {selCorrels.map((cE: any[], index: number) => {
+                  const props: CardPropsType = {
+                    title: cE[0],
+                    imgSrc: "",
+                    correlVal: cE[1],
+                  };
 
-                if (hiddenFields.includes(cE[0])) {
-                  return null;
-                }
+                  if (hiddenFields.includes(cE[0])) {
+                    return null;
+                  }
 
-                return (
-                  <SwiperSlide key={index} className="px-4 py-2">
-                    <Card {...props} />
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-            <div
-              className={`swiper-button-prev ${styles.swiperButtonPrev}`}
-            ></div>
-            <div
-              className={`swiper-button-next ${styles.swiperButtonNext}`}
-            ></div>
-          </>
-        )}
+                  return (
+                    <SwiperSlide key={index} className="px-4 py-2">
+                      <Card {...props} />
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+              <div
+                className={`swiper-button-prev ${styles.swiperButtonPrev}`}
+              ></div>
+              <div
+                className={`swiper-button-next ${styles.swiperButtonNext}`}
+              ></div>
+              <div
+                onClick={() => exportCorrels({ correls })}
+                className="lg:hidden absolute right-[50%] bottom-0 translate-x-[50%] translate-y-full"
+              >
+                <ButtonGreen shadowColor="white/30" shadowSize="md">
+                  Export
+                </ButtonGreen>
+              </div>
+            </>
+          )
+        }
       </section>
     </div>
   );

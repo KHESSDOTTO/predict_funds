@@ -11,7 +11,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
   useEffect(() => {
     if (showSideBar) {
       setContainerClass(
-        `transition-all duration-500 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-100 z-20`
+        `transition-all duration-500 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-100 z-30`
       );
     } else {
       setContainerClass(
@@ -29,6 +29,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
 
   return (
     <div className={containerClass} onClick={handleClickOutside}>
+      <div className="hidden z-30 -z-10"></div>
       <div
         className={`bg-black transition-all pointer-event-none sticky z-30 h-[70vh] w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
         style={{boxShadow: '0 0 15px rgba(255,255,255,0.5)'}}
