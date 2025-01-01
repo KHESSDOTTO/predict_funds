@@ -62,9 +62,9 @@ export default function ValueQuotaChart({
         }`}
       >
         <div
-          className={`bg-gray-800 pt-4 px-4 rounded-sm ${
+          className={`bg-gray-800 pt-4 pr-2 rounded-xl ${
             smallV ? "lg:w-full lg:h-[250px]" : "lg:w-[60%] lg:h-[412px]"
-          } lg:rounded-xl`}
+          }`}
         >
           <ResponsiveContainer height={smallV ? 240 : isMobile ? 300 : 400}>
             <AreaChart data={historic}>

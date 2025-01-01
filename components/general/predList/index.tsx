@@ -92,7 +92,7 @@ export default function PredList({
           + Add Row
         </button>
       </div>
-      <div className="absolute bottom-2 w-full ml-[-8px] text-center">
+      <div className="absolute bottom-2 w-full text-center">
         <div className="flex justify-center">
           <div onClick={() => handleAddRow(handleAddRowArgs)} className="w-fit">
             <ButtonIndigo shadowSize="md" shadowColor="black">

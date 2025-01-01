@@ -177,7 +177,7 @@ export default function NetFundingHistogramChart({
 
                     <div className="flex flex-col gap-4 lg:pb-6 relative">
                       <div
-                        className="bg-gray-800 pt-4 rounded-sm lg:w-full lg:rounded-xl relative"
+                        className="bg-gray-800 pt-4 lg:w-full pr-1 rounded-xl relative"
                       >
                         <ResponsiveContainer
                           height={smallV ? 200 : isMobile ? 350 : 680}

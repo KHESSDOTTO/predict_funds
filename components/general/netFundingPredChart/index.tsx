@@ -102,9 +102,9 @@ export default function NetFundingPredChart({
         }`}
       >
         <div
-          className={`bg-gray-800 px-4 pt-4 rounded-sm overflow-hidden ${
+          className={`bg-gray-800 px-1 pt-4 rounded-xl overflow-hidden ${
             (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
-          } lg:rounded-xl`}
+          }`}
         >
           <ResponsiveContainer
             height={smallV ? 240 : isMobile ? 300 : 400}
