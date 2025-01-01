@@ -41,7 +41,7 @@ export default function CenarioCard({
           <h3 className="font-bold mx-4 hidden lg:block text-base lg:mx-0 lg:mb-4">
             Params:
           </h3>
-          <ul className="lg:flex gap-4 lg:flex-col lg:gap-2">
+          <ul className="flex gap-1 flex-col lg:gap-2">
             <li>
               Var. Quota:
               <span className="font-bold">
