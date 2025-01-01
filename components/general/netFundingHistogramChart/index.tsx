@@ -141,24 +141,24 @@ export default function NetFundingHistogramChart({
 
           (
             <>
-              <div className="py-4 px-0 lg:px-8 flex flex-col lg:flex-row gap-6 lg:gap-12">
-                <div className="flex flex-col gap-6">
-                  <div className="relative">
+              <div className="py-4 px-0 lg:px-8 flex flex-col lg:flex-row lg:flex-wrap gap-6 lg:gap-12">
+                <div className="relative lg:w-full">
                     <SelFundInfos
-                      {
+                        {
                         ...{
-                          currCnpj,
-                          dataForHistogram,
-                          sliderInitialInfos
+                            currCnpj,
+                            dataForHistogram,
+                            sliderInitialInfos
                         }
-                      }
+                        }
                     />
-                  </div>
+                </div>
+                <div className="flex flex-col gap-6">
                   <div className="w-full lg:w-fit">
                     <FilterForm { ...filterFormProps } />
                   </div>
                 </div>
-                <div className="flex flex-grow flex-col lg:flex-row">
+                <div className="flex flex-grow flex-col lg:flex-row items-end">
                   <div className="flex mt-2 flex-col w-full lg:mt-0 lg:relative">
                     <div className="text-sm lg:px-1 py-4 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
                       <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
@@ -175,12 +175,12 @@ export default function NetFundingHistogramChart({
                       </p>
                     </div>
 
-                    <div className="flex flex-col gap-4 lg:pb-6 relative">
+                    <div className="flex flex-col gap-4 lg:py-4 relative">
                       <div
-                        className="bg-gray-800 pt-4 lg:w-full pr-1 rounded-xl relative"
+                        className="bg-gray-800 pt-4 lg:w-full pr-1 rounded-xl relative lg:bottom-10"
                       >
                         <ResponsiveContainer
-                          height={smallV ? 200 : isMobile ? 350 : 680}
+                          height={smallV ? 200 : isMobile ? 350 : 500}
                           minWidth={250}
                         >
                           <BarChart
@@ -232,7 +232,7 @@ export default function NetFundingHistogramChart({
                         onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
                         className="
                           lg:absolute lg:right-1 lg:block lg:w-fit
-                          mt-6 bottom-0 lg:-bottom-4 w-full flex justify-center
+                          mt-6 bottom-0 lg:bottom-8 w-full flex justify-center scale-90
                         "
                       >
                         <ButtonGreen shadowColor="white/30" shadowSize="md">

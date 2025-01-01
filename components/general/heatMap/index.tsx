@@ -124,8 +124,8 @@ export default function HeatMap({
               {/* End Desk */}
 
               {/* Mobile */}
-              <div className="overflow-x-auto lg:hidden hover:scale-[101%] duration-200 transition-all">
-                <table className="text-center border border-gray-500 rounded-lg w-full">
+              <div className="overflow-x-auto lg:hidden hover:scale-[101%] rounded-lg duration-200 transition-all" style={{boxShadow: '0 1px 10px 0 rgba(255,255,255,0.8)'}}>
+                <table className="text-center w-full">
                   <thead>
                     <tr className="bg-gray-800 bg-opacity-50 text-white uppercase text-sm leading-normal">
                       <th className="py-3 px-6 text-left w-1/3"></th>

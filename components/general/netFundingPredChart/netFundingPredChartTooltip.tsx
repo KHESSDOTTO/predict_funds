@@ -10,9 +10,11 @@ function NFTooltip({
   absOrPct,
   numWeeksPreds,
 }: NFTooltipProps) {
-  if (!numWeeksPreds) {
+
+  if (! numWeeksPreds) {
     return;
   }
+
   const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
   const predsElements = data?.slice(data.length - numWeeksPreds, data.length);
   const predsDates = predsElements?.map((cE) => cE.DT_COMPTC);
@@ -96,7 +98,7 @@ function NFTooltip({
     return (
       <div className={tooltipClass}>
         {isPrediction && <h3 className="font-semibold mb-1">Prediction</h3>}
-        {!isPrediction && <h3 className="font-semibold ">Historic</h3>}
+        {! isPrediction && <h3 className="font-semibold ">Historic</h3>}
         <h4 className="">{format(label, "d, MMM, yy")}</h4>
         <p>
           Net Funding:&nbsp;
