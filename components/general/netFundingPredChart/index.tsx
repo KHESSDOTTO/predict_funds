@@ -22,6 +22,7 @@ import {
 import PredList from "../predList";
 import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
 import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function NetFundingPredChart({
   title = 'Net Funding',
@@ -72,6 +73,7 @@ export default function NetFundingPredChart({
       };
 
       prepareChartNFData(prepareChartNFDataArgs);
+      consoleLog({ unifiedNFData });
     }
   }, [historic, predictions, absOrPct]);
 
@@ -85,7 +87,7 @@ export default function NetFundingPredChart({
           className={`mb-4 ${
             smallV
               ? "text-md w-9/12 mx-auto text-black border-black"
-              : "text-lg max-w-fit p-2 text-white/90 border-white/90"
+              : "text-lg w-full p-2 border-b-2 text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-0 lg:text-left`}
         >
           { title }
@@ -200,7 +202,16 @@ export default function NetFundingPredChart({
                 }}
               ></Line>
 
-              <ReferenceLine y={0} fill="white" strokeWidth={2} />
+              <ReferenceLine
+                y={0}
+                stroke="white"
+                strokeWidth={2}
+              />
+              <ReferenceLine
+                x={Number(unifiedNFData[historic.length - 1]['DT_COMPTC'])}
+                stroke="orange"
+                strokeWidth={2}
+              />
 
               <Tooltip
                 content={

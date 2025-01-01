@@ -105,7 +105,7 @@ export default function ControlSection({
 
   return (
     <>
-      <div className="w-full text-white/90 flex justify-center lg:block">
+      <div className="w-full text-white/90 flex justify-center lg:block mb-2 lg:mb-0">
         <TitleComponent>Control Section</TitleComponent>
       </div>
       <div

@@ -58,7 +58,7 @@ export default function PredList({
   }, [historic, predictions]);
 
   return (
-    <div className="text-black h-full w-full pb-16 bg-gradient-to-br from-white from-15% to-white/30 border-black relative rounded-xl shadow-md shadow-indigo-900">
+    <div className="text-black h-full w-full pb-20 pt-2 bg-gradient-to-br from-white from-15% to-white/30 border-black relative rounded-xl shadow-md shadow-indigo-900">
       {title && (
         <div className="flex justify-center w-full">
           <h2 className="font-bold mb-4 text-center border-black text-base py-1 px-4 border-b">
@@ -92,7 +92,7 @@ export default function PredList({
           + Add Row
         </button>
       </div>
-      <div className="absolute bottom-2 w-full text-center">
+      <div className="absolute bottom-4 w-full text-center">
         <div className="flex justify-center">
           <div onClick={() => handleAddRow(handleAddRowArgs)} className="w-fit">
             <ButtonIndigo shadowSize="md" shadowColor="black">
