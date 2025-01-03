@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import PredList from "@/components/general/predList";
 import ValueQuotaTooltip from "./valueQuotaChartTooltip";
+import ButtonGreen from "@/components/UI/buttonGreen";
 
 export default function ValueQuotaChart({
   smallV,
@@ -45,7 +46,7 @@ export default function ValueQuotaChart({
         <h2
           className={`mb-4 p-2 ${
             smallV
-              ? "pt-0 text-md w-9/12 mx-auto text-black border-black"
+              ? "pt-0 text-md w-9/12 mx-auto text-black border-b border-black"
               : "text-lg mx-2 w-full border-b-2 text-white/90 border-white/90"
           } font-semibold text-center lg:border-b lg:pb-2 lg:px-4 lg:mx-0 lg:text-left`}
         >
@@ -57,7 +58,7 @@ export default function ValueQuotaChart({
         </h2>
       </div>
       <div
-        className={`flex flex-col gap-4 lg:flex-row ${
+        className={`flex flex-col lg:relative lg:pb-12 gap-4 lg:flex-row ${
           smallV ? "" : "lg:mx-6 lg:mt-6"
         }`}
       >
@@ -111,17 +112,40 @@ export default function ValueQuotaChart({
               <Tooltip content={<ValueQuotaTooltip />} />
             </AreaChart>
           </ResponsiveContainer>
+        {
+          ! smallV &&
+          (
+            <div className="text-end mt-2 ml-1 hidden lg:block absolute bottom-0 left-0">
+              <ButtonGreen shadowColor="white/30" shadowSize="md">
+                Export
+              </ButtonGreen>
+            </div>
+          )
+        }
+
         </div>
-        {!smallV && (
-          <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
-            <PredList
-              title="Value Quota (history)"
-              onlyBack={true}
-              historic={historic}
-              varName={"VL_QUOTA_ms"}
-            />
-          </div>
-        )}
+
+        {
+          ! smallV &&
+          (
+            <>
+              <div className="text-center lg:hidden">
+                <ButtonGreen shadowColor="white/30" shadowSize="md">
+                  Export
+                </ButtonGreen>
+              </div>
+              <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
+                <PredList
+                  title="Value Quota (history)"
+                  onlyBack={true}
+                  historic={historic}
+                  varName={"VL_QUOTA_ms"}
+                />
+              </div>
+            </>
+          )
+        }
+
       </div>
     </div>
   );

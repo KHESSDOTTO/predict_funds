@@ -1,4 +1,5 @@
-import { AdjustValueQuotaChartAxisParamsType } from "./valueQuotaChartTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
+import { AdjustValueQuotaChartAxisParamsType, ExportValueQuotaParams } from "./valueQuotaChartTypes";
 
 function adjustValueQuotaChartAxis({
   historic,
@@ -30,6 +31,13 @@ function adjustValueQuotaChartAxis({
   );
 
   setTicksYaxisVQ(newTicksYaxisVQ);
+}
+
+function exportValueQuota({
+    historic
+}: ExportValueQuotaParams) {
+    consoleLog({ historic });
+    return;
 }
 
 export { adjustValueQuotaChartAxis };

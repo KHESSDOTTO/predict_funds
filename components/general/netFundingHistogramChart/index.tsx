@@ -163,7 +163,7 @@ export default function NetFundingHistogramChart({
                     <div className="text-sm lg:px-1 py-4 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
                       <VisualizationForm { ...{ absOrPct, setAbsOrPct } } />
                     </div>
-                    <div className="hidden lg:block text-center text-gray-400 text-sm lg:text-base lg:text-left lg:absolute lg:top-2 lg:right-1">
+                    <div className="hidden lg:block text-center text-gray-400 text-sm lg:text-base lg:text-left lg:absolute lg:top-0 lg:right-1">
                       <p>
                         Funds count:
                         &nbsp;
@@ -175,7 +175,7 @@ export default function NetFundingHistogramChart({
                       </p>
                     </div>
 
-                    <div className="flex flex-col gap-4 lg:py-4 relative">
+                    <div className="flex flex-col gap-4 lg:pt-8 lg:pb-10 relative">
                       <div
                         className="bg-gray-800 pt-4 lg:w-full pr-1 rounded-xl relative lg:bottom-10"
                       >
@@ -231,8 +231,8 @@ export default function NetFundingHistogramChart({
                       <div
                         onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
                         className="
-                          lg:absolute lg:right-1 lg:block lg:w-fit
-                          mt-6 bottom-0 lg:bottom-8 w-full flex justify-center scale-90
+                          lg:absolute lg:right-1 lg:w-fit
+                          mt-8 bottom-0 lg:bottom-10 w-full flex justify-center
                         "
                       >
                         <ButtonGreen shadowColor="white/30" shadowSize="md">

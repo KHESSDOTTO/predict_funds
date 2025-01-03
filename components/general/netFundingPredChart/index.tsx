@@ -23,6 +23,7 @@ import PredList from "../predList";
 import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
 import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
+import ButtonGreen from "@/components/UI/buttonGreen";
 
 export default function NetFundingPredChart({
   title = 'Net Funding',
@@ -93,18 +94,28 @@ export default function NetFundingPredChart({
           { title }
         </h2>
       </div>
-      {!smallV && (
-        <div className="text-sm text-gray-200 pb-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
-          <AbsOrPctPredsViewForm {...formArgs} />
-        </div>
-      )}
+      
+      {
+        ! smallV && 
+        (
+          <div className="text-sm text-gray-200 pb-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
+            <AbsOrPctPredsViewForm {...formArgs} />
+            <div className="hidden scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]">
+              <ButtonGreen shadowColor="white/30" shadowSize="md">
+                Export
+              </ButtonGreen>
+            </div>
+          </div>
+        )
+      }
+      
       <div
         className={`flex flex-col gap-4 lg:flex-row ${
           smallV ? "" : "lg:mx-6 lg:mt-6"
         }`}
       >
         <div
-          className={`bg-gray-800 px-1 pt-4 rounded-xl overflow-hidden ${
+          className={`bg-gray-800 px-1 pt-4 rounded-xl overflow-hidden relative ${
             (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
           }`}
         >
@@ -208,7 +219,11 @@ export default function NetFundingPredChart({
                 strokeWidth={2}
               />
               <ReferenceLine
-                x={Number(unifiedNFData[historic.length - 1]['DT_COMPTC'])}
+                x={
+                  unifiedNFData[historic.length - 1] ? 
+                    Number(unifiedNFData[historic.length - 1]['DT_COMPTC']) :
+                    1000
+                }
                 stroke="orange"
                 strokeWidth={2}
               />
@@ -225,6 +240,17 @@ export default function NetFundingPredChart({
             </ComposedChart>
           </ResponsiveContainer>
         </div>
+
+        {
+          ! smallV &&
+          (
+            <div className="text-center lg:hidden">
+              <ButtonGreen shadowColor="white/30" shadowSize="md">
+                Export
+              </ButtonGreen>
+            </div>
+          )
+        }
 
         {
           ! smallV && predList &&
