@@ -9,7 +9,6 @@ import CenarioCard from "@/components/general/cenarioCard";
 import {
   excludeCenario,
   exportCenarios,
-  updateFooterPosition,
 } from "@/utils/functions/pageFunctions/loggedInMyCenariosFunctions";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";

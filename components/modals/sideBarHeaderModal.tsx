@@ -29,7 +29,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
 
   return (
     <div className={containerClass} onClick={handleClickOutside}>
-      <div className="hidden z-30 -z-10">
+      <div className="hidden z-30 lg:-z-10">
         {/* Div para forçar inclusão de classes tailwind */}
       </div>
       <div
