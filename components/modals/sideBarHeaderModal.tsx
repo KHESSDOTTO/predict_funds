@@ -5,17 +5,17 @@ import Link from "next/link";
 function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
   // For the component to work properly, it should be placed inside a container that has position: relative.
   const [containerClass, setContainerClass] = useState(
-    `transition-all duration-200 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-0 -z-10`
+    `transition-all duration-200 fixed top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-0 -z-10`
   );
 
   useEffect(() => {
     if (showSideBar) {
       setContainerClass(
-        `transition-all duration-500 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-100 z-30`
+        `transition-all duration-500 fixed top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-100 z-30`
       );
     } else {
       setContainerClass(
-        `transition-all duration-500 absolute top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-0 -z-10`
+        `transition-all duration-500 fixed top-0 bottom-0 backdrop-blur-sm min-h-screen w-full opacity-0 -z-10`
       );
     }
   }, [showSideBar]);
@@ -29,9 +29,11 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
 
   return (
     <div className={containerClass} onClick={handleClickOutside}>
-      <div className="hidden z-30 -z-10"></div>
+      <div className="hidden z-30 -z-10">
+        {/* Div para forçar inclusão de classes tailwind */}
+      </div>
       <div
-        className={`bg-black transition-all pointer-event-none sticky z-30 h-[70vh] w-[80%] top-[15vh] bottom-[10vh] left-[10vw] right-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
+        className={`bg-black transition-all pointer-event-none absolute h-[70vh] w-[80%] top-[15vh] left-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
         style={{boxShadow: '0 0 15px rgba(255,255,255,0.5)'}}
       >
         <div>
