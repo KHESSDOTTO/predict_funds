@@ -1,11 +1,6 @@
 import type { CenarioType, UserType } from "@/utils/types/generalTypes/types";
 import type { Dispatch, RefObject, SetStateAction } from "react";
 
-interface UpdateFooterPositionParamsType {
-  footerRef: RefObject<HTMLDivElement>;
-  setFooterPosition: Dispatch<SetStateAction<string>>;
-}
-
 interface MyCenariosPagePropsType {
   userFromToken: UserType;
 }
@@ -21,7 +16,6 @@ interface ExportCenariosParamsType {
 }
 
 export type {
-  UpdateFooterPositionParamsType,
   MyCenariosPagePropsType,
   ExcludeCenarioParamsType,
   ExportCenariosParamsType,
