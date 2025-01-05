@@ -45,6 +45,11 @@ interface NetFundingPredChartPropsType {
   title?: string;
 }
 
+interface ExportNetFundingPredParams {
+  historic: HistoricType[];
+  predictions: PredictionsType[];
+}
+
 export type {
   UnifiedDataPredsType,
   AdjustNetFundingChartAxisParamsType,
@@ -52,4 +57,5 @@ export type {
   HandleAbsOrPctChangeParamsType,
   AbsOrPctPredsViewFormPropsType,
   NetFundingPredChartPropsType,
+  ExportNetFundingPredParams
 };

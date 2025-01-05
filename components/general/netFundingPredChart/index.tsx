@@ -6,6 +6,7 @@ import { handleAbsOrPctChange } from "./forms/absOrPctPredsViewFormFunctions";
 import { format } from "date-fns";
 import {
   adjustNetFundingChartAxis,
+  exportNetFundingPred,
   prepareChartNFData,
 } from "./netFundingPredChartFunctions";
 import {
@@ -100,7 +101,10 @@ export default function NetFundingPredChart({
         (
           <div className="text-sm text-gray-200 pb-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
             <AbsOrPctPredsViewForm {...formArgs} />
-            <div className="hidden scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]">
+            <div
+              className="hidden scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]"
+              onClick={() => exportNetFundingPred({ historic, predictions })}
+            >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
               </ButtonGreen>
@@ -244,7 +248,10 @@ export default function NetFundingPredChart({
         {
           ! smallV &&
           (
-            <div className="text-center lg:hidden">
+            <div
+              className="text-center lg:hidden"
+              onClick={() => exportNetFundingPred({ historic, predictions })}  
+            >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
               </ButtonGreen>

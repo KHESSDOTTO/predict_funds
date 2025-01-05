@@ -122,6 +122,9 @@ interface HistoricType {
   CAPTC_LIQ_PCT_ms?: number;
   CI_minor?: number | null;
   CI_major?: number | null;
+  _id?: string;
+  datahora_proc_informes?: string;
+  updated_at?: string;
 }
 
 interface UserContextType {

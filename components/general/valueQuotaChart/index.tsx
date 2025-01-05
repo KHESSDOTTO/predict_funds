@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ValueQuotaChartPropsType } from "./valueQuotaChartTypes";
 import { format } from "date-fns";
-import { adjustValueQuotaChartAxis } from "./valueQuotaChartFunctions";
+import { adjustValueQuotaChartAxis, exportValueQuota } from "./valueQuotaChartFunctions";
 import {
   XAxis,
   YAxis,
@@ -115,7 +115,10 @@ export default function ValueQuotaChart({
         {
           ! smallV &&
           (
-            <div className="text-end mt-2 ml-1 hidden lg:block absolute bottom-0 left-0">
+            <div
+              className="text-end mt-2 ml-1 hidden lg:block absolute bottom-0 left-0"
+              onClick={() => exportValueQuota({ historic })}  
+            >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
               </ButtonGreen>
@@ -129,7 +132,10 @@ export default function ValueQuotaChart({
           ! smallV &&
           (
             <>
-              <div className="text-center lg:hidden">
+              <div
+                className="text-center lg:hidden" 
+                onClick={() => exportValueQuota({ historic })}
+            >
                 <ButtonGreen shadowColor="white/30" shadowSize="md">
                   Export
                 </ButtonGreen>
