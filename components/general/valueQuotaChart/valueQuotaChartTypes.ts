@@ -18,10 +18,15 @@ interface AdjustValueQuotaChartAxisParamsType {
   setTicksYaxisVQ: Dispatch<SetStateAction<number[]>>;
 }
 
+interface ExportValueQuotaParams {
+    historic: HistoricType[];
+}
+
 interface ValueQuotaTooltipProps extends TooltipProps<ValueType, NameType> {}
 
 export type {
   ValueQuotaChartPropsType,
   AdjustValueQuotaChartAxisParamsType,
   ValueQuotaTooltipProps,
+  ExportValueQuotaParams,
 };

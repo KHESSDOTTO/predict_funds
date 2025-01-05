@@ -11,6 +11,7 @@ function updateFooterPosition({
   footerRef,
   setFooterPosition,
 }: UpdateFooterPositionParamsType) {
+
   if (footerRef.current) {
     const footerHeight = footerRef.current.clientHeight;
     const atBottom =
@@ -26,6 +27,7 @@ function updateFooterPosition({
     } else {
       setFooterPosition("sticky");
     }
+
   }
 }
 
@@ -37,6 +39,7 @@ function excludeCenario({
   const updatedCenarios = cenarios.filter((cE) => {
     return cE.id != cenarioId;
   });
+
   setCenarios(updatedCenarios);
   toast.success("Removed cenario.");
 }
@@ -45,6 +48,7 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
 
   if (cenarios.length === 0) {
     toast.error("No cenarios were saved to export.");
+    
     return;
   }
 
@@ -74,6 +78,7 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
         predsArray.push(...predsSubArray);
       });
     // </Adjusting_predictions>
+
     const historicDataHeader: (keyof HistoricType)[] = [
       "DT_COMPTC",
       "CNPJ_FUNDO",
@@ -112,6 +117,7 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
       ...historicDataArray,
     ];
     const worksheet = XLSX.utils.aoa_to_sheet(data);
+
     XLSX.utils.book_append_sheet(workbook, worksheet, ws_name);
   });
 

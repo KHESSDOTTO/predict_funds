@@ -3,7 +3,10 @@ import {
   generateYaxisDomainBasedOnMaxMod,
   generateYaxisTicksBasedOnMaxMod,
 } from "@/utils/functions/axisFunctions";
-import type { PrepareChartNFDataParamsType } from "./netFundingPredChartTypes";
+import type { ExportNetFundingPredParams, PrepareChartNFDataParamsType } from "./netFundingPredChartTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
+import * as XLSX from "xlsx";
+import { HistoricType, PredictionsType } from "@/utils/types/generalTypes/types";
 
 function adjustNetFundingChartAxis({
   historic,
@@ -69,4 +72,116 @@ function prepareChartNFData({
   setGradientOffset(newGradientOffset);
 }
 
-export { adjustNetFundingChartAxis, prepareChartNFData };
+function exportNetFundingPred({
+  historic,
+  predictions,
+}: ExportNetFundingPredParams) {
+  const historicIsValid = Array.isArray(historic) && historic.length > 0;
+  const predictionsIsValid = Array.isArray(predictions) && predictions.length > 0;
+
+  if (! historicIsValid || ! predictionsIsValid) {
+    consoleLog({ historicIsValid });
+    consoleLog({ predictionsIsValid });
+
+    return;
+  }
+
+  const workbook = XLSX.utils.book_new();
+  const currTime = new Date;
+  const selCnpj = historic[0]['CNPJ_FUNDO'];
+  const fileName = `export_prediction_${selCnpj.replaceAll("/", ".")}_${currTime.toISOString()}.xlsx`;
+  const predsData = predsToExport(predictions);
+  const historicData = historicToExport(historic);
+
+  const sheetData: (string | number)[][] = [];
+
+  sheetData.push(
+    ['Predictions'],
+    ...predsData,
+    [],
+    ['Historic'],
+    ...historicData
+  );
+
+  const sheet = XLSX.utils.aoa_to_sheet(sheetData);
+
+  XLSX.utils.book_append_sheet(workbook, sheet, `preds_${selCnpj.replaceAll("/", ".")}`)
+  XLSX.writeFile(workbook, fileName);
+
+  return;
+}
+
+function predsToExport(predictions: PredictionsType[]) {
+  const isValidPreds = Array.isArray(predictions) && predictions.length > 0;
+  
+  if (! isValidPreds) {
+    consoleLog({ isValidPreds })
+
+    return[[]];
+  }
+
+  const formattedPreds: (string | number)[][] = [];
+
+  predictions.forEach((cE, cI) => {
+    const cleanedEl = { ...cE };
+    const regex = /^(CAPTC|CI|DT_COMPTC)/;
+
+    for (let key of Object.keys(cE)) {
+
+      if (! key.match(regex)) {
+        delete cleanedEl[key]
+      }
+
+    }
+
+    if (cI === 0) {
+      formattedPreds.push(Object.keys(cleanedEl));
+    }
+
+    const adjustedVals = Object.values(cleanedEl).map((cE) => {
+      if (Array.isArray(cE)) {
+        return cE.toString();
+      } else {
+        return cE;
+      }
+    })
+
+    formattedPreds.push(adjustedVals);
+  })
+
+  return formattedPreds;
+}
+
+function historicToExport(historic: HistoricType[]) {
+    const isValidHistoric = Array.isArray(historic) && historic.length > 0;
+
+    if (! isValidHistoric) {
+      consoleLog({ isValidHistoric })
+    
+      return[[]];
+    }
+
+    const formattedHistoric: (string | number)[][] = [];
+
+    historic.forEach((cE, cI) => {
+        const cleanedEl = { ...cE } as HistoricType;
+    
+        delete cleanedEl['_id'];
+        delete cleanedEl['datahora_proc_informes'];
+        delete cleanedEl['updated_at'];
+
+        if (cI === 0) {
+          formattedHistoric.push(Object.keys(cleanedEl));
+        }
+
+        formattedHistoric.push(Object.values(cleanedEl));
+      })
+
+    return formattedHistoric;
+}
+
+export {
+  adjustNetFundingChartAxis,
+  prepareChartNFData,
+  exportNetFundingPred,
+};
