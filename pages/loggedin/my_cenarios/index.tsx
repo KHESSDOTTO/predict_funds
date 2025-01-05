@@ -18,33 +18,19 @@ import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenarios
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { cenarios, setCenarios } = useContext(UserContext);
   const [footerPosition, setFooterPosition] = useState<string>("absolute");
-  const footerRef = useRef<HTMLDivElement>(null);
-  const updateFooterPositionArgs = {
-    footerRef,
-    setFooterPosition,
-  };
 
   useEffect(() => {
-    const handleScroll = () => {
-      updateFooterPosition(updateFooterPositionArgs);
-    };
-    window.addEventListener("scroll", handleScroll);
-    const resizeObserver = new ResizeObserver(() => {
-      updateFooterPosition(updateFooterPositionArgs);
-    });
-    resizeObserver.observe(document.body);
-    updateFooterPosition(updateFooterPositionArgs);
     return () => {
       toast.dismiss();
-      window.removeEventListener("scroll", handleScroll);
-      resizeObserver.disconnect();
     };
   }, []);
 
   return (
-    <div className="bg-black/90">
-      <div className="min-h-screen relative text-white/90">
+    <div className="bg-black/90 h-full">
+      <div className="min-h-screen relative text-white/90 pb-16">
+
         {userFromToken && <Header user={userFromToken} />}
+
         <div className="px-4 lg:px-8">
           <div className="mt-12 lg:mt-14 mb-8 lg:mb-8">
             <LogoPredict bold={false} />
@@ -59,7 +45,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
           </h1>
           <section
             id="cenarios"
-            className="mb-8 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
+            className="mb-8 lg:mb-0 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
           >
             {cenarios?.map((cE, cI) => {
               return (
@@ -81,8 +67,10 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
           </section>
         </div>
         <footer
-          ref={footerRef}
-          className={`bg-gradient-to-b from-black/50 via-black/80 to-black/90 flex justify-center items-center py-4 ${footerPosition} bottom-0 w-full`}
+          className={`
+            bg-gradient-to-b from-black/60 via-black/90 to-black/90
+            flex justify-center items-center py-4 fixed bottom-0 w-full
+          `}
         >
           <div onClick={() => exportCenarios({ cenarios })}>
             <ButtonGreen shadowSize="none" shadowColor="">

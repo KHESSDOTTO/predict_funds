@@ -2,34 +2,9 @@ import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 import type { HistoricType } from "@/utils/types/generalTypes/types";
 import type {
-  UpdateFooterPositionParamsType,
   ExcludeCenarioParamsType,
   ExportCenariosParamsType,
 } from "@/utils/types/pageTypes/myCenariosTypes";
-
-function updateFooterPosition({
-  footerRef,
-  setFooterPosition,
-}: UpdateFooterPositionParamsType) {
-
-  if (footerRef.current) {
-    const footerHeight = footerRef.current.clientHeight;
-    const atBottom =
-      window.scrollY + window.innerHeight - 20 >=
-      document.documentElement.scrollHeight;
-    const contentTooShort =
-      window.innerHeight >= document.body.offsetHeight - footerHeight;
-
-    if (atBottom) {
-      setFooterPosition("absolute");
-    } else if (contentTooShort) {
-      setFooterPosition("absolute");
-    } else {
-      setFooterPosition("sticky");
-    }
-
-  }
-}
 
 function excludeCenario({
   cenarioId,
@@ -124,4 +99,7 @@ function exportCenarios({ cenarios }: ExportCenariosParamsType) {
   XLSX.writeFile(workbook, "export-cenarios.xlsx");
 }
 
-export { updateFooterPosition, excludeCenario, exportCenarios };
+export {
+  excludeCenario,
+  exportCenarios,
+};
