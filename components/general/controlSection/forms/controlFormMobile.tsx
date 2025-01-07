@@ -20,7 +20,7 @@ export default function ControlFormMobile({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const inputRangeClass = "cursor-pointer px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const inputRangeClass = "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map(cE => (
     {
@@ -201,7 +201,7 @@ export default function ControlFormMobile({
               })}
             </select>
           </div>
-          <div className="flex h-8 px-1 gap-4 text-sm">
+          <div className="flex items-center h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -235,7 +235,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex h-8 px-1 gap-4 text-sm">
+          <div className="flex items-center h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -269,7 +269,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex px-1 h-8 gap-4">
+          <div className="flex items-center px-1 h-8 gap-4">
             <span
               className="range-value w-12 text-sm"
               style={{
