@@ -1,12 +1,11 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   CadastroFundosType,
-  DashboardControlFormType,
   HistoricType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
 import ControlSection from "../controlSection";
-import { UserContext } from "@/contexts/UserContext";
+import { useUser } from "@/contexts/userContext";
 import RegistrationInfos from "../registrationInfos";
 import CorrelCardsSection from "@/components/general/correlCardsSection";
 import HeatMap from "../heatMap";
@@ -23,9 +22,11 @@ import type {
   SaveCenarioParamsType,
 } from "./dashboardTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
+import { useControlForm } from "@/contexts/controlFormContext";
 
-export default function Dashboard({ user, ancoras }: DashboardPropsType) {
-  const userContext = useContext(UserContext);
+export default function Dashboard({ ancoras }: DashboardPropsType) {
+  const userContext = useUser();
+  const { controlForm, setControlForm } = useControlForm();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const screenWidth = useWindowWidth();
   const [historicData, setHistoricData] = useState<HistoricType[]>([]);
@@ -36,20 +37,8 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   const [predictionData, setPredictionData] = useState<PredictionsType[]>([]);
   const [loadingHistogram, setLoadingHistogram] = useState<boolean>(true);
   const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>([]);
-  const [controlForm, setControlForm] = useState<DashboardControlFormType>({
-      baseDate: ancoras
-        ? ancoras[ancoras.length - 1]
-        : "2024-05-31T00:00:00.00Z",
-      buscaCnpj: user.cnpjs[0],
-      varNF: 0,
-      varCotistas: 0,
-      varCota: 0,
-      weeksBack: 8,
-      weeksAhead: 4,
-      anbimaClass: "",
-    }),
-    [correls, setCorrels] = useState<any>(false),
-    [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
+  const [correls, setCorrels] = useState<any>(false);
+  const [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
   const saveCenariosArgs: SaveCenarioParamsType = {
     userContext,
     controlForm,
@@ -59,8 +48,6 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   const controlSectionProps = {
     setHistoricData: setHistoricData,
     setPredictionData: setPredictionData,
-    controlForm: controlForm,
-    setControlForm: setControlForm,
     saveCenario: () => saveCenario(saveCenariosArgs),
     setIsLoading: setIsLoading,
     registration: registration,
@@ -78,12 +65,24 @@ export default function Dashboard({ user, ancoras }: DashboardPropsType) {
   ];
 
   useEffect(() => {
+
     if (screenWidth > 992) {
       setIsMobile(false);
     } else {
       setIsMobile(true);
     }
+
+    return;
   }, [screenWidth]);
+
+  useEffect(() => {
+
+    if (ancoras && ancoras.length > 0) {
+        setControlForm({ ...controlForm, baseDate: ancoras[ancoras.length - 1] });
+    }
+
+    return;
+  }, [ancoras])
 
   return (
     <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm py-2">

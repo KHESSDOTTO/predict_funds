@@ -6,14 +6,12 @@ import {
   handleControlFormChange,
 } from "./controlFormHandlers";
 import SelectWithFilter from "@/components/UI/selectInputWithFilter";
+import { useControlForm } from "@/contexts/controlFormContext";
 
 export default function ControlFormDesk({
-  controlForm,
   ancoras,
   arrCnpjName,
-  nameSelectedFund,
   setNameSelectedFund,
-  setControlForm,
   setRegistration,
   setIsLoading,
   setHistoricData,
@@ -21,6 +19,8 @@ export default function ControlFormDesk({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass = "cursor-pointer px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+  const sliderInputClass = "w-40";
+  const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map(cE => (
     {
       name: cE['DENOM_SOCIAL'],
@@ -49,6 +49,12 @@ export default function ControlFormDesk({
         name="anbimaClass"
         id="anbimaClass"
         value={controlForm.anbimaClass}
+      />
+      <input
+        type="hidden"
+        name="cvmClass"
+        id="cvmClass"
+        value={controlForm.cvmClass}
       />
       <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
         <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">
@@ -171,7 +177,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ selectInputClass }
+                  className={ sliderInputClass }
                   value={controlForm.varNF}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -208,7 +214,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ selectInputClass }
+                  className={ sliderInputClass }
                   value={controlForm.varCotistas}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -245,7 +251,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ selectInputClass }
+                  className={ sliderInputClass }
                   value={controlForm.varCota}
                   onChange={(e) =>
                     handleControlFormChange(
