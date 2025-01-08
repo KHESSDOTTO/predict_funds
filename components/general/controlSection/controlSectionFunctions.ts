@@ -101,6 +101,7 @@ async function selRegistration(
     if (registration) {
       setControlForm({
         ...controlForm,
+        buscaCnpj: registration.data["CNPJ_FUNDO"],
         cvmClass: registration.data["CLASSE"],
         anbimaClass: registration.data["CLASSE_ANBIMA"],
       });

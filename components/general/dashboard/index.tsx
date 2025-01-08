@@ -31,9 +31,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   const screenWidth = useWindowWidth();
   const [historicData, setHistoricData] = useState<HistoricType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [registration, setRegistration] = useState<CadastroFundosType | false>(
-    false
-  );
+  const [registration, setRegistration] = useState<CadastroFundosType | false>(false);
   const [predictionData, setPredictionData] = useState<PredictionsType[]>([]);
   const [loadingHistogram, setLoadingHistogram] = useState<boolean>(true);
   const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>([]);

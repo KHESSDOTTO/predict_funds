@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@/contexts/userContext";
-import useWindowWidth from "@/hooks/useWindowWidth";
 import {
   getData,
   getRegistration,
@@ -10,10 +9,10 @@ import {
 } from "./controlSectionFunctions";
 import ControlFormDesk from "./forms/controlFormDesk";
 import ControlFormMobile from "./forms/controlFormMobile";
-import type { ControlSectionProps } from "./controlSectionTypes";
-import type { ControlFormPropsType } from "./forms/controlFormType";
 import TitleComponent from "@/components/UI/titleComponent";
 import { useControlForm } from "@/contexts/controlFormContext";
+import type { ControlSectionProps } from "./controlSectionTypes";
+import type { ControlFormPropsType } from "./forms/controlFormType";
 
 export default function ControlSection({
   registration,
@@ -49,14 +48,10 @@ export default function ControlSection({
   // Get user registration and array with CNPJ and names of funds.
   // Get historic data and predictions
   useEffect(() => {
-    if (!user) {
+
+    if (!user || !controlForm) {
       return;
     }
-
-    setControlForm((prevForm) => ({
-      ...prevForm,
-      buscaCnpj: user.cnpjs[0] || "",
-    }));
 
     getData(
       user,
@@ -84,7 +79,6 @@ export default function ControlSection({
 
   // Get Histogram and correlations
   useEffect(() => {
-
     getDataForHistogram(
       controlForm,
       setLoadingHistogram,
