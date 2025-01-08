@@ -54,7 +54,7 @@ export default function PredRow({
       <td className="p-0">{formatValuePredList(formatValuePredListArgs)}</td>
       <td className="text-red-800 p-1 text-base align-middle">
         <button
-          className="z-10 hover:text-red-600"
+          className="z-10 transition-all hover:text-red-600"
           data-id={cE.id.toString()}
           onClick={(e) => handleDeleteRow({ e, predRows, setPredRows })}
         >

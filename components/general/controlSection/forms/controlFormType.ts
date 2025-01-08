@@ -1,7 +1,6 @@
 import { ArrCnpjNameType } from "@/database/models/cadastroFundos/cadastroFundosTypes";
 import {
   CadastroFundosType,
-  DashboardControlFormType,
   HistoricType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
@@ -9,12 +8,10 @@ import { Dispatch, SetStateAction } from "react";
 import type { MouseEventHandler } from "react";
 
 interface ControlFormPropsType {
-  controlForm: DashboardControlFormType;
   ancoras: string[] | null;
   arrCnpjName: ArrCnpjNameType[];
   nameSelectedFund: string;
   setNameSelectedFund: Dispatch<SetStateAction<string>>;
-  setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;

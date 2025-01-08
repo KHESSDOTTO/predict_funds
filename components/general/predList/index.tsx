@@ -88,7 +88,7 @@ export default function PredList({
           setShowAddRow(true);
         }}
       >
-        <button className="text-indigo-800 text-xs font-semibold hover:underline hover:text-indigo-600">
+        <button className="text-indigo-800 text-xs font-semibold transition-all duration-200 hover:text-indigo-600">
           + Add Row
         </button>
       </div>

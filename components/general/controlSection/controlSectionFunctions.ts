@@ -97,13 +97,18 @@ async function selRegistration(
     const registration = await ax.get(
       `/cadastroFundos/getByCnpj?cnpj=${encodedParam}`
     );
+
     if (registration) {
       setControlForm({
         ...controlForm,
+        buscaCnpj: registration.data["CNPJ_FUNDO"],
+        cvmClass: registration.data["CLASSE"],
         anbimaClass: registration.data["CLASSE_ANBIMA"],
       });
+
       return registration.data;
     }
+
   } catch (err) {
     console.log(err);
   }

@@ -1,7 +1,7 @@
 import { verifyToken } from "@/utils/jwt.config";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
-import { UserContext } from "@/contexts/UserContext";
+import { useEffect } from "react";
+import { useUser } from "@/contexts/userContext";
 import { doLogout } from "@/utils/functions/genericFunctions";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/general/dashboard";
@@ -15,7 +15,7 @@ import type { DoLogoutParamsType } from "@/utils/types/generalTypes/types";
 
 export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   const dashboardProps = {
     user: user,
     ancoras: ancoras,

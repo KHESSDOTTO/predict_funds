@@ -8,10 +8,8 @@ import type {
 } from "@/utils/types/generalTypes/types";
 
 interface ControlSectionProps {
-  controlForm: DashboardControlFormType;
   registration: CadastroFundosType | false;
   ancoras: string[] | null;
-  setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>;
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;

@@ -1,8 +1,8 @@
-import {
+import type { UserContextType } from "@/contexts/userContext/userContextTypes";
+import type {
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
-  UserContextType,
   UserType,
 } from "@/utils/types/generalTypes/types";
 

@@ -7,14 +7,12 @@ import {
   handleControlFormChange,
 } from "./controlFormHandlers";
 import SelectWithFilter from "@/components/UI/selectInputWithFilter";
+import { useControlForm } from "@/contexts/controlFormContext";
 
 export default function ControlFormMobile({
-  controlForm,
   ancoras,
   arrCnpjName,
-  nameSelectedFund,
   setNameSelectedFund,
-  setControlForm,
   setRegistration,
   setIsLoading,
   setHistoricData,
@@ -22,7 +20,8 @@ export default function ControlFormMobile({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const inputRangeClass = "cursor-pointer px-4 py-1 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const inputRangeClass = "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map(cE => (
     {
       name: cE['DENOM_SOCIAL'],
@@ -51,6 +50,12 @@ export default function ControlFormMobile({
         name="anbimaClass"
         id="anbimaClass"
         value={controlForm.anbimaClass}
+      />
+      <input
+        type="hidden"
+        name="cvmClass"
+        id="cvmClass"
+        value={controlForm.cvmClass}
       />
       <div className="flex flex-row justify-center gap-4">
         <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
@@ -196,7 +201,7 @@ export default function ControlFormMobile({
               })}
             </select>
           </div>
-          <div className="flex h-8 px-1 gap-4 text-sm">
+          <div className="flex items-center h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -230,7 +235,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex h-8 px-1 gap-4 text-sm">
+          <div className="flex items-center h-8 px-1 gap-4 text-sm">
             <span
               className="range-value w-12 text-sm"
               style={{
@@ -264,7 +269,7 @@ export default function ControlFormMobile({
               }
             ></input>
           </div>
-          <div className="flex px-1 h-8 gap-4">
+          <div className="flex items-center px-1 h-8 gap-4">
             <span
               className="range-value w-12 text-sm"
               style={{

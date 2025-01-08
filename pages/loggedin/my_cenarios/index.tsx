@@ -1,7 +1,7 @@
 import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
-import { UserContext } from "@/contexts/UserContext";
-import { useContext, useEffect, useState, useRef } from "react";
+import { useUser } from "@/contexts/userContext";
+import { useEffect, useState } from "react";
 import { verifyToken } from "@/utils/jwt.config";
 import toast from "react-hot-toast";
 import LogoPredict from "@/components/UI/logoPredict";
@@ -13,10 +13,10 @@ import {
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenariosTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
-  const { cenarios, setCenarios } = useContext(UserContext);
-  const [footerPosition, setFooterPosition] = useState<string>("absolute");
+  const { cenarios, setCenarios } = useUser();
 
   useEffect(() => {
     return () => {
@@ -47,6 +47,8 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
             className="mb-8 lg:mb-0 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
           >
             {cenarios?.map((cE, cI) => {
+              consoleLog({ cE });
+
               return (
                 <CenarioCard
                   key={cE.id.toString()}

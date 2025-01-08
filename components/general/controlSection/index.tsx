@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "@/contexts/UserContext";
-import useWindowWidth from "@/hooks/useWindowWidth";
+import { useEffect, useState } from "react";
+import { useUser } from "@/contexts/userContext";
 import {
   getData,
   getRegistration,
@@ -10,15 +9,14 @@ import {
 } from "./controlSectionFunctions";
 import ControlFormDesk from "./forms/controlFormDesk";
 import ControlFormMobile from "./forms/controlFormMobile";
+import TitleComponent from "@/components/UI/titleComponent";
+import { useControlForm } from "@/contexts/controlFormContext";
 import type { ControlSectionProps } from "./controlSectionTypes";
 import type { ControlFormPropsType } from "./forms/controlFormType";
-import TitleComponent from "@/components/UI/titleComponent";
 
 export default function ControlSection({
-  controlForm,
   registration,
   ancoras,
-  setControlForm,
   setRegistration,
   setHistoricData,
   setPredictionData,
@@ -29,18 +27,16 @@ export default function ControlSection({
   setCorrels,
   setHeatMapObj,
 }: ControlSectionProps) {
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
+  const { controlForm, setControlForm } = useControlForm();
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
-  const screenWidth = useWindowWidth();
   const user = userContext.user;
   const formProps: ControlFormPropsType = {
-    controlForm: controlForm,
     ancoras: ancoras,
     arrCnpjName: arrCnpjName,
     nameSelectedFund: nameSelectedFund,
     setNameSelectedFund: setNameSelectedFund,
-    setControlForm: setControlForm,
     setRegistration: setRegistration,
     setIsLoading: setIsLoading,
     setHistoricData: setHistoricData,
@@ -52,14 +48,10 @@ export default function ControlSection({
   // Get user registration and array with CNPJ and names of funds.
   // Get historic data and predictions
   useEffect(() => {
-    if (!user) {
+
+    if (!user || !controlForm) {
       return;
     }
-
-    setControlForm((prevForm) => ({
-      ...prevForm,
-      buscaCnpj: user.cnpjs[0] || "",
-    }));
 
     getData(
       user,
@@ -87,7 +79,6 @@ export default function ControlSection({
 
   // Get Histogram and correlations
   useEffect(() => {
-
     getDataForHistogram(
       controlForm,
       setLoadingHistogram,

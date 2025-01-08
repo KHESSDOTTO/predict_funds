@@ -5,6 +5,7 @@ import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
+import { UserContextType } from "@/contexts/userContext/userContextTypes";
 
 type AbsOrPctType = "abs" | "pct";
 
@@ -127,13 +128,6 @@ interface HistoricType {
   updated_at?: string;
 }
 
-interface UserContextType {
-  user: UserType | null;
-  cenarios: CenarioType[];
-  setUser: (newUser: UserType | null) => void;
-  setCenarios: (newData: CenarioType[]) => void;
-}
-
 interface DashboardControlFormType {
   baseDate: string;
   buscaCnpj: string;
@@ -142,6 +136,7 @@ interface DashboardControlFormType {
   varCota: number;
   weeksBack: number;
   weeksAhead: number;
+  cvmClass: string;
   anbimaClass: string;
 }
 
@@ -187,7 +182,6 @@ export type {
   HistoricType,
   SideBarPropsType,
   HeaderPropsType,
-  UserContextType,
   DashboardControlFormType,
   CenarioType,
   PredictionsType,

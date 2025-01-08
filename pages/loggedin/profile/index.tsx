@@ -1,13 +1,13 @@
 import { verifyToken } from "@/utils/jwt.config";
 import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import Header from "@/components/layout/header";
 import ButtonRed from "@/components/UI/buttonRed";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
-import { UserContext } from "@/contexts/UserContext";
+import { useUser } from "@/contexts/userContext";
 import LogoPredict from "@/components/UI/logoPredict";
 import type { ProfileFormType, ProfilePagePropsType } from "@/utils/types/pageTypes/profileTypes";
 import {
@@ -21,7 +21,7 @@ import { doLogout } from "@/utils/functions/genericFunctions";
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
   const router = useRouter();
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   const [showModal, setShowModal] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const titleModal = "Confirm your password to change the e-mail";
@@ -53,8 +53,10 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
     if (!user) {
       console.log("There is no user!");
       router.push("/login");
+
       return;
     }
+
     return () => {
       toast.dismiss();
     };
