@@ -43,6 +43,7 @@ interface PrepareHeatMapParamsType {
 }
 
 interface ExportHeatMapParams {
+  selCnpj: string;
   heatMapObj: HeatMapObjType;
 }
 

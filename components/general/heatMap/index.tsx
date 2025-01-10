@@ -13,6 +13,7 @@ import RowMobile from "./rowMobile";
 import TitleComponent from "@/components/UI/titleComponent";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
+import { useControlForm } from "@/contexts/controlFormContext";
 
 export default function HeatMap({
   title,
@@ -26,6 +27,7 @@ export default function HeatMap({
     avg: {},
     fund: {},
   });
+  const { controlForm } = useControlForm();
   const selCorrelsKeys = Object.keys(selCorrels) as (keyof HeatMapObjType)[];
   const heatMapFormArgs = {
     numMonths,
@@ -60,7 +62,10 @@ export default function HeatMap({
         <HeatMapForm {...heatMapFormArgs} />
         <div
           className="absolute bottom-[50%] translate-y-[50%] right-10 scale-90 hidden lg:block"
-          onClick={() => heatMapObj ? exportHeatMap({ heatMapObj }) : {}}
+          onClick={() => (heatMapObj && controlForm)
+            ? exportHeatMap({ selCnpj: controlForm.buscaCnpj, heatMapObj })
+            : {}
+          }
         >
           <ButtonGreen
             shadowColor="white/30"
@@ -154,7 +159,10 @@ export default function HeatMap({
       <div className="flex justify-center relative mt-4 lg:hidden">
         <div
           className="w-fit h-fit"
-          onClick={() => heatMapObj ? exportHeatMap({ heatMapObj }) : {}}
+          onClick={() => (heatMapObj && controlForm)
+            ? exportHeatMap({ selCnpj: controlForm.buscaCnpj, heatMapObj })
+            : {}
+          }
         >
           <ButtonGreen
             shadowColor="white/30"

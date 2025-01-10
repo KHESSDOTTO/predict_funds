@@ -16,6 +16,7 @@ interface CorrelCardsFormPropsType {
 }
 
 interface ExportCorrelsParamsType {
+  selCnpj: string;
   correls: any[][];
 }
 

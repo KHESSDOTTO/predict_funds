@@ -38,16 +38,14 @@ function prepareHeatMap({
 }
 
 function exportHeatMap({
+    selCnpj,
     heatMapObj
 }: ExportHeatMapParams): void {
-  consoleLog({ heatMapObj });
   const workbook = XLSX.utils.book_new();
   const currTime = new Date();
   const fileName = "export_heatmap_" + currTime.toISOString() + ".xlsx";
   const heatMapKeys = Object.keys(heatMapObj) as (keyof HeatMapObjType)[];
   const reshapedHeatMapObj: ReshapedHeatMapObjType = {};
-
-  consoleLog({ heatMapKeys });
 
   heatMapKeys.forEach(currKey => {
     heatMapObj[currKey].forEach((currobj: any) => {
@@ -69,16 +67,15 @@ function exportHeatMap({
     })
   })
 
-  consoleLog({ reshapedHeatMapObj });
-
   const sheetTitles = Object.keys(reshapedHeatMapObj) as (keyof ReshapedHeatMapObjType)[];
-
-  consoleLog({ sheetTitles });
 
   sheetTitles.forEach(currTitle => {
     const currData = reshapedHeatMapObj[currTitle];
     const sheetContent: (number | string)[][] = [];
-    sheetContent.push([ '', 'fund', 'avg' ]);
+    sheetContent.push(
+        ['sel_cnpj', selCnpj],
+        [ '', 'fund', 'avg' ],
+    );
     
     currData['fund'].forEach((cE: (string | number)[]) => {
       const fundFieldName = cE[0];
@@ -103,8 +100,6 @@ function exportHeatMap({
         avgFieldElement[1],
       ])
     })
-
-    consoleLog({ sheetContent });
 
     const currSheet = XLSX.utils.aoa_to_sheet(sheetContent);
 
