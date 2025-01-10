@@ -3,18 +3,19 @@ import { ExportCorrelsParamsType } from "./correlCardsSectionTypes";
 import * as XLSX from 'xlsx';
 
 function exportCorrels({
+  selCnpj,
   correls
 }: ExportCorrelsParamsType): void {
-  
-  consoleLog({ correls });
-
   const workbook = XLSX.utils.book_new();
   const currTime = new Date();
   const fileName = "export_correls_" + currTime.toISOString() + ".xlsx";
   
   correls.forEach(currCorrelPeriod => {
     const periodElement = currCorrelPeriod.filter(currField => currField[0] === 'janela_em_meses');
-    const sheetData = currCorrelPeriod.filter(currField => currField[0] !== 'janela_em_meses');
+    const sheetData = [
+        ['selCnpj', selCnpj],
+        ...currCorrelPeriod.filter(currField => currField[0] !== 'janela_em_meses'),
+    ];
 
     if (periodElement.length !== 1) {
       consoleLog({ periodElement });

@@ -17,7 +17,7 @@ import TitleComponent from "@/components/UI/titleComponent";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { exportCorrels } from "./correlCardsSectionFunctions";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { consoleLog } from "@/utils/functions/genericFunctions";
+import { useControlForm } from "@/contexts/controlFormContext";
 
 SwiperCore.use([Navigation]);
 
@@ -29,8 +29,7 @@ export default function CorrelCardsSection({
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [selCorrels, setSelCorrels] = useState<any>([]);
   const [numMonths, setNumMonths] = useState(6);
-  const windowWidth = useWindowWidth();
-  const isMobile = windowWidth <= 992;
+  const { controlForm } = useControlForm();
   const breakpoints = {
     320: {
       slidesPerView: 1,
@@ -105,8 +104,11 @@ export default function CorrelCardsSection({
         <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
-            onClick={() => exportCorrels({ correls })}
             className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
+            onClick={() => (controlForm && correls)
+              ? exportCorrels({ selCnpj: controlForm.buscaCnpj, correls })
+              : {}
+            }
           >
             <ButtonGreen shadowColor="white/30" shadowSize="md">
               Export
@@ -166,8 +168,11 @@ export default function CorrelCardsSection({
                 className={`swiper-button-next ${styles.swiperButtonNext}`}
               ></div>
               <div
-                onClick={() => exportCorrels({ correls })}
                 className="lg:hidden absolute right-[50%] bottom-0 translate-x-[50%] translate-y-full"
+                onClick={() => (controlForm && correls)
+                  ? exportCorrels({ selCnpj: controlForm.buscaCnpj, correls })
+                  : {}
+                }
               >
                 <ButtonGreen shadowColor="white/30" shadowSize="md">
                   Export
