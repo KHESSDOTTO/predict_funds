@@ -8,6 +8,8 @@ import {
 } from "./controlFormHandlers";
 import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 import { useControlForm } from "@/contexts/controlFormContext";
+import { useUser } from "@/contexts/userContext";
+import { track } from "@vercel/analytics";
 
 export default function ControlFormMobile({
   ancoras,
@@ -21,6 +23,7 @@ export default function ControlFormMobile({
 }: ControlFormPropsType) {
   const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const inputRangeClass = "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const userContext = useUser(); 
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map(cE => (
     {
@@ -310,7 +313,12 @@ export default function ControlFormMobile({
           Update
         </ButtonIndigo>
         <div
-          onClick={saveCenario}
+          onClick={
+            (e) => {
+              track("save_cenario", { username: userContext.user?.username || null })
+              saveCenario(e)
+            }
+          }
           className="absolute right-0 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
         >
           + Save Cenario

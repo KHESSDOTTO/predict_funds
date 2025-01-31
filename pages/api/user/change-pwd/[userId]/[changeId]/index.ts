@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import UserModel from "@/database/models/user/userModel";
+import { track } from "@vercel/analytics/server";
 
 async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId, changeId } = req.query;
@@ -28,6 +29,10 @@ async function UpdateUserPwd(req: NextApiRequest, res: NextApiResponse) {
       changeId,
       req.body
     );
+
+    if (confirmation.ok) {
+      track("updated_pwd", { userId: userId });
+    }
 
     return res.status(confirmation.status).send(confirmation.msg);
   } catch (err) {

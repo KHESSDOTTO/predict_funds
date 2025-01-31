@@ -12,6 +12,7 @@ import {
   GenericObjectReturnType,
 } from "./userType";
 import { consoleLog } from "@/utils/functions/genericFunctions";
+import { UserType } from "@/utils/types/generalTypes/types";
 
 const UserSchema = new Schema(
   {
@@ -206,7 +207,8 @@ UserSchema.statics.doLogin = async function (clientInfo: {
       username: username,
     })
       .lean()
-      .exec();
+      .exec()
+    ;
 
     if (!user) {
       return {
@@ -239,7 +241,7 @@ UserSchema.statics.doLogin = async function (clientInfo: {
       return {
         ok: true,
         status: 200,
-        msg: { ...user },
+        msg: (user as UserModelDocType),
         token: token,
         authCookie: authCookie,
       };

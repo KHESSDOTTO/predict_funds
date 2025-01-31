@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import UserModel from "@/database/models/user/userModel";
+import { track } from "@vercel/analytics/server";
 
 async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -21,6 +22,14 @@ async function SendPwdUpdateEmail(req: NextApiRequest, res: NextApiResponse) {
 
     const updUser = await UserModel.insertUpdateChangeId(String(user._id));
     await UserModel.sendPwdUpdateEmail(updUser._id, updUser.changeId);
+
+    track(
+      "sent_pwd_reset_email",
+      {
+        userId: String(user['_id']),
+        userName: user['username']
+      }
+    )
 
     return res.status(200).send("Sent e-mail.");
   } catch (err) {
