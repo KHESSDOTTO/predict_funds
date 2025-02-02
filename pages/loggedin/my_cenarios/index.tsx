@@ -14,7 +14,7 @@ import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenariosTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { user, cenarios, setCenarios } = useUser();

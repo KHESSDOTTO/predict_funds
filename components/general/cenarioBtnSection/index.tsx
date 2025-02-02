@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CenariosBtnSectionProps } from "./cenarioBtSectionTypes";
 import TitleComponent from "@/components/UI/titleComponent";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 
 export default function CenariosBtnSection({

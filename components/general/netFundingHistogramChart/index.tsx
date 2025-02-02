@@ -34,7 +34,7 @@ import type {
   FinalHistogramDataType
 } from "@/utils/types/generalTypes/types";
 import ButtonGreen from "@/components/UI/buttonGreen";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 
 export default function NetFundingHistogramChart({

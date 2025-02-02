@@ -25,7 +25,7 @@ import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
 import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 
 export default function NetFundingPredChart({

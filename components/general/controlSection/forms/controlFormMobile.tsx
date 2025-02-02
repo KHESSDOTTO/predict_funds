@@ -309,9 +309,11 @@ export default function ControlFormMobile({
         </div>
       </div>
       <div className="text-center relative mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
-        <ButtonIndigo shadowSize="md" shadowColor="black">
-          Update
-        </ButtonIndigo>
+        <div onClick={() => track('clicked_update', { username: user?.username || null })}>
+          <ButtonIndigo shadowSize="md" shadowColor="black">
+            Update
+          </ButtonIndigo>
+        </div>
         <div
           onClick={
             (e) => {

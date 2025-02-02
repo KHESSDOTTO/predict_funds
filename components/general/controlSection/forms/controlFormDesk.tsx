@@ -273,6 +273,7 @@ export default function ControlFormDesk({
         <div className="flex justify-center items-center p-0 ml-6">
           <button
             type="submit"
+            onClick={() => track('clicked_update', { username: user?.username || null })}
             className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
           >
             <div className="shadow-black relative bottom-1 hover:shadow-xl">

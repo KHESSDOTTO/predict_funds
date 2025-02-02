@@ -7,7 +7,8 @@ import type {
 import { prepareDualRangeSlidersData } from '../netFundingHistogramFunctions';
 import ButtonIndigo from '@/components/UI/buttonIndigo';
 import { handleSubmit } from './filterFormHandlers';
-import { consoleLog } from '@/utils/functions/genericFunctions';
+import { track } from '@vercel/analytics';
+import { useUser } from '@/contexts/userContext';
 
 export default function FilterForm ({
   currCnpj,
@@ -20,6 +21,7 @@ export default function FilterForm ({
   setHistogramControlForm,
   setHistogram,
 }: FilterFormPropsType) {
+  const { user } = useUser();
   const { titles, dualRangeSliderWithTippyProps } = useMemo(() =>
     prepareDualRangeSlidersData({ sliderInfos })
   , [sliderInfos, histogramControlForm]);
@@ -85,7 +87,8 @@ export default function FilterForm ({
         <div
           className='flex w-full justify-center items-center lg:mt-2'
           onClick={(e) => {
-            handleSubmit({ e, ...handleSubmitArgs })
+            track('updated_histogram_filter', { username: user?.username || null });
+            handleSubmit({ e, ...handleSubmitArgs });
           }} 
         >
           <ButtonIndigo shadowColor='white/30' shadowSize='md'>

@@ -14,7 +14,7 @@ import TitleComponent from "@/components/UI/titleComponent";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { useControlForm } from "@/contexts/controlFormContext";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 
 export default function HeatMap({
