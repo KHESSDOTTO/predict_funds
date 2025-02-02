@@ -14,12 +14,15 @@ import {
 import PredList from "@/components/general/predList";
 import ValueQuotaTooltip from "./valueQuotaChartTooltip";
 import ButtonGreen from "@/components/UI/buttonGreen";
+import { track } from "@vercel/analytics/*";
+import { useUser } from "@/contexts/userContext";
 
 export default function ValueQuotaChart({
   smallV,
   isMobile,
   historic,
 }: ValueQuotaChartPropsType) {
+  const { user } = useUser();
   const [domainYaxisVQ, setDomainYaxisVQ] = useState<number[]>([0, 100]);
   const [ticksYaxisVQ, setTicksYaxisVQ] = useState<number[]>([]);
   const adjustVQAxisArgs = {
@@ -117,7 +120,12 @@ export default function ValueQuotaChart({
           (
             <div
               className="text-end mt-2 ml-1 hidden lg:block absolute bottom-0 left-0"
-              onClick={() => exportValueQuota({ historic })}  
+              onClick={
+                () => {
+                  track('export_value_quota', { username: user?.username || null });
+                  exportValueQuota({ historic })
+                }
+              }
             >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
@@ -134,7 +142,12 @@ export default function ValueQuotaChart({
             <>
               <div
                 className="text-center lg:hidden" 
-                onClick={() => exportValueQuota({ historic })}
+                onClick={
+                  () => {
+                    track('export_value_quota', { username: user?.username || null });
+                    exportValueQuota({ historic })
+                  }
+                }
             >
                 <ButtonGreen shadowColor="white/30" shadowSize="md">
                   Export

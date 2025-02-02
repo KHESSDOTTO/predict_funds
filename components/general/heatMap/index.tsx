@@ -14,11 +14,14 @@ import TitleComponent from "@/components/UI/titleComponent";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { useControlForm } from "@/contexts/controlFormContext";
+import { track } from "@vercel/analytics/*";
+import { useUser } from "@/contexts/userContext";
 
 export default function HeatMap({
   title,
   heatMapObj
 }: HeatMapPropsType) {
+  const { user } = useUser();
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [tickers, setTickers] = useState<string[]>([]);
   const [numMonths, setNumMonths] = useState(6);
@@ -159,9 +162,16 @@ export default function HeatMap({
       <div className="flex justify-center relative mt-4 lg:hidden">
         <div
           className="w-fit h-fit"
-          onClick={() => (heatMapObj && controlForm)
-            ? exportHeatMap({ selCnpj: controlForm.buscaCnpj, heatMapObj })
-            : {}
+          onClick={
+            () => {
+              track(
+                "export_heat_map",
+                { username: user?.username || null }
+              );
+              if (heatMapObj && controlForm) {
+                exportHeatMap({ selCnpj: controlForm.buscaCnpj, heatMapObj })
+              }
+            }
           }
         >
           <ButtonGreen

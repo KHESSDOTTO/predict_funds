@@ -34,7 +34,8 @@ import type {
   FinalHistogramDataType
 } from "@/utils/types/generalTypes/types";
 import ButtonGreen from "@/components/UI/buttonGreen";
-import OptionButtonGreen from "@/components/UI/optionButtonGreen";
+import { track } from "@vercel/analytics/*";
+import { useUser } from "@/contexts/userContext";
 
 export default function NetFundingHistogramChart({
   currCnpj,
@@ -44,6 +45,7 @@ export default function NetFundingHistogramChart({
   setLoadingHistogram,
   dataForHistogram = [],
 }: NetFundingHistogramChartPropsType) {
+  const { user } = useUser();
   const numBins = getNumBinsForHistogram(isMobile);
   const [absOrPct, setAbsOrPct] = useState<AbsOrPctType>("abs");
   const [histogram, setHistogram] = useState<FinalHistogramDataType>({
@@ -229,7 +231,13 @@ export default function NetFundingHistogramChart({
                         </div>
                       </div>
                       <div
-                        onClick={() => exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })}
+                        onClick={
+                          () => {
+                            track('export_nf_histogram', { username: user?.username || null })
+                            exportHistogram({ selCnpj: currCnpj, filters: currAppliedFilters, histogram })
+                          }
+                        }
+
                         className="
                           lg:absolute lg:right-1 lg:w-fit
                           mt-8 bottom-0 lg:bottom-10 w-full flex justify-center

@@ -18,12 +18,15 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { exportCorrels } from "./correlCardsSectionFunctions";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { useControlForm } from "@/contexts/controlFormContext";
+import { useUser } from "@/contexts/userContext";
+import { track } from "@vercel/analytics";
 
 SwiperCore.use([Navigation]);
 
 export default function CorrelCardsSection({
   correls,
 }: CorrelCardsSectionProps) {
+  const { user } = useUser();
   const tippyContent =
     "This section refers to the correlation between the returns on the benchmarks, given the same initial investment over the course of 6 or 12 months, as choosen below.";
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
@@ -105,9 +108,17 @@ export default function CorrelCardsSection({
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
             className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
-            onClick={() => (controlForm && correls)
-              ? exportCorrels({ selCnpj: controlForm.buscaCnpj, correls })
-              : {}
+            onClick={
+              () => {
+                track(
+                  "export_cards_correls",
+                  { username: user?.username || null }
+                );
+
+                if (controlForm && correls) {
+                  exportCorrels({ selCnpj: controlForm.buscaCnpj, correls })
+                }
+              }
             }
           >
             <ButtonGreen shadowColor="white/30" shadowSize="md">

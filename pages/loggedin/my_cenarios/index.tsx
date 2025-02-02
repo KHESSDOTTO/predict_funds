@@ -14,9 +14,10 @@ import type { GetServerSideProps } from "next";
 import type { JwtPayload } from "jsonwebtoken";
 import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenariosTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
+import { track } from "@vercel/analytics/*";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
-  const { cenarios, setCenarios } = useUser();
+  const { user, cenarios, setCenarios } = useUser();
 
   useEffect(() => {
     return () => {
@@ -47,8 +48,6 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
             className="mb-8 lg:mb-0 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"
           >
             {cenarios?.map((cE, cI) => {
-              consoleLog({ cE });
-
               return (
                 <CenarioCard
                   key={cE.id.toString()}
@@ -73,7 +72,14 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
             flex justify-center items-center py-4 fixed bottom-0 w-full
           `}
         >
-          <div onClick={() => exportCenarios({ cenarios })}>
+          <div
+            onClick={
+              () => {
+                track('export_cenarios', { username: user?.username || null });
+                exportCenarios({ cenarios });
+              }
+            }
+          >
             <ButtonGreen shadowSize="none" shadowColor="">
               Export
             </ButtonGreen>
