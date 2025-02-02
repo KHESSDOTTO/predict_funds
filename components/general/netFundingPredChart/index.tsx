@@ -25,6 +25,8 @@ import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
 import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
+import { track } from "@vercel/analytics";
+import { useUser } from "@/contexts/userContext";
 
 export default function NetFundingPredChart({
   title = 'Net Funding',
@@ -34,6 +36,7 @@ export default function NetFundingPredChart({
   isMobile,
   predList = true,
 }: NetFundingPredChartPropsType) {
+  const { user } = useUser();
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
   const [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]);
   const [unifiedNFData, setUnifiedNFData] = useState<UnifiedDataPredsType[]>([
@@ -103,7 +106,12 @@ export default function NetFundingPredChart({
             <AbsOrPctPredsViewForm {...formArgs} />
             <div
               className="hidden scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]"
-              onClick={() => exportNetFundingPred({ historic, predictions })}
+              onClick={
+                () => {
+                  track('export_nf_pred_chart', { username: user?.username || null });
+                  exportNetFundingPred({ historic, predictions });
+                }
+              }
             >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
@@ -250,7 +258,12 @@ export default function NetFundingPredChart({
           (
             <div
               className="text-center lg:hidden"
-              onClick={() => exportNetFundingPred({ historic, predictions })}  
+              onClick={
+                () => {
+                  track('export_nf_pred_chart', { username: user?.username || null });
+                  exportNetFundingPred({ historic, predictions });
+                }
+              }
             >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
