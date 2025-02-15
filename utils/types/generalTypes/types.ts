@@ -84,6 +84,7 @@ interface PredictionsType {
   CI90_PCT_limits?: number[];
   CI95_PCT_limits?: number[];
   CI99_PCT_limits?: number[];
+  mean?: number;
   [key: string]: any; // Adjust the index signature to accommodate both types
 }
 

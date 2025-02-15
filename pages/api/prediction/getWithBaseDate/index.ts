@@ -14,10 +14,10 @@ async function GetPredictionsWithBaseDate(
     await connect();
     const predictions4Weeks = await PredictionsModel.getPredictions(req.body);
 
-    if (!predictions4Weeks) {
+    if (! predictions4Weeks) {
       return res
         .status(500)
-        .send("No predictions were found for this CNPJ on this baseDate.");
+        .send("No predictions were found for this CNPJ on the baseDate.");
     }
 
     return res.status(200).json(predictions4Weeks);
