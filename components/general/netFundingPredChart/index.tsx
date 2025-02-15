@@ -27,6 +27,7 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
+import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
 
 export default function NetFundingPredChart({
   title = 'Net Funding',
@@ -123,7 +124,7 @@ export default function NetFundingPredChart({
       
       <div
         className={`flex flex-col gap-4 lg:flex-row ${
-          smallV ? "" : "lg:mx-6 lg:mt-6"
+          smallV ? "" : "lg:px-6"
         }`}
       >
         <div
@@ -273,6 +274,20 @@ export default function NetFundingPredChart({
         }
 
         {
+          ! smallV &&
+          <div className="my-2 px-6 lg:hidden text-center">
+            * Average daily prediction error:&nbsp;
+            <span className="font-bold ml-2">
+              {
+                predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
+                    `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
+                    : ''
+              }
+            </span>
+          </div>
+        }
+
+        {
           ! smallV && predList &&
             (
               <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
@@ -287,6 +302,16 @@ export default function NetFundingPredChart({
             )
         }
 
+      </div>
+      <div className="mt-6 px-6 hidden lg:block">
+        * Average daily prediction error:&nbsp;
+        <span className="font-bold ml-2">
+          {
+            predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
+                `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
+                : ''
+          }
+        </span>
       </div>
     </div>
   );

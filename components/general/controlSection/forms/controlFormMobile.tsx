@@ -21,7 +21,7 @@ export default function ControlFormMobile({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
-  const selectInputClass = "px-4 py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const selectInputClass = "py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const inputRangeClass = "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const { user } = useUser(); 
   const { controlForm, setControlForm } = useControlForm();

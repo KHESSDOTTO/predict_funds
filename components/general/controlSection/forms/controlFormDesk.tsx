@@ -20,7 +20,7 @@ export default function ControlFormDesk({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
-  const selectInputClass = "cursor-pointer px-4 py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+  const selectInputClass = "cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
   const sliderInputClass = "w-40";
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();

@@ -20,8 +20,14 @@ const PredictionSchema = new Schema(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
-    controlForm;
+  const {
+    varCota,
+    varCotistas,
+    varNF,
+    baseDate,
+    buscaCnpj,
+    weeksAhead
+  } = controlForm;
   const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
@@ -42,6 +48,7 @@ PredictionSchema.statics.getPredictions = async function (
         CI90: 1,
         CI95: 1,
         CI99: 1,
+        mean: 1,
       }
     )
       .sort({ datahora_predicao: -1 })
@@ -107,14 +114,17 @@ PredictionSchema.statics.getPredictions = async function (
           (prediction[predKeyPct] as number) - (prediction.CI99_PCT as number),
           (prediction[predKeyPct] as number) + (prediction.CI99_PCT as number),
         ],
+        mean: prediction['mean'], // Average deviation from the last predictions
       };
     } else {
+        
       return false;
     }
 
     return finalPred;
   } catch (err) {
     console.log(err);
+    
     return false;
   }
 };
