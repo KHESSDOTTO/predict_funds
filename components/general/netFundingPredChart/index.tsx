@@ -257,40 +257,38 @@ export default function NetFundingPredChart({
         {
           ! smallV &&
           (
-            <div
-              className="text-center lg:hidden"
-              onClick={
-                () => {
-                  track('export_nf_pred_chart', { username: user?.username || null });
-                  exportNetFundingPred({ historic, predictions });
+            <>
+              <div className="my-2 px-6 lg:hidden text-center">
+                * Average daily prediction error on this fund:&nbsp;
+                <span className="font-bold ml-2">
+                {
+                    predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
+                        `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
+                        : ''
                 }
-              }
-            >
-              <ButtonGreen shadowColor="white/30" shadowSize="md">
-                Export
-              </ButtonGreen>
-            </div>
+                </span>
+              </div>
+              <div
+                className="text-center lg:hidden"
+                onClick={
+                  () => {
+                    track('export_nf_pred_chart', { username: user?.username || null });
+                    exportNetFundingPred({ historic, predictions });
+                  }
+                }
+              >
+                <ButtonGreen shadowColor="white/30" shadowSize="md">
+                  Export
+                </ButtonGreen>
+              </div>
+            </>
           )
-        }
-
-        {
-          ! smallV &&
-          <div className="my-2 px-6 lg:hidden text-center">
-            * Average daily prediction error:&nbsp;
-            <span className="font-bold ml-2">
-              {
-                predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
-                    `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
-                    : ''
-              }
-            </span>
-          </div>
         }
 
         {
           ! smallV && predList &&
             (
-              <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
+              <div className="hidden lg:block lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
                 <PredList
                   title="Net Funding"
                   onlyBack={false}
@@ -304,7 +302,7 @@ export default function NetFundingPredChart({
 
       </div>
       <div className="mt-6 px-6 hidden lg:block">
-        * Average daily prediction error:&nbsp;
+        * Average daily prediction error on this fund:&nbsp;
         <span className="font-bold ml-2">
           {
             predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?

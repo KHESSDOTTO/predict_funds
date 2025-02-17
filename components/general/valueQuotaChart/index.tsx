@@ -153,7 +153,7 @@ export default function ValueQuotaChart({
                   Export
                 </ButtonGreen>
               </div>
-              <div className="lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
+              <div className="hidden lg:block lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
                 <PredList
                   title="Value Quota (history)"
                   onlyBack={true}
