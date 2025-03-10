@@ -26,7 +26,7 @@ export default async function AddAnbimaClassToPreds(
         $project: {
           _id: 1,
           CNPJ_FUNDO: 1,
-          CLASSE_ANBIMA: "$fundosDetails.CLASSE_ANBIMA",
+          classificacao: "$fundosDetails.classificacao",
         },
       },
     ]);
@@ -39,7 +39,7 @@ export default async function AddAnbimaClassToPreds(
       entries.map((doc) =>
         PredictionsModel.updateOne(
           { _id: doc._id },
-          { $set: { CLASSE_ANBIMA: doc.CLASSE_ANBIMA } }
+          { $set: { classificacao: doc.classificacao } }
         )
       )
     );

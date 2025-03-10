@@ -21,17 +21,17 @@ export default function ControlFormMobile({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
-  const selectInputClass = "py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const inputRangeClass = "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const { user } = useUser(); 
+  const selectInputClass =
+    "py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const inputRangeClass =
+    "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
+  const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
-  const fundOptions = arrCnpjName.map(cE => (
-    {
-      name: cE['DENOM_SOCIAL'],
-      value: cE['CNPJ_FUNDO']
-    }
-  ));
-  
+  const fundOptions = arrCnpjName.map((cE) => ({
+    name: cE["DENOM_SOCIAL"],
+    value: cE["CNPJ_FUNDO"],
+  }));
+
   return (
     <form
       id="controlFormMobile"
@@ -50,15 +50,9 @@ export default function ControlFormMobile({
     >
       <input
         type="hidden"
-        name="anbimaClass"
-        id="anbimaClass"
-        value={controlForm.anbimaClass}
-      />
-      <input
-        type="hidden"
-        name="cvmClass"
-        id="cvmClass"
-        value={controlForm.cvmClass}
+        name="classificacao"
+        id="classificacao"
+        value={controlForm.classificacao}
       />
       <div className="flex flex-row justify-center gap-4">
         <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
@@ -108,7 +102,7 @@ export default function ControlFormMobile({
                   setNameSelectedFund
                 )
               }
-              className={ selectInputClass }
+              className={selectInputClass}
             >
               {ancoras?.map((cE, cI) => {
                 const ancora = new Date(cE);
@@ -122,14 +116,12 @@ export default function ControlFormMobile({
           </div>
           <div className="flex items-center h-8 px-1">
             <SelectWithFilter
-              {
-                ...{
-                  options: fundOptions,
-                  value: controlForm.buscaCnpj,
-                  varNameForm: 'buscaCnpj',
-                  setForm: setControlForm,
-                }
-              }
+              {...{
+                options: fundOptions,
+                value: controlForm.buscaCnpj,
+                varNameForm: "buscaCnpj",
+                setForm: setControlForm,
+              }}
             />
             {/* <select
               id="buscaCnpj"
@@ -166,7 +158,7 @@ export default function ControlFormMobile({
               type="text"
               id="weeksBack"
               name="weeksBack"
-              className={ selectInputClass }
+              className={selectInputClass}
               value={controlForm.weeksBack}
               onChange={(e) =>
                 handleControlFormChange(
@@ -183,7 +175,7 @@ export default function ControlFormMobile({
             <select
               id="weeksAhead"
               name="weeksAhead"
-              className={ selectInputClass }
+              className={selectInputClass}
               value={controlForm.weeksAhead}
               onChange={(e) =>
                 handleControlFormChange(
@@ -225,7 +217,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className={ inputRangeClass }
+              className={inputRangeClass}
               value={controlForm.varNF}
               onChange={(e) =>
                 handleControlFormChange(
@@ -259,7 +251,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className={ inputRangeClass }
+              className={inputRangeClass}
               value={controlForm.varCotistas}
               onChange={(e) =>
                 handleControlFormChange(
@@ -293,7 +285,7 @@ export default function ControlFormMobile({
               min={-0.05}
               max={0.05}
               step={0.01}
-              className={ inputRangeClass }
+              className={inputRangeClass}
               value={controlForm.varCota}
               onChange={(e) =>
                 handleControlFormChange(
@@ -309,18 +301,20 @@ export default function ControlFormMobile({
         </div>
       </div>
       <div className="text-center relative mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
-        <div onClick={() => track('clicked_update', { username: user?.username || null })}>
+        <div
+          onClick={() =>
+            track("clicked_update", { username: user?.username || null })
+          }
+        >
           <ButtonIndigo shadowSize="md" shadowColor="black">
             Update
           </ButtonIndigo>
         </div>
         <div
-          onClick={
-            (e) => {
-              track("save_cenario", { username: user?.username || null });
-              saveCenario(e);
-            }
-          }
+          onClick={(e) => {
+            track("save_cenario", { username: user?.username || null });
+            saveCenario(e);
+          }}
           className="absolute right-0 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
         >
           + Save Cenario

@@ -1,6 +1,9 @@
-import { formatNumToPctStr, formatNumToStrMlnK } from "@/utils/functions/formatNumbers";
+import {
+  formatNumToPctStr,
+  formatNumToStrMlnK,
+} from "@/utils/functions/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import type {
@@ -9,15 +12,15 @@ import type {
   InitializeSlidersParamsType,
   HistogramSliderInfosType,
   SliderInitialInfosType,
-  ExportHistogramParamsType
+  ExportHistogramParamsType,
 } from "./netFundingHistogramChartTypes";
 import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
 
-function prepareDualRangeSlidersData ({
-  sliderInfos
+function prepareDualRangeSlidersData({
+  sliderInfos,
 }: PrepareDualRangeSlidersDataParamsType) {
   const titles: string[] = [];
   const dualRangeSliderWithTippyProps: DualRangeSliderWithTippyPropsType[] = [];
@@ -39,51 +42,57 @@ function filterDataForHistogram({
   histogramControlForm,
   sliderInitialInfos,
 }: FilterDataForHistogramParamsType): RawHistogramData[] {
-
-  if (dataForHistogram.length === 0 || ! histogramControlForm) {
+  if (dataForHistogram.length === 0 || !histogramControlForm) {
     return [];
   }
 
   const filterKeys = Object.keys(histogramControlForm);
   const filterRangesValues = Object.values(histogramControlForm);
 
-  const newFilteredDataForHistogram: RawHistogramData[] = dataForHistogram.filter((cE) => {
-    let isSelectedCnpj: boolean = Boolean(cE['CNPJ_FUNDO'] === currCnpj);
+  const newFilteredDataForHistogram: RawHistogramData[] =
+    dataForHistogram.filter((cE) => {
+      let isSelectedCnpj: boolean = Boolean(cE["CNPJ_FUNDO"] === currCnpj);
 
-    const isOk = !filterKeys.some((currKey, currKeyIndex) => {
-      const currVal = cE[currKey as keyof RawHistogramData];
-      const filterVal = filterRangesValues[currKeyIndex];
+      const isOk = !filterKeys.some((currKey, currKeyIndex) => {
+        const currVal = cE[currKey as keyof RawHistogramData];
+        const filterVal = filterRangesValues[currKeyIndex];
 
-      if (!filterVal) {
-        return false;
-      }
+        if (!filterVal) {
+          return false;
+        }
 
-      // Filter by CVM class (and text fields)
-      if (typeof currVal === 'string') {
-        return currVal !== filterVal;
-      }
-      // End: filter by CVM class (and text fields)
+        // Filter by CVM class (and text fields)
+        if (typeof currVal === "string") {
+          return currVal !== filterVal;
+        }
+        // End: filter by CVM class (and text fields)
 
-      // Numeric value check
-      if (typeof currVal !== "number") {
-        return false; // Include null/NaN values
-      }
-      // End: Numeric value check
+        // Numeric value check
+        if (typeof currVal !== "number") {
+          return false; // Include null/NaN values
+        }
+        // End: Numeric value check
 
-      // Filter by sliders
-      const maxValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['upperLimit'];
-      const lowerLimit: number = filterVal[0];
-      const upperLimit: number = filterVal[1];
-      const isLowerThanRangeSelected: boolean = currVal < lowerLimit;
-      const isHigherThanRangeSelected: boolean = currVal > upperLimit;
-      const isHigherThanMaxValSlider: boolean = currVal > maxValSlider;
-  
-      return (isLowerThanRangeSelected || (isHigherThanRangeSelected && ! isHigherThanMaxValSlider));
-      // End: filter by sliders
+        // Filter by sliders
+        const maxValSlider =
+          sliderInitialInfos[currKey as keyof SliderInitialInfosType][
+            "upperLimit"
+          ];
+        const lowerLimit: number = filterVal[0];
+        const upperLimit: number = filterVal[1];
+        const isLowerThanRangeSelected: boolean = currVal < lowerLimit;
+        const isHigherThanRangeSelected: boolean = currVal > upperLimit;
+        const isHigherThanMaxValSlider: boolean = currVal > maxValSlider;
+
+        return (
+          isLowerThanRangeSelected ||
+          (isHigherThanRangeSelected && !isHigherThanMaxValSlider)
+        );
+        // End: filter by sliders
+      });
+
+      return isOk || isSelectedCnpj;
     });
-
-    return isOk || isSelectedCnpj;
-  });
 
   return newFilteredDataForHistogram || [];
 }
@@ -96,31 +105,36 @@ function initializeSliders({
   setHistogramControlForm,
   setSliderInfos,
 }: InitializeSlidersParamsType): HistogramSliderInfosType[] {
-
-  if (! dataForHistogram) {
+  if (!dataForHistogram) {
     return [];
   }
 
   const onlySliders = { ...histogramControlForm };
-  delete onlySliders['CLASSE'];
+  delete onlySliders["classificacao"];
 
   const sliderKeys = Object.keys(onlySliders);
-  
+
   let newSliderInfos: HistogramSliderInfosType[] = [];
 
   sliderKeys.forEach((currKey) => {
     const controlFormKey = currKey;
-    const minValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['lowerLimit'];
-    const maxValSlider = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['upperLimit'];
-    const title = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['title'];
-    const formatterFunction = sliderInitialInfos[currKey as keyof SliderInitialInfosType]['formatterFunction'];
+    const minValSlider =
+      sliderInitialInfos[currKey as keyof SliderInitialInfosType]["lowerLimit"];
+    const maxValSlider =
+      sliderInitialInfos[currKey as keyof SliderInitialInfosType]["upperLimit"];
+    const title =
+      sliderInitialInfos[currKey as keyof SliderInitialInfosType]["title"];
+    const formatterFunction =
+      sliderInitialInfos[currKey as keyof SliderInitialInfosType][
+        "formatterFunction"
+      ];
 
     let step: number = 1;
 
     if (maxValSlider < 10) {
       step = 0.005;
     }
-    
+
     const sliderInfoElement: HistogramSliderInfosType = {
       title,
       minValSlider,
@@ -130,11 +144,17 @@ function initializeSliders({
       controlForm: histogramControlForm,
       controlFormKey,
       setControlForm: setHistogramControlForm,
-    }
+    };
 
-    newSliderInfos.push(sliderInfoElement)
-    setHistogramControlForm(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
-    setCurrAppliedFilters(prevForm => ({ ...prevForm, [currKey]: [minValSlider, maxValSlider] }));
+    newSliderInfos.push(sliderInfoElement);
+    setHistogramControlForm((prevForm) => ({
+      ...prevForm,
+      [currKey]: [minValSlider, maxValSlider],
+    }));
+    setCurrAppliedFilters((prevForm) => ({
+      ...prevForm,
+      [currKey]: [minValSlider, maxValSlider],
+    }));
   });
 
   setSliderInfos(newSliderInfos);
@@ -149,7 +169,6 @@ function prepareHistogram(
   lowerLimitOutliers: number,
   upperLimitOutliers: number
 ): FinalHistogramDataType | false {
-  
   if (!histogramData) {
     return false;
   }
@@ -170,7 +189,7 @@ function prepareHistogram(
     selCnpj,
     lowerLimitOutliers,
     upperLimitOutliers
-  );  
+  );
 
   const finalData = { abs: finalDataAbs, pct: finalDataPct };
 
@@ -303,56 +322,55 @@ function removeOutliersAddPercentiles(
 }
 
 function getNumBinsForHistogram(isMobile: boolean): number {
-
   if (isMobile) {
     return numBinsMobile;
   } else {
     return numBinsDesktop;
   }
-
 }
 
-function exportHistogram ({
+function exportHistogram({
   selCnpj,
   filters,
   histogram,
 }: ExportHistogramParamsType) {
-  
-  if (! histogram || ! histogram['abs'].length) {
+  if (!histogram || !histogram["abs"].length) {
     return;
   }
 
   const workbook = XLSX.utils.book_new();
   const dataForSheet: any[][] = [];
-  const visualizations = Object.keys(histogram) as (keyof FinalHistogramDataType)[];
+  const visualizations = Object.keys(
+    histogram
+  ) as (keyof FinalHistogramDataType)[];
   const filterArr = Object.entries(filters);
   const filterTable = filterArr.map((cE) => {
-    const isSlider = typeof cE[1] === 'object';
+    const isSlider = typeof cE[1] === "object";
 
-    if (cE[0] === 'CLASSE' && cE[1] === '') {
-      cE[1] = 'All';
+    if (cE[0] === "classificacao" && cE[1] === "") {
+      cE[1] = "All";
     }
 
     return isSlider ? [cE[0], ...cE[1]] : cE;
   });
 
-  dataForSheet.push(['sel_cnpj', selCnpj], []);
-  dataForSheet.push(['Filters'], ...filterTable, [], ['Histograms']);
+  dataForSheet.push(["sel_cnpj", selCnpj], []);
+  dataForSheet.push(["Filters"], ...filterTable, [], ["Histograms"]);
 
   const tableHeaders = [
-    'interval',
-    'exact_upper_limit',
-    'cnpj_count',
-    'is_selected_cnpj_bin',
-    'percentile',
-  ]
+    "interval",
+    "exact_upper_limit",
+    "cnpj_count",
+    "is_selected_cnpj_bin",
+    "percentile",
+  ];
   const tableHeaderRow: string[] = []; // Mounting first row
   const visualizationsRow: string[] = [];
 
   visualizations.forEach((currV) => {
-    visualizationsRow.push('visualization', currV, '', '', '', '');
-    tableHeaderRow.push(...tableHeaders, '');
-  })
+    visualizationsRow.push("visualization", currV, "", "", "", "");
+    tableHeaderRow.push(...tableHeaders, "");
+  });
 
   dataForSheet.push(visualizationsRow); // Added first row to identify table visualization
   dataForSheet.push(tableHeaderRow); // Added first row table headers for all visualizations
@@ -362,23 +380,22 @@ function exportHistogram ({
 
     visualizations.forEach((currV, currIndexV) => {
       newRow.push(
-        histogram[currV][currIndex]['xTick'],
-        histogram[currV][currIndex]['limit'],
-        histogram[currV][currIndex]['value'],
-        histogram[currV][currIndex]['selCnpjBin'],
-        histogram[currV][currIndex]['percentile'],
-        '',
+        histogram[currV][currIndex]["xTick"],
+        histogram[currV][currIndex]["limit"],
+        histogram[currV][currIndex]["value"],
+        histogram[currV][currIndex]["selCnpjBin"],
+        histogram[currV][currIndex]["percentile"],
+        ""
       ); // Build row with infos. from all tables/visualizations
-
-    })
+    });
 
     dataForSheet.push(newRow); // Add row to tables
-  })
+  });
 
   const sheet = XLSX.utils.aoa_to_sheet(dataForSheet);
 
   XLSX.utils.book_append_sheet(workbook, sheet);
-  XLSX.writeFile(workbook, 'export_histogram.xlsx');
+  XLSX.writeFile(workbook, "export_histogram.xlsx");
 
   return;
 }

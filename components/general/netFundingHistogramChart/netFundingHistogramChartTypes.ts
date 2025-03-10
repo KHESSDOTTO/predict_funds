@@ -1,14 +1,13 @@
-import {
-  Dispatch,
-  SetStateAction,
-  MouseEvent,
-} from "react";
+import { Dispatch, SetStateAction, MouseEvent } from "react";
 import type { TooltipProps } from "recharts";
 import type {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
-import type { AbsOrPctType, FinalHistogramDataType } from "@/utils/types/generalTypes/types";
+import type {
+  AbsOrPctType,
+  FinalHistogramDataType,
+} from "@/utils/types/generalTypes/types";
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 
@@ -17,7 +16,7 @@ interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
 interface NetFundingHistogramChartPropsType {
   currCnpj: string;
   smallV: boolean;
-  anbimaClass: string;
+  classificacao: string;
   isMobile: boolean;
   dataForHistogram: RawHistogramData[];
   loadingHistogram: boolean;
@@ -39,7 +38,7 @@ interface VisualizationFormPropsType {
 
 interface HistogramSliderInfosType extends DualRangeSliderWithTippyPropsType {
   title: string;
-} 
+}
 
 interface FilterFormPropsType {
   currCnpj: string;
@@ -58,11 +57,11 @@ interface PrepareDualRangeSlidersDataParamsType {
 }
 
 interface InitializeSlidersParamsType {
-  dataForHistogram: RawHistogramData[],
-  histogramControlForm: HistogramControlFormType,
-  sliderInitialInfos: SliderInitialInfosType,
-  setCurrAppliedFilters: Dispatch<SetStateAction<HistogramControlFormType>>,
-  setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>,
+  dataForHistogram: RawHistogramData[];
+  histogramControlForm: HistogramControlFormType;
+  sliderInitialInfos: SliderInitialInfosType;
+  setCurrAppliedFilters: Dispatch<SetStateAction<HistogramControlFormType>>;
+  setHistogramControlForm: Dispatch<SetStateAction<HistogramControlFormType>>;
   setSliderInfos: Dispatch<SetStateAction<HistogramSliderInfosType[]>>;
 }
 
@@ -72,7 +71,7 @@ interface HistogramControlFormType {
   QT_DIA_PAGTO_RESGATE: [number, number];
   NR_COTST: [number, number];
   VL_PATRIM_LIQ: [number, number];
-  CLASSE?: string;
+  classificacao?: string;
 }
 
 interface SliderInitialInfosItemType {
@@ -92,9 +91,9 @@ interface SliderInitialInfosType {
 
 interface FilterDataForHistogramParamsType {
   currCnpj: string;
-  dataForHistogram: RawHistogramData[],
-  histogramControlForm: HistogramControlFormType,
-  sliderInitialInfos: SliderInitialInfosType,
+  dataForHistogram: RawHistogramData[];
+  histogramControlForm: HistogramControlFormType;
+  sliderInitialInfos: SliderInitialInfosType;
 }
 
 interface HandleSubmitStaticParamsType {

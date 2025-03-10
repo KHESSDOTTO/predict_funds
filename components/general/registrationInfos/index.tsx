@@ -6,18 +6,8 @@ export default function RegistrationInfos({
   registration,
   isLoading,
 }: RegistrationInfosPropsType) {
-  const fieldsToShow = [
-    "CNPJ_FUNDO",
-    "DENOM_SOCIAL",
-    "CLASSE",
-    "CLASSE_ANBIMA"
-  ] as const;
-  const titlesOfFields = [
-    "CNPJ",
-    "Fund Name",
-    "CVM Class",
-    "ANBIMA Class"
-  ];
+  const fieldsToShow = ["CNPJ_FUNDO", "DENOM_SOCIAL", "classificacao"] as const;
+  const titlesOfFields = ["CNPJ", "Fund Name", "CVM Class"];
 
   return (
     <div

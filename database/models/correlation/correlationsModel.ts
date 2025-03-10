@@ -30,7 +30,7 @@ const CorrelationSchema = new Schema<
     required: true,
     unique: false,
   },
-  CLASSE_ANBIMA: {
+  classificacao: {
     type: String,
     required: true,
     unique: false,
@@ -70,8 +70,8 @@ CorrelationSchema.statics.getMostRecentCorrelsByCnpj = async function (
   }
 };
 
-CorrelationSchema.statics.getAvgMostRecentCorrelsByAnbimaClass =
-  async function (anbimaClass: string): Promise<any> {
+CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
+  async function (classificacao: string): Promise<any> {
     try {
       const correlPeriods = [6, 12];
       const correlFields = [
@@ -90,7 +90,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByAnbimaClass =
       for (const correlPeriod of correlPeriods) {
         const lastCorrel = await CorrelationsModel.findOne(
           {
-            CLASSE_ANBIMA: anbimaClass,
+            classificacao: classificacao,
             janela_em_meses: correlPeriod,
           },
           {
@@ -110,7 +110,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByAnbimaClass =
         const correls =
           ((await CorrelationsModel.find(
             {
-              CLASSE_ANBIMA: anbimaClass,
+              classificacao: classificacao,
               janela_em_meses: correlPeriod,
               data_calc_correlacao: lastBaseDate,
             },
@@ -120,7 +120,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByAnbimaClass =
               ancora: 0,
               janela_em_meses: 0,
               data_calc_correlacao: 0,
-              CLASSE_ANBIMA: 0,
+              classificacao: 0,
             }
           ).exec()) as CorrelationsDocCorrelsQuery[]) || null;
 
@@ -136,7 +136,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByAnbimaClass =
         results.push({
           ...averages,
           janela_em_meses: correlPeriod,
-          CLASSE_ANBIMA: anbimaClass,
+          classificacao: classificacao,
         });
       }
 

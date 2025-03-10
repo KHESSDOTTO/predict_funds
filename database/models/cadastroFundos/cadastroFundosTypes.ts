@@ -42,14 +42,11 @@ interface CadastroFundosDocType_doc {
   CNPJ_CONTROLADOR: string;
   CONTROLADOR: string;
   INVEST_CEMPR_EXTER: string;
-  CLASSE_ANBIMA: string;
+  classificacao: string;
 }
 
 // Interface for the document, in here should go the custom instance methods and properties
-interface CadastroFundosDocType extends
-  Document,
-  CadastroFundosDocType_doc
-{
+interface CadastroFundosDocType extends Document, CadastroFundosDocType_doc {
   _doc: CadastroFundosDocType_doc;
 }
 
@@ -57,14 +54,12 @@ interface CadastroFundosDocType extends
 interface CadastroFundosModelType extends Model<CadastroFundosDocType> {
   getCadastroByCnpj(cnpj: string): Promise<CadastroFundosDocType | null>;
   getAnbimaClassByCnpj(cnpj: string): Promise<string | false>;
-  getArrCnpjName(
-    cnpjs: string[]
-  ): Promise<Array<ArrCnpjNameType> | false>; // THIS SHOULD BE AN INSTANCE METHOD
+  getArrCnpjName(cnpjs: string[]): Promise<Array<ArrCnpjNameType> | false>; // THIS SHOULD BE AN INSTANCE METHOD
 }
 
 interface ArrCnpjNameType {
   CNPJ_FUNDO: string;
-  DENOM_SOCIAL: string
+  DENOM_SOCIAL: string;
 }
 
 export type {
@@ -72,4 +67,4 @@ export type {
   CadastroFundosDocType,
   CadastroFundosModelType,
   ArrCnpjNameType,
-}
+};

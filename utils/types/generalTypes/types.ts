@@ -66,7 +66,7 @@ interface CadastroFundosType {
   CNPJ_CONTROLADOR: string;
   CONTROLADOR: string;
   INVEST_CEMPR_EXTER: string;
-  CLASSE_ANBIMA: string;
+  classificacao: string;
 }
 
 interface PredictionsType {
@@ -137,8 +137,7 @@ interface DashboardControlFormType {
   varCota: number;
   weeksBack: number;
   weeksAhead: number;
-  cvmClass: string;
-  anbimaClass: string;
+  classificacao: string;
 }
 
 interface HistogramSingleTypeData {

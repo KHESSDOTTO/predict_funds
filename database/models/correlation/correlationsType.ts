@@ -15,7 +15,7 @@ export interface CorrelationsDocType_doc {
   ancora: Date;
   data_calc_correlacao: Date;
   janela_em_meses: Number;
-  CLASSE_ANBIMA: String;
+  classificacao: String;
 }
 
 // Interface to add custom instance methods and properties

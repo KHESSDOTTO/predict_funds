@@ -48,17 +48,11 @@ export default function ControlSection({
   // Get user registration and array with CNPJ and names of funds.
   // Get historic data and predictions
   useEffect(() => {
-
     if (!user || !controlForm) {
       return;
     }
 
-    getData(
-      user,
-      controlForm,
-      setHistoricData,
-      setPredictionData
-    );
+    getData(user, controlForm, setHistoricData, setPredictionData);
 
     getRegistration(
       user,
@@ -69,29 +63,21 @@ export default function ControlSection({
       setIsLoading
     );
 
-    getArrCnpjFundName(
-      user.cnpjs,
-      setArrCnpjName
-    );
+    getArrCnpjFundName(user.cnpjs, setArrCnpjName);
 
     return;
   }, [user]);
 
   // Get Histogram and correlations
   useEffect(() => {
-    getDataForHistogram(
-      controlForm,
-      setLoadingHistogram,
-      setDataForHistogram
-    );
+    getDataForHistogram(controlForm, setLoadingHistogram, setDataForHistogram);
 
     getCorrels(
       controlForm.buscaCnpj,
-      controlForm.anbimaClass,
+      controlForm.classificacao,
       setCorrels,
       setHeatMapObj
     );
-
   }, [registration]);
 
   return (

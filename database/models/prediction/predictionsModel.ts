@@ -1,9 +1,16 @@
-import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
+import {
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 import { Schema, model, models } from "mongoose";
 import { buildPredKey } from "@/utils/functions/genericFunctions";
-import { PredictionDocType, PredictionModelType, RawHistogramData } from "./predictionsType";
+import {
+  PredictionDocType,
+  PredictionModelType,
+  RawHistogramData,
+} from "./predictionsType";
 
-const PredictionSchema = new Schema(
+const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
   {
     CNPJ_FUNDO: { type: String, required: true, trim: true, unique: false },
     ancora: { type: Date, required: true, unique: false },
@@ -20,14 +27,8 @@ const PredictionSchema = new Schema(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const {
-    varCota,
-    varCotistas,
-    varNF,
-    baseDate,
-    buscaCnpj,
-    weeksAhead
-  } = controlForm;
+  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
+    controlForm;
   const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
 
@@ -42,7 +43,7 @@ PredictionSchema.statics.getPredictions = async function (
       {
         _id: 0,
         CNPJ_FUNDO: 1,
-        CLASSE_ANBIMA: 1,
+        classificacao: 1,
         [predKeyAbs]: 1,
         [predKeyPct]: 1,
         CI90: 1,
@@ -81,7 +82,7 @@ PredictionSchema.statics.getPredictions = async function (
     if (prediction) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
-        CLASSE_ANBIMA: prediction.CLASSE_ANBIMA,
+        classificacao: prediction.classificacao,
         CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
         CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
         CI90_ABS: prediction.CI90,
@@ -114,17 +115,16 @@ PredictionSchema.statics.getPredictions = async function (
           (prediction[predKeyPct] as number) - (prediction.CI99_PCT as number),
           (prediction[predKeyPct] as number) + (prediction.CI99_PCT as number),
         ],
-        mean: prediction['mean'], // Average deviation from the last predictions
+        mean: prediction["mean"], // Average deviation from the last predictions
       };
     } else {
-        
       return false;
     }
 
     return finalPred;
   } catch (err) {
     console.log(err);
-    
+
     return false;
   }
 };
@@ -137,14 +137,8 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       others default (zero), to build histogram
   */
 
-  const {
-    varCota,
-    varCotistas,
-    varNF,
-    baseDate,
-    buscaCnpj,
-    weeksAhead,
-  } = controlForm;
+  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
+    controlForm;
   const customPredKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
   const defaultPredKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
@@ -155,8 +149,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
     const projection = {
       CNPJ_FUNDO: 1,
-      CLASSE: 1,
-      CLASSE_ANBIMA: 1,
+      classificacao: 1,
       vol_252: 1,
       VL_PATRIM_LIQ: 1,
       NR_COTST: 1,
@@ -176,7 +169,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       projection
     );
 
-    if (! predictions) {
+    if (!predictions) {
       return [];
     }
 
@@ -189,32 +182,30 @@ PredictionSchema.statics.getPredsForHistogram = async function (
         predKeyAbs = customPredKeyAbs;
         predKeyPct = customPredKeyPct;
         newElement = {
-          CNPJ_FUNDO: cE['CNPJ_FUNDO'],
-          CLASSE: cE['CLASSE'],
-          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
-          vol_252: cE['vol_252'],
-          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
-          NR_COTST: cE['NR_COTST'],
-          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
-          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CNPJ_FUNDO: cE["CNPJ_FUNDO"],
+          classificacao: cE["classificacao"],
+          vol_252: cE["vol_252"],
+          VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
+          NR_COTST: cE["NR_COTST"],
+          QT_DIA_CONVERSAO_COTA: cE["QT_DIA_CONVERSAO_COTA"],
+          QT_DIA_PAGTO_RESGATE: cE["QT_DIA_PAGTO_RESGATE"],
           CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
           CAPTC_LIQ_PCT_ms: cE[predKeyPct],
-        }
+        };
       } else {
         predKeyAbs = defaultPredKeyAbs;
         predKeyPct = defaultPredKeyPct;
         newElement = {
-          CNPJ_FUNDO: '',
-          CLASSE: cE['CLASSE'],
-          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
-          vol_252: cE['vol_252'],
-          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
-          NR_COTST: cE['NR_COTST'],
-          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
-          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CNPJ_FUNDO: "",
+          classificacao: cE["classificacao"],
+          vol_252: cE["vol_252"],
+          VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
+          NR_COTST: cE["NR_COTST"],
+          QT_DIA_CONVERSAO_COTA: cE["QT_DIA_CONVERSAO_COTA"],
+          QT_DIA_PAGTO_RESGATE: cE["QT_DIA_PAGTO_RESGATE"],
           CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
           CAPTC_LIQ_PCT_ms: cE[predKeyPct],
-        }
+        };
       }
 
       return newElement;

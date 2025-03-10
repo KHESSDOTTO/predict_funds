@@ -102,13 +102,11 @@ async function selRegistration(
       setControlForm({
         ...controlForm,
         buscaCnpj: registration.data["CNPJ_FUNDO"],
-        cvmClass: registration.data["CLASSE"],
-        anbimaClass: registration.data["CLASSE_ANBIMA"],
+        classificacao: registration.data["classificacao"],
       });
 
       return registration.data;
     }
-
   } catch (err) {
     console.log(err);
   }
@@ -132,26 +130,25 @@ async function getDataForHistogram(
     if (responsePreds) {
       setDataForHistogram(responsePreds.data);
     }
-
   } catch (err) {
     console.log(err);
 
     return false;
   }
-  
+
   return true;
 }
 
 async function getCorrels(
   cnpj: string,
-  anbimaClass: string,
+  classificacao: string,
   setCorrels: Dispatch<SetStateAction<any>>,
   setHeatMapObj: Dispatch<SetStateAction<any>>
 ) {
   const encodedCnpj = encodeURIComponent(cnpj);
-  const encodedAnbimaClass = encodeURIComponent(anbimaClass);
+  const encodedclassificacao = encodeURIComponent(classificacao);
 
-  if (!anbimaClass) {
+  if (!classificacao) {
     return false;
   }
 
@@ -167,14 +164,14 @@ async function getCorrels(
       setCorrels(adjustCorrelCnpj);
     }
 
-    const resAvgAnbimaClass = await ax.get(
-      `/correlations/getAvgByAnbimaClass?anbimaClass=${encodedAnbimaClass}`
+    const resAvgclassificacao = await ax.get(
+      `/correlations/getAvgByclassificacao?classificacao=${encodedclassificacao}`
     );
 
-    if (resCnpj && resAvgAnbimaClass) {
+    if (resCnpj && resAvgclassificacao) {
       const newheatMapObj = {
         fund: resCnpj.data,
-        avg: resAvgAnbimaClass.data,
+        avg: resAvgclassificacao.data,
       };
       setHeatMapObj(newheatMapObj);
     }
@@ -220,7 +217,6 @@ async function getData(
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
 ) {
-
   if (!user) {
     return;
   }

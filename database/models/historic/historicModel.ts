@@ -6,7 +6,7 @@ import {
   DatahoraQueryDoc,
 } from "./historicType";
 
-const HistoricSchema = new Schema(
+const HistoricSchema = new Schema<HistoricDocType, HistoricModelType>(
   {
     DT_COMPTC: { type: Date, required: true, trim: true, unique: false },
     CNPJ_FUNDO: { type: String, required: true, trim: true, unique: false },
@@ -21,7 +21,7 @@ const HistoricSchema = new Schema(
     updated_at: { type: Date, required: false, unique: false },
   },
   {
-    collection: "HN_informes_ms",
+    collection: "HN_informes_ms_cvm175",
     timeseries: {
       timeField: "DT_COMPTC",
       granularity: "hours",

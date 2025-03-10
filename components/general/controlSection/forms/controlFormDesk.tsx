@@ -20,16 +20,15 @@ export default function ControlFormDesk({
   setPredictionData,
   saveCenario,
 }: ControlFormPropsType) {
-  const selectInputClass = "cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
+  const selectInputClass =
+    "cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
   const sliderInputClass = "w-40";
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
-  const fundOptions = arrCnpjName.map(cE => (
-    {
-      name: cE['DENOM_SOCIAL'],
-      value: cE['CNPJ_FUNDO']
-    }
-  ));
+  const fundOptions = arrCnpjName.map((cE) => ({
+    name: cE["DENOM_SOCIAL"],
+    value: cE["CNPJ_FUNDO"],
+  }));
 
   return (
     <form
@@ -49,15 +48,9 @@ export default function ControlFormDesk({
     >
       <input
         type="hidden"
-        name="anbimaClass"
-        id="anbimaClass"
-        value={controlForm.anbimaClass}
-      />
-      <input
-        type="hidden"
-        name="cvmClass"
-        id="cvmClass"
-        value={controlForm.cvmClass}
+        name="classificacao"
+        id="classificacao"
+        value={controlForm.classificacao}
       />
       <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
         <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">
@@ -80,7 +73,7 @@ export default function ControlFormDesk({
                     setNameSelectedFund
                   )
                 }
-                className={ selectInputClass }
+                className={selectInputClass}
               >
                 {ancoras?.map((cE, cI) => {
                   const ancora = new Date(cE);
@@ -96,14 +89,12 @@ export default function ControlFormDesk({
               <label htmlFor="buscaCnpj">Fund Name</label>
               <div className="w-40 text-black">
                 <SelectWithFilter
-                  {
-                    ...{
-                      options: fundOptions,
-                      value: controlForm.buscaCnpj,
-                      varNameForm: 'buscaCnpj',
-                      setForm: setControlForm,
-                    }
-                  }
+                  {...{
+                    options: fundOptions,
+                    value: controlForm.buscaCnpj,
+                    varNameForm: "buscaCnpj",
+                    setForm: setControlForm,
+                  }}
                 />
               </div>
             </div>
@@ -113,7 +104,7 @@ export default function ControlFormDesk({
                 type="text"
                 id="weeksBack"
                 name="weeksBack"
-                className={ selectInputClass }
+                className={selectInputClass}
                 value={controlForm.weeksBack}
                 onChange={(e) =>
                   handleControlFormChange(
@@ -131,7 +122,7 @@ export default function ControlFormDesk({
               <select
                 id="weeksAhead"
                 name="weeksAhead"
-                className={ selectInputClass }
+                className={selectInputClass}
                 value={controlForm.weeksAhead}
                 onChange={(e) =>
                   handleControlFormChange(
@@ -180,7 +171,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ sliderInputClass }
+                  className={sliderInputClass}
                   value={controlForm.varNF}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -217,7 +208,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ sliderInputClass }
+                  className={sliderInputClass}
                   value={controlForm.varCotistas}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -254,7 +245,7 @@ export default function ControlFormDesk({
                   min={-0.05}
                   max={0.05}
                   step={0.01}
-                  className={ sliderInputClass }
+                  className={sliderInputClass}
                   value={controlForm.varCota}
                   onChange={(e) =>
                     handleControlFormChange(
@@ -273,7 +264,9 @@ export default function ControlFormDesk({
         <div className="flex justify-center items-center p-0 ml-6">
           <button
             type="submit"
-            onClick={() => track('clicked_update', { username: user?.username || null })}
+            onClick={() =>
+              track("clicked_update", { username: user?.username || null })
+            }
             className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
           >
             <div className="shadow-black relative bottom-1 hover:shadow-xl">
@@ -282,12 +275,10 @@ export default function ControlFormDesk({
           </button>
         </div>
         <div
-          onClick={
-            (e) => {
-              track("save_cenario", { username: user?.username || null });
-              saveCenario(e);
-            }
-          }
+          onClick={(e) => {
+            track("save_cenario", { username: user?.username || null });
+            saveCenario(e);
+          }}
           className="absolute bottom-0 right-0 xl:right-24 text-white italic px-1 transition-all duration-200 border-yellow-900 hover:text-indigo-400  lg:ml-4 lg:hover:border-yellow-600 hover:cursor-pointer hover:-translate-y-px"
         >
           + Save Cenario

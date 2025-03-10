@@ -4,7 +4,10 @@ import type {
   CadastroFundosModelType,
 } from "./cadastroFundosTypes";
 
-const CadastroFundosSchema = new Schema(
+const CadastroFundosSchema = new Schema<
+  CadastroFundosDocType,
+  CadastroFundosModelType
+>(
   {
     CNPJ_FUNDO: { type: String, required: true, trim: true, unique: true },
     TP_FUNDO: { type: String, required: true, trim: true, unique: false },
@@ -71,7 +74,7 @@ const CadastroFundosSchema = new Schema(
       trim: true,
       unique: false,
     },
-    CLASSE_ANBIMA: { type: String, required: true, trim: true, unique: false },
+    classificacao: { type: String, required: true, trim: true, unique: false },
   },
   { timestamps: true }
 );
@@ -97,16 +100,16 @@ CadastroFundosSchema.statics.getAnbimaClassByCnpj = async function (
         CNPJ_FUNDO: cnpj,
       },
       {
-        CLASSE_ANBIMA: 1,
+        classificacao: 1,
         _id: 0,
       }
-    )) as { CLASSE_ANBIMA: string } | null;
+    )) as { classificacao: string } | null;
 
     if (!anbimaClass) {
       return false;
     }
 
-    return anbimaClass.CLASSE_ANBIMA;
+    return anbimaClass.classificacao;
   } catch (err) {
     console.log(err);
     return false;

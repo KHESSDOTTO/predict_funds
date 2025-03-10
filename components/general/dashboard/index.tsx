@@ -31,10 +31,14 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   const screenWidth = useWindowWidth();
   const [historicData, setHistoricData] = useState<HistoricType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [registration, setRegistration] = useState<CadastroFundosType | false>(false);
+  const [registration, setRegistration] = useState<CadastroFundosType | false>(
+    false
+  );
   const [predictionData, setPredictionData] = useState<PredictionsType[]>([]);
   const [loadingHistogram, setLoadingHistogram] = useState<boolean>(true);
-  const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>([]);
+  const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>(
+    []
+  );
   const [correls, setCorrels] = useState<any>(false);
   const [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
   const saveCenariosArgs: SaveCenarioParamsType = {
@@ -56,14 +60,9 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
-  const cvmClasses = [
-    "Ações",
-    "Multimercado",
-    "Renda Fixa"
-  ];
+  const classificacoes = ["Ações", "Multimercado", "Renda Fixa"];
 
   useEffect(() => {
-
     if (screenWidth > 992) {
       setIsMobile(false);
     } else {
@@ -74,13 +73,12 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   }, [screenWidth]);
 
   useEffect(() => {
-
     if (ancoras && ancoras.length > 0) {
-        setControlForm({ ...controlForm, baseDate: ancoras[ancoras.length - 1] });
+      setControlForm({ ...controlForm, baseDate: ancoras[ancoras.length - 1] });
     }
 
     return;
-  }, [ancoras])
+  }, [ancoras]);
 
   return (
     <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm py-2">
@@ -88,13 +86,12 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
         <LogoPredict bold={false} />
       </div>
       <div className="w-full">
-        <ControlSection { ...controlSectionProps } />
+        <ControlSection {...controlSectionProps} />
       </div>
       <div className="w-full">
-        <RegistrationInfos isLoading={ isLoading } registration={ registration } />
+        <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      {
-        /* <div className="flex flex-col w-full lg:flex-row gap-4">
+      {/* <div className="flex flex-col w-full lg:flex-row gap-4">
           {
           cvmClasses.map((currClass) => {
               return (
@@ -113,12 +110,13 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
               )
           })
           }
-        </div> */
-      }
+        </div> */}
       <div className="w-full">
         <NetFundingPredChart
           {...{
-            title: `Net Funding ${registration ? "- CNPJ: " + registration['CNPJ_FUNDO'] : ''}`,
+            title: `Net Funding ${
+              registration ? "- CNPJ: " + registration["CNPJ_FUNDO"] : ""
+            }`,
             smallV: false,
             isMobile,
             historic: historicData,
@@ -131,7 +129,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           {...{
             currCnpj: controlForm.buscaCnpj,
             smallV: false,
-            anbimaClass: registration ? registration["CLASSE_ANBIMA"] : "",
+            classificacao: registration ? registration["classificacao"] : "",
             isMobile,
             dataForHistogram,
             loadingHistogram,
@@ -145,13 +143,13 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
         />
       </div>
       <div className="w-full">
-        <CorrelCardsSection padding="5px 0" correls={ correls } />
+        <CorrelCardsSection padding="5px 0" correls={correls} />
       </div>
       <div className="w-full">
-        <HeatMap title="Heat Map - Correlations" heatMapObj={ heatMapObj } />
+        <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />
       </div>
       <div className="w-full flex justify-center lg:hidden">
-        <CenariosBtnSection saveCenario={ () => saveCenario(saveCenariosArgs) } />
+        <CenariosBtnSection saveCenario={() => saveCenario(saveCenariosArgs)} />
       </div>
     </main>
   );
