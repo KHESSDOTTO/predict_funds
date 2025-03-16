@@ -7,7 +7,7 @@ import {
 import ControlSection from "../controlSection";
 import { useUser } from "@/contexts/userContext";
 import RegistrationInfos from "../registrationInfos";
-import CorrelCardsSection from "@/components/general/correlCardsSection";
+import CorrelCardsSection from "@/components/dashboardComponents/correlCardsSection";
 import HeatMap from "../heatMap";
 import type { HeatMapObjType } from "../heatMap/heatMapTypes";
 import CenariosBtnSection from "../cenarioBtnSection";
@@ -129,7 +129,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           {...{
             currCnpj: controlForm.buscaCnpj,
             smallV: false,
-            classificacao: registration ? registration["classificacao"] : "",
+            Classificacao: registration ? registration["Classificacao"] : "",
             isMobile,
             dataForHistogram,
             loadingHistogram,

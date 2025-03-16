@@ -67,7 +67,7 @@ export default function NetFundingHistogramChart({
       QT_DIA_PAGTO_RESGATE: [0, 720],
       NR_COTST: [0, 100000],
       VL_PATRIM_LIQ: [0, 9999999999],
-      classificacao: "",
+      Classificacao: "",
     });
   const [currAppliedFilters, setCurrAppliedFilters] =
     useState<HistogramControlFormType>(histogramControlForm);

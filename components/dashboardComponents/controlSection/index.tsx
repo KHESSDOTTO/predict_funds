@@ -74,7 +74,7 @@ export default function ControlSection({
 
     getCorrels(
       controlForm.buscaCnpj,
-      controlForm.classificacao,
+      controlForm.Classificacao,
       setCorrels,
       setHeatMapObj
     );

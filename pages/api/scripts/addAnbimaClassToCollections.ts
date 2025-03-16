@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
-import CorrelationsModel from "@/database/models/correlation/correlationsModel";
 import PredictionsModel from "@/database/models/prediction/predictionsModel";
 
 export default async function AddAnbimaClassToPreds(
@@ -26,7 +25,7 @@ export default async function AddAnbimaClassToPreds(
         $project: {
           _id: 1,
           CNPJ_FUNDO: 1,
-          classificacao: "$fundosDetails.classificacao",
+          Classificacao: "$fundosDetails.Classificacao",
         },
       },
     ]);
@@ -39,7 +38,7 @@ export default async function AddAnbimaClassToPreds(
       entries.map((doc) =>
         PredictionsModel.updateOne(
           { _id: doc._id },
-          { $set: { classificacao: doc.classificacao } }
+          { $set: { Classificacao: doc.Classificacao } }
         )
       )
     );

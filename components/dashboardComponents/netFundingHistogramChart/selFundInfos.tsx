@@ -38,7 +38,7 @@ export default function SelFundInfos({
                 lg:py-1 lg:px-4 lg:bg-gray-300 lg:rounded-full lg:text-gray-800 lg:not-italic
             "
           >
-            {selectedFund["classificacao"]}
+            {selectedFund["Classificacao"]}
           </span>
         </li>
 

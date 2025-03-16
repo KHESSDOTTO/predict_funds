@@ -11,7 +11,7 @@ import {
   Area,
   ResponsiveContainer,
 } from "recharts";
-import PredList from "@/components/general/predList";
+import PredList from "@/components/dashboardComponents/predList";
 import ValueQuotaTooltip from "./valueQuotaChartTooltip";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";

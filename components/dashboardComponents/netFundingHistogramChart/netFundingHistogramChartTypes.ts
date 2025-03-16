@@ -16,7 +16,7 @@ interface HistogramTooltipProps extends TooltipProps<ValueType, NameType> {}
 interface NetFundingHistogramChartPropsType {
   currCnpj: string;
   smallV: boolean;
-  classificacao: string;
+  Classificacao: string;
   isMobile: boolean;
   dataForHistogram: RawHistogramData[];
   loadingHistogram: boolean;
@@ -71,7 +71,7 @@ interface HistogramControlFormType {
   QT_DIA_PAGTO_RESGATE: [number, number];
   NR_COTST: [number, number];
   VL_PATRIM_LIQ: [number, number];
-  classificacao?: string;
+  Classificacao?: string;
 }
 
 interface SliderInitialInfosItemType {

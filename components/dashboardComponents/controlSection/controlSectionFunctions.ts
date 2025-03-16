@@ -102,7 +102,7 @@ async function selRegistration(
       setControlForm({
         ...controlForm,
         buscaCnpj: registration.data["CNPJ_FUNDO"],
-        classificacao: registration.data["classificacao"],
+        Classificacao: registration.data["Classificacao"],
       });
 
       return registration.data;
@@ -146,9 +146,9 @@ async function getCorrels(
   setHeatMapObj: Dispatch<SetStateAction<any>>
 ) {
   const encodedCnpj = encodeURIComponent(cnpj);
-  const encodedclassificacao = encodeURIComponent(classificacao);
+  const encodedClassificacao = encodeURIComponent(classificacao);
 
-  if (!classificacao) {
+  if (! classificacao) {
     return false;
   }
 
@@ -164,14 +164,14 @@ async function getCorrels(
       setCorrels(adjustCorrelCnpj);
     }
 
-    const resAvgclassificacao = await ax.get(
-      `/correlations/getAvgByclassificacao?classificacao=${encodedclassificacao}`
+    const resAvgClassificacao = await ax.get(
+      `/correlations/getAvgByClassificacao?classificacao=${encodedClassificacao}`
     );
 
-    if (resCnpj && resAvgclassificacao) {
+    if (resCnpj && resAvgClassificacao) {
       const newheatMapObj = {
         fund: resCnpj.data,
-        avg: resAvgclassificacao.data,
+        avg: resAvgClassificacao.data,
       };
       setHeatMapObj(newheatMapObj);
     }
@@ -179,6 +179,7 @@ async function getCorrels(
     return true;
   } catch (err) {
     console.log(err);
+    
     return false;
   }
 }

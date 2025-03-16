@@ -22,7 +22,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   const [isLoadingCorrels, setIsLoadingCorrels] = useState(true);
   const [tickers, setTickers] = useState<string[]>([]);
   const [numMonths, setNumMonths] = useState(6);
-  const exclude = ["janela_em_meses", "classificacao", "updated_at"];
+  const exclude = ["janela_em_meses", "Classificacao", "updated_at"];
   const [selCorrels, setSelCorrels] = useState<HeatMapObjType>({
     avg: {},
     fund: {},

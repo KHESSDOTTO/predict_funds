@@ -48,9 +48,9 @@ export default function ControlFormDesk({
     >
       <input
         type="hidden"
-        name="classificacao"
-        id="classificacao"
-        value={controlForm.classificacao}
+        name="Classificacao"
+        id="Classificacao"
+        value={controlForm.Classificacao}
       />
       <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
         <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">

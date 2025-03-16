@@ -53,8 +53,8 @@ export default function CorrelCardsSection({
     "janela_em_meses",
     "ancora",
     "data_calc_correlacao",
-    "classificacao",
-    "classificacao",
+    "Classificacao",
+    "Classificacao",
     "updated_at",
   ];
 

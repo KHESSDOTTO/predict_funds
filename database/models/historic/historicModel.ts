@@ -89,7 +89,7 @@ const HistoricModel =
   model<HistoricDocType, HistoricModelType>(
     "historic",
     HistoricSchema,
-    "HN_informes_ms"
+    "HN_informes_ms_cvm175"
   );
 
 export default HistoricModel;

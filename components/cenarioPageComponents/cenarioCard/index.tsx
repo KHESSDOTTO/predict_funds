@@ -2,8 +2,8 @@ import { useState } from "react";
 import { handleFadeOut } from "./cenarioCardFunction";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import ButtonRed from "../../UI/buttonRed";
-import NetFundingPredChart from "../netFundingPredChart";
-import ValueQuotaChart from "../valueQuotaChart";
+import NetFundingPredChart from "../../dashboardComponents/netFundingPredChart";
+import ValueQuotaChart from "../../dashboardComponents/valueQuotaChart";
 import type { CenarioCardPropsType } from "./cenarioCardTypes";
 
 export default function CenarioCard({

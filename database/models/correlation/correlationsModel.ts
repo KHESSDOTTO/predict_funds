@@ -30,7 +30,7 @@ const CorrelationSchema = new Schema<
     required: true,
     unique: false,
   },
-  classificacao: {
+  Classificacao: {
     type: String,
     required: true,
     unique: false,
@@ -70,7 +70,7 @@ CorrelationSchema.statics.getMostRecentCorrelsByCnpj = async function (
   }
 };
 
-CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
+CorrelationSchema.statics.getAvgMostRecentCorrelsByClassificacao =
   async function (classificacao: string): Promise<any> {
     try {
       const correlPeriods = [6, 12];
@@ -90,7 +90,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
       for (const correlPeriod of correlPeriods) {
         const lastCorrel = await CorrelationsModel.findOne(
           {
-            classificacao: classificacao,
+            Classificacao: classificacao,
             janela_em_meses: correlPeriod,
           },
           {
@@ -110,7 +110,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
         const correls =
           ((await CorrelationsModel.find(
             {
-              classificacao: classificacao,
+              Classificacao: classificacao,
               janela_em_meses: correlPeriod,
               data_calc_correlacao: lastBaseDate,
             },
@@ -120,7 +120,7 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
               ancora: 0,
               janela_em_meses: 0,
               data_calc_correlacao: 0,
-              classificacao: 0,
+              Classificacao: 0,
             }
           ).exec()) as CorrelationsDocCorrelsQuery[]) || null;
 
@@ -136,13 +136,14 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
         results.push({
           ...averages,
           janela_em_meses: correlPeriod,
-          classificacao: classificacao,
+          Classificacao: classificacao,
         });
       }
 
       return results;
     } catch (err) {
       console.log(err);
+      
       return [];
     }
   };
@@ -150,9 +151,9 @@ CorrelationSchema.statics.getAvgMostRecentCorrelsByclassificacao =
 const CorrelationsModel =
   (models.correlations_model as CorrelationsModelType) ||
   model<CorrelationsDocType, CorrelationsModelType>(
-    "correlations_model",
+    "correlations",
     CorrelationSchema,
-    "HN_correlations"
+    "HN_correlations_cvm175"
   );
 
 export default CorrelationsModel;

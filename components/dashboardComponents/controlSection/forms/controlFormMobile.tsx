@@ -50,9 +50,9 @@ export default function ControlFormMobile({
     >
       <input
         type="hidden"
-        name="classificacao"
-        id="classificacao"
-        value={controlForm.classificacao}
+        name="Classificacao"
+        id="Classificacao"
+        value={controlForm.Classificacao}
       />
       <div className="flex flex-row justify-center gap-4">
         <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">

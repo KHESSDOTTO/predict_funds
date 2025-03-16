@@ -15,7 +15,7 @@ export interface CorrelationsDocType_doc {
   ancora: Date;
   data_calc_correlacao: Date;
   janela_em_meses: Number;
-  classificacao: String;
+  Classificacao: String;
 }
 
 // Interface to add custom instance methods and properties
@@ -26,7 +26,7 @@ export interface CorrelationsDocType extends Document, CorrelationsDocType_doc {
 // Interface to add custom static methods
 export interface CorrelationsModelType extends Model<CorrelationsDocType> {
   getMostRecentCorrelsByCnpj(cnpj: string): Promise<any>;
-  getAvgMostRecentCorrelsByAnbimaClass(anbimaClass: string): Promise<any>;
+  getAvgMostRecentCorrelsByClassificacao(classificacao: string): Promise<any>;
 }
 
 // Interfaces for specific queries
