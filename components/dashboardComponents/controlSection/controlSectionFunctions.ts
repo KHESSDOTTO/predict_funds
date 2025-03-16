@@ -179,7 +179,7 @@ async function getCorrels(
     return true;
   } catch (err) {
     console.log(err);
-    
+
     return false;
   }
 }
@@ -205,7 +205,7 @@ async function getRegistration(
     );
 
     setRegistration(registration);
-    setNameSelectedFund(registration["DENOM_SOCIAL"]);
+    setNameSelectedFund(registration["Denominacao_Social_F"]);
     setIsLoading(false);
   } catch (err) {
     console.log(err);

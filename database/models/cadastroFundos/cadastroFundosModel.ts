@@ -3,6 +3,7 @@ import type {
   CadastroFundosDocType,
   CadastroFundosModelType,
 } from "./cadastroFundosTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const CadastroFundosSchema = new Schema<
   CadastroFundosDocType,
@@ -11,7 +12,7 @@ const CadastroFundosSchema = new Schema<
   {
     CNPJ_Fundo: { type: String, required: true, trim: true, unique: true },
     TP_FUNDO: { type: String, required: true, trim: true, unique: false },
-    DENOM_SOCIAL: { type: String, required: true, trim: true, unique: false },
+    Denominacao_Social_F: { type: String, required: true, trim: true, unique: false },
     DT_REG: { type: String, required: true, trim: true, unique: false },
     DT_CONST: { type: String, required: true, trim: true, unique: false },
     CD_CVM: { type: Number, required: true, trim: true, unique: false },
@@ -125,9 +126,11 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
       {
         _id: 0,
         CNPJ_Fundo: 1,
-        DENOM_SOCIAL: 1,
+        Denominacao_Social_F: 1,
       }
     );
+
+    consoleLog({arrCnpjNames})
 
     return arrCnpjNames;
   } catch (err) {

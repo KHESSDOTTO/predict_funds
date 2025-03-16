@@ -28,7 +28,7 @@ interface HeaderPropsType {
 interface CadastroFundosType {
   CNPJ_Fundo: string;
   TP_FUNDO: string;
-  DENOM_SOCIAL: string;
+  Denominacao_Social_F: string;
   DT_REG: string;
   DT_CONST: string;
   CD_CVM: number;

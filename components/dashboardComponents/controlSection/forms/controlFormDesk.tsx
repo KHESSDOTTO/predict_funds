@@ -26,7 +26,7 @@ export default function ControlFormDesk({
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map((cE) => ({
-    name: cE["DENOM_SOCIAL"],
+    name: cE["Denominacao_Social_F"],
     value: cE["CNPJ_FUNDO"],
   }));
 

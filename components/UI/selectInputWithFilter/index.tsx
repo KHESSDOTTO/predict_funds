@@ -69,6 +69,7 @@ export default function SelectWithFilter ({
   }
 
   useEffect(() => {
+    consoleLog({options})
     setFilteredOptions(
       options.filter((option) =>
         option.name.toLowerCase().includes(searchTerm.toLowerCase())
