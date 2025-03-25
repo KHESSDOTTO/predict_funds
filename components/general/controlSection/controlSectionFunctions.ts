@@ -9,6 +9,7 @@ import type {
   UserType,
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 async function getHistoricData(
   encodedParam: string,
@@ -145,28 +146,30 @@ async function getCorrels(
   setCorrels: Dispatch<SetStateAction<any>>,
   setHeatMapObj: Dispatch<SetStateAction<any>>
 ) {
+  console.log("INSIIIIIIDE");
   const encodedCnpj = encodeURIComponent(cnpj);
   const encodedclassificacao = encodeURIComponent(classificacao);
 
   if (!classificacao) {
+    console.log("is this the problem?");
     return false;
   }
 
   try {
     const resCnpj = await ax.get(`/correlations/getByCnpj?cnpj=${encodedCnpj}`);
+    consoleLog(resCnpj);
 
     let adjustCorrelCnpj;
-    if (resCnpj) {
-      adjustCorrelCnpj = resCnpj.data.map((cE: any) => Object.entries(cE));
-    }
 
     if (resCnpj) {
+      adjustCorrelCnpj = resCnpj.data.map((cE: any) => Object.entries(cE));
       setCorrels(adjustCorrelCnpj);
     }
 
     const resAvgclassificacao = await ax.get(
       `/correlations/getAvgByclassificacao?classificacao=${encodedclassificacao}`
     );
+    consoleLog(resAvgclassificacao);
 
     if (resCnpj && resAvgclassificacao) {
       const newheatMapObj = {
@@ -179,6 +182,7 @@ async function getCorrels(
     return true;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 }

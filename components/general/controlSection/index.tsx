@@ -13,6 +13,7 @@ import TitleComponent from "@/components/UI/titleComponent";
 import { useControlForm } from "@/contexts/controlFormContext";
 import type { ControlSectionProps } from "./controlSectionTypes";
 import type { ControlFormPropsType } from "./forms/controlFormType";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function ControlSection({
   registration,
@@ -71,7 +72,7 @@ export default function ControlSection({
   // Get Histogram and correlations
   useEffect(() => {
     getDataForHistogram(controlForm, setLoadingHistogram, setDataForHistogram);
-
+    console.log("TRIGGERIIIIIIIIIIING!!!!!!!!!!!!!!");
     getCorrels(
       controlForm.buscaCnpj,
       controlForm.classificacao,

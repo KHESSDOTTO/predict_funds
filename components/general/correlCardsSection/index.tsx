@@ -20,6 +20,7 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { useUser } from "@/contexts/userContext";
 import { track } from "@vercel/analytics";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 SwiperCore.use([Navigation]);
 
@@ -53,13 +54,14 @@ export default function CorrelCardsSection({
     "janela_em_meses",
     "ancora",
     "data_calc_correlacao",
-    "classificacao",
-    "classificacao",
+    "Classificacao",
+    "Classificacao",
     "updated_at",
   ];
 
   useEffect(() => {
     if (correls) {
+      consoleLog({ correls });
       const newSelCorrel = correls.filter((cE) => {
         let result = false;
         cE.forEach((cE2: any[]) => {
