@@ -26,7 +26,7 @@ export function ControlFormProvider({
     varCota: 0,
     weeksBack: 8,
     weeksAhead: 4,
-    classificacao: "",
+    Classificacao: "",
   });
 
   return (

@@ -2,9 +2,9 @@ import { Document, Model } from "mongoose";
 
 // Interface for the original document, like it is on the collection (_doc property)
 interface CadastroFundosDocType_doc {
-  CNPJ_FUNDO: string;
+  CNPJ_Fundo: string;
   TP_FUNDO: string;
-  DENOM_SOCIAL: string;
+  Denominacao_Social_F: string;
   DT_REG: string;
   DT_CONST: string;
   CD_CVM: number;
@@ -42,7 +42,7 @@ interface CadastroFundosDocType_doc {
   CNPJ_CONTROLADOR: string;
   CONTROLADOR: string;
   INVEST_CEMPR_EXTER: string;
-  classificacao: string;
+  Classificacao: string;
 }
 
 // Interface for the document, in here should go the custom instance methods and properties
@@ -59,7 +59,7 @@ interface CadastroFundosModelType extends Model<CadastroFundosDocType> {
 
 interface ArrCnpjNameType {
   CNPJ_FUNDO: string;
-  DENOM_SOCIAL: string;
+  Denominacao_Social_F: string;
 }
 
 export type {

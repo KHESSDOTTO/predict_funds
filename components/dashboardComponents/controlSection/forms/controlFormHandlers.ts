@@ -31,7 +31,7 @@ function handleControlFormChange(
       return cE["CNPJ_FUNDO"] === e.target.value;
     });
 
-    setNameSelectedFund(selectedFund[0]["DENOM_SOCIAL"]);
+    setNameSelectedFund(selectedFund[0]["Denominacao_Social_F"]);
   }
 
   return;

@@ -110,7 +110,7 @@ function initializeSliders({
   }
 
   const onlySliders = { ...histogramControlForm };
-  delete onlySliders["classificacao"];
+  delete onlySliders["Classificacao"];
 
   const sliderKeys = Object.keys(onlySliders);
 
@@ -347,7 +347,7 @@ function exportHistogram({
   const filterTable = filterArr.map((cE) => {
     const isSlider = typeof cE[1] === "object";
 
-    if (cE[0] === "classificacao" && cE[1] === "") {
+    if (cE[0] === "Classificacao" && cE[1] === "") {
       cE[1] = "All";
     }
 

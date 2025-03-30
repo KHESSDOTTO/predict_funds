@@ -75,7 +75,7 @@ export default function ControlSection({
     console.log("TRIGGERIIIIIIIIIIING!!!!!!!!!!!!!!");
     getCorrels(
       controlForm.buscaCnpj,
-      controlForm.classificacao,
+      controlForm.Classificacao,
       setCorrels,
       setHeatMapObj
     );

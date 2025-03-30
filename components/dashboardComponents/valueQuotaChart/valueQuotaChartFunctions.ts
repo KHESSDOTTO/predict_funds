@@ -46,7 +46,7 @@ function exportValueQuota({
 
   const workbook = XLSX.utils.book_new();
   const currTime = new Date();
-  const selCnpj = historic[0]['CNPJ_FUNDO'].replaceAll("/", ".");
+  const selCnpj = historic[0]["CNPJ_FUNDO"].replaceAll("/", ".");
   const fileName = `export_value_quota_${selCnpj}_${currTime.toISOString()}.xlsx`;
   const sheetData: (string | number)[][] = [];
 

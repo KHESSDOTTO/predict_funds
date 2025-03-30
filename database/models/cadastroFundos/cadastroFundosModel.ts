@@ -3,15 +3,16 @@ import type {
   CadastroFundosDocType,
   CadastroFundosModelType,
 } from "./cadastroFundosTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const CadastroFundosSchema = new Schema<
   CadastroFundosDocType,
   CadastroFundosModelType
 >(
   {
-    CNPJ_FUNDO: { type: String, required: true, trim: true, unique: true },
+    CNPJ_Fundo: { type: String, required: true, trim: true, unique: true },
     TP_FUNDO: { type: String, required: true, trim: true, unique: false },
-    DENOM_SOCIAL: { type: String, required: true, trim: true, unique: false },
+    Denominacao_Social_F: { type: String, required: true, trim: true, unique: false },
     DT_REG: { type: String, required: true, trim: true, unique: false },
     DT_CONST: { type: String, required: true, trim: true, unique: false },
     CD_CVM: { type: Number, required: true, trim: true, unique: false },
@@ -74,7 +75,7 @@ const CadastroFundosSchema = new Schema<
       trim: true,
       unique: false,
     },
-    classificacao: { type: String, required: true, trim: true, unique: false },
+    Classificacao: { type: String, required: true, trim: true, unique: false },
   },
   { timestamps: true }
 );
@@ -82,7 +83,7 @@ const CadastroFundosSchema = new Schema<
 CadastroFundosSchema.statics.getCadastroByCnpj = async function (cnpj: string) {
   try {
     const cadastro = await CadastroFundosModel.findOne({
-      CNPJ_FUNDO: cnpj,
+      CNPJ_Fundo: cnpj,
     });
     return cadastro;
   } catch (err) {
@@ -97,19 +98,19 @@ CadastroFundosSchema.statics.getAnbimaClassByCnpj = async function (
   try {
     const anbimaClass = (await CadastroFundosModel.findOne(
       {
-        CNPJ_FUNDO: cnpj,
+        CNPJ_Fundo: cnpj,
       },
       {
-        classificacao: 1,
+        Classificacao: 1,
         _id: 0,
       }
-    )) as { classificacao: string } | null;
+    )) as { Classificacao: string } | null;
 
     if (!anbimaClass) {
       return false;
     }
 
-    return anbimaClass.classificacao;
+    return anbimaClass.Classificacao;
   } catch (err) {
     console.log(err);
     return false;
@@ -120,14 +121,16 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
   try {
     const arrCnpjNames = await CadastroFundosModel.find(
       {
-        CNPJ_FUNDO: { $in: cnpjs },
+        CNPJ_Fundo: { $in: cnpjs },
       },
       {
         _id: 0,
-        CNPJ_FUNDO: 1,
-        DENOM_SOCIAL: 1,
+        CNPJ_Fundo: 1,
+        Denominacao_Social_F: 1,
       }
     );
+
+    consoleLog({arrCnpjNames})
 
     return arrCnpjNames;
   } catch (err) {
@@ -137,14 +140,14 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
   }
 };
 
-CadastroFundosSchema.index({ CNPJ_FUNDO: 1 });
+CadastroFundosSchema.index({ CNPJ_Fundo: 1 });
 
 const CadastroFundosModel =
   (models.cadastro_fundos as CadastroFundosModelType) ||
   model<CadastroFundosDocType, CadastroFundosModelType>(
     "cadastro_fundos",
     CadastroFundosSchema,
-    "cadastro_fundos"
+    "HN_cadastro_fundos_cvm175"
   );
 
 export default CadastroFundosModel;

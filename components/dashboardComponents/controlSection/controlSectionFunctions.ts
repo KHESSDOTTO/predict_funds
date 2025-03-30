@@ -103,7 +103,7 @@ async function selRegistration(
       setControlForm({
         ...controlForm,
         buscaCnpj: registration.data["CNPJ_FUNDO"],
-        classificacao: registration.data["classificacao"],
+        Classificacao: registration.data["Classificacao"],
       });
 
       return registration.data;
@@ -148,10 +148,9 @@ async function getCorrels(
 ) {
   console.log("INSIIIIIIDE");
   const encodedCnpj = encodeURIComponent(cnpj);
-  const encodedclassificacao = encodeURIComponent(classificacao);
+  const encodedClassificacao = encodeURIComponent(classificacao);
 
   if (!classificacao) {
-    console.log("is this the problem?");
     return false;
   }
 
@@ -166,15 +165,15 @@ async function getCorrels(
       setCorrels(adjustCorrelCnpj);
     }
 
-    const resAvgclassificacao = await ax.get(
-      `/correlations/getAvgByclassificacao?classificacao=${encodedclassificacao}`
+    const resAvgClassificacao = await ax.get(
+      `/correlations/getAvgByClassificacao?classificacao=${encodedClassificacao}`
     );
     consoleLog(resAvgclassificacao);
 
-    if (resCnpj && resAvgclassificacao) {
+    if (resCnpj && resAvgClassificacao) {
       const newheatMapObj = {
         fund: resCnpj.data,
-        avg: resAvgclassificacao.data,
+        avg: resAvgClassificacao.data,
       };
       setHeatMapObj(newheatMapObj);
     }
@@ -208,7 +207,7 @@ async function getRegistration(
     );
 
     setRegistration(registration);
-    setNameSelectedFund(registration["DENOM_SOCIAL"]);
+    setNameSelectedFund(registration["Denominacao_Social_F"]);
     setIsLoading(false);
   } catch (err) {
     console.log(err);

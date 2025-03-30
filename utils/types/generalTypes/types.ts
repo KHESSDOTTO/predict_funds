@@ -26,9 +26,9 @@ interface HeaderPropsType {
 }
 
 interface CadastroFundosType {
-  CNPJ_FUNDO: string;
+  CNPJ_Fundo: string;
   TP_FUNDO: string;
-  DENOM_SOCIAL: string;
+  Denominacao_Social_F: string;
   DT_REG: string;
   DT_CONST: string;
   CD_CVM: number;
@@ -66,7 +66,7 @@ interface CadastroFundosType {
   CNPJ_CONTROLADOR: string;
   CONTROLADOR: string;
   INVEST_CEMPR_EXTER: string;
-  classificacao: string;
+  Classificacao: string;
 }
 
 interface PredictionsType {
@@ -137,7 +137,7 @@ interface DashboardControlFormType {
   varCota: number;
   weeksBack: number;
   weeksAhead: number;
-  classificacao: string;
+  Classificacao: string;
 }
 
 interface HistogramSingleTypeData {

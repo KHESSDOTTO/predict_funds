@@ -88,7 +88,7 @@ function exportNetFundingPred({
 
   const workbook = XLSX.utils.book_new();
   const currTime = new Date;
-  const selCnpj = historic[0]['CNPJ_FUNDO'];
+  const selCnpj = historic[0]["CNPJ_FUNDO"];
   const fileName = `export_prediction_${selCnpj.replaceAll("/", ".")}_${currTime.toISOString()}.xlsx`;
   const predsData = predsToExport(predictions);
   const historicData = historicToExport(historic);

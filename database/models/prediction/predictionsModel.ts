@@ -3,7 +3,6 @@ import {
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
 import { Schema, model, models } from "mongoose";
-import { buildPredKey } from "@/utils/functions/genericFunctions";
 import {
   PredictionDocType,
   PredictionModelType,
@@ -29,8 +28,8 @@ PredictionSchema.statics.getPredictions = async function (
 ) {
   const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
     controlForm;
-  const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
-  const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
+  const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
+  const predKeyPct = "pct_BRL__0_0__0_0__0_0";
 
   try {
     let prediction: PredictionDocType | null = null;
@@ -43,7 +42,7 @@ PredictionSchema.statics.getPredictions = async function (
       {
         _id: 0,
         CNPJ_FUNDO: 1,
-        classificacao: 1,
+        Classificacao: 1,
         [predKeyAbs]: 1,
         [predKeyPct]: 1,
         CI90: 1,
@@ -82,7 +81,7 @@ PredictionSchema.statics.getPredictions = async function (
     if (prediction) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
-        classificacao: prediction.classificacao,
+        Classificacao: prediction.Classificacao,
         CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
         CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
         CI90_ABS: prediction.CI90,
@@ -139,26 +138,22 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
   const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
     controlForm;
-  const customPredKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
-  const defaultPredKeyAbs = "abs_BRL__0_0__0_0__0_0";
-  const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
-  const defaultPredKeyPct = "pct_PL__0_0__0_0__0_0";
+  const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
+  const predKeyPct = "pct_PL__0_0__0_0__0_0";
 
   try {
     let predictions: PredictionsType[] | null = null;
 
     const projection = {
       CNPJ_FUNDO: 1,
-      classificacao: 1,
+      Classificacao: 1,
       vol_252: 1,
       VL_PATRIM_LIQ: 1,
       NR_COTST: 1,
       QT_DIA_CONVERSAO_COTA: 1,
       QT_DIA_PAGTO_RESGATE: 1,
-      [customPredKeyAbs]: 1,
-      [defaultPredKeyAbs]: 1,
-      [customPredKeyPct]: 1,
-      [defaultPredKeyPct]: 1,
+      [predKeyAbs]: 1,
+      [predKeyPct]: 1,
     };
 
     predictions = await PredictionsModel.find(
@@ -174,16 +169,12 @@ PredictionSchema.statics.getPredsForHistogram = async function (
     }
 
     const finalPredictions = predictions.map((cE) => {
-      let predKeyAbs;
-      let predKeyPct;
       let newElement;
 
       if (cE.CNPJ_FUNDO === buscaCnpj) {
-        predKeyAbs = customPredKeyAbs;
-        predKeyPct = customPredKeyPct;
         newElement = {
           CNPJ_FUNDO: cE["CNPJ_FUNDO"],
-          classificacao: cE["classificacao"],
+          Classificacao: cE["Classificacao"],
           vol_252: cE["vol_252"],
           VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
           NR_COTST: cE["NR_COTST"],
@@ -193,11 +184,9 @@ PredictionSchema.statics.getPredsForHistogram = async function (
           CAPTC_LIQ_PCT_ms: cE[predKeyPct],
         };
       } else {
-        predKeyAbs = defaultPredKeyAbs;
-        predKeyPct = defaultPredKeyPct;
         newElement = {
           CNPJ_FUNDO: "",
-          classificacao: cE["classificacao"],
+          Classificacao: cE["Classificacao"],
           vol_252: cE["vol_252"],
           VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
           NR_COTST: cE["NR_COTST"],
@@ -221,6 +210,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
 PredictionSchema.statics.getAncoras = async function () {
   const ancoras: Date[] = await PredictionsModel.distinct("ancora");
+  
   return ancoras;
 };
 
@@ -228,6 +218,7 @@ PredictionSchema.statics.getCalcDatesPred = async function () {
   const datahoraPredicao: Date[] = await PredictionsModel.distinct(
     "datahora_predicao"
   );
+
   return datahoraPredicao;
 };
 
@@ -236,7 +227,7 @@ const PredictionsModel =
   model<PredictionDocType, PredictionModelType>(
     "predictions",
     PredictionSchema,
-    "HN_predictions"
+    "HN_predictions_cvm175"
   );
 
 export default PredictionsModel;

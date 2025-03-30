@@ -28,7 +28,7 @@ export default function ControlFormMobile({
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map((cE) => ({
-    name: cE["DENOM_SOCIAL"],
+    name: cE["Denominacao_Social_F"],
     value: cE["CNPJ_FUNDO"],
   }));
 
@@ -50,9 +50,9 @@ export default function ControlFormMobile({
     >
       <input
         type="hidden"
-        name="classificacao"
-        id="classificacao"
-        value={controlForm.classificacao}
+        name="Classificacao"
+        id="Classificacao"
+        value={controlForm.Classificacao}
       />
       <div className="flex flex-row justify-center gap-4">
         <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
@@ -147,7 +147,7 @@ export default function ControlFormMobile({
                       value={cE["CNPJ_FUNDO"]}
                       className="text-ellipsis max-w-6 overflow-hidden"
                     >
-                      {cE["DENOM_SOCIAL"]}
+                      {cE["Denominacao_Social_F"]}
                     </option>
                   );
                 })}
