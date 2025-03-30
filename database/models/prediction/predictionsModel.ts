@@ -29,7 +29,7 @@ PredictionSchema.statics.getPredictions = async function (
 ) {
   const { baseDate, buscaCnpj, weeksAhead } = controlForm;
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
-  const predKeyPct = "pct_BRL__0_0__0_0__0_0";
+  const predKeyPct = "pct_PL__0_0__0_0__0_0";
 
   try {
     let prediction: PredictionDocType | null = null;
@@ -71,12 +71,9 @@ PredictionSchema.statics.getPredictions = async function (
       }
     }
 
-    let finalPred: PredictionsType | null;
-    if (prediction) {
-      finalPred = { ...prediction };
-    } else {
-      finalPred = prediction;
-    }
+    let finalPred: PredictionsType | null = prediction
+      ? { ...prediction }
+      : prediction;
 
     if (prediction) {
       finalPred = {

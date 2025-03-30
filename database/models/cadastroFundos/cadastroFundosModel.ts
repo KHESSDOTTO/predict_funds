@@ -1,3 +1,4 @@
+import { ArrCnpjNameType } from "@/database/models/cadastroFundos/cadastroFundosTypes";
 import { Schema, model, models } from "mongoose";
 import type {
   CadastroFundosDocType,
@@ -72,7 +73,7 @@ CadastroFundosSchema.statics.getClassificacaoByCnpj = async function (
 
 CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
   try {
-    const arrCnpjNames = await CadastroFundosModel.find(
+    const arrCnpjNamesRaw = await CadastroFundosModel.find(
       {
         CNPJ_Fundo: { $in: cnpjs },
       },
@@ -82,6 +83,23 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
         Denominacao_Social_F: 1,
       }
     );
+
+    const lastIndex = arrCnpjNamesRaw.length - 1;
+    const foundCnpjs: string[] = [];
+    let arrCnpjNames: ArrCnpjNameType[] = [];
+
+    for (let i = lastIndex; i >= 0; i--) {
+      if (foundCnpjs.length === cnpjs.length) {
+        break;
+      }
+
+      const currElement = arrCnpjNamesRaw[i];
+
+      if (!foundCnpjs.includes(currElement["CNPJ_Fundo"])) {
+        foundCnpjs.push(currElement["CNPJ_Fundo"]);
+        arrCnpjNames.push(currElement);
+      }
+    }
 
     return arrCnpjNames;
   } catch (err) {
