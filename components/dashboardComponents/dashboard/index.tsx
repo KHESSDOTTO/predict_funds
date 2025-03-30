@@ -115,7 +115,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
         <NetFundingPredChart
           {...{
             title: `Net Funding ${
-              registration ? "- CNPJ: " + registration["CNPJ_FUNDO"] : ""
+              registration ? "- CNPJ: " + registration["CNPJ_Fundo"] : ""
             }`,
             smallV: false,
             isMobile,
