@@ -12,10 +12,11 @@ async function GetMostRecentCorrelsByClassificacao(
 
   try {
     await connect();
-    const classificacao = req.query.classificacao;
-    const classificacaoCorrect = classificacao && typeof classificacao === "string";
+    const classificacao = req.query.Classificacao;
+    const classificacaoCorrect =
+      classificacao && typeof classificacao === "string";
 
-    if (! classificacaoCorrect) {
+    if (!classificacaoCorrect) {
       return res.status(400).json({
         error:
           "Invalid 'classificacao' format. 'Classificacao' should be present in the query and should be a string",
@@ -23,7 +24,9 @@ async function GetMostRecentCorrelsByClassificacao(
     }
 
     const mostRecentCorrels =
-      await CorrelationsModel.getAvgMostRecentCorrelsByClassificacao(classificacao);
+      await CorrelationsModel.getAvgMostRecentCorrelsByClassificacao(
+        classificacao
+      );
 
     return res.status(200).json(mostRecentCorrels);
   } catch (err) {

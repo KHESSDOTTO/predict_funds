@@ -6,7 +6,11 @@ export default function RegistrationInfos({
   registration,
   isLoading,
 }: RegistrationInfosPropsType) {
-  const fieldsToShow = ["CNPJ_Fundo", "Denominacao_Social_F", "Classificacao"] as const;
+  const fieldsToShow = [
+    "CNPJ_Fundo",
+    "Denominacao_Social_F",
+    "Classificacao",
+  ] as const;
   const titlesOfFields = ["CNPJ", "Fund Name", "CVM Class"];
 
   return (

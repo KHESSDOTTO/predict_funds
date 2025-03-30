@@ -8,6 +8,7 @@ import {
   PredictionModelType,
   RawHistogramData,
 } from "./predictionsType";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
   {
@@ -132,14 +133,15 @@ PredictionSchema.statics.getPredsForHistogram = async function (
   controlForm: DashboardControlFormType
 ): Promise<RawHistogramData[]> {
   /*
-    Prediction of all CNPJs for the selected period. Prediction of the selected CNPJ are based on params (controlForm),
-      others default (zero), to build histogram
+    Prediction of all CNPJs for the selected period.
   */
 
-  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
-    controlForm;
+  const { baseDate, buscaCnpj, weeksAhead } = controlForm;
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const predKeyPct = "pct_PL__0_0__0_0__0_0";
+
+  console.log("Inside PredictionsModel.getPredsForHistogram");
+  consoleLog({ controlForm });
 
   try {
     let predictions: PredictionsType[] | null = null;
@@ -210,7 +212,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
 PredictionSchema.statics.getAncoras = async function () {
   const ancoras: Date[] = await PredictionsModel.distinct("ancora");
-  
+
   return ancoras;
 };
 

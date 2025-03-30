@@ -6,6 +6,7 @@ import {
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
 import { UserContextType } from "@/contexts/userContext/userContextTypes";
+import { CadastroFundosDocType_doc } from "@/database/models/cadastroFundos/cadastroFundosTypes";
 
 type AbsOrPctType = "abs" | "pct";
 
@@ -25,49 +26,7 @@ interface HeaderPropsType {
   user: UserType;
 }
 
-interface CadastroFundosType {
-  CNPJ_Fundo: string;
-  TP_FUNDO: string;
-  Denominacao_Social_F: string;
-  DT_REG: string;
-  DT_CONST: string;
-  CD_CVM: number;
-  DT_CANCEL: string;
-  SIT: string;
-  DT_INI_SIT: string;
-  DT_INI_ATIV: string;
-  DT_INI_EXERC: string;
-  DT_FIM_EXERC: string;
-  CLASSE: string;
-  DT_INI_CLASSE: string;
-  RENTAB_FUNDO: string;
-  CONDOM: string;
-  FUNDO_COTAS: string;
-  FUNDO_EXCLUSIVO: string;
-  TRIB_LPRAZO: string;
-  PUBLICO_ALVO: string;
-  ENTID_INVEST: string;
-  TAXA_PERFM: number;
-  INF_TAXA_PERFM: string;
-  TAXA_ADM: number;
-  INF_TAXA_ADM: string;
-  VL_PATRIM_LIQ: number;
-  DT_PATRIM_LIQ: string;
-  DIRETOR: string;
-  CNPJ_ADMIN: string;
-  ADMIN: string;
-  PF_PJ_GESTOR: string;
-  CPF_CNPJ_GESTOR: string;
-  GESTOR: string;
-  CNPJ_AUDITOR: string;
-  AUDITOR: string;
-  CNPJ_CUSTODIANTE: string;
-  CUSTODIANTE: string;
-  CNPJ_CONTROLADOR: string;
-  CONTROLADOR: string;
-  INVEST_CEMPR_EXTER: string;
-  Classificacao: string;
-}
+interface CadastroFundosType extends CadastroFundosDocType_doc {}
 
 interface PredictionsType {
   DT_COMPTC?: Date;

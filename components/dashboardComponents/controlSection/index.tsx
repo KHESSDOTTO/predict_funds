@@ -72,7 +72,6 @@ export default function ControlSection({
   // Get Histogram and correlations
   useEffect(() => {
     getDataForHistogram(controlForm, setLoadingHistogram, setDataForHistogram);
-    console.log("TRIGGERIIIIIIIIIIING!!!!!!!!!!!!!!");
     getCorrels(
       controlForm.buscaCnpj,
       controlForm.Classificacao,

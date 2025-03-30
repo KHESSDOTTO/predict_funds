@@ -29,7 +29,7 @@ export default function ControlFormMobile({
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map((cE) => ({
     name: cE["Denominacao_Social_F"],
-    value: cE["CNPJ_FUNDO"],
+    value: cE["CNPJ_Fundo"],
   }));
 
   return (

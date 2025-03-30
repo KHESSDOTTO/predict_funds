@@ -18,6 +18,7 @@ import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 function prepareDualRangeSlidersData({
   sliderInfos,
@@ -207,6 +208,8 @@ function handleAbsPctHistogram(
   const abs = absOrPct === "abs";
   const fieldVal = abs ? "CAPTC_LIQ_ABS_ms" : "CAPTC_LIQ_PCT_ms";
 
+  consoleLog({ histogramData });
+
   const adjustedHistogramData = removeOutliersAddPercentiles(
     fieldVal,
     histogramData,
@@ -288,6 +291,8 @@ function handleAbsPctHistogram(
     selCnpjBin: selCnpjBin[cI],
     percentile: percentile[cI],
   }));
+
+  consoleLog({ preparedData });
 
   return preparedData;
 }

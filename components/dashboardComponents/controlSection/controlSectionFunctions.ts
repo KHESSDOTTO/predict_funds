@@ -102,7 +102,7 @@ async function selRegistration(
     if (registration) {
       setControlForm({
         ...controlForm,
-        buscaCnpj: registration.data["CNPJ_FUNDO"],
+        buscaCnpj: registration.data["CNPJ_Fundo"],
         Classificacao: registration.data["Classificacao"],
       });
 
@@ -146,7 +146,6 @@ async function getCorrels(
   setCorrels: Dispatch<SetStateAction<any>>,
   setHeatMapObj: Dispatch<SetStateAction<any>>
 ) {
-  console.log("INSIIIIIIDE");
   const encodedCnpj = encodeURIComponent(cnpj);
   const encodedClassificacao = encodeURIComponent(classificacao);
 
@@ -168,7 +167,7 @@ async function getCorrels(
     const resAvgClassificacao = await ax.get(
       `/correlations/getAvgByClassificacao?classificacao=${encodedClassificacao}`
     );
-    consoleLog(resAvgclassificacao);
+    consoleLog(resAvgClassificacao);
 
     if (resCnpj && resAvgClassificacao) {
       const newheatMapObj = {
