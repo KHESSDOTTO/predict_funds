@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { verifyToken } from "@/utils/jwt.config";
 import toast from "react-hot-toast";
 import LogoPredict from "@/components/UI/logoPredict";
-import CenarioCard from "@/components/general/cenarioCard";
+import CenarioCard from "@/components/cenarioPageComponents/cenarioCard";
 import {
   excludeCenario,
   exportCenarios,

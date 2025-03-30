@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useUser } from "@/contexts/userContext";
 import { doLogout } from "@/utils/functions/genericFunctions";
 import toast from "react-hot-toast";
-import Dashboard from "@/components/general/dashboard";
+import Dashboard from "@/components/dashboardComponents/dashboard";
 import ButtonRed from "@/components/UI/buttonRed";
 import Header from "@/components/layout/header";
 import getCachedAncoras from "@/cache/ancorasPredsCache";

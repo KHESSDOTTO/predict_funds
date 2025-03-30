@@ -40,33 +40,6 @@ function pushIfNew(val: any, arr: any[]) {
   }
 }
 
-function buildPredKey(
-  varCota: string | number,
-  varCotistas: string | number,
-  varNF: string | number,
-  absOrPct: "abs" | "pct"
-): string {
-  const mapPrefix: any = {
-    abs: "abs_BRL",
-    pct: "pct_PL",
-  };
-
-  const predKey = [
-    mapPrefix[absOrPct],
-    (Number(varCota) * 100)
-      .toFixed(1)
-      .replaceAll(".", "_")
-      .replaceAll("-", "n"),
-    (Number(varCotistas) * 100)
-      .toFixed(1)
-      .replaceAll(".", "_")
-      .replaceAll("-", "n"),
-    (Number(varNF) * 100).toFixed(1).replaceAll(".", "_").replaceAll("-", "n"),
-  ].join("__");
-
-  return predKey;
-}
-
 function consoleLog(varObj: any): void {
   const varName = Object.keys(varObj)[0];
   console.log(`${varName}`);
@@ -95,7 +68,6 @@ export {
   capitalize,
   pushIfNew,
   getToneColor,
-  buildPredKey,
   consoleLog,
   doLogout,
   arrUnique,
