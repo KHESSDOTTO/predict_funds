@@ -26,7 +26,7 @@ export interface CorrelationsDocType extends Document, CorrelationsDocType_doc {
 // Interface to add custom static methods
 export interface CorrelationsModelType extends Model<CorrelationsDocType> {
   getMostRecentCorrelsByCnpj(cnpj: string): Promise<any>;
-  getAvgMostRecentCorrelsByClassificacao(classificacao: string): Promise<any>;
+  getAvgCorrelsByClassificacao(classificacao: string): Promise<any>;
 }
 
 // Interfaces for specific queries

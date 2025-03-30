@@ -12,7 +12,7 @@ async function GetMostRecentCorrelsByClassificacao(
 
   try {
     await connect();
-    const classificacao = req.query.Classificacao;
+    const classificacao = req.query.classificacao;
     const classificacaoCorrect =
       classificacao && typeof classificacao === "string";
 
@@ -24,9 +24,7 @@ async function GetMostRecentCorrelsByClassificacao(
     }
 
     const mostRecentCorrels =
-      await CorrelationsModel.getAvgMostRecentCorrelsByClassificacao(
-        classificacao
-      );
+      await CorrelationsModel.getAvgCorrelsByClassificacao(classificacao);
 
     return res.status(200).json(mostRecentCorrels);
   } catch (err) {

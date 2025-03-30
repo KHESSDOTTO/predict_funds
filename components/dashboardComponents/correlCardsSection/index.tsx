@@ -55,20 +55,22 @@ export default function CorrelCardsSection({
     "ancora",
     "data_calc_correlacao",
     "Classificacao",
-    "Classificacao",
     "updated_at",
   ];
 
   useEffect(() => {
     if (correls) {
+      console.log("correlCardsSection");
       consoleLog({ correls });
       const newSelCorrel = correls.filter((cE) => {
         let result = false;
+
         cE.forEach((cE2: any[]) => {
           if (cE2[0] === "janela_em_meses" && Number(cE2[1]) === numMonths) {
             result = true;
           }
         });
+
         return result;
       });
 

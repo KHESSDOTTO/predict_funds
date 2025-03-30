@@ -36,6 +36,9 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
 
   useEffect(() => {
     if (heatMapObj) {
+      console.log("heatMap");
+      consoleLog({ heatMapObj });
+
       const prepareHeatMapArgs: PrepareHeatMapParamsType = {
         heatMapObj,
         exclude,

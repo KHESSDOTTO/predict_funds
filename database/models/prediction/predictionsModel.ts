@@ -27,8 +27,7 @@ const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const { varCota, varCotistas, varNF, baseDate, buscaCnpj, weeksAhead } =
-    controlForm;
+  const { baseDate, buscaCnpj, weeksAhead } = controlForm;
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const predKeyPct = "pct_BRL__0_0__0_0__0_0";
 
@@ -139,9 +138,6 @@ PredictionSchema.statics.getPredsForHistogram = async function (
   const { baseDate, buscaCnpj, weeksAhead } = controlForm;
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const predKeyPct = "pct_PL__0_0__0_0__0_0";
-
-  console.log("Inside PredictionsModel.getPredsForHistogram");
-  consoleLog({ controlForm });
 
   try {
     let predictions: PredictionsType[] | null = null;
