@@ -41,6 +41,7 @@ async function handleControlFormSubmit(
   e: React.FormEvent<HTMLFormElement>,
   controlForm: DashboardControlFormType,
   currSubmitToast: string,
+  additionalSearches: string[],
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>,
   setRegistration: Dispatch<SetStateAction<any>>,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
