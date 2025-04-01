@@ -91,26 +91,24 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      {/* <div className="flex flex-col w-full lg:flex-row gap-4">
-          {
-          cvmClasses.map((currClass) => {
-              return (
-              <div className="w-full lg:w-1/3">
-                  <NetFundingPredChart
-                  {...{
-                      title: `Net Funding CVM Class - ${currClass}`,
-                      smallV: false,
-                      isMobile,
-                      historic: historicData,
-                      predictions: predictionData,
-                      predList: false,
-                  }}
-                  />
-              </div>
-              )
-          })
-          }
-        </div> */}
+      <div className="flex flex-col w-full lg:flex-row gap-4">
+        {classificacoes.map((currClass) => {
+          return (
+            <div className="w-full lg:w-1/3">
+              <NetFundingPredChart
+                {...{
+                  title: `Net Funding CVM Class - ${currClass}`,
+                  smallV: false,
+                  isMobile,
+                  historic: historicData,
+                  predictions: predictionData,
+                  predList: false,
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
       <div className="w-full">
         <NetFundingPredChart
           {...{

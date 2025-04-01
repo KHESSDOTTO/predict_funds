@@ -40,14 +40,24 @@ function handleControlFormChange(
 async function handleControlFormSubmit(
   e: React.FormEvent<HTMLFormElement>,
   controlForm: DashboardControlFormType,
+  currSubmitToast: string,
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>,
   setRegistration: Dispatch<SetStateAction<any>>,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
-  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
+  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setCurrSubmitToast: Dispatch<SetStateAction<string>>
 ) {
   e.preventDefault();
+
+  if (currSubmitToast) {
+    return;
+  }
+
   const loadingToast = toast.loading("Fetching data...");
+
+  setCurrSubmitToast(loadingToast);
+
   const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
 
   try {
@@ -62,6 +72,7 @@ async function handleControlFormSubmit(
   } catch (err) {
     console.log(err);
   }
+
   setIsLoading(false);
 
   try {
@@ -94,6 +105,9 @@ async function handleControlFormSubmit(
   }
 
   toast.dismiss(loadingToast);
+  setTimeout(() => {
+    setCurrSubmitToast("");
+  }, 500);
 }
 
 export { handleControlFormChange, handleControlFormSubmit };

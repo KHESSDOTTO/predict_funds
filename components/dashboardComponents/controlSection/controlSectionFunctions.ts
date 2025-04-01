@@ -217,13 +217,17 @@ async function getData(
   user: UserType,
   controlForm: DashboardControlFormType,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
-  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
+  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setCurrSubmitToast: Dispatch<SetStateAction<string>>
 ) {
   if (!user) {
     return;
   }
 
   const loadingToast = toast.loading("Fetching data...");
+
+  setCurrSubmitToast(loadingToast);
+
   const cnpj = user.cnpjs[0];
   const encodedCnpj = encodeURIComponent(cnpj);
 
@@ -256,6 +260,10 @@ async function getData(
   }
 
   toast.dismiss(loadingToast);
+
+  setTimeout(() => {
+    setCurrSubmitToast("");
+  }, 500);
 }
 
 async function getArrCnpjFundName(
