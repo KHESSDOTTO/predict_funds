@@ -10,6 +10,7 @@ import type {
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 import { consoleLog } from "@/utils/functions/genericFunctions";
+import { classificacoes } from "@/utils/globalVars";
 
 async function getHistoricData(
   encodedParam: string,
@@ -217,7 +218,13 @@ async function getData(
   user: UserType,
   controlForm: DashboardControlFormType,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricRendaFixaData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricMultimercadoData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricAcoesData: Dispatch<SetStateAction<HistoricType[]>>,
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionRendaFixaData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionMultimercadoData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionAcoesData: Dispatch<SetStateAction<PredictionsType[]>>,
   setCurrSubmitToast: Dispatch<SetStateAction<string>>
 ) {
   if (!user) {
@@ -230,6 +237,16 @@ async function getData(
 
   const cnpj = user.cnpjs[0];
   const encodedCnpj = encodeURIComponent(cnpj);
+  const mapHistoricSetters = {
+    "Renda Fixa": setHistoricRendaFixaData,
+    Multimercado: setHistoricMultimercadoData,
+    Ações: setHistoricAcoesData,
+  };
+  const mapPredictionSetters = {
+    "Renda Fixa": setPredictionRendaFixaData,
+    Multimercado: setPredictionMultimercadoData,
+    Ações: setPredictionAcoesData,
+  };
 
   try {
     const slicedHistoricData = await getHistoricData(
@@ -237,6 +254,26 @@ async function getData(
       controlForm,
       setHistoricData
     );
+
+    classificacoes.forEach(async (currClass) => {
+      const encodedClassificacao = encodeURIComponent(currClass);
+      const slicedHistoricData = await getHistoricData(
+        encodedClassificacao,
+        controlForm,
+        mapHistoricSetters[currClass]
+      );
+
+      let predictions: PredictionsType[] | false = [];
+
+      if (slicedHistoricData) {
+        predictions = await getPredictions(
+          encodedClassificacao,
+          slicedHistoricData,
+          controlForm,
+          mapPredictionSetters[currClass]
+        );
+      }
+    });
 
     let predictions: PredictionsType[] | false = [];
 

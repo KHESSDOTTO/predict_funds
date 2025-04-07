@@ -18,6 +18,12 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 export default function ControlSection({
   registration,
   ancoras,
+  setHistoricRendaFixaData,
+  setHistoricMultimercadoData,
+  setHistoricAcoesData,
+  setPredictionRendaFixaData,
+  setPredictionMultimercadoData,
+  setPredictionAcoesData,
   setRegistration,
   setHistoricData,
   setPredictionData,
@@ -60,7 +66,13 @@ export default function ControlSection({
       user,
       controlForm,
       setHistoricData,
+      setHistoricRendaFixaData,
+      setHistoricMultimercadoData,
+      setHistoricAcoesData,
       setPredictionData,
+      setPredictionRendaFixaData,
+      setPredictionMultimercadoData,
+      setPredictionAcoesData,
       setCurrSubmitToast
     );
 

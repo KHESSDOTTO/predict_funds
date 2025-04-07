@@ -30,12 +30,17 @@ PredictionSchema.statics.getPredictions = async function (
   const { baseDate, buscaCnpj, weeksAhead } = controlForm;
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const predKeyPct = "pct_PL__0_0__0_0__0_0";
+  const decodedCnpj = decodeURIComponent(buscaCnpj);
+
+  console.log("Inside predictionModel.getPredictions()");
+  consoleLog({ decodedCnpj });
+  consoleLog({ controlForm });
 
   try {
     let prediction: PredictionDocType | null = null;
     prediction = await PredictionsModel.findOne(
       {
-        CNPJ_FUNDO: buscaCnpj,
+        CNPJ_FUNDO: decodedCnpj,
         ancora: new Date(baseDate),
         weeks_ahead: weeksAhead,
       },
@@ -54,6 +59,8 @@ PredictionSchema.statics.getPredictions = async function (
       .sort({ datahora_predicao: -1 })
       .lean()
       .exec();
+
+    consoleLog({ prediction });
 
     for (const key in prediction) {
       if (prediction && key.slice(0, 2) === "CI") {
@@ -116,6 +123,8 @@ PredictionSchema.statics.getPredictions = async function (
     } else {
       return false;
     }
+
+    consoleLog({ finalPred });
 
     return finalPred;
   } catch (err) {

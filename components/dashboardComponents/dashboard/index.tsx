@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import {
   CadastroFundosType,
+  HistoricDataObjectType,
   HistoricType,
+  PredictionsDataObjectType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
 import ControlSection from "../controlSection";
@@ -24,18 +26,39 @@ import type {
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
+import { getData } from "../controlSection/controlSectionFunctions";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
   const { controlForm, setControlForm } = useControlForm();
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const screenWidth = useWindowWidth();
-  const [historicData, setHistoricData] = useState<HistoricType[]>([]);
+  const [historicFundData, setHistoricFundData] = useState<HistoricType[]>([]);
+  const [historicRendaFixaData, setHistoricRendaFixaData] = useState<
+    HistoricType[]
+  >([]);
+  const [historicMultimercadoData, setHistoricMultimercadoData] = useState<
+    HistoricType[]
+  >([]);
+  const [historicAcoesData, setHistoricAcoesData] = useState<HistoricType[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [registration, setRegistration] = useState<CadastroFundosType | false>(
     false
   );
-  const [predictionData, setPredictionData] = useState<PredictionsType[]>([]);
+  const [predictionFundData, setPredictionFundData] = useState<
+    PredictionsType[]
+  >([]);
+  const [predictionRendaFixaData, setPredictionRendaFixaData] = useState<
+    PredictionsType[]
+  >([]);
+  const [predictionMultimercadoData, setPredictionMultimercadoData] = useState<
+    PredictionsType[]
+  >([]);
+  const [predictionAcoesData, setPredictionAcoesData] = useState<
+    PredictionsType[]
+  >([]);
   const [loadingHistogram, setLoadingHistogram] = useState<boolean>(true);
   const [dataForHistogram, setDataForHistogram] = useState<RawHistogramData[]>(
     []
@@ -45,12 +68,18 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   const saveCenariosArgs: SaveCenarioParamsType = {
     userContext,
     controlForm,
-    historicData,
-    predictionData,
+    historicData: historicFundData,
+    predictionData: predictionFundData,
   };
   const controlSectionProps = {
-    setHistoricData: setHistoricData,
-    setPredictionData: setPredictionData,
+    setHistoricRendaFixaData,
+    setHistoricMultimercadoData,
+    setHistoricAcoesData,
+    setPredictionRendaFixaData,
+    setPredictionMultimercadoData,
+    setPredictionAcoesData,
+    setHistoricData: setHistoricFundData,
+    setPredictionData: setPredictionFundData,
     saveCenario: () => saveCenario(saveCenariosArgs),
     setIsLoading: setIsLoading,
     registration: registration,
@@ -63,11 +92,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   };
 
   useEffect(() => {
-    if (screenWidth > 992) {
-      setIsMobile(false);
-    } else {
-      setIsMobile(true);
-    }
+    setIsMobile(screenWidth <= 992);
 
     return;
   }, [screenWidth]);
@@ -93,6 +118,20 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       </div>
       <div className="flex flex-col w-full lg:flex-row gap-6">
         {classificacoes.map((currClass) => {
+          const mapVars = {
+            "Renda Fixa": {
+              historic: historicRendaFixaData,
+              prediction: predictionRendaFixaData,
+            },
+            Multimercado: {
+              historic: historicMultimercadoData,
+              prediction: predictionMultimercadoData,
+            },
+            Ações: {
+              historic: historicAcoesData,
+              prediction: predictionAcoesData,
+            },
+          };
           return (
             <div className="w-full mb-4 lg:mb-0 lg:w-1/3">
               <NetFundingPredChart
@@ -100,8 +139,8 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
                   title: `Net Funding CVM Class - ${currClass}`,
                   smallV: false,
                   isMobile,
-                  historic: historicData,
-                  predictions: predictionData,
+                  historic: mapVars[currClass]["historic"],
+                  predictions: mapVars[currClass]["prediction"],
                   predList: false,
                   exportPosition: "bottom",
                 }}
@@ -118,8 +157,8 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
             }`,
             smallV: false,
             isMobile,
-            historic: historicData,
-            predictions: predictionData,
+            historic: historicFundData,
+            predictions: predictionFundData,
             exportPosition: isMobile ? "bottom" : "right",
           }}
         />
@@ -139,7 +178,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       </div>
       <div className="w-full">
         <ValueQuotaChart
-          {...{ smallV: false, isMobile, historic: historicData }}
+          {...{ smallV: false, isMobile, historic: historicFundData }}
         />
       </div>
       <div className="w-full">

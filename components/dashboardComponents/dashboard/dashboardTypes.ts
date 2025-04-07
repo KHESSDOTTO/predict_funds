@@ -5,6 +5,7 @@ import type {
   PredictionsType,
   UserType,
 } from "@/utils/types/generalTypes/types";
+import { Dispatch, SetStateAction } from "react";
 
 interface DashboardPropsType {
   user: UserType;

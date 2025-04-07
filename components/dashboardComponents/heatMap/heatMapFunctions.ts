@@ -17,32 +17,20 @@ function prepareHeatMap({
 }: PrepareHeatMapParamsType): void {
   const keys = Object.keys(heatMapObj) as (keyof HeatMapObjType)[];
 
-  console.log("prepareHeatMap");
-  consoleLog({ keys });
-
   let newSelCorrel: HeatMapObjType = {
     avg: {},
     fund: {},
   };
 
   for (const key of keys) {
-    console.log("inside loop prepareHeatMap");
-    consoleLog({ key });
     const correlArrays = heatMapObj[key as keyof HeatMapObjType];
-    consoleLog({ correlArrays });
     const newSelCorrelEl = correlArrays.filter((cE: any) => {
       return cE["janela_em_meses"] === numMonths;
     });
 
-    console.log("before");
-    consoleLog({ newSelCorrelEl });
-
     if (newSelCorrelEl.length === 1) {
       newSelCorrel[key as keyof HeatMapObjType] = newSelCorrelEl[0];
     }
-
-    console.log("after");
-    consoleLog({ newSelCorrelEl });
   }
 
   if (newSelCorrel.fund && newSelCorrel.avg) {
@@ -63,7 +51,6 @@ function exportHeatMap({ selCnpj, heatMapObj }: ExportHeatMapParams): void {
 
   heatMapKeys.forEach((currKey) => {
     heatMapObj[currKey].forEach((currobj: any) => {
-      consoleLog({ currobj });
       const periodString = "janela_em_meses_" + currobj["janela_em_meses"];
       const copy = { ...currobj };
       delete copy["janela_em_meses"];

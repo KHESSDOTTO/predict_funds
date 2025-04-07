@@ -4,6 +4,6 @@ const arrBaseDates = [
   "2024-01-26T03:00:00Z",
 ];
 const predictionWeeks = [4, 8];
-const classificacoes = ["Ações", "Multimercado", "Renda Fixa"];
+const classificacoes = ["Ações", "Multimercado", "Renda Fixa"] as const;
 
 export { arrBaseDates, predictionWeeks, classificacoes };
