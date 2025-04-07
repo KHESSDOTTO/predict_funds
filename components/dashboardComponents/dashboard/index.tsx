@@ -23,6 +23,7 @@ import type {
 } from "./dashboardTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
+import { classificacoes } from "@/utils/globalVars";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
@@ -60,7 +61,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
-  const classificacoes = ["Ações", "Multimercado", "Renda Fixa"];
 
   useEffect(() => {
     if (screenWidth > 992) {
@@ -91,10 +91,10 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="flex flex-col w-full lg:flex-row gap-4">
+      <div className="flex flex-col w-full lg:flex-row gap-6">
         {classificacoes.map((currClass) => {
           return (
-            <div className="w-full lg:w-1/3">
+            <div className="w-full mb-4 lg:mb-0 lg:w-1/3">
               <NetFundingPredChart
                 {...{
                   title: `Net Funding CVM Class - ${currClass}`,
@@ -103,6 +103,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
                   historic: historicData,
                   predictions: predictionData,
                   predList: false,
+                  exportPosition: "bottom",
                 }}
               />
             </div>
@@ -119,6 +120,7 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
             isMobile,
             historic: historicData,
             predictions: predictionData,
+            exportPosition: isMobile ? "bottom" : "right",
           }}
         />
       </div>

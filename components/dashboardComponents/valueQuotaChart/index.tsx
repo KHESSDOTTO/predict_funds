@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { ValueQuotaChartPropsType } from "./valueQuotaChartTypes";
 import { format } from "date-fns";
-import { adjustValueQuotaChartAxis, exportValueQuota } from "./valueQuotaChartFunctions";
+import {
+  adjustValueQuotaChartAxis,
+  exportValueQuota,
+} from "./valueQuotaChartFunctions";
 import {
   XAxis,
   YAxis,
@@ -62,7 +65,7 @@ export default function ValueQuotaChart({
       </div>
       <div
         className={`flex flex-col lg:relative lg:pb-12 gap-4 lg:flex-row ${
-          smallV ? "" : "lg:mx-6 lg:mt-6"
+          smallV ? "" : "lg:mt-6"
         }`}
       >
         <div
@@ -115,56 +118,48 @@ export default function ValueQuotaChart({
               <Tooltip content={<ValueQuotaTooltip />} />
             </AreaChart>
           </ResponsiveContainer>
-        {
-          ! smallV &&
-          (
+          {!smallV && (
             <div
               className="text-end mt-2 ml-1 hidden lg:block absolute bottom-0 left-0"
-              onClick={
-                () => {
-                  track('export_value_quota', { username: user?.username || null });
-                  exportValueQuota({ historic })
-                }
-              }
+              onClick={() => {
+                track("export_value_quota", {
+                  username: user?.username || null,
+                });
+                exportValueQuota({ historic });
+              }}
             >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
               </ButtonGreen>
             </div>
-          )
-        }
-
+          )}
         </div>
 
-        {
-          ! smallV &&
-          (
-            <>
-              <div
-                className="text-center lg:hidden" 
-                onClick={
-                  () => {
-                    track('export_value_quota', { username: user?.username || null });
-                    exportValueQuota({ historic })
-                  }
-                }
+        {!smallV && (
+          <>
+            <div
+              className="text-center lg:hidden"
+              onClick={() => {
+                track("export_value_quota", {
+                  username: user?.username || null,
+                });
+                exportValueQuota({ historic });
+              }}
             >
-                <ButtonGreen shadowColor="white/30" shadowSize="md">
-                  Export
-                </ButtonGreen>
-              </div>
-              <div className="hidden lg:block lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
-                <PredList
-                  title="Value Quota (history)"
-                  onlyBack={true}
-                  historic={historic}
-                  varName={"VL_QUOTA_ms"}
-                />
-              </div>
-            </>
-          )
-        }
-
+              <ButtonGreen shadowColor="white/30" shadowSize="md">
+                Export
+              </ButtonGreen>
+            </div>
+            <div className="hidden lg:block mt-1 lg:w-[40%] lg:ml-2">
+              <PredList
+                title="Value Quota (history)"
+                onlyBack={true}
+                historic={historic}
+                varName={"VL_QUOTA_ms"}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
