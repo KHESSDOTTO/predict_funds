@@ -43,27 +43,6 @@ export default function CenarioCard({
           </h3>
           <ul className="flex gap-1 flex-col lg:gap-2">
             <li>
-              Var. Quota:
-              <span className="font-bold">
-                {" "}
-                {(params.varCota * 100).toFixed(1)}%
-              </span>
-            </li>
-            <li>
-              Var. Sharehold.:
-              <span className="font-bold">
-                {" "}
-                {(params.varCotistas * 100).toFixed(1)}%
-              </span>
-            </li>
-            <li>
-              Var. Net Fund.:
-              <span className="font-bold">
-                {" "}
-                {(params.varNF * 100).toFixed(1)}%
-              </span>
-            </li>
-            <li>
               CNPJ:
               <span className="font-bold"> {params.buscaCnpj}</span>
             </li>
