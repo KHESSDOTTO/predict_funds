@@ -4,7 +4,9 @@ import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks } from "date-fns";
 import type {
   DashboardControlFormType,
+  HistoricDataObjectType,
   HistoricType,
+  PredictionsDataObjectType,
   PredictionsType,
   UserType,
 } from "@/utils/types/generalTypes/types";
@@ -15,7 +17,7 @@ import { classificacoes } from "@/utils/globalVars";
 async function getHistoricData(
   encodedParam: string,
   controlForm: DashboardControlFormType,
-  setHistoricData: Dispatch<SetStateAction<HistoricType[]>>
+  setHistoricData: Dispatch<SetStateAction<HistoricDataObjectType>>
 ) {
   try {
     const baseDate = controlForm.baseDate;
@@ -44,7 +46,10 @@ async function getHistoricData(
         return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
       });
     }
-    setHistoricData(slicedHistoricData);
+    setHistoricData((prevData) => ({
+      ...prevData,
+      [encodedParam]: slicedHistoricData,
+    }));
 
     return slicedHistoricData;
   } catch (err) {
@@ -57,7 +62,7 @@ async function getPredictions(
   cnpj: string,
   slicedHistoricData: HistoricType[],
   controlForm: DashboardControlFormType,
-  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
+  setPredictionData: Dispatch<SetStateAction<PredictionsDataObjectType>>
 ) {
   let responsePreds: AxiosResponse<any, any> | undefined;
   responsePreds = await ax.post(`/prediction/getWithBaseDate`, {
@@ -84,7 +89,10 @@ async function getPredictions(
   }
 
   if (finalPredictionData) {
-    setPredictionData(finalPredictionData);
+    setPredictionData((prevData) => ({
+      ...prevData,
+      [cnpj]: finalPredictionData,
+    }));
   }
 
   return finalPredictionData;

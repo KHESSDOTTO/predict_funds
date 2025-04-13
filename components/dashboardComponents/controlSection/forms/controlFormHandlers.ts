@@ -7,7 +7,9 @@ import {
 } from "../controlSectionFunctions";
 import type {
   DashboardControlFormType,
+  HistoricDataObjectType,
   HistoricType,
+  PredictionsDataObjectType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
 
@@ -44,8 +46,8 @@ async function handleControlFormSubmit(
   setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>,
   setRegistration: Dispatch<SetStateAction<any>>,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
-  setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setHistoricData: Dispatch<SetStateAction<HistoricDataObjectType>>,
+  setPredictionData: Dispatch<SetStateAction<PredictionsDataObjectType>>,
   setCurrSubmitToast: Dispatch<SetStateAction<string>>
 ) {
   e.preventDefault();
