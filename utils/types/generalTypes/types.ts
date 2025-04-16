@@ -91,9 +91,6 @@ interface HistoricType {
 interface DashboardControlFormType {
   baseDate: string;
   buscaCnpj: string;
-  varNF: number;
-  varCotistas: number;
-  varCota: number;
   weeksBack: number;
   weeksAhead: number;
   Classificacao: string;

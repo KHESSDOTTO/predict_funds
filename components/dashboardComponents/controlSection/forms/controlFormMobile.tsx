@@ -55,7 +55,7 @@ export default function ControlFormMobile({
         value={controlForm.Classificacao}
       />
       <div className="flex flex-row justify-center gap-4">
-        <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
+        <div className="flex flex-col gap-4 font-semibold max-w-32 lg:gap-0 text-base">
           <label htmlFor="baseDate" className="flex items-center h-8">
             Base Date
           </label>
@@ -68,26 +68,8 @@ export default function ControlFormMobile({
           <label htmlFor="weeksAhead" className="flex items-center h-8">
             Weeks ahead
           </label>
-          <label
-            htmlFor="varNF"
-            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
-          >
-            N. Funding var (%)
-          </label>
-          <label
-            htmlFor="varCotistas overflow-scroll"
-            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
-          >
-            Shareholders qnt. var (%)
-          </label>
-          <label
-            htmlFor="varCota"
-            className="flex items-center h-8 whitespace-nowrap overflow-scroll"
-          >
-            Quota var (%)
-          </label>
         </div>
-        <div className="flex flex-col items-stretch gap-2 lg:gap-0">
+        <div className="flex flex-col items-stretch gap-4">
           <div className="flex items-center h-8 px-1">
             <select
               id="baseDate"
@@ -123,35 +105,6 @@ export default function ControlFormMobile({
                 setForm: setControlForm,
               }}
             />
-            {/* <select
-              id="buscaCnpj"
-              name="buscaCnpj"
-              value={controlForm.buscaCnpj}
-              onChange={(e) =>
-                handleControlFormChange(
-                  e,
-                  arrCnpjName,
-                  controlForm,
-                  setControlForm,
-                  setNameSelectedFund
-                )
-              }
-              className={ selectInputClass }
-              title={nameSelectedFund}
-            >
-              {arrCnpjName &&
-                arrCnpjName.map((cE: any, cI: number) => {
-                  return (
-                    <option
-                      key={cI}
-                      value={cE["CNPJ_FUNDO"]}
-                      className="text-ellipsis max-w-6 overflow-hidden"
-                    >
-                      {cE["Denominacao_Social_F"]}
-                    </option>
-                  );
-                })}
-            </select> */}
           </div>
           <div className="flex items-center h-8 px-1">
             <input
@@ -196,111 +149,9 @@ export default function ControlFormMobile({
               })}
             </select>
           </div>
-          <div className="flex items-center h-8 px-1 gap-4 text-sm">
-            <span
-              className="range-value w-12 text-sm"
-              style={{
-                color:
-                  controlForm.varNF < 0
-                    ? "darkred"
-                    : controlForm.varNF == 0
-                    ? ""
-                    : "darkgreen",
-              }}
-            >
-              {(controlForm.varNF * 100).toFixed(2)}%
-            </span>
-            <input
-              type="range"
-              id="varNF"
-              name="varNF"
-              min={-0.05}
-              max={0.05}
-              step={0.01}
-              className={inputRangeClass}
-              value={controlForm.varNF}
-              onChange={(e) =>
-                handleControlFormChange(
-                  e,
-                  arrCnpjName,
-                  controlForm,
-                  setControlForm,
-                  setNameSelectedFund
-                )
-              }
-            ></input>
-          </div>
-          <div className="flex items-center h-8 px-1 gap-4 text-sm">
-            <span
-              className="range-value w-12 text-sm"
-              style={{
-                color:
-                  controlForm.varCotistas < 0
-                    ? "darkred"
-                    : controlForm.varCotistas == 0
-                    ? ""
-                    : "darkgreen",
-              }}
-            >
-              {(controlForm.varCotistas * 100).toFixed(2)}%
-            </span>
-            <input
-              type="range"
-              id="varCotistas"
-              name="varCotistas"
-              min={-0.05}
-              max={0.05}
-              step={0.01}
-              className={inputRangeClass}
-              value={controlForm.varCotistas}
-              onChange={(e) =>
-                handleControlFormChange(
-                  e,
-                  arrCnpjName,
-                  controlForm,
-                  setControlForm,
-                  setNameSelectedFund
-                )
-              }
-            ></input>
-          </div>
-          <div className="flex items-center px-1 h-8 gap-4">
-            <span
-              className="range-value w-12 text-sm"
-              style={{
-                color:
-                  controlForm.varCota < 0
-                    ? "darkred"
-                    : controlForm.varCota == 0
-                    ? ""
-                    : "darkgreen",
-              }}
-            >
-              {(controlForm.varCota * 100).toFixed(2)}%
-            </span>
-            <input
-              type="range"
-              id="varCota"
-              name="varCota"
-              min={-0.05}
-              max={0.05}
-              step={0.01}
-              className={inputRangeClass}
-              value={controlForm.varCota}
-              onChange={(e) =>
-                handleControlFormChange(
-                  e,
-                  arrCnpjName,
-                  controlForm,
-                  setControlForm,
-                  setNameSelectedFund
-                )
-              }
-            ></input>
-          </div>
         </div>
       </div>
-      <div className="text-center relative mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
+      <div className="text-center relative mt-8">
         <div
           onClick={() =>
             track("clicked_update", { username: user?.username || null })

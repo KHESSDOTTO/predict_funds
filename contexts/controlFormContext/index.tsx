@@ -21,9 +21,6 @@ export function ControlFormProvider({
         ? initialAncoras[initialAncoras.length - 1]
         : "2024-05-31T00:00:00.00Z",
     buscaCnpj: initialCnpjs ? initialCnpjs[0] : "",
-    varNF: 0,
-    varCotistas: 0,
-    varCota: 0,
     weeksBack: 8,
     weeksAhead: 4,
     Classificacao: "",
