@@ -9,7 +9,6 @@ import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
-import ButtonIndigo from "@/components/UI/buttonIndigo";
 
 export default function ControlFormDesk({
   ancoras,
@@ -22,7 +21,7 @@ export default function ControlFormDesk({
   saveCenario,
 }: ControlFormPropsType) {
   const selectInputClass =
-    "cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black px-4 flex-1 bg-transparent lg:bg-white focus:outline-none";
+    "px-4 cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black flex-1 bg-transparent lg:bg-white focus:outline-none";
   const labelClass = "whitespace-nowrap w-40";
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
@@ -53,9 +52,8 @@ export default function ControlFormDesk({
         id="Classificacao"
         value={controlForm.Classificacao}
       />
-      <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-white/90">
-        <div className="flex flex-row justify-start gap-x-6 gap-y-12 border-red-500 w-[600px] items-start">
-          <span className="mr-4">Config.: </span>
+      <div className="flex relative flex-row justify-start gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:flex-wrap lg:text-white/90">
+        <div className="flex flex-row justify-start gap-x-6 gap-y-12 border-red-500 w-[45%] items-start">
           <div className="flex flex-col justify-start gap-6 border-red-500 w-full">
             <div className="flex font-semibold border-white">
               <label htmlFor="baseDate" className={labelClass}>
@@ -74,7 +72,7 @@ export default function ControlFormDesk({
                     setNameSelectedFund
                   )
                 }
-                className={`${selectInputClass} text-center lg:px-0`}
+                className={selectInputClass}
               >
                 {ancoras?.map((cE, cI) => {
                   const ancora = new Date(cE);
@@ -150,20 +148,16 @@ export default function ControlFormDesk({
                 })}
               </select>
             </div>
-            <div>
-              <button
-                type="submit"
-                onClick={() =>
-                  track("clicked_update", { username: user?.username || null })
-                }
-                className="text-base transition-all items-start duration-300 text-white/80 p-auto flex justify-center pt-4"
-              >
-                <ButtonIndigo shadowColor="white/30" shadowSize="md">
-                  Update
-                </ButtonIndigo>
-              </button>
-            </div>
           </div>
+          <button
+            type="submit"
+            onClick={() =>
+              track("clicked_update", { username: user?.username || null })
+            }
+            className="text-base border-l-2 border-white transition-all h-full duration-300 text-white/80 p-auto flex justify-center items-center mx-6 hover:border-yellow-700 hover:text-yellow-700"
+          >
+            <div className="px-4">Update</div>
+          </button>
         </div>
         <div
           onClick={(e) => {

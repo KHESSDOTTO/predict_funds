@@ -55,7 +55,7 @@ export default function ControlFormMobile({
         value={controlForm.Classificacao}
       />
       <div className="flex flex-row justify-center gap-4">
-        <div className="flex flex-col gap-2 font-semibold max-w-32 lg:gap-0 text-base">
+        <div className="flex flex-col gap-4 font-semibold max-w-32 lg:gap-0 text-base">
           <label htmlFor="baseDate" className="flex items-center h-8">
             Base Date
           </label>
@@ -69,7 +69,7 @@ export default function ControlFormMobile({
             Weeks ahead
           </label>
         </div>
-        <div className="flex flex-col items-stretch gap-2 lg:gap-0">
+        <div className="flex flex-col items-stretch gap-4">
           <div className="flex items-center h-8 px-1">
             <select
               id="baseDate"
@@ -151,7 +151,7 @@ export default function ControlFormMobile({
           </div>
         </div>
       </div>
-      <div className="text-center relative mt-6 lg:mt-4 lg:shadow-md lg:shadow-black">
+      <div className="text-center relative mt-8">
         <div
           onClick={() =>
             track("clicked_update", { username: user?.username || null })
