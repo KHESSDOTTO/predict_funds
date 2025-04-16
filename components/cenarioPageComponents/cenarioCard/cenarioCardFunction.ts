@@ -10,7 +10,7 @@ function handleFadeOut({
   setIsFadingOut(true);
   setTimeout(() => {
     excludeCenarioFunction({ cenarioId: id, cenarios, setCenarios });
-  }, 300);
+  }, 400);
 }
 
 export { handleFadeOut };

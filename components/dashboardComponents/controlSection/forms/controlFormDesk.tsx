@@ -24,8 +24,8 @@ export default function ControlFormDesk({
   setCurrSubmitToast,
 }: ControlFormPropsType) {
   const selectInputClass =
-    "cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black text-center w-40 bg-transparent lg:bg-white focus:outline-none";
-  const sliderInputClass = "w-40";
+    "px-4 cursor-pointer py-1 lg:rounded-2xl lg:text-black border-black flex-1 bg-transparent lg:bg-white focus:outline-none";
+  const labelClass = "whitespace-nowrap w-40";
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map((cE) => ({
@@ -57,12 +57,11 @@ export default function ControlFormDesk({
         id="Classificacao"
         value={controlForm.Classificacao}
       />
-      <div className="flex relative flex-row justify-start px-4 gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:mb-4 lg:flex-wrap lg:text-sm lg:text-white/90">
-        <div className="flex flex-row justify-start gap-4 border-red-500 w-fit items-start">
-          <span className="mr-4">Config.: </span>
-          <div className="flex flex-col justify-start gap-4 border-red-500 w-fit items-center">
-            <div className="flex flex-col font-semibold items-center gap-1 border-white">
-              <label htmlFor="baseDate" className="whitespace-nowrap">
+      <div className="flex relative flex-row justify-start gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:flex-wrap lg:text-white/90">
+        <div className="flex flex-row justify-start gap-x-6 gap-y-12 border-red-500 w-[45%] items-start">
+          <div className="flex flex-col justify-start gap-6 border-red-500 w-full">
+            <div className="flex font-semibold border-white">
+              <label htmlFor="baseDate" className={labelClass}>
                 Base Date
               </label>
               <select
@@ -90,9 +89,11 @@ export default function ControlFormDesk({
                 })}
               </select>
             </div>
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="buscaCnpj">Fund Name</label>
-              <div className="w-40 text-black">
+            <div className="flex font-semibold">
+              <label htmlFor="buscaCnpj" className={labelClass}>
+                Fund Name
+              </label>
+              <div className="flex-1 text-black">
                 <SelectWithFilter
                   {...{
                     options: fundOptions,
@@ -103,13 +104,15 @@ export default function ControlFormDesk({
                 />
               </div>
             </div>
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="weeksBack">Weeks back</label>
+            <div className="flex font-semibold">
+              <label htmlFor="weeksBack" className={labelClass}>
+                Weeks back
+              </label>
               <input
                 type="text"
                 id="weeksBack"
                 name="weeksBack"
-                className={selectInputClass}
+                className={`${selectInputClass} lg:cursor-text`}
                 value={controlForm.weeksBack}
                 onChange={(e) =>
                   handleControlFormChange(
@@ -122,8 +125,10 @@ export default function ControlFormDesk({
                 }
               ></input>
             </div>
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="weeksAhead">Weeks ahead</label>
+            <div className="flex font-semibold">
+              <label htmlFor="weeksAhead" className={labelClass}>
+                Weeks ahead
+              </label>
               <select
                 id="weeksAhead"
                 name="weeksAhead"
@@ -149,134 +154,14 @@ export default function ControlFormDesk({
               </select>
             </div>
           </div>
-        </div>
-        <div className="flex flex-row justify-start gap-6 border-blue-500 items-start">
-          <span className="mr-6">Params: </span>
-          <div className="flex flex-col justify-start gap-4 border-red-500 w-fit items-center">
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="varNF">% Net Funding var</label>
-              <div className="flex gap-4 text-sm">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varNF < 0
-                        ? "orange"
-                        : controlForm.varNF == 0
-                        ? ""
-                        : "green",
-                  }}
-                >
-                  {(controlForm.varNF * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varNF"
-                  name="varNF"
-                  min={-0.05}
-                  max={0.05}
-                  step={0.01}
-                  className={sliderInputClass}
-                  value={controlForm.varNF}
-                  onChange={(e) =>
-                    handleControlFormChange(
-                      e,
-                      arrCnpjName,
-                      controlForm,
-                      setControlForm,
-                      setNameSelectedFund
-                    )
-                  }
-                ></input>
-              </div>
-            </div>
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="varCotistas">% Shareholders qnt. var</label>
-              <div className="flex gap-4 text-sm">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varCotistas < 0
-                        ? "orange"
-                        : controlForm.varCotistas == 0
-                        ? ""
-                        : "green",
-                  }}
-                >
-                  {(controlForm.varCotistas * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varCotistas"
-                  name="varCotistas"
-                  min={-0.05}
-                  max={0.05}
-                  step={0.01}
-                  className={sliderInputClass}
-                  value={controlForm.varCotistas}
-                  onChange={(e) =>
-                    handleControlFormChange(
-                      e,
-                      arrCnpjName,
-                      controlForm,
-                      setControlForm,
-                      setNameSelectedFund
-                    )
-                  }
-                ></input>
-              </div>
-            </div>
-            <div className="flex flex-col font-semibold items-center gap-1">
-              <label htmlFor="varCota">Quota variation (%)</label>
-              <div className="flex gap-4">
-                <span
-                  className="range-value w-10 text-sm"
-                  style={{
-                    color:
-                      controlForm.varCota < 0
-                        ? "orange"
-                        : controlForm.varCota == 0
-                        ? ""
-                        : "green",
-                  }}
-                >
-                  {(controlForm.varCota * 100).toFixed(2)}%
-                </span>
-                <input
-                  type="range"
-                  id="varCota"
-                  name="varCota"
-                  min={-0.05}
-                  max={0.05}
-                  step={0.01}
-                  className={sliderInputClass}
-                  value={controlForm.varCota}
-                  onChange={(e) =>
-                    handleControlFormChange(
-                      e,
-                      arrCnpjName,
-                      controlForm,
-                      setControlForm,
-                      setNameSelectedFund
-                    )
-                  }
-                ></input>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center items-center p-0 ml-6">
           <button
             type="submit"
             onClick={() =>
               track("clicked_update", { username: user?.username || null })
             }
-            className="text-base transition-all duration-300 h-[110%] border-l-2 border-white/80 text-white/80 p-auto flex justify-center items-center pl-4 hover:text-yellow-700 hover:border-yellow-700"
+            className="text-base border-l-2 border-white transition-all h-full duration-300 text-white/80 p-auto flex justify-center items-center mx-6 hover:border-yellow-700 hover:text-yellow-700"
           >
-            <div className="shadow-black relative bottom-1 hover:shadow-xl">
-              Update
-            </div>
+            <div className="px-4">Update</div>
           </button>
         </div>
         <div
