@@ -83,7 +83,6 @@ export default function NetFundingPredChart({
       };
 
       prepareChartNFData(prepareChartNFDataArgs);
-      consoleLog({ unifiedNFData });
     }
   }, [historic, predictions, absOrPct]);
 
@@ -109,7 +108,7 @@ export default function NetFundingPredChart({
       </div>
 
       {!smallV && (
-        <div className="text-sm text-gray-200 mb-6 mt-6 flex relative justify-center lg:text-base">
+        <div className="text-sm text-gray-200 mb-6 mt-2 lg:mt-6 flex relative justify-center lg:text-base">
           <AbsOrPctPredsViewForm {...formArgs} />
           {exportPosition === "right" && (
             <div
@@ -254,41 +253,40 @@ export default function NetFundingPredChart({
           </ResponsiveContainer>
         </div>
 
-        {!smallV && (
-          <>
-            <div className="my-2 lg:hidden text-center">
-              * Average daily prediction error on this fund:&nbsp;
-              <span className="font-bold ml-2">
-                {predictions.length &&
-                predictions[0]["mean"] &&
-                historic.length &&
-                historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]
-                  ? `R$ ${formatterBrNumber.format(
-                      predictions[0]["mean"]
-                    )} (~${formatterPct.format(
-                      (predictions[0]["mean"] /
-                        historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
-                        100
-                    )}% of Net Asset)`
-                  : ""}
-              </span>
-            </div>
-            {exportPosition === "bottom" && (
-              <div
-                className="text-center lg:absolute lg:left-0 lg:bottom-0"
-                onClick={() => {
-                  track("export_nf_pred_chart", {
-                    username: user?.username || null,
-                  });
-                  exportNetFundingPred({ historic, predictions });
-                }}
-              >
-                <ButtonGreen shadowColor="white/30" shadowSize="md">
-                  Export
-                </ButtonGreen>
+        {!smallV &&
+          predictions.length &&
+          predictions[0]["mean"] &&
+          historic.length &&
+          historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
+            <>
+              <div className="my-2 lg:hidden text-center">
+                * Average daily prediction error on this fund:&nbsp;
+                <span className="font-bold ml-2">
+                  {`R$ ${formatterBrNumber.format(
+                    predictions[0]["mean"]
+                  )} (~${formatterPct.format(
+                    (predictions[0]["mean"] /
+                      historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
+                      100
+                  )}% of Net Asset)`}
+                </span>
               </div>
-            )}
-          </>
+            </>
+          )}
+        {exportPosition === "bottom" && (
+          <div
+            className="text-center lg:absolute lg:left-0 lg:bottom-0"
+            onClick={() => {
+              track("export_nf_pred_chart", {
+                username: user?.username || null,
+              });
+              exportNetFundingPred({ historic, predictions });
+            }}
+          >
+            <ButtonGreen shadowColor="white/30" shadowSize="md">
+              Export
+            </ButtonGreen>
+          </div>
         )}
 
         {!smallV && predList && (
@@ -303,23 +301,23 @@ export default function NetFundingPredChart({
           </div>
         )}
       </div>
-      <div className="mt-6 hidden lg:block">
-        * Average daily prediction error on this fund:&nbsp;
-        <span className="font-bold ml-2">
-          {predictions.length &&
-          predictions[0]["mean"] &&
-          historic.length &&
-          historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]
-            ? `R$ ${formatterBrNumber.format(
+      {predictions.length &&
+        predictions[0]["mean"] &&
+        historic.length &&
+        historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
+          <div className="mt-6 hidden lg:block">
+            * Average daily prediction error on this fund:&nbsp;
+            <span className="font-bold ml-2">
+              {`R$ ${formatterBrNumber.format(
                 predictions[0]["mean"]
               )} (~${formatterPct.format(
                 (predictions[0]["mean"] /
                   historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
                   100
-              )}% of Net Asset)`
-            : ""}
-        </span>
-      </div>
+              )}% of Net Asset)`}
+            </span>
+          </div>
+        )}
     </div>
   );
 }

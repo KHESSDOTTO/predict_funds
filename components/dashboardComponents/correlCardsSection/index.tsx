@@ -60,8 +60,6 @@ export default function CorrelCardsSection({
 
   useEffect(() => {
     if (correls) {
-      console.log("correlCardsSection");
-      consoleLog({ correls });
       const newSelCorrel = correls.filter((cE) => {
         let result = false;
 

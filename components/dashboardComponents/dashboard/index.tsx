@@ -26,7 +26,6 @@ import type {
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
-import { getData } from "../controlSection/controlSectionFunctions";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
