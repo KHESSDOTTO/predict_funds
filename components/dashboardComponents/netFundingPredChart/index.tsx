@@ -11,6 +11,7 @@ import {
   adjustNetFundingChartAxis,
   exportNetFundingPred,
   prepareChartNFData,
+  yAxisTickFormats,
 } from "./netFundingPredChartFunctions";
 import {
   XAxis,
@@ -186,10 +187,9 @@ export default function NetFundingPredChart({
                 ticks={ticksYaxisNF}
                 tick={{ fill: "rgb(230, 230, 230)" }}
                 tickFormatter={(num) => {
-                  const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
-                  const numAbs = String((num / 1000).toFixed(0));
-                  const numPct = num.toFixed(2);
-                  return isPct ? `${numPct}%` : `R$${numAbs} k`;
+                  return absOrPct === "CAPTC_LIQ_ABS_ms"
+                    ? yAxisTickFormats(num, "abs")
+                    : yAxisTickFormats(num, "pct");
                 }}
                 tickCount={11}
                 domain={domainYaxisNF}

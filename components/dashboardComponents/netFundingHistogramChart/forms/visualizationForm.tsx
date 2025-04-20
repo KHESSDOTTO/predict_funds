@@ -6,7 +6,6 @@ export default function VisualizationForm({
   absOrPct,
   setAbsOrPct,
 }: VisualizationFormPropsType) {
-  
   return (
     <form className="flex items-center gap-2 md:gap-8">
       <h4 className="mr-2 md:mr-6">Visualization: </h4>

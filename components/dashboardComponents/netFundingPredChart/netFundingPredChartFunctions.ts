@@ -193,4 +193,34 @@ function historicToExport(historic: HistoricType[]) {
   return formattedHistoric;
 }
 
-export { adjustNetFundingChartAxis, prepareChartNFData, exportNetFundingPred };
+function yAxisTickFormats(num: number, absOrPct: "abs" | "pct") {
+  const absNum = Math.abs(num);
+  const numPct = num.toFixed(2) + "%";
+  const numAbsPre = "R$";
+  let numAbsDivisor = 1000;
+  let numAbsPos = " k";
+  let decimal = 0;
+
+  if (absNum > 10 ** 9) {
+    numAbsDivisor = 10 ** 9;
+    decimal = 1;
+    numAbsPos = " bln";
+  } else if (absNum > 10 ** 6) {
+    numAbsDivisor = 10 ** 6;
+    decimal = 0;
+    numAbsPos = " mln";
+  }
+
+  const numAbs =
+    numAbsPre + String((num / numAbsDivisor).toFixed(decimal)) + numAbsPos;
+  const ticks = { pct: numPct, abs: numAbs };
+
+  return ticks[absOrPct];
+}
+
+export {
+  adjustNetFundingChartAxis,
+  prepareChartNFData,
+  exportNetFundingPred,
+  yAxisTickFormats,
+};
