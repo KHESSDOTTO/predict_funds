@@ -1,7 +1,7 @@
 import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes";
 import {
   generateYaxisDomainBasedOnMaxMod,
-  generateYaxisTicksBasedOnMaxMod,
+  generateYaxisTicksBasedOnDomain,
 } from "@/utils/functions/axisFunctions";
 import type {
   ExportNetFundingPredParams,
@@ -25,50 +25,42 @@ function adjustNetFundingChartAxis({
 
   // Defining values for domain/axis in Net Funding Chart
   // Max absolute value in historic
-  let maxModValueNF = historic.reduce((maxAbsObj, currObj) => {
-    consoleLog({ maxAbsObj });
-    consoleLog({ currObj });
-    return Math.abs(currObj[absOrPct] ?? 0) >
-      (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
-      ? currObj
-      : maxAbsObj;
-  }, historic[0])[absOrPct];
-
-  consoleLog({ maxModValueNF });
+  let maxModValueNF = Math.abs(
+    historic.reduce((maxAbsObj, currObj) => {
+      return Math.abs(currObj[absOrPct] ?? 0) >
+        (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
+        ? currObj
+        : maxAbsObj;
+    }, historic[0])[absOrPct] || 0
+  );
 
   // Value of prediction to compare with highest absolute value of historic.
   const modValuePred = predictions[0][absOrPct]
     ? Math.abs(Number(predictions[0][absOrPct]))
     : 0;
 
-  consoleLog({ modValuePred });
-
   if (maxModValueNF) {
     // Defyning domain.
     maxModValueNF =
-      modValuePred > Math.abs(maxModValueNF)
+      modValuePred > maxModValueNF
         ? Number(Math.abs(modValuePred).toFixed(2))
         : Number(Math.abs(maxModValueNF).toFixed(2));
 
     const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
 
     if (newDomain) {
-      consoleLog({ newDomain });
       setDomainYaxisNF(newDomain);
     }
 
-    const newYaxisNFTicks = generateYaxisTicksBasedOnMaxMod(
-      maxModValueNF,
-      isPct
-    );
+    const newYaxisNFTicks = generateYaxisTicksBasedOnDomain(newDomain);
 
     if (newYaxisNFTicks) {
-      consoleLog({ newDomain });
       setTicksYaxisNF(newYaxisNFTicks);
     }
 
     return true;
   }
+
   return false;
 }
 
