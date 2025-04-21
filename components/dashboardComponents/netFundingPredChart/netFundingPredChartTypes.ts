@@ -43,7 +43,7 @@ interface NetFundingPredChartPropsType {
   isMobile: boolean;
   predList?: boolean;
   title?: string;
-  exportPosition: "bottom" | "right";
+  exportPosition?: "bottom" | "right";
 }
 
 interface ExportNetFundingPredParams {
