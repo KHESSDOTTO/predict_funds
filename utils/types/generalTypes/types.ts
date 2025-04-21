@@ -28,6 +28,10 @@ interface HeaderPropsType {
 
 interface CadastroFundosType extends CadastroFundosDocType_doc {}
 
+interface PredictionsDataObjectType {
+  [key: string]: PredictionsType[];
+}
+
 interface PredictionsType {
   DT_COMPTC?: Date;
   CNPJ_FUNDO: string;
@@ -67,6 +71,10 @@ interface UserType {
   emailConfirm: boolean;
   isActive: boolean;
   cnpjs: string[];
+}
+
+interface HistoricDataObjectType {
+  [key: string]: HistoricType[];
 }
 
 interface HistoricType {
@@ -135,11 +143,13 @@ interface NFTooltipProps extends TooltipProps<ValueType, NameType> {
 export type {
   ButtonPropsType,
   UserType,
+  HistoricDataObjectType,
   HistoricType,
   SideBarPropsType,
   HeaderPropsType,
   DashboardControlFormType,
   CenarioType,
+  PredictionsDataObjectType,
   PredictionsType,
   CadastroFundosType,
   HistogramSingleTypeData,

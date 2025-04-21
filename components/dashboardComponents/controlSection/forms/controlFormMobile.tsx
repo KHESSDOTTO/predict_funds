@@ -10,16 +10,19 @@ import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { useUser } from "@/contexts/userContext";
 import { track } from "@vercel/analytics";
+import { useState } from "react";
 
 export default function ControlFormMobile({
   ancoras,
   arrCnpjName,
+  currSubmitToast,
   setNameSelectedFund,
   setRegistration,
   setIsLoading,
   setHistoricData,
   setPredictionData,
   saveCenario,
+  setCurrSubmitToast,
 }: ControlFormPropsType) {
   const selectInputClass =
     "py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
@@ -40,11 +43,13 @@ export default function ControlFormMobile({
         handleControlFormSubmit(
           e,
           controlForm,
+          currSubmitToast,
           setControlForm,
           setRegistration,
           setIsLoading,
           setHistoricData,
-          setPredictionData
+          setPredictionData,
+          setCurrSubmitToast
         )
       }
     >

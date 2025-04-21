@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { UnifiedDataPredsType } from "./netFundingPredChartTypes";
-import { AbsOrPctNFFieldsType, AbsOrPctType } from "@/utils/types/generalTypes/types";
+import {
+  AbsOrPctNFFieldsType,
+  AbsOrPctType,
+} from "@/utils/types/generalTypes/types";
 import { NFTooltip } from "./netFundingPredChartTooltip";
 import { handleAbsOrPctChange } from "./forms/absOrPctPredsViewFormFunctions";
 import { format } from "date-fns";
@@ -8,6 +11,7 @@ import {
   adjustNetFundingChartAxis,
   exportNetFundingPred,
   prepareChartNFData,
+  yAxisTickFormats,
 } from "./netFundingPredChartFunctions";
 import {
   XAxis,
@@ -30,12 +34,13 @@ import { useUser } from "@/contexts/userContext";
 import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
 
 export default function NetFundingPredChart({
-  title = 'Net Funding',
+  title = "Net Funding",
   historic,
   predictions,
   smallV,
   isMobile,
   predList = true,
+  exportPosition = "bottom",
 }: NetFundingPredChartPropsType) {
   const { user } = useUser();
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
@@ -79,14 +84,17 @@ export default function NetFundingPredChart({
       };
 
       prepareChartNFData(prepareChartNFDataArgs);
-      consoleLog({ unifiedNFData });
     }
   }, [historic, predictions, absOrPct]);
 
   return (
     <div
       id="NetFundingDiv"
-      className={` ${smallV ? "pt-4 lg:w-[45%]" : "w-full"}`}
+      className={`
+        relative
+        ${smallV ? "pt-4 lg:w-[45%]" : "w-full"}
+        ${exportPosition === "bottom" ? "lg:pb-14" : ""}  
+      `}
     >
       <div className="flex justify-center lg:block">
         <h2
@@ -96,40 +104,36 @@ export default function NetFundingPredChart({
               : "text-lg w-full p-2 border-b-2 text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-0 lg:text-left`}
         >
-          { title }
+          {title}
         </h2>
       </div>
-      
-      {
-        ! smallV && 
-        (
-          <div className="text-sm text-gray-200 pb-6 flex relative justify-center lg:mb-6 lg:pt-4 lg:text-base">
-            <AbsOrPctPredsViewForm {...formArgs} />
+
+      {!smallV && (
+        <div className="text-sm text-gray-200 mb-6 mt-2 lg:mt-6 flex relative justify-center lg:text-base">
+          <AbsOrPctPredsViewForm {...formArgs} />
+          {exportPosition === "right" && (
             <div
-              className="hidden scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]"
-              onClick={
-                () => {
-                  track('export_nf_pred_chart', { username: user?.username || null });
-                  exportNetFundingPred({ historic, predictions });
-                }
-              }
+              className="scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]"
+              onClick={() => {
+                track("export_nf_pred_chart", {
+                  username: user?.username || null,
+                });
+                exportNetFundingPred({ historic, predictions });
+              }}
             >
               <ButtonGreen shadowColor="white/30" shadowSize="md">
                 Export
               </ButtonGreen>
             </div>
-          </div>
-        )
-      }
-      
-      <div
-        className={`flex flex-col gap-4 lg:flex-row ${
-          smallV ? "" : "lg:px-6"
-        }`}
-      >
+          )}
+        </div>
+      )}
+
+      <div className={`flex flex-col gap-4 lg:flex-row`}>
         <div
           className={`bg-gray-800 px-1 pt-4 rounded-xl overflow-hidden relative ${
-            (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") + (predList ? " lg:w-[60%]" : " w-full")
+            (smallV ? "lg:w-full lg:h-[250px]" : "lg:h-[412px]") +
+            (predList ? " lg:w-[60%]" : " w-full")
           }`}
         >
           <ResponsiveContainer
@@ -183,10 +187,9 @@ export default function NetFundingPredChart({
                 ticks={ticksYaxisNF}
                 tick={{ fill: "rgb(230, 230, 230)" }}
                 tickFormatter={(num) => {
-                  const isPct = absOrPct === "CAPTC_LIQ_PCT_ms";
-                  const numAbs = String((num / 1000).toFixed(0));
-                  const numPct = num.toFixed(2);
-                  return isPct ? `${numPct}%` : `R$${numAbs} k`;
+                  return absOrPct === "CAPTC_LIQ_ABS_ms"
+                    ? yAxisTickFormats(num, "abs")
+                    : yAxisTickFormats(num, "pct");
                 }}
                 tickCount={11}
                 domain={domainYaxisNF}
@@ -226,16 +229,12 @@ export default function NetFundingPredChart({
                 }}
               ></Line>
 
-              <ReferenceLine
-                y={0}
-                stroke="white"
-                strokeWidth={2}
-              />
+              <ReferenceLine y={0} stroke="white" strokeWidth={2} />
               <ReferenceLine
                 x={
-                  unifiedNFData[historic.length - 1] ? 
-                    Number(unifiedNFData[historic.length - 1]['DT_COMPTC']) :
-                    1000
+                  unifiedNFData[historic.length - 1]
+                    ? Number(unifiedNFData[historic.length - 1]["DT_COMPTC"])
+                    : 1000
                 }
                 stroke="orange"
                 strokeWidth={2}
@@ -254,63 +253,71 @@ export default function NetFundingPredChart({
           </ResponsiveContainer>
         </div>
 
-        {
-          ! smallV &&
-          (
+        {!smallV &&
+          predictions.length &&
+          predictions[0]["mean"] &&
+          historic.length &&
+          historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
             <>
-              <div className="my-2 px-6 lg:hidden text-center">
+              <div className="my-2 lg:hidden text-center">
                 * Average daily prediction error on this fund:&nbsp;
                 <span className="font-bold ml-2">
-                {
-                    predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
-                        `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
-                        : ''
-                }
+                  {`R$ ${formatterBrNumber.format(
+                    predictions[0]["mean"]
+                  )} (~${formatterPct.format(
+                    (predictions[0]["mean"] /
+                      historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
+                      100
+                  )}% of Net Asset)`}
                 </span>
               </div>
-              <div
-                className="text-center lg:hidden"
-                onClick={
-                  () => {
-                    track('export_nf_pred_chart', { username: user?.username || null });
-                    exportNetFundingPred({ historic, predictions });
-                  }
-                }
-              >
-                <ButtonGreen shadowColor="white/30" shadowSize="md">
-                  Export
-                </ButtonGreen>
-              </div>
             </>
-          )
-        }
+          )}
+        {exportPosition === "bottom" && (
+          <div
+            className="text-center lg:absolute lg:left-0 lg:bottom-0"
+            onClick={() => {
+              track("export_nf_pred_chart", {
+                username: user?.username || null,
+              });
+              exportNetFundingPred({ historic, predictions });
+            }}
+          >
+            <ButtonGreen shadowColor="white/30" shadowSize="md">
+              Export
+            </ButtonGreen>
+          </div>
+        )}
 
-        {
-          ! smallV && predList &&
-            (
-              <div className="hidden lg:block lg:px-4 mt-1 lg:w-[40%] lg:mr-4">
-                <PredList
-                  title="Net Funding"
-                  onlyBack={false}
-                  historic={historic}
-                  predictions={predictions}
-                  varName={absOrPct}
-                />
-              </div>
-            )
-        }
-
+        {!smallV && predList && (
+          <div className="hidden lg:block mt-1 lg:w-[40%] lg:ml-2">
+            <PredList
+              title="Net Funding"
+              onlyBack={false}
+              historic={historic}
+              predictions={predictions}
+              varName={absOrPct}
+            />
+          </div>
+        )}
       </div>
-      <div className="mt-6 px-6 hidden lg:block">
-        * Average daily prediction error on this fund:&nbsp;
-        <span className="font-bold ml-2">
-          {
-            predictions.length && predictions[0]['mean'] && historic.length && historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] ?
-                `R$ ${ formatterBrNumber.format(predictions[0]['mean']) } (~${ formatterPct.format(predictions[0]['mean'] / historic[historic.length - 1]['VL_PATRIM_LIQ_ms'] * 100) }% of Net Asset)`
-                : ''
-          }
-        </span>
-      </div>
+      {predictions.length &&
+        predictions[0]["mean"] &&
+        historic.length &&
+        historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
+          <div className="mt-6 hidden lg:block">
+            * Average daily prediction error on this fund:&nbsp;
+            <span className="font-bold ml-2">
+              {`R$ ${formatterBrNumber.format(
+                predictions[0]["mean"]
+              )} (~${formatterPct.format(
+                (predictions[0]["mean"] /
+                  historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
+                  100
+              )}% of Net Asset)`}
+            </span>
+          </div>
+        )}
     </div>
   );
 }

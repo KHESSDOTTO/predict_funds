@@ -18,6 +18,12 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 export default function ControlSection({
   registration,
   ancoras,
+  setHistoricRendaFixaData,
+  setHistoricMultimercadoData,
+  setHistoricAcoesData,
+  setPredictionRendaFixaData,
+  setPredictionMultimercadoData,
+  setPredictionAcoesData,
   setRegistration,
   setHistoricData,
   setPredictionData,
@@ -32,17 +38,20 @@ export default function ControlSection({
   const { controlForm, setControlForm } = useControlForm();
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
+  const [currSubmitToast, setCurrSubmitToast] = useState("");
   const user = userContext.user;
   const formProps: ControlFormPropsType = {
     ancoras: ancoras,
     arrCnpjName: arrCnpjName,
     nameSelectedFund: nameSelectedFund,
+    currSubmitToast: currSubmitToast,
     setNameSelectedFund: setNameSelectedFund,
     setRegistration: setRegistration,
     setIsLoading: setIsLoading,
     setHistoricData: setHistoricData,
     setPredictionData: setPredictionData,
     saveCenario: saveCenario,
+    setCurrSubmitToast: setCurrSubmitToast,
   };
 
   // Updates the controlForm with the first CNPJ in CNPJs list, initially.
@@ -53,7 +62,19 @@ export default function ControlSection({
       return;
     }
 
-    getData(user, controlForm, setHistoricData, setPredictionData);
+    getData(
+      user,
+      controlForm,
+      setHistoricData,
+      setHistoricRendaFixaData,
+      setHistoricMultimercadoData,
+      setHistoricAcoesData,
+      setPredictionData,
+      setPredictionRendaFixaData,
+      setPredictionMultimercadoData,
+      setPredictionAcoesData,
+      setCurrSubmitToast
+    );
 
     getRegistration(
       user,

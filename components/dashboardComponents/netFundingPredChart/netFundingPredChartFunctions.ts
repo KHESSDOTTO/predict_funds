@@ -1,12 +1,18 @@
 import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes";
 import {
   generateYaxisDomainBasedOnMaxMod,
-  generateYaxisTicksBasedOnMaxMod,
+  generateYaxisTicksBasedOnDomain,
 } from "@/utils/functions/axisFunctions";
-import type { ExportNetFundingPredParams, PrepareChartNFDataParamsType } from "./netFundingPredChartTypes";
+import type {
+  ExportNetFundingPredParams,
+  PrepareChartNFDataParamsType,
+} from "./netFundingPredChartTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import * as XLSX from "xlsx";
-import { HistoricType, PredictionsType } from "@/utils/types/generalTypes/types";
+import {
+  HistoricType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 
 function adjustNetFundingChartAxis({
   historic,
@@ -19,12 +25,14 @@ function adjustNetFundingChartAxis({
 
   // Defining values for domain/axis in Net Funding Chart
   // Max absolute value in historic
-  let maxModValueNF = historic.reduce((maxAbsObj, currObj) => {
-    return Math.abs(currObj[absOrPct] ?? 0) >
-      (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
-      ? currObj
-      : maxAbsObj;
-  }, historic[0])[absOrPct];
+  let maxModValueNF = Math.abs(
+    historic.reduce((maxAbsObj, currObj) => {
+      return Math.abs(currObj[absOrPct] ?? 0) >
+        (maxAbsObj[absOrPct] ? Math.abs(maxAbsObj[absOrPct]) : 0)
+        ? currObj
+        : maxAbsObj;
+    }, historic[0])[absOrPct] || 0
+  );
 
   // Value of prediction to compare with highest absolute value of historic.
   const modValuePred = predictions[0][absOrPct]
@@ -34,19 +42,17 @@ function adjustNetFundingChartAxis({
   if (maxModValueNF) {
     // Defyning domain.
     maxModValueNF =
-      modValuePred > Math.abs(maxModValueNF)
+      modValuePred > maxModValueNF
         ? Number(Math.abs(modValuePred).toFixed(2))
         : Number(Math.abs(maxModValueNF).toFixed(2));
 
     const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
+
     if (newDomain) {
       setDomainYaxisNF(newDomain);
     }
 
-    const newYaxisNFTicks = generateYaxisTicksBasedOnMaxMod(
-      maxModValueNF,
-      isPct
-    );
+    const newYaxisNFTicks = generateYaxisTicksBasedOnDomain(newDomain);
 
     if (newYaxisNFTicks) {
       setTicksYaxisNF(newYaxisNFTicks);
@@ -54,6 +60,7 @@ function adjustNetFundingChartAxis({
 
     return true;
   }
+
   return false;
 }
 
@@ -77,9 +84,10 @@ function exportNetFundingPred({
   predictions,
 }: ExportNetFundingPredParams) {
   const historicIsValid = Array.isArray(historic) && historic.length > 0;
-  const predictionsIsValid = Array.isArray(predictions) && predictions.length > 0;
+  const predictionsIsValid =
+    Array.isArray(predictions) && predictions.length > 0;
 
-  if (! historicIsValid || ! predictionsIsValid) {
+  if (!historicIsValid || !predictionsIsValid) {
     consoleLog({ historicIsValid });
     consoleLog({ predictionsIsValid });
 
@@ -87,25 +95,32 @@ function exportNetFundingPred({
   }
 
   const workbook = XLSX.utils.book_new();
-  const currTime = new Date;
+  const currTime = new Date();
   const selCnpj = historic[0]["CNPJ_FUNDO"];
-  const fileName = `export_prediction_${selCnpj.replaceAll("/", ".")}_${currTime.toISOString()}.xlsx`;
+  const fileName = `export_prediction_${selCnpj.replaceAll(
+    "/",
+    "."
+  )}_${currTime.toISOString()}.xlsx`;
   const predsData = predsToExport(predictions);
   const historicData = historicToExport(historic);
 
   const sheetData: (string | number)[][] = [];
 
   sheetData.push(
-    ['Predictions'],
+    ["Predictions"],
     ...predsData,
     [],
-    ['Historic'],
+    ["Historic"],
     ...historicData
   );
 
   const sheet = XLSX.utils.aoa_to_sheet(sheetData);
 
-  XLSX.utils.book_append_sheet(workbook, sheet, `preds_${selCnpj.replaceAll("/", ".")}`)
+  XLSX.utils.book_append_sheet(
+    workbook,
+    sheet,
+    `preds_${selCnpj.replaceAll("/", ".")}`
+  );
   XLSX.writeFile(workbook, fileName);
 
   return;
@@ -113,11 +128,11 @@ function exportNetFundingPred({
 
 function predsToExport(predictions: PredictionsType[]) {
   const isValidPreds = Array.isArray(predictions) && predictions.length > 0;
-  
-  if (! isValidPreds) {
-    consoleLog({ isValidPreds })
 
-    return[[]];
+  if (!isValidPreds) {
+    consoleLog({ isValidPreds });
+
+    return [[]];
   }
 
   const formattedPreds: (string | number)[][] = [];
@@ -127,11 +142,9 @@ function predsToExport(predictions: PredictionsType[]) {
     const regex = /^(CAPTC|CI|DT_COMPTC)/;
 
     for (let key of Object.keys(cE)) {
-
-      if (! key.match(regex)) {
-        delete cleanedEl[key]
+      if (!key.match(regex)) {
+        delete cleanedEl[key];
       }
-
     }
 
     if (cI === 0) {
@@ -144,44 +157,70 @@ function predsToExport(predictions: PredictionsType[]) {
       } else {
         return cE;
       }
-    })
+    });
 
     formattedPreds.push(adjustedVals);
-  })
+  });
 
   return formattedPreds;
 }
 
 function historicToExport(historic: HistoricType[]) {
-    const isValidHistoric = Array.isArray(historic) && historic.length > 0;
+  const isValidHistoric = Array.isArray(historic) && historic.length > 0;
 
-    if (! isValidHistoric) {
-      consoleLog({ isValidHistoric })
-    
-      return[[]];
+  if (!isValidHistoric) {
+    consoleLog({ isValidHistoric });
+
+    return [[]];
+  }
+
+  const formattedHistoric: (string | number)[][] = [];
+
+  historic.forEach((cE, cI) => {
+    const cleanedEl = { ...cE } as HistoricType;
+
+    delete cleanedEl["_id"];
+    delete cleanedEl["datahora_proc_informes"];
+    delete cleanedEl["updated_at"];
+
+    if (cI === 0) {
+      formattedHistoric.push(Object.keys(cleanedEl));
     }
 
-    const formattedHistoric: (string | number)[][] = [];
+    formattedHistoric.push(Object.values(cleanedEl));
+  });
 
-    historic.forEach((cE, cI) => {
-        const cleanedEl = { ...cE } as HistoricType;
-    
-        delete cleanedEl['_id'];
-        delete cleanedEl['datahora_proc_informes'];
-        delete cleanedEl['updated_at'];
+  return formattedHistoric;
+}
 
-        if (cI === 0) {
-          formattedHistoric.push(Object.keys(cleanedEl));
-        }
+function yAxisTickFormats(num: number, absOrPct: "abs" | "pct") {
+  const absNum = Math.abs(num);
+  const numPct = num.toFixed(2) + "%";
+  const numAbsPre = "R$";
+  let numAbsDivisor = 1000;
+  let numAbsPos = " k";
+  let decimal = 0;
 
-        formattedHistoric.push(Object.values(cleanedEl));
-      })
+  if (absNum > 10 ** 9) {
+    numAbsDivisor = 10 ** 9;
+    decimal = 1;
+    numAbsPos = " bln";
+  } else if (absNum > 10 ** 6) {
+    numAbsDivisor = 10 ** 6;
+    decimal = 0;
+    numAbsPos = " mln";
+  }
 
-    return formattedHistoric;
+  const numAbs =
+    numAbsPre + String((num / numAbsDivisor).toFixed(decimal)) + numAbsPos;
+  const ticks = { pct: numPct, abs: numAbs };
+
+  return ticks[absOrPct];
 }
 
 export {
   adjustNetFundingChartAxis,
   prepareChartNFData,
   exportNetFundingPred,
+  yAxisTickFormats,
 };

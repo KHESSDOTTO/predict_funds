@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ax } from "@/database/axios.config";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 import Link from "next/link";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import BackLink from "@/components/UI/backLink";
@@ -13,7 +13,8 @@ export default function LoginPage() {
       password: "",
     }),
     router = useRouter();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [currToast, setCurrToast] = useState<string>("");
 
   // css - classes
   const mainClass =
@@ -24,7 +25,8 @@ export default function LoginPage() {
       "px-auto row-span-3 flex flex-col justify-center items-center rounded-sm gap-8 lg:pt-8",
     divClass = "flex flex-col gap-2 lg:gap-1 align-center justify-center w-72",
     labelClass = "text-center lg:text-left lg:indent-2",
-    inputClass = "rounded-full px-4 py-1 shadow-md shadow-gray-400/50 text-black";
+    inputClass =
+      "rounded-full px-4 py-1 shadow-md shadow-gray-400/50 text-black";
   // /css - classes
   const smTextShadow = { textShadow: "2px 2px 5px rgba(200,200,200,0.9)" };
 
@@ -34,16 +36,25 @@ export default function LoginPage() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (currToast) {
+      return;
+    }
+
     const loading = toast.loading("Logging in...");
+
+    setCurrToast(loading);
+
     try {
-      const response = await ax.post("/user/login", form);
-      console.log(response);
+      await ax.post("/user/login", form);
       toast.success("Successfully logged in!");
       router.push("/loggedin/home");
     } catch (err) {
       console.log(err);
       toast.error("Couldn't complete the log in.");
+      setCurrToast("");
     }
+
     toast.dismiss(loading);
   }
 
