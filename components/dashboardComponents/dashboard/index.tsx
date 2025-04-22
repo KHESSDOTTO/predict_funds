@@ -26,6 +26,7 @@ import type {
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
@@ -115,7 +116,51 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="flex flex-col w-full lg:flex-row gap-6">
+      <div className="lg:hidden w-full">
+        <Swiper
+          slidesPerGroup={1}
+          loop={true}
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+          speed={600}
+          style={{ width: "90%", height: "auto" }}
+        >
+          {classificacoes.map((currClass) => {
+            const mapVars = {
+              "Renda Fixa": {
+                historic: historicRendaFixaData,
+                prediction: predictionRendaFixaData,
+              },
+              Multimercado: {
+                historic: historicMultimercadoData,
+                prediction: predictionMultimercadoData,
+              },
+              Ações: {
+                historic: historicAcoesData,
+                prediction: predictionAcoesData,
+              },
+            };
+            return (
+              <SwiperSlide className="px-2">
+                <NetFundingPredChart
+                  {...{
+                    title: `Net Funding CVM Class - ${currClass}`,
+                    smallV: false,
+                    isMobile,
+                    historic: mapVars[currClass]["historic"],
+                    predictions: mapVars[currClass]["prediction"],
+                    predList: false,
+                    exportPosition: "bottom",
+                  }}
+                />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+      <div className="hidden lg:flex lg:w-full lg:flex-row lg:gap-6">
         {classificacoes.map((currClass) => {
           const mapVars = {
             "Renda Fixa": {
