@@ -26,6 +26,10 @@ import type {
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css/pagination";
+import styles from "./styles/dashboard.module.css";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
@@ -115,7 +119,54 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="flex flex-col w-full lg:flex-row gap-6">
+      <div className="lg:hidden w-full relative">
+        <Swiper
+          modules={[Pagination, Navigation]}
+          pagination
+          navigation={{
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          }}
+          loop={true}
+          speed={600}
+          className={`${styles.swiperContainer} w-11/12`}
+        >
+          {classificacoes.map((currClass) => {
+            const mapVars = {
+              "Renda Fixa": {
+                historic: historicRendaFixaData,
+                prediction: predictionRendaFixaData,
+              },
+              Multimercado: {
+                historic: historicMultimercadoData,
+                prediction: predictionMultimercadoData,
+              },
+              Ações: {
+                historic: historicAcoesData,
+                prediction: predictionAcoesData,
+              },
+            };
+            return (
+              <SwiperSlide className="px-2 mb-12">
+                <NetFundingPredChart
+                  {...{
+                    title: ["Net Funding CVM Class", currClass],
+                    smallV: false,
+                    isMobile,
+                    historic: mapVars[currClass]["historic"],
+                    predictions: mapVars[currClass]["prediction"],
+                    predList: false,
+                    exportPosition: "bottom",
+                  }}
+                />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+        <div className={`swiper-button-prev ${styles.swiperButtonPrev}`}></div>
+        <div className={`swiper-button-next ${styles.swiperButtonNext}`}></div>
+      </div>
+      <div className="hidden lg:flex lg:w-full lg:flex-row lg:gap-6">
         {classificacoes.map((currClass) => {
           const mapVars = {
             "Renda Fixa": {

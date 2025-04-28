@@ -16,11 +16,9 @@ import { SwiperSlide } from "swiper/react";
 import TitleComponent from "@/components/UI/titleComponent";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { exportCorrels } from "./correlCardsSectionFunctions";
-import useWindowWidth from "@/hooks/useWindowWidth";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { useUser } from "@/contexts/userContext";
 import { track } from "@vercel/analytics";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 SwiperCore.use([Navigation]);
 
@@ -144,8 +142,8 @@ export default function CorrelCardsSection({
               slidesPerGroup={1}
               loop={true}
               navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+                nextEl: ".swiper-button-next .correl-card-swiper",
+                prevEl: ".swiper-button-prev .correl-card-swiper",
               }}
               speed={600}
               style={{ width: "90%", height: "auto" }}
@@ -170,10 +168,10 @@ export default function CorrelCardsSection({
               })}
             </Swiper>
             <div
-              className={`swiper-button-prev ${styles.swiperButtonPrev}`}
+              className={`swiper-button-prev correl-card-swiper ${styles.swiperButtonPrev}`}
             ></div>
             <div
-              className={`swiper-button-next ${styles.swiperButtonNext}`}
+              className={`swiper-button-next correl-card-swiper ${styles.swiperButtonNext}`}
             ></div>
             <div
               className="lg:hidden absolute right-[50%] bottom-0 translate-x-[50%] translate-y-full"

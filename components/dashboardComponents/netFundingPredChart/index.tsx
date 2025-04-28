@@ -104,7 +104,16 @@ export default function NetFundingPredChart({
               : "text-lg w-full p-2 border-b-2 text-white/90 border-white/90"
           } font-semibold text-center border-b lg:pb-2 lg:max-w-full lg:px-4 lg:mx-0 lg:text-left`}
         >
-          {title}
+          {typeof title === "string" && title}
+          {typeof title === "object" &&
+            title.map((cE, cI) => {
+              return (
+                <>
+                  {cI > 0 && <br />}
+                  <span>{cE}</span>
+                </>
+              );
+            })}
         </h2>
       </div>
 
@@ -273,7 +282,7 @@ export default function NetFundingPredChart({
               </div>
             </>
           )}
-        {exportPosition === "bottom" && (
+        {!smallV && exportPosition === "bottom" && (
           <div
             className="text-center lg:absolute lg:left-0 lg:bottom-0"
             onClick={() => {
