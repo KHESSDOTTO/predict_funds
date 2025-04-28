@@ -42,7 +42,7 @@ interface NetFundingPredChartPropsType {
   smallV: boolean;
   isMobile: boolean;
   predList?: boolean;
-  title?: string;
+  title?: string | string[];
   exportPosition?: "bottom" | "right";
 }
 
