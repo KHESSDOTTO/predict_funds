@@ -28,6 +28,7 @@ import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import toast from "react-hot-toast";
 import "swiper/css/pagination";
 import styles from "./styles/dashboard.module.css";
 
@@ -93,6 +94,20 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
+  const mapVars = {
+    "Renda Fixa": {
+      historic: historicRendaFixaData,
+      prediction: predictionRendaFixaData,
+    },
+    Multimercado: {
+      historic: historicMultimercadoData,
+      prediction: predictionMultimercadoData,
+    },
+    Ações: {
+      historic: historicAcoesData,
+      prediction: predictionAcoesData,
+    },
+  };
 
   useEffect(() => {
     setIsMobile(screenWidth <= 992);
@@ -132,20 +147,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           className={`${styles.swiperContainer} w-11/12`}
         >
           {classificacoes.map((currClass) => {
-            const mapVars = {
-              "Renda Fixa": {
-                historic: historicRendaFixaData,
-                prediction: predictionRendaFixaData,
-              },
-              Multimercado: {
-                historic: historicMultimercadoData,
-                prediction: predictionMultimercadoData,
-              },
-              Ações: {
-                historic: historicAcoesData,
-                prediction: predictionAcoesData,
-              },
-            };
             return (
               <SwiperSlide className="px-2 mb-12">
                 <NetFundingPredChart
@@ -168,20 +169,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       </div>
       <div className="hidden lg:flex lg:w-full lg:flex-row lg:gap-6">
         {classificacoes.map((currClass) => {
-          const mapVars = {
-            "Renda Fixa": {
-              historic: historicRendaFixaData,
-              prediction: predictionRendaFixaData,
-            },
-            Multimercado: {
-              historic: historicMultimercadoData,
-              prediction: predictionMultimercadoData,
-            },
-            Ações: {
-              historic: historicAcoesData,
-              prediction: predictionAcoesData,
-            },
-          };
           return (
             <div className="w-full mb-4 lg:mb-0 lg:w-1/3">
               <NetFundingPredChart

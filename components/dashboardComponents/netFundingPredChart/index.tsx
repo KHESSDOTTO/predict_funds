@@ -310,7 +310,8 @@ export default function NetFundingPredChart({
           </div>
         )}
       </div>
-      {predictions.length &&
+      {!smallV &&
+        predictions.length &&
         predictions[0]["mean"] &&
         historic.length &&
         historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
