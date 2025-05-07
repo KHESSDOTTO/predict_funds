@@ -16,6 +16,7 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
+import { hash } from "crypto";
 
 export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   const { user } = useUser();
@@ -114,7 +115,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               </thead>
               <tbody className="text-white text-sm font-light">
                 {selCorrelsKeys.map((name) => {
-                  const id = Math.random();
+                  const id = hash("md5", name);
 
                   return <RowDesk {...{ id, name, tickers, selCorrels }} />;
                 })}
@@ -142,7 +143,7 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               </thead>
               <tbody className="text-white text-sm font-light">
                 {tickers.map((ticker) => {
-                  const id = Math.random();
+                  const id = hash("md5", ticker);
 
                   return <RowMobile {...{ id, ticker, selCorrels }} />;
                 })}

@@ -3,6 +3,7 @@ import { getToneColor } from "@/utils/functions/genericFunctions";
 import { HeatMapObjType } from "./heatMapTypes";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import type { RowMobilePropsType } from "./heatMapTypes";
+import { hash } from "crypto";
 
 export default function RowMobile({
   id,
@@ -21,7 +22,7 @@ export default function RowMobile({
         {nameTicker}
       </td>
       {selCorrelsKeys.map((key) => {
-        const id = Math.random();
+        const id = hash("md5", key);
         const value = selCorrels[key][ticker];
         const color = getToneColor(value, toneColorsMapTxtRGB, 0.9);
         const valColor = value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
