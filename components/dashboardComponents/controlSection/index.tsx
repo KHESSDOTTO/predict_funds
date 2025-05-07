@@ -41,17 +41,23 @@ export default function ControlSection({
   const [currSubmitToast, setCurrSubmitToast] = useState("");
   const user = userContext.user;
   const formProps: ControlFormPropsType = {
-    ancoras: ancoras,
-    arrCnpjName: arrCnpjName,
-    nameSelectedFund: nameSelectedFund,
-    currSubmitToast: currSubmitToast,
-    setNameSelectedFund: setNameSelectedFund,
-    setRegistration: setRegistration,
-    setIsLoading: setIsLoading,
-    setHistoricData: setHistoricData,
-    setPredictionData: setPredictionData,
-    saveCenario: saveCenario,
-    setCurrSubmitToast: setCurrSubmitToast,
+    ancoras,
+    arrCnpjName,
+    nameSelectedFund,
+    currSubmitToast,
+    setNameSelectedFund,
+    setRegistration,
+    setIsLoading,
+    setHistoricData,
+    setPredictionData,
+    saveCenario,
+    setCurrSubmitToast,
+    setHistoricRendaFixaData,
+    setHistoricMultimercadoData,
+    setHistoricAcoesData,
+    setPredictionRendaFixaData,
+    setPredictionMultimercadoData,
+    setPredictionAcoesData,
   };
 
   // Updates the controlForm with the first CNPJ in CNPJs list, initially.

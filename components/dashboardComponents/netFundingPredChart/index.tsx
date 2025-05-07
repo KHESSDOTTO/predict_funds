@@ -32,13 +32,13 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
+import { useDevice } from "@/contexts/deviceContext";
 
 export default function NetFundingPredChart({
   title = "Net Funding",
   historic,
   predictions,
   smallV,
-  isMobile,
   predList = true,
   exportPosition = "bottom",
 }: NetFundingPredChartPropsType) {
@@ -58,6 +58,7 @@ export default function NetFundingPredChart({
     setAbsOrPctShort,
     handleAbsOrPctChange,
   };
+  const { isMobile } = useDevice();
 
   useEffect(() => {
     if (historic.length === 0 || predictions.length === 0) {

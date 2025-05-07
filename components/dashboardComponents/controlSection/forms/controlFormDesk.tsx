@@ -9,7 +9,6 @@ import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
-import { useState } from "react";
 
 export default function ControlFormDesk({
   ancoras,
@@ -19,7 +18,13 @@ export default function ControlFormDesk({
   setRegistration,
   setIsLoading,
   setHistoricData,
+  setHistoricAcoesData,
+  setHistoricMultimercadoData,
+  setHistoricRendaFixaData,
   setPredictionData,
+  setPredictionAcoesData,
+  setPredictionMultimercadoData,
+  setPredictionRendaFixaData,
   saveCenario,
   setCurrSubmitToast,
 }: ControlFormPropsType) {
@@ -47,7 +52,13 @@ export default function ControlFormDesk({
           setRegistration,
           setIsLoading,
           setHistoricData,
+          setHistoricAcoesData,
+          setHistoricMultimercadoData,
+          setHistoricRendaFixaData,
           setPredictionData,
+          setPredictionAcoesData,
+          setPredictionMultimercadoData,
+          setPredictionRendaFixaData,
           setCurrSubmitToast
         )
       }

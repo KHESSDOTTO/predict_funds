@@ -10,7 +10,6 @@ import SelectWithFilter from "@/components/UI/selectInputWithFilter";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { useUser } from "@/contexts/userContext";
 import { track } from "@vercel/analytics";
-import { useState } from "react";
 
 export default function ControlFormMobile({
   ancoras,
@@ -20,14 +19,18 @@ export default function ControlFormMobile({
   setRegistration,
   setIsLoading,
   setHistoricData,
+  setHistoricAcoesData,
+  setHistoricMultimercadoData,
+  setHistoricRendaFixaData,
   setPredictionData,
+  setPredictionAcoesData,
+  setPredictionMultimercadoData,
+  setPredictionRendaFixaData,
   saveCenario,
   setCurrSubmitToast,
 }: ControlFormPropsType) {
   const selectInputClass =
     "py-1 border shadow-md shadow-gray-400 rounded-2xl text-black text-center w-full bg-white focus:outline-none";
-  const inputRangeClass =
-    "cursor-pointer relative top-[1.5px] rounded-2xl text-black text-center w-full bg-white focus:outline-none";
   const { user } = useUser();
   const { controlForm, setControlForm } = useControlForm();
   const fundOptions = arrCnpjName.map((cE) => ({
@@ -49,7 +52,13 @@ export default function ControlFormMobile({
           setRegistration,
           setIsLoading,
           setHistoricData,
+          setHistoricAcoesData,
+          setHistoricMultimercadoData,
+          setHistoricRendaFixaData,
           setPredictionData,
+          setPredictionAcoesData,
+          setPredictionMultimercadoData,
+          setPredictionRendaFixaData,
           setCurrSubmitToast
         )
       }

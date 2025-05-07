@@ -1,9 +1,10 @@
-import { UserProvider } from '../userContext';
-import { ControlFormProvider } from '../controlFormContext';
-import { AppProviderProps } from './appProviderTypes';
+import { UserProvider } from "../userContext";
+import { ControlFormProvider } from "../controlFormContext";
+import { AppProviderProps } from "./appProviderTypes";
+import { DeviceProvider } from "../deviceContext";
 
 export function AppProvider({
-  children, 
+  children,
   initialAncoras,
   user,
 }: AppProviderProps) {
@@ -11,15 +12,17 @@ export function AppProvider({
     initialAncoras: initialAncoras,
     initialCnpjs: user?.cnpjs,
     userCnpj: user?.cnpj,
-  }
+  };
 
   return (
     <>
-      <UserProvider>
-        <ControlFormProvider {...controlFormProviderProps}>
+      <DeviceProvider>
+        <UserProvider>
+          <ControlFormProvider {...controlFormProviderProps}>
             {children}
-        </ControlFormProvider>
-      </UserProvider>
+          </ControlFormProvider>
+        </UserProvider>
+      </DeviceProvider>
     </>
   );
 }

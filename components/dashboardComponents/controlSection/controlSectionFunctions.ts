@@ -235,7 +235,7 @@ async function getData(
 
   setCurrSubmitToast(loadingToast);
 
-  const cnpj = user.cnpjs[0];
+  const cnpj = controlForm.buscaCnpj || user.cnpjs[0];
   const encodedCnpj = encodeURIComponent(cnpj);
   const mapHistoricSetters = {
     "Renda Fixa": setHistoricRendaFixaData,

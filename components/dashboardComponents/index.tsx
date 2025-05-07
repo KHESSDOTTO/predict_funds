@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   CadastroFundosType,
-  HistoricDataObjectType,
   HistoricType,
-  PredictionsDataObjectType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
 import ControlSection from "./controlSection";
@@ -17,7 +15,6 @@ import LogoPredict from "@/components/UI/logoPredict";
 import NetFundingPredChart from "./netFundingPredChart";
 import NetFundingHistogramChart from "./netFundingHistogramChart";
 import ValueQuotaChart from "./valueQuotaChart";
-import useWindowWidth from "@/hooks/useWindowWidth";
 import { saveCenario } from "./dashboardFunctions";
 import type {
   DashboardPropsType,
@@ -30,12 +27,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 import styles from "./styles/dashboard.module.css";
+import { useDevice } from "@/contexts/deviceContext";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
   const { controlForm, setControlForm } = useControlForm();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const screenWidth = useWindowWidth();
+  const { isMobile } = useDevice();
   const [historicFundData, setHistoricFundData] = useState<HistoricType[]>([]);
   const [historicRendaFixaData, setHistoricRendaFixaData] = useState<
     HistoricType[]
@@ -109,12 +106,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   };
 
   useEffect(() => {
-    setIsMobile(screenWidth <= 992);
-
-    return;
-  }, [screenWidth]);
-
-  useEffect(() => {
     if (ancoras && ancoras.length > 0) {
       setControlForm({ ...controlForm, baseDate: ancoras[ancoras.length - 1] });
     }
@@ -152,7 +143,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
                   {...{
                     title: ["Net Funding CVM Class", currClass],
                     smallV: false,
-                    isMobile,
                     historic: mapVars[currClass]["historic"],
                     predictions: mapVars[currClass]["prediction"],
                     predList: false,
@@ -174,7 +164,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
                 {...{
                   title: `Net Funding CVM Class - ${currClass}`,
                   smallV: false,
-                  isMobile,
                   historic: mapVars[currClass]["historic"],
                   predictions: mapVars[currClass]["prediction"],
                   predList: false,
@@ -192,7 +181,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
               registration ? "- CNPJ: " + registration["CNPJ_Fundo"] : ""
             }`,
             smallV: false,
-            isMobile,
             historic: historicFundData,
             predictions: predictionFundData,
             exportPosition: isMobile ? "bottom" : "right",

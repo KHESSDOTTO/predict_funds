@@ -16,7 +16,13 @@ interface ControlFormPropsType {
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;
+  setHistoricAcoesData: Dispatch<SetStateAction<HistoricType[]>>;
+  setHistoricMultimercadoData: Dispatch<SetStateAction<HistoricType[]>>;
+  setHistoricRendaFixaData: Dispatch<SetStateAction<HistoricType[]>>;
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
+  setPredictionAcoesData: Dispatch<SetStateAction<PredictionsType[]>>;
+  setPredictionMultimercadoData: Dispatch<SetStateAction<PredictionsType[]>>;
+  setPredictionRendaFixaData: Dispatch<SetStateAction<PredictionsType[]>>;
   saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
   setCurrSubmitToast: Dispatch<SetStateAction<string>>;
 }
