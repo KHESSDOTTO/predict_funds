@@ -6,17 +6,17 @@ import {
   PredictionsDataObjectType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
-import ControlSection from "../controlSection";
+import ControlSection from "./controlSection";
 import { useUser } from "@/contexts/userContext";
-import RegistrationInfos from "../registrationInfos";
+import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/dashboardComponents/correlCardsSection";
-import HeatMap from "../heatMap";
-import type { HeatMapObjType } from "../heatMap/heatMapTypes";
-import CenariosBtnSection from "../cenarioBtnSection";
+import HeatMap from "./heatMap";
+import type { HeatMapObjType } from "./heatMap/heatMapTypes";
+import CenariosBtnSection from "./cenarioBtnSection";
 import LogoPredict from "@/components/UI/logoPredict";
-import NetFundingPredChart from "../netFundingPredChart";
-import NetFundingHistogramChart from "../netFundingHistogramChart";
-import ValueQuotaChart from "../valueQuotaChart";
+import NetFundingPredChart from "./netFundingPredChart";
+import NetFundingHistogramChart from "./netFundingHistogramChart";
+import ValueQuotaChart from "./valueQuotaChart";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { saveCenario } from "./dashboardFunctions";
 import type {
@@ -28,7 +28,6 @@ import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import toast from "react-hot-toast";
 import "swiper/css/pagination";
 import styles from "./styles/dashboard.module.css";
 

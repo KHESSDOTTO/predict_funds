@@ -39,6 +39,7 @@ export default function ControlFormDesk({
       className="hidden lg:block lg:border-red-500"
       onSubmit={(e) =>
         handleControlFormSubmit(
+          user,
           e,
           controlForm,
           currSubmitToast,

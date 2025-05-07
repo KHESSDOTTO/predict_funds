@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import {
+  getData,
   getHistoricData,
   getPredictions,
   selRegistration,
@@ -9,6 +10,7 @@ import type {
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
+  UserType,
 } from "@/utils/types/generalTypes/types";
 
 function handleControlFormChange(
@@ -38,6 +40,7 @@ function handleControlFormChange(
 }
 
 async function handleControlFormSubmit(
+  user: UserType | null,
   e: React.FormEvent<HTMLFormElement>,
   controlForm: DashboardControlFormType,
   currSubmitToast: string,
@@ -45,69 +48,89 @@ async function handleControlFormSubmit(
   setRegistration: Dispatch<SetStateAction<any>>,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricRendaFixaData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricMultimercadoData: Dispatch<SetStateAction<HistoricType[]>>,
+  setHistoricAcoesData: Dispatch<SetStateAction<HistoricType[]>>,
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionRendaFixaData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionMultimercadoData: Dispatch<SetStateAction<PredictionsType[]>>,
+  setPredictionAcoesData: Dispatch<SetStateAction<PredictionsType[]>>,
   setCurrSubmitToast: Dispatch<SetStateAction<string>>
 ) {
   e.preventDefault();
 
-  if (currSubmitToast) {
+  if (currSubmitToast || !user) {
     return;
   }
 
-  const loadingToast = toast.loading("Fetching data...");
+  getData(
+    user,
+    controlForm,
+    setHistoricData,
+    setHistoricRendaFixaData,
+    setHistoricAcoesData,
+    setHistoricMultimercadoData,
+    setPredictionData,
+    setPredictionRendaFixaData,
+    setPredictionAcoesData,
+    setPredictionMultimercadoData,
+    setCurrSubmitToast
+  );
 
-  setCurrSubmitToast(loadingToast);
+  // const loadingToast = toast.loading("Fetching data...");
 
-  const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
+  // setCurrSubmitToast(loadingToast);
 
-  try {
-    // Registration fetching - automatically triggers reload of histogram data based on ANBIMA CLASS
-    setIsLoading(true);
-    const newRegistration = await selRegistration(
-      encodedParam,
-      controlForm,
-      setControlForm
-    );
-    setRegistration(newRegistration);
-  } catch (err) {
-    console.log(err);
-  }
+  // const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
 
-  setIsLoading(false);
+  // try {
+  //   // Registration fetching - automatically triggers reload of histogram data based on ANBIMA CLASS
+  //   setIsLoading(true);
+  //   const newRegistration = await selRegistration(
+  //     encodedParam,
+  //     controlForm,
+  //     setControlForm
+  //   );
+  //   setRegistration(newRegistration);
+  // } catch (err) {
+  //   console.log(err);
+  // }
 
-  try {
-    // Historic and Predictions fetching
-    const slicedHistoricData = await getHistoricData(
-      encodedParam,
-      controlForm,
-      setHistoricData
-    );
-    let predictions: PredictionsType[] = [];
+  // setIsLoading(false);
 
-    if (slicedHistoricData) {
-      predictions = await getPredictions(
-        controlForm.buscaCnpj,
-        slicedHistoricData,
-        controlForm,
-        setPredictionData
-      );
-    }
+  // try {
+  //   // Historic and Predictions fetching
+  //   const slicedHistoricData = await getHistoricData(
+  //     encodedParam,
+  //     controlForm,
+  //     setHistoricData
+  //   );
+  //   let predictions: PredictionsType[] = [];
 
-    if (predictions) {
-      toast.success("Done.");
-      // console.log("Finished fetching historic and prediction.");
-    } else {
-      toast.error("Something went wrong.");
-    }
-  } catch (err) {
-    console.log(err);
-    toast.error("Sorry. We had a problem fetching the data.");
-  }
+  //   if (slicedHistoricData) {
+  //     predictions = await getPredictions(
+  //       controlForm.buscaCnpj,
+  //       slicedHistoricData,
+  //       controlForm,
+  //       setPredictionData
+  //     );
+  //   }
 
-  toast.dismiss(loadingToast);
-  setTimeout(() => {
-    setCurrSubmitToast("");
-  }, 500);
+  //   if (predictions) {
+  //     toast.success("Done.");
+  //     // console.log("Finished fetching historic and prediction.");
+  //   } else {
+  //     toast.error("Something went wrong.");
+  //   }
+  // } catch (err) {
+  //   console.log(err);
+  //   toast.error("Sorry. We had a problem fetching the data.");
+  // }
+
+  // toast.dismiss(loadingToast);
+  // setTimeout(() => {
+  //   setCurrSubmitToast("");
+  // }, 500);
 }
 
 export { handleControlFormChange, handleControlFormSubmit };

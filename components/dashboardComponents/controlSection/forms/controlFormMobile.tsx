@@ -41,6 +41,7 @@ export default function ControlFormMobile({
       className="py-2 lg:hidden"
       onSubmit={(e) =>
         handleControlFormSubmit(
+          user,
           e,
           controlForm,
           currSubmitToast,
