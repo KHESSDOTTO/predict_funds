@@ -41,7 +41,7 @@ export default function ControlFormMobile({
   return (
     <form
       id="controlFormMobile"
-      className="py-2 lg:hidden"
+      className="p-2 lg:hidden"
       onSubmit={(e) =>
         handleControlFormSubmit(
           user,
@@ -69,8 +69,8 @@ export default function ControlFormMobile({
         id="Classificacao"
         value={controlForm.Classificacao}
       />
-      <div className="flex flex-row justify-center gap-4">
-        <div className="flex flex-col gap-4 font-semibold max-w-32 lg:gap-0 text-base">
+      <div className="flex flex-row justify-center gap-2">
+        <div className="flex flex-col gap-4 font-semibold w-28 lg:gap-0 text-base">
           <label htmlFor="baseDate" className="flex items-center h-8">
             Base Date
           </label>
@@ -166,7 +166,7 @@ export default function ControlFormMobile({
           </div>
         </div>
       </div>
-      <div className="text-center relative mt-8">
+      <div className="text-center relative mt-6">
         <div
           onClick={() =>
             track("clicked_update", { username: user?.username || null })
@@ -181,7 +181,7 @@ export default function ControlFormMobile({
             track("save_cenario", { username: user?.username || null });
             saveCenario(e);
           }}
-          className="absolute right-0 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
+          className="absolute -right-2 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
         >
           + Save Cenario
         </div>

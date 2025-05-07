@@ -21,15 +21,15 @@ export default function Home() {
           <Link href={"/signup"} className={linkClass} style={smTextShadow}>
             Sign up
           </Link>
-          <Link href={"/login"} className={linkClass} style={smTextShadow}>
-            Login
-          </Link>
           <Link
             href={"/free-predictions"}
             className={linkClass}
             style={smTextShadow}
           >
             Predictions
+          </Link>
+          <Link href={"/login"} className={linkClass} style={smTextShadow}>
+            Login
           </Link>
         </div>
       </div>

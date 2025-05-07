@@ -235,8 +235,8 @@ async function getData(
 
   setCurrSubmitToast(loadingToast);
 
-  const cnpj = controlForm.buscaCnpj || user.cnpjs[0];
-  const encodedCnpj = encodeURIComponent(cnpj);
+  const cnpj = controlForm.buscaCnpj || user.cnpjs[0] || null;
+  const encodedCnpj = encodeURIComponent(cnpj || "");
   const mapHistoricSetters = {
     "Renda Fixa": setHistoricRendaFixaData,
     Multimercado: setHistoricMultimercadoData,
@@ -249,11 +249,7 @@ async function getData(
   };
 
   try {
-    const slicedHistoricData = await getHistoricData(
-      encodedCnpj,
-      controlForm,
-      setHistoricData
-    );
+    let okClassificacoes = false;
 
     classificacoes.forEach(async (currClass) => {
       const encodedClassificacao = encodeURIComponent(currClass);
@@ -263,8 +259,6 @@ async function getData(
         mapHistoricSetters[currClass]
       );
 
-      let predictions: PredictionsType[] | false = [];
-
       if (slicedHistoricData) {
         predictions = await getPredictions(
           encodedClassificacao,
@@ -273,13 +267,33 @@ async function getData(
           mapPredictionSetters[currClass]
         );
       }
+
+      if (predictions && !okClassificacoes) {
+        okClassificacoes = true;
+      }
     });
+
+    if (!encodedCnpj && okClassificacoes) {
+      toast.success("Done.");
+
+      return;
+    } else if (!encodedCnpj && !okClassificacoes) {
+      toast.error("Something went wrong.");
+
+      return;
+    }
+
+    const slicedHistoricData = await getHistoricData(
+      encodedCnpj,
+      controlForm,
+      setHistoricData
+    );
 
     let predictions: PredictionsType[] | false = [];
 
     if (slicedHistoricData) {
       predictions = await getPredictions(
-        cnpj,
+        encodedCnpj,
         slicedHistoricData,
         controlForm,
         setPredictionData

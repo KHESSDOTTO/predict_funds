@@ -1,12 +1,24 @@
+import NetFundingPredChart from "@/components/dashboardComponents/netFundingPredChart";
 import TitleComponent from "@/components/UI/titleComponent";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AggregateChartsDataType } from "./types/predictionsPageTypes";
+import { fetchData } from "./freePredictionsFunction";
 
 export default function FreePredictions() {
-  const [chartsData, setChartsData] = useState({
-    "Renda Fixa": [],
-    Multimercado: [],
-    Ações: [],
+  const [chartsData, setChartsData] = useState<AggregateChartsDataType>({
+    "Renda Fixa": {
+      historic: [],
+      prediction: [],
+    },
+    Multimercado: {
+      historic: [],
+      prediction: [],
+    },
+    Ações: {
+      historic: [],
+      prediction: [],
+    },
   });
   const [controlForm, setControlForm] = useState({
     weeksBack: 8,
@@ -15,9 +27,15 @@ export default function FreePredictions() {
   const linkClass =
     "hover:text-yellow-600 lg:hover:scale-110 transition-all duration-200";
 
+  useEffect(() => {
+    fetchData();
+
+    return;
+  }, []);
+
   return (
-    <>
-      <header className="bg-black py-6 border-b-2 border-gray-500 flex justify-around">
+    <div className="bg-black">
+      <header className="bg-black fixed w-full z-20 py-6 border-b-2 border-gray-500 flex justify-around">
         <Link href={"/"} className={linkClass}>
           Home
         </Link>
@@ -28,20 +46,52 @@ export default function FreePredictions() {
           Login
         </Link>
       </header>
-      <main className="min-h-screen px-6 bg-black">
-        <div className="py-6">
+      <main className=" animate-fadeIn-l-r min-h-screen px-6 bg-black pt-[72px]">
+        <div className="py-10">
           <div>
-            <TitleComponent htmlTag="h1">My title</TitleComponent>
+            <h1 className="px-2 border-b-2 text-center lg:text-start border-white text-4xl py-2 mb-6">
+              <span>Free Predictions</span>
+            </h1>
           </div>
-          <div>My description</div>
+          <p>
+            Here are the predictions that are available without the need to log
+            in:
+          </p>
         </div>
         <div>
-          <p>Here goes all predictions:</p>
-          {Object.keys(chartsData).map((currKey) => {
-            return <p>{currKey}</p>;
-          })}
+          <div className="flex flex-col gap-6">
+            {Object.keys(chartsData).map((currKey) => {
+              const currClass = currKey as keyof AggregateChartsDataType;
+
+              return (
+                <NetFundingPredChart
+                  {...{
+                    title: `Net Funding CVM Class - ${currClass}`,
+                    smallV: false,
+                    historic: chartsData[currClass]["historic"],
+                    predictions: chartsData[currClass]["prediction"],
+                    predList: false,
+                    exportPosition: "bottom",
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </main>
-    </>
+      <footer className="pt-10 bg-black">
+        <a
+          href="mailto:khess.dotto@predictfunds.com.br"
+          className="block mb-4 ml-4 w-fit hover:text-blue-500 transition-all cursor-pointer"
+        >
+          Contact us at: khess.dotto@predictfunds.com.br
+        </a>
+        <Link href={"/signup"} className="hover:scale-110 transition-all">
+          <div className="bg-yellow-200/10 hover:text-yellow-600 duration-200 text-2xl py-8 text-center border-t-2 hover:border-yellow-800">
+            Sign Up For All Predictions!
+          </div>
+        </Link>
+      </footer>
+    </div>
   );
 }

@@ -196,7 +196,7 @@ function historicToExport(historic: HistoricType[]) {
 function yAxisTickFormats(num: number, absOrPct: "abs" | "pct") {
   const absNum = Math.abs(num);
   const numPct = num.toFixed(2) + "%";
-  const numAbsPre = "R$";
+  let numAbsPre = "R$";
   let numAbsDivisor = 1000;
   let numAbsPos = " k";
   let decimal = 0;
@@ -209,6 +209,9 @@ function yAxisTickFormats(num: number, absOrPct: "abs" | "pct") {
     numAbsDivisor = 10 ** 6;
     decimal = 0;
     numAbsPos = " mln";
+  } else if (absNum === 0) {
+    numAbsPre = "R$ ";
+    numAbsPos = "";
   }
 
   const numAbs =
