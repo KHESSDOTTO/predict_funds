@@ -13,7 +13,6 @@ import TitleComponent from "@/components/UI/titleComponent";
 import { useControlForm } from "@/contexts/controlFormContext";
 import type { ControlSectionProps } from "./controlSectionTypes";
 import type { ControlFormPropsType } from "./forms/controlFormType";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function ControlSection({
   registration,

@@ -1,11 +1,15 @@
 import NetFundingPredChart from "@/components/dashboardComponents/netFundingPredChart";
-import TitleComponent from "@/components/UI/titleComponent";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AggregateChartsDataType } from "./types/predictionsPageTypes";
+import {
+  AggregateChartsDataType,
+  FreePredictionsPropsType,
+} from "./types/predictionsPageTypes";
 import { fetchData } from "./freePredictionsFunction";
+import getCachedAncoras from "@/cache/ancorasPredsCache";
+import { GetServerSideProps } from "next";
 
-export default function FreePredictions() {
+export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
   const [chartsData, setChartsData] = useState<AggregateChartsDataType>({
     "Renda Fixa": {
       historic: [],
@@ -21,14 +25,15 @@ export default function FreePredictions() {
     },
   });
   const [controlForm, setControlForm] = useState({
+    baseDate: ancoras[ancoras.length - 1] || "",
     weeksBack: 8,
-    weeksForward: 4,
+    weeksAhead: 4,
   });
   const linkClass =
     "hover:text-yellow-600 lg:hover:scale-110 transition-all duration-200";
 
   useEffect(() => {
-    fetchData();
+    fetchData({ controlForm, chartsData, setChartsData });
 
     return;
   }, []);
@@ -95,3 +100,13 @@ export default function FreePredictions() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const ancoras = await getCachedAncoras();
+
+  return {
+    props: {
+      ancoras,
+    },
+  };
+};

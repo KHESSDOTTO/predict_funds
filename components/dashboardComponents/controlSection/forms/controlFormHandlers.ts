@@ -63,6 +63,8 @@ async function handleControlFormSubmit(
     return;
   }
 
+  setIsLoading(true);
+
   getData(
     user,
     controlForm,
@@ -76,61 +78,6 @@ async function handleControlFormSubmit(
     setPredictionMultimercadoData,
     setCurrSubmitToast
   );
-
-  // const loadingToast = toast.loading("Fetching data...");
-
-  // setCurrSubmitToast(loadingToast);
-
-  // const encodedParam = encodeURIComponent(controlForm.buscaCnpj);
-
-  // try {
-  //   // Registration fetching - automatically triggers reload of histogram data based on ANBIMA CLASS
-  //   setIsLoading(true);
-  //   const newRegistration = await selRegistration(
-  //     encodedParam,
-  //     controlForm,
-  //     setControlForm
-  //   );
-  //   setRegistration(newRegistration);
-  // } catch (err) {
-  //   console.log(err);
-  // }
-
-  // setIsLoading(false);
-
-  // try {
-  //   // Historic and Predictions fetching
-  //   const slicedHistoricData = await getHistoricData(
-  //     encodedParam,
-  //     controlForm,
-  //     setHistoricData
-  //   );
-  //   let predictions: PredictionsType[] = [];
-
-  //   if (slicedHistoricData) {
-  //     predictions = await getPredictions(
-  //       controlForm.buscaCnpj,
-  //       slicedHistoricData,
-  //       controlForm,
-  //       setPredictionData
-  //     );
-  //   }
-
-  //   if (predictions) {
-  //     toast.success("Done.");
-  //     // console.log("Finished fetching historic and prediction.");
-  //   } else {
-  //     toast.error("Something went wrong.");
-  //   }
-  // } catch (err) {
-  //   console.log(err);
-  //   toast.error("Sorry. We had a problem fetching the data.");
-  // }
-
-  // toast.dismiss(loadingToast);
-  // setTimeout(() => {
-  //   setCurrSubmitToast("");
-  // }, 500);
 }
 
 export { handleControlFormChange, handleControlFormSubmit };
