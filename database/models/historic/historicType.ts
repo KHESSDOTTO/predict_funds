@@ -22,7 +22,11 @@ export interface HistoricDocType extends Document, HistoricDocType_doc {
 
 // Interface to add custom static methods
 export interface HistoricModelType extends Model<HistoricDocType> {
-  getAllHistoricByCnpj(cnpj: string, baseDate: Date): Promise<any[] | false>;
+  getHistoricByCnpj(
+    cnpj: string,
+    baseDate: Date,
+    weeksBack?: number
+  ): Promise<HistoricDocType[] | false>;
 }
 
 // Interfaces of query returns

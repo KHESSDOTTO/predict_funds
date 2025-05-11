@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import HistoricModel from "@/database/models/historic/historicModel";
 import { connect } from "@/database/database.config";
 
-async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
+async function GetHistoricByCnpj(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     return res
       .status(400)
@@ -12,7 +12,7 @@ async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
   try {
     await connect();
 
-    let allRawData = [];
+    let selHistoric = [];
 
     if (
       typeof req.query.cnpj !== "string" ||
@@ -23,12 +23,14 @@ async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
         .json({ msg: "Wrong CNPJ or basedate (not string)" });
     }
 
-    const { cnpj, baseDate } = req.query;
+    const { cnpj, baseDate, weeksBack } = req.query;
+    const numWeeksBack = Number(weeksBack);
     const formattedBaseDate = new Date(baseDate);
 
-    const response = await HistoricModel.getAllHistoricByCnpj(
+    const response = await HistoricModel.getHistoricByCnpj(
       cnpj,
-      formattedBaseDate
+      formattedBaseDate,
+      numWeeksBack
     );
 
     if (!response) {
@@ -39,9 +41,9 @@ async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
         );
     }
 
-    allRawData = response;
+    selHistoric = response;
 
-    return res.status(200).json(allRawData);
+    return res.status(200).json(selHistoric);
   } catch (err) {
     console.error(err);
 
@@ -49,4 +51,4 @@ async function GetAllHistoric(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default GetAllHistoric;
+export default GetHistoricByCnpj;

@@ -42,6 +42,8 @@ export default function NetFundingPredChart({
   predList = true,
   exportPosition = "bottom",
 }: NetFundingPredChartPropsType) {
+  consoleLog({ historic });
+  consoleLog({ predictions });
   const { user } = useUser();
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
   const [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]);

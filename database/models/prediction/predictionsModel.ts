@@ -8,6 +8,7 @@ import {
   PredictionModelType,
   RawHistogramData,
 } from "./predictionsType";
+import { addWeeks } from "date-fns";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
@@ -27,7 +28,8 @@ const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const { baseDate, buscaCnpj, weeksAhead } = controlForm;
+  let { baseDate, buscaCnpj, weeksAhead } = controlForm;
+  const baseDateAdj = new Date(baseDate);
   const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
   const predKeyPct = "pct_PL__0_0__0_0__0_0";
   const decodedCnpj = decodeURIComponent(buscaCnpj);
@@ -37,7 +39,7 @@ PredictionSchema.statics.getPredictions = async function (
     prediction = await PredictionsModel.findOne(
       {
         CNPJ_FUNDO: decodedCnpj,
-        ancora: new Date(baseDate),
+        ancora: baseDateAdj,
         weeks_ahead: weeksAhead,
       },
       {
@@ -75,6 +77,7 @@ PredictionSchema.statics.getPredictions = async function (
     let finalPred: PredictionsType | null = prediction
       ? { ...prediction }
       : prediction;
+    const returnArr: PredictionsType[] = [];
 
     if (prediction) {
       finalPred = {
@@ -114,11 +117,26 @@ PredictionSchema.statics.getPredictions = async function (
         ],
         mean: prediction["mean"], // Average deviation from the last predictions
       };
+
+      // Repeat the prediction doc for the number of weeks ahead it refers to
+      const endPredDate = addWeeks(baseDateAdj, weeksAhead); // Last date for a 4 week prediction
+      let lastDate = baseDateAdj;
+
+      while (lastDate < endPredDate) {
+        const newDate = addWeeks(lastDate, 1);
+
+        returnArr.push({
+          ...finalPred,
+          DT_COMPTC: newDate,
+        });
+
+        lastDate = newDate;
+      }
     } else {
       return false;
     }
 
-    return finalPred;
+    return returnArr;
   } catch (err) {
     console.log(err);
 

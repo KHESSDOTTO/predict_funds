@@ -2,7 +2,7 @@ import { toneColorsMapTxtRGB } from "@/utils/toneColors";
 import { getToneColor } from "@/utils/functions/genericFunctions";
 import { capitalize } from "@/utils/functions/genericFunctions";
 import type { RowDeskPropsType } from "./heatMapTypes";
-import { hash } from "crypto";
+import crypto from "crypto";
 
 export default function RowDesk({
   id,
@@ -22,7 +22,7 @@ export default function RowDesk({
         {capitalize(name)}
       </td>
       {tickers.map((ticker) => {
-        const id = hash("md5", ticker);
+        const id = crypto.createHash("md5").update(ticker).digest("hex");
         const value = selCorrels[name][ticker];
         const color = getToneColor(value, toneColorsMapTxtRGB, 0.9);
         const valColor = value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";

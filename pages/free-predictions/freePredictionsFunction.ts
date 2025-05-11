@@ -5,7 +5,15 @@ import {
   FetchHistPredsParamsType,
 } from "./types/predictionsPageTypes";
 import { ax } from "@/database/axios.config";
-import { consoleLog } from "@/utils/functions/genericFunctions";
+import {
+  consoleLog,
+  convertDtComptcToDate,
+} from "@/utils/functions/genericFunctions";
+import {
+  HistoricType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
+import { subWeeks } from "date-fns";
 
 async function fetchData({
   controlForm,
@@ -15,18 +23,20 @@ async function fetchData({
   const newChartsData = { ...chartsData };
 
   try {
-    classificacoes.forEach(async (cE) => {
-      await fetchHistoric({
-        dataName: cE,
-        controlForm,
-        dataObj: newChartsData,
-      });
-      await fetchPredictions({
-        dataName: cE,
-        controlForm,
-        dataObj: newChartsData,
-      });
-    });
+    await Promise.all(
+      classificacoes.map(async (cE) => {
+        await fetchHistoric({
+          dataName: cE,
+          controlForm,
+          dataObj: newChartsData,
+        });
+        await fetchPredictions({
+          dataName: cE,
+          controlForm,
+          dataObj: newChartsData,
+        });
+      })
+    );
 
     setChartsData(newChartsData);
 
@@ -44,16 +54,36 @@ async function fetchHistoric({
   dataObj,
 }: FetchHistPredsParamsType): Promise<AggregateChartsDataType> {
   const dataKey = dataName as keyof AggregateChartsDataType;
+  const { baseDate, weeksBack } = controlForm;
 
   try {
     const historicResponse = await ax.get(
-      `/historic/getAllByCnpj?cnpj=${dataKey}&baseDate=${controlForm.baseDate}`
+      `/historic/getByCnpj?cnpj=${dataKey}&baseDate=${baseDate}&weeksBack=${weeksBack}`
     );
     const historic = historicResponse.data;
 
-    consoleLog({ historic });
+    if (!historic || historic.length === 0) {
+      return dataObj;
+    }
 
-    dataObj[dataKey]["historic"] = historic;
+    const adjHistoricData: HistoricType[] = historic.map((cE: HistoricType) => {
+      const convDate = new Date(cE.DT_COMPTC);
+
+      return { ...cE, DT_COMPTC: convDate };
+    });
+
+    adjHistoricData.sort(
+      (a, b) => a.DT_COMPTC.getTime() - b.DT_COMPTC.getTime()
+    );
+
+    const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
+      return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
+    }, new Date("2020-01-01T00:00:00Z"));
+    const slicedHistoricData = adjHistoricData.filter((cE) => {
+      return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
+    });
+
+    dataObj[dataKey]["historic"] = slicedHistoricData;
   } catch (err) {
     console.error(err);
   }
@@ -73,11 +103,12 @@ async function fetchPredictions({
       ...controlForm,
       buscaCnpj: dataKey,
     });
-    const prediction = predictionResponse.data;
+    const rawPrediction = predictionResponse.data;
+    const predictionArr = convertDtComptcToDate(
+      rawPrediction
+    ) as PredictionsType[];
 
-    consoleLog({ prediction });
-
-    dataObj[dataKey]["prediction"] = prediction;
+    dataObj[dataKey]["prediction"] = predictionArr;
   } catch (err) {
     console.error(err);
   }

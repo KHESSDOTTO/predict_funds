@@ -8,6 +8,8 @@ import {
 import { fetchData } from "./freePredictionsFunction";
 import getCachedAncoras from "@/cache/ancorasPredsCache";
 import { GetServerSideProps } from "next";
+import { consoleLog } from "@/utils/functions/genericFunctions";
+import toast from "react-hot-toast";
 
 export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
   const [chartsData, setChartsData] = useState<AggregateChartsDataType>({
@@ -24,6 +26,7 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
       prediction: [],
     },
   });
+  const [loadingToast, setLoadingToast] = useState<boolean>(false);
   const [controlForm, setControlForm] = useState({
     baseDate: ancoras[ancoras.length - 1] || "",
     weeksBack: 8,
@@ -33,7 +36,24 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
     "hover:text-yellow-600 lg:hover:scale-110 transition-all duration-200";
 
   useEffect(() => {
-    fetchData({ controlForm, chartsData, setChartsData });
+    if (loadingToast) {
+      return;
+    }
+
+    setLoadingToast(true);
+
+    toast.promise(
+      fetchData({
+        controlForm,
+        chartsData,
+        setChartsData,
+      }),
+      {
+        loading: "Fetching Data...",
+        success: "Done!",
+        error: "Error when fetching data...",
+      }
+    );
 
     return;
   }, []);
@@ -92,7 +112,7 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
           Contact us at: khess.dotto@predictfunds.com.br
         </a>
         <Link href={"/signup"} className="hover:scale-110 transition-all">
-          <div className="bg-yellow-200/10 hover:text-yellow-600 duration-200 text-2xl py-8 text-center border-t-2 hover:border-yellow-800">
+          <div className="bg-yellow-200/20 hover:text-yellow-600 duration-200 text-2xl py-8 text-center border-t-2 hover:border-yellow-800">
             Sign Up For All Predictions!
           </div>
         </Link>

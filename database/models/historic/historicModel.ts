@@ -5,6 +5,7 @@ import {
   HistoricModelType,
   DatahoraQueryDoc,
 } from "./historicType";
+import { subWeeks } from "date-fns";
 
 const HistoricSchema = new Schema<HistoricDocType, HistoricModelType>(
   {
@@ -29,9 +30,10 @@ const HistoricSchema = new Schema<HistoricDocType, HistoricModelType>(
   }
 );
 
-HistoricSchema.statics.getAllHistoricByCnpj = async function (
+HistoricSchema.statics.getHistoricByCnpj = async function (
   cnpj: string,
-  baseDate: Date
+  baseDate: Date,
+  weeksBack: number
 ) {
   try {
     const lastUpdateDateDoc = (await HistoricModel.findOne(
@@ -50,15 +52,21 @@ HistoricSchema.statics.getAllHistoricByCnpj = async function (
     }
 
     const lastUpdateDate = lastUpdateDateDoc._doc.datahora_proc_informes;
+    const minDate = subWeeks(baseDate, weeksBack);
 
-    const allHistoric = await HistoricModel.find({
+    const selHistoric = await HistoricModel.find({
       CNPJ_FUNDO: cnpj,
-      DT_COMPTC: { $lte: baseDate },
+      DT_COMPTC: {
+        $lte: baseDate,
+        $gte: minDate,
+      },
       datahora_proc_informes: lastUpdateDate,
-    });
-
-    const finalResult = allHistoric.map((cE) => {
+    })
+      .sort({ DT_COMPTC: -1 })
+      .exec();
+    const finalResult = selHistoric.map((cE) => {
       const newDoc: any = { ...cE._doc };
+
       for (const key in cE._doc) {
         if (key === "CAPTC_LIQ_ms") {
           const newKey = "CAPTC_LIQ_ABS_ms";

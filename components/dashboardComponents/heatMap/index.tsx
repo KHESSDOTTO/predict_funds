@@ -11,12 +11,11 @@ import HeatMapForm from "./forms/heatMapForm";
 import RowDesk from "./rowDesk";
 import RowMobile from "./rowMobile";
 import TitleComponent from "@/components/UI/titleComponent";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
-import { hash } from "crypto";
+import crypto from "crypto";
 
 export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
   const { user } = useUser();
@@ -115,7 +114,10 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               </thead>
               <tbody className="text-white text-sm font-light">
                 {selCorrelsKeys.map((name) => {
-                  const id = hash("md5", name);
+                  const id = crypto
+                    .createHash("md5")
+                    .update(name)
+                    .digest("hex");
 
                   return <RowDesk {...{ id, name, tickers, selCorrels }} />;
                 })}
@@ -143,7 +145,10 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
               </thead>
               <tbody className="text-white text-sm font-light">
                 {tickers.map((ticker) => {
-                  const id = hash("md5", ticker);
+                  const id = crypto
+                    .createHash("md5")
+                    .update(ticker)
+                    .digest("hex");
 
                   return <RowMobile {...{ id, ticker, selCorrels }} />;
                 })}

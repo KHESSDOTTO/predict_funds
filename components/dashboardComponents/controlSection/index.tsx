@@ -37,7 +37,7 @@ export default function ControlSection({
   const { controlForm, setControlForm } = useControlForm();
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
-  const [currSubmitToast, setCurrSubmitToast] = useState("");
+  const [currSubmitToast, setCurrSubmitToast] = useState<string>("");
   const user = userContext.user;
   const formProps: ControlFormPropsType = {
     ancoras,
