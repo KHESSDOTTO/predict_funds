@@ -32,16 +32,18 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
+import { useDevice } from "@/contexts/deviceContext";
 
 export default function NetFundingPredChart({
   title = "Net Funding",
   historic,
   predictions,
   smallV,
-  isMobile,
   predList = true,
   exportPosition = "bottom",
 }: NetFundingPredChartPropsType) {
+  consoleLog({ historic });
+  consoleLog({ predictions });
   const { user } = useUser();
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
   const [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]);
@@ -58,6 +60,7 @@ export default function NetFundingPredChart({
     setAbsOrPctShort,
     handleAbsOrPctChange,
   };
+  const { isMobile } = useDevice();
 
   useEffect(() => {
     if (historic.length === 0 || predictions.length === 0) {
@@ -310,7 +313,8 @@ export default function NetFundingPredChart({
           </div>
         )}
       </div>
-      {predictions.length &&
+      {!smallV &&
+        predictions.length &&
         predictions[0]["mean"] &&
         historic.length &&
         historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (

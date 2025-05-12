@@ -21,7 +21,7 @@ interface PredictionDocType extends Document, PredictionsType {
 interface PredictionModelType extends Model<PredictionDocType> {
   getPredictions(
     controlForm: DashboardControlFormType
-  ): Promise<false | PredictionsType>;
+  ): Promise<false | PredictionsType[]>;
   getPredsForHistogram(
     controlForm: DashboardControlFormType
   ): Promise<RawHistogramData[]>;

@@ -40,7 +40,6 @@ interface NetFundingPredChartPropsType {
   historic: HistoricType[];
   predictions: PredictionsType[];
   smallV: boolean;
-  isMobile: boolean;
   predList?: boolean;
   title?: string | string[];
   exportPosition?: "bottom" | "right";

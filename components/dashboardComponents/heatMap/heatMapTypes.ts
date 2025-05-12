@@ -15,7 +15,7 @@ interface HeatMapPropsType {
 }
 
 interface RowPropsType {
-  id: number;
+  id: string;
   selCorrels: HeatMapObjType;
 }
 

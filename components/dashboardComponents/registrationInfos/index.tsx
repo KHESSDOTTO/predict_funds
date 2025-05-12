@@ -21,7 +21,25 @@ export default function RegistrationInfos({
       <div className="flex justify-center lg:block w-full">
         <TitleComponent>Fund Infos.</TitleComponent>
       </div>
-      {!isLoading && registration ? (
+      {isLoading && (
+        <div className="flex w-full justify-center">
+          <ClipLoader
+            color={"white"}
+            loading={isLoading}
+            size={50}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+            className="my-4"
+            speedMultiplier={0.75}
+          />
+        </div>
+      )}
+      {isLoading && !registration && (
+        <p className="italic text-center mt-1 px-2 text-gray-400 lg:text-start">
+          No data was found
+        </p>
+      )}
+      {!isLoading && registration && (
         <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-8 lg:px-0">
           {fieldsToShow.map((cE, cI) => {
             return (
@@ -34,18 +52,6 @@ export default function RegistrationInfos({
             );
           })}
         </ul>
-      ) : (
-        <div className="flex w-full justify-center">
-          <ClipLoader
-            color={"white"}
-            loading={isLoading}
-            size={50}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-            className="my-4"
-            speedMultiplier={0.75}
-          />
-        </div>
       )}
     </div>
   );

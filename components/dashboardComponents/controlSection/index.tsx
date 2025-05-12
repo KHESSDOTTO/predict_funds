@@ -13,7 +13,6 @@ import TitleComponent from "@/components/UI/titleComponent";
 import { useControlForm } from "@/contexts/controlFormContext";
 import type { ControlSectionProps } from "./controlSectionTypes";
 import type { ControlFormPropsType } from "./forms/controlFormType";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function ControlSection({
   registration,
@@ -38,20 +37,26 @@ export default function ControlSection({
   const { controlForm, setControlForm } = useControlForm();
   const [arrCnpjName, setArrCnpjName] = useState<any[]>([]);
   const [nameSelectedFund, setNameSelectedFund] = useState<string>("");
-  const [currSubmitToast, setCurrSubmitToast] = useState("");
+  const [currSubmitToast, setCurrSubmitToast] = useState<string>("");
   const user = userContext.user;
   const formProps: ControlFormPropsType = {
-    ancoras: ancoras,
-    arrCnpjName: arrCnpjName,
-    nameSelectedFund: nameSelectedFund,
-    currSubmitToast: currSubmitToast,
-    setNameSelectedFund: setNameSelectedFund,
-    setRegistration: setRegistration,
-    setIsLoading: setIsLoading,
-    setHistoricData: setHistoricData,
-    setPredictionData: setPredictionData,
-    saveCenario: saveCenario,
-    setCurrSubmitToast: setCurrSubmitToast,
+    ancoras,
+    arrCnpjName,
+    nameSelectedFund,
+    currSubmitToast,
+    setNameSelectedFund,
+    setRegistration,
+    setIsLoading,
+    setHistoricData,
+    setPredictionData,
+    saveCenario,
+    setCurrSubmitToast,
+    setHistoricRendaFixaData,
+    setHistoricMultimercadoData,
+    setHistoricAcoesData,
+    setPredictionRendaFixaData,
+    setPredictionMultimercadoData,
+    setPredictionAcoesData,
   };
 
   // Updates the controlForm with the first CNPJ in CNPJs list, initially.
@@ -65,6 +70,8 @@ export default function ControlSection({
     getData(
       user,
       controlForm,
+      setControlForm,
+      setRegistration,
       setHistoricData,
       setHistoricRendaFixaData,
       setHistoricMultimercadoData,

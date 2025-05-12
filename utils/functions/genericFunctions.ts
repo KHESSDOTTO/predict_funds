@@ -1,10 +1,12 @@
 import { ToneColorsInterface } from "@/utils/types/generalTypes/types";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-import type { DoLogoutParamsType } from "@/utils/types/generalTypes/types";
+import type {
+  DoLogoutParamsType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 
 function capitalize(string: string) {
-
   switch (string.length) {
     case 0:
       return string;
@@ -13,7 +15,6 @@ function capitalize(string: string) {
     default:
       return string[0].toUpperCase() + string.slice(1);
   }
-  
 }
 
 function getToneColor(
@@ -64,6 +65,18 @@ function arrUnique(arr: any[]): any[] {
   return Array(newSet);
 }
 
+function convertDtComptcToDate(pred: PredictionsType | PredictionsType[]) {
+  return Array.isArray(pred)
+    ? pred.map((cE) => ({
+        ...cE,
+        DT_COMPTC: new Date(cE.DT_COMPTC || ""),
+      }))
+    : {
+        ...pred,
+        DT_COMPTC: new Date(pred.DT_COMPTC || ""),
+      };
+}
+
 export {
   capitalize,
   pushIfNew,
@@ -71,4 +84,5 @@ export {
   consoleLog,
   doLogout,
   arrUnique,
+  convertDtComptcToDate,
 };

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { handleFadeOut } from "./cenarioCardFunction";
-import useWindowWidth from "@/hooks/useWindowWidth";
 import ButtonRed from "../../UI/buttonRed";
 import NetFundingPredChart from "../../dashboardComponents/netFundingPredChart";
 import ValueQuotaChart from "../../dashboardComponents/valueQuotaChart";
 import type { CenarioCardPropsType } from "./cenarioCardTypes";
+import { useDevice } from "@/contexts/deviceContext";
 
 export default function CenarioCard({
   cenarios,
@@ -15,8 +15,7 @@ export default function CenarioCard({
 }: CenarioCardPropsType) {
   const { id, params, historicData, predictionData } = cenarioData;
   const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
-  const windowWidth = useWindowWidth();
-  const isMobile = windowWidth <= 992;
+  const { isMobile } = useDevice();
   const handleFadeoutArgsType = {
     id,
     cenarios,
@@ -61,7 +60,6 @@ export default function CenarioCard({
             <NetFundingPredChart
               {...{
                 smallV: true,
-                isMobile,
                 historic: historicData,
                 predictions: predictionData,
               }}

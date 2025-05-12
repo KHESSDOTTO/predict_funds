@@ -3,14 +3,15 @@ import { AxiosResponse } from "axios";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks } from "date-fns";
 import type {
+  CadastroFundosType,
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
   UserType,
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import { classificacoes } from "@/utils/globalVars";
+import { convertDtComptcToDate } from "@/utils/functions/genericFunctions";
 
 async function getHistoricData(
   encodedParam: string,
@@ -18,44 +19,34 @@ async function getHistoricData(
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>
 ) {
   try {
-    const baseDate = controlForm.baseDate;
+    const { baseDate, weeksBack } = controlForm;
     const responseHistoric = await ax.get(
-      `/historic/getAllByCnpj?cnpj=${encodedParam}&baseDate=${baseDate}`
+      `/historic/getByCnpj?cnpj=${encodedParam}&baseDate=${baseDate}&weeksBack=${
+        weeksBack || 8
+      }`
     );
-    let slicedHistoricData: HistoricType[] = [];
+
+    let adjHistoricData: HistoricType[] = [];
 
     if (responseHistoric.data) {
-      const adjHistoricData: HistoricType[] = responseHistoric.data.map(
-        (cE: HistoricType) => {
-          const convDate = new Date(cE.DT_COMPTC);
-          return { ...cE, DT_COMPTC: convDate };
-        }
-      );
-
-      adjHistoricData.sort(
-        (a, b) => a.DT_COMPTC.getTime() - b.DT_COMPTC.getTime()
-      );
-
-      const higherDate = adjHistoricData.reduce((acc: Date, cE) => {
-        return cE.DT_COMPTC > acc ? cE.DT_COMPTC : acc;
-      }, new Date("2020-01-01T00:00:00Z"));
-
-      slicedHistoricData = adjHistoricData.filter((cE) => {
-        return cE.DT_COMPTC >= subWeeks(higherDate, controlForm.weeksBack);
+      adjHistoricData = responseHistoric.data.map((cE: HistoricType) => {
+        const convDate = new Date(cE.DT_COMPTC);
+        return { ...cE, DT_COMPTC: convDate };
       });
     }
-    setHistoricData(slicedHistoricData);
 
-    return slicedHistoricData;
+    setHistoricData(adjHistoricData);
+
+    return adjHistoricData;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 }
 
 async function getPredictions(
   cnpj: string,
-  slicedHistoricData: HistoricType[],
   controlForm: DashboardControlFormType,
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>
 ) {
@@ -67,25 +58,15 @@ async function getPredictions(
 
   let finalPredictionData: PredictionsType[] = [];
 
-  if (responsePreds && responsePreds.data && slicedHistoricData) {
-    let lastDate = slicedHistoricData[slicedHistoricData.length - 1].DT_COMPTC; // Last historic date to begin the loop
-    const endPredDate = addWeeks(lastDate, controlForm.weeksAhead); // Last date for a 4 week prediction
-
-    while (lastDate < endPredDate) {
-      const newDate = addWeeks(lastDate, 1);
-
-      finalPredictionData.push({
-        DT_COMPTC: newDate,
-        ...responsePreds.data,
-      });
-
-      lastDate = newDate;
-    }
+  // Convert JSON string representation of date into Date object type
+  if (responsePreds && responsePreds.data) {
+    finalPredictionData = convertDtComptcToDate(
+      responsePreds.data
+    ) as PredictionsType[];
   }
+  // End: Convert JSON string representation of date into Date object type
 
-  if (finalPredictionData) {
-    setPredictionData(finalPredictionData);
-  }
+  setPredictionData(finalPredictionData);
 
   return finalPredictionData;
 }
@@ -156,25 +137,24 @@ async function getCorrels(
 
   try {
     const resCnpj = await ax.get(`/correlations/getByCnpj?cnpj=${encodedCnpj}`);
-    consoleLog(resCnpj);
-
     let adjustCorrelCnpj;
 
     if (resCnpj) {
       adjustCorrelCnpj = resCnpj.data.map((cE: any) => Object.entries(cE));
+
       setCorrels(adjustCorrelCnpj);
     }
 
     const resAvgClassificacao = await ax.get(
       `/correlations/getAvgByClassificacao?classificacao=${encodedClassificacao}`
     );
-    consoleLog(resAvgClassificacao);
 
     if (resCnpj && resAvgClassificacao) {
       const newheatMapObj = {
         fund: resCnpj.data,
         avg: resAvgClassificacao.data,
       };
+
       setHeatMapObj(newheatMapObj);
     }
 
@@ -198,6 +178,7 @@ async function getRegistration(
 
   const cnpj = user.cnpjs[0];
   const encodedCnpj = encodeURIComponent(cnpj);
+  let returnValue = {};
 
   try {
     const registration = await selRegistration(
@@ -209,14 +190,20 @@ async function getRegistration(
     setRegistration(registration);
     setNameSelectedFund(registration["Denominacao_Social_F"]);
     setIsLoading(false);
+
+    returnValue = registration;
   } catch (err) {
     console.log(err);
   }
+
+  return returnValue;
 }
 
 async function getData(
   user: UserType,
   controlForm: DashboardControlFormType,
+  setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>,
+  setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
   setHistoricRendaFixaData: Dispatch<SetStateAction<HistoricType[]>>,
   setHistoricMultimercadoData: Dispatch<SetStateAction<HistoricType[]>>,
@@ -235,8 +222,8 @@ async function getData(
 
   setCurrSubmitToast(loadingToast);
 
-  const cnpj = user.cnpjs[0];
-  const encodedCnpj = encodeURIComponent(cnpj);
+  const cnpj = controlForm.buscaCnpj || user.cnpjs[0] || null;
+  const encodedCnpj = encodeURIComponent(cnpj || "");
   const mapHistoricSetters = {
     "Renda Fixa": setHistoricRendaFixaData,
     Multimercado: setHistoricMultimercadoData,
@@ -248,12 +235,19 @@ async function getData(
     Ações: setPredictionAcoesData,
   };
 
+  const encodedParam = encodeURIComponent(cnpj || "");
+  console.log("");
+
+  const newRegistration = await selRegistration(
+    encodedParam,
+    controlForm,
+    setControlForm
+  );
+
+  setRegistration(newRegistration);
+
   try {
-    const slicedHistoricData = await getHistoricData(
-      encodedCnpj,
-      controlForm,
-      setHistoricData
-    );
+    let okClassificacoes = false;
 
     classificacoes.forEach(async (currClass) => {
       const encodedClassificacao = encodeURIComponent(currClass);
@@ -268,19 +262,37 @@ async function getData(
       if (slicedHistoricData) {
         predictions = await getPredictions(
           encodedClassificacao,
-          slicedHistoricData,
           controlForm,
           mapPredictionSetters[currClass]
         );
       }
+
+      if (predictions && !okClassificacoes) {
+        okClassificacoes = true;
+      }
     });
+
+    if (!encodedCnpj && okClassificacoes) {
+      toast.success("Done.");
+
+      return;
+    } else if (!encodedCnpj && !okClassificacoes) {
+      toast.error("Something went wrong.");
+
+      return;
+    }
+
+    const slicedHistoricData = await getHistoricData(
+      encodedCnpj,
+      controlForm,
+      setHistoricData
+    );
 
     let predictions: PredictionsType[] | false = [];
 
     if (slicedHistoricData) {
       predictions = await getPredictions(
-        cnpj,
-        slicedHistoricData,
+        encodedCnpj,
         controlForm,
         setPredictionData
       );

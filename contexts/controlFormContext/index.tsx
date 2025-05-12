@@ -4,7 +4,6 @@ import {
   ControlFormContextType,
   ControlFormProviderProps,
 } from "./controlFormContextTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const ControlFormContext = createContext<ControlFormContextType | undefined>(
   undefined

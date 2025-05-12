@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 import {
   CadastroFundosType,
-  HistoricDataObjectType,
   HistoricType,
-  PredictionsDataObjectType,
   PredictionsType,
 } from "@/utils/types/generalTypes/types";
-import ControlSection from "../controlSection";
+import ControlSection from "./controlSection";
 import { useUser } from "@/contexts/userContext";
-import RegistrationInfos from "../registrationInfos";
+import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/dashboardComponents/correlCardsSection";
-import HeatMap from "../heatMap";
-import type { HeatMapObjType } from "../heatMap/heatMapTypes";
-import CenariosBtnSection from "../cenarioBtnSection";
+import HeatMap from "./heatMap";
+import type { HeatMapObjType } from "./heatMap/heatMapTypes";
+import CenariosBtnSection from "./cenarioBtnSection";
 import LogoPredict from "@/components/UI/logoPredict";
-import NetFundingPredChart from "../netFundingPredChart";
-import NetFundingHistogramChart from "../netFundingHistogramChart";
-import ValueQuotaChart from "../valueQuotaChart";
-import useWindowWidth from "@/hooks/useWindowWidth";
+import NetFundingPredChart from "./netFundingPredChart";
+import NetFundingHistogramChart from "./netFundingHistogramChart";
+import ValueQuotaChart from "./valueQuotaChart";
 import { saveCenario } from "./dashboardFunctions";
 import type {
   DashboardPropsType,
@@ -30,12 +27,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css/pagination";
 import styles from "./styles/dashboard.module.css";
+import { useDevice } from "@/contexts/deviceContext";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
   const { controlForm, setControlForm } = useControlForm();
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const screenWidth = useWindowWidth();
+  const { isMobile } = useDevice();
   const [historicFundData, setHistoricFundData] = useState<HistoricType[]>([]);
   const [historicRendaFixaData, setHistoricRendaFixaData] = useState<
     HistoricType[]
@@ -93,12 +90,20 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     setHeatMapObj: setHeatMapObj,
     ancoras: ancoras,
   };
-
-  useEffect(() => {
-    setIsMobile(screenWidth <= 992);
-
-    return;
-  }, [screenWidth]);
+  const mapVars = {
+    "Renda Fixa": {
+      historic: historicRendaFixaData,
+      prediction: predictionRendaFixaData,
+    },
+    Multimercado: {
+      historic: historicMultimercadoData,
+      prediction: predictionMultimercadoData,
+    },
+    Ações: {
+      historic: historicAcoesData,
+      prediction: predictionAcoesData,
+    },
+  };
 
   useEffect(() => {
     if (ancoras && ancoras.length > 0) {
@@ -132,27 +137,12 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           className={`${styles.swiperContainer} w-11/12`}
         >
           {classificacoes.map((currClass) => {
-            const mapVars = {
-              "Renda Fixa": {
-                historic: historicRendaFixaData,
-                prediction: predictionRendaFixaData,
-              },
-              Multimercado: {
-                historic: historicMultimercadoData,
-                prediction: predictionMultimercadoData,
-              },
-              Ações: {
-                historic: historicAcoesData,
-                prediction: predictionAcoesData,
-              },
-            };
             return (
               <SwiperSlide className="px-2 mb-12">
                 <NetFundingPredChart
                   {...{
                     title: ["Net Funding CVM Class", currClass],
                     smallV: false,
-                    isMobile,
                     historic: mapVars[currClass]["historic"],
                     predictions: mapVars[currClass]["prediction"],
                     predList: false,
@@ -168,27 +158,12 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       </div>
       <div className="hidden lg:flex lg:w-full lg:flex-row lg:gap-6">
         {classificacoes.map((currClass) => {
-          const mapVars = {
-            "Renda Fixa": {
-              historic: historicRendaFixaData,
-              prediction: predictionRendaFixaData,
-            },
-            Multimercado: {
-              historic: historicMultimercadoData,
-              prediction: predictionMultimercadoData,
-            },
-            Ações: {
-              historic: historicAcoesData,
-              prediction: predictionAcoesData,
-            },
-          };
           return (
             <div className="w-full mb-4 lg:mb-0 lg:w-1/3">
               <NetFundingPredChart
                 {...{
                   title: `Net Funding CVM Class - ${currClass}`,
                   smallV: false,
-                  isMobile,
                   historic: mapVars[currClass]["historic"],
                   predictions: mapVars[currClass]["prediction"],
                   predList: false,
@@ -206,7 +181,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
               registration ? "- CNPJ: " + registration["CNPJ_Fundo"] : ""
             }`,
             smallV: false,
-            isMobile,
             historic: historicFundData,
             predictions: predictionFundData,
             exportPosition: isMobile ? "bottom" : "right",
