@@ -70,6 +70,8 @@ export default function ControlSection({
     getData(
       user,
       controlForm,
+      setControlForm,
+      setRegistration,
       setHistoricData,
       setHistoricRendaFixaData,
       setHistoricMultimercadoData,

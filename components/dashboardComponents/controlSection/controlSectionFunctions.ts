@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import { ax } from "@/database/axios.config";
 import { subWeeks, addWeeks } from "date-fns";
 import type {
+  CadastroFundosType,
   DashboardControlFormType,
   HistoricType,
   PredictionsType,
@@ -201,6 +202,8 @@ async function getRegistration(
 async function getData(
   user: UserType,
   controlForm: DashboardControlFormType,
+  setControlForm: Dispatch<SetStateAction<DashboardControlFormType>>,
+  setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>,
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>,
   setHistoricRendaFixaData: Dispatch<SetStateAction<HistoricType[]>>,
   setHistoricMultimercadoData: Dispatch<SetStateAction<HistoricType[]>>,
@@ -231,6 +234,17 @@ async function getData(
     Multimercado: setPredictionMultimercadoData,
     Ações: setPredictionAcoesData,
   };
+
+  const encodedParam = encodeURIComponent(cnpj || "");
+  console.log("");
+
+  const newRegistration = await selRegistration(
+    encodedParam,
+    controlForm,
+    setControlForm
+  );
+
+  setRegistration(newRegistration);
 
   try {
     let okClassificacoes = false;

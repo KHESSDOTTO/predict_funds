@@ -4,6 +4,7 @@ import {
   getData,
   getHistoricData,
   getPredictions,
+  getRegistration,
   selRegistration,
 } from "../controlSectionFunctions";
 import type {
@@ -68,6 +69,8 @@ async function handleControlFormSubmit(
   getData(
     user,
     controlForm,
+    setControlForm,
+    setRegistration,
     setHistoricData,
     setHistoricRendaFixaData,
     setHistoricAcoesData,
