@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import {
   AggregateChartsDataType,
   FreePredictionsPropsType,
-} from "./types/predictionsPageTypes";
-import { fetchData } from "./freePredictionsFunction";
+} from "@/utils/types/pageTypes/predictionsPageTypes";
+import { fetchData } from "@/utils/functions/pageFunctions/freePredictionsFunction";
 import getCachedAncoras from "@/cache/ancorasPredsCache";
 import { GetServerSideProps } from "next";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import toast from "react-hot-toast";
 
 export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
