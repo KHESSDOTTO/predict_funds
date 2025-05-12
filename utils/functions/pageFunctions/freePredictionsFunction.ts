@@ -3,7 +3,7 @@ import {
   AggregateChartsDataType,
   FetchDataParamsType,
   FetchHistPredsParamsType,
-} from "./types/predictionsPageTypes";
+} from "@/utils/types/pageTypes/predictionsPageTypes";
 import { ax } from "@/database/axios.config";
 import {
   consoleLog,
