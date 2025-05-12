@@ -74,7 +74,7 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
         <div className="py-10">
           <div>
             <h1 className="px-2 border-b-2 text-center lg:text-start border-white text-4xl py-2 mb-6">
-              <span>Free Predictions</span>
+              <span>Aggregate Predictions</span>
             </h1>
           </div>
           <p>
