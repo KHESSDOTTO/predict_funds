@@ -62,7 +62,7 @@ HistoricSchema.statics.getHistoricByCnpj = async function (
       },
       datahora_proc_informes: lastUpdateDate,
     })
-      .sort({ DT_COMPTC: -1 })
+      .sort({ DT_COMPTC: 1 })
       .exec();
     const finalResult = selHistoric.map((cE) => {
       const newDoc: any = { ...cE._doc };

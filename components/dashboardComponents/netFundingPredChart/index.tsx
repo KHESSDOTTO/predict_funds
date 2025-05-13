@@ -272,8 +272,8 @@ export default function NetFundingPredChart({
         {!smallV && (
           <>
             <div className="my-2 lg:hidden text-center">
-              <TextAvgErrorPreds {...{ historic, predictions }} />
               <TextDateReference predictions={predictions} />
+              <TextAvgErrorPreds {...{ historic, predictions }} />
             </div>
           </>
         )}
@@ -307,8 +307,8 @@ export default function NetFundingPredChart({
       </div>
       {!smallV && (
         <div className="mt-6 hidden lg:block">
-          <TextAvgErrorPreds {...{ historic, predictions }} />
           <TextDateReference predictions={predictions} />
+          <TextAvgErrorPreds {...{ historic, predictions }} />
         </div>
       )}
     </div>
@@ -319,9 +319,6 @@ function TextAvgErrorPreds({
   historic,
   predictions,
 }: TextAvgErrorPredsPropsType) {
-  console.log("TextAvgErrorPreds");
-  consoleLog({ historic });
-  consoleLog({ predictions });
   if (
     !predictions[0]?.["mean"] ||
     !historic[historic.length - 1]?.["VL_PATRIM_LIQ_ms"] ||
@@ -335,20 +332,22 @@ function TextAvgErrorPreds({
   return (
     <p>
       <span>
-        * Average daily prediction error on $
-        {classificacoesStr.includes(predictions[0]["CNPJ_FUNDO"])
-          ? "these funds"
-          : "this fund"}
-        :
-      </span>
-      <span className="font-bold ml-2">
-        {`R$ ${formatterBrNumber.format(
-          predictions[0]["mean"]
-        )} (~${formatterPct.format(
-          (predictions[0]["mean"] /
-            historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
-            100
-        )}% of Net Asset)`}
+        <span>
+          * Average daily prediction error on&nbsp;
+          {classificacoesStr.includes(predictions[0]["CNPJ_FUNDO"])
+            ? "these funds"
+            : "this fund"}
+          :
+        </span>
+        <span className="font-bold ml-2">
+          {`R$ ${formatterBrNumber.format(
+            predictions[0]["mean"]
+          )} (~${formatterPct.format(
+            (predictions[0]["mean"] /
+              historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
+              100
+          )}% of Net Asset)`}
+        </span>
       </span>
     </p>
   );
@@ -359,7 +358,9 @@ function TextDateReference({ predictions }: TextDateReferencePropsType) {
     return <></>;
   }
 
-  const startDate = predictions[0]?.["DT_COMPTC"] ?? 0;
+  const startDate = predictions[0]?.["DT_COMPTC"]
+    ? subDays(predictions[0]["DT_COMPTC"], 4)
+    : 0;
   const endDate = predictions[predictions.length - 1]?.["DT_COMPTC"] ?? 0;
 
   if (!startDate || !endDate) {
@@ -367,7 +368,7 @@ function TextDateReference({ predictions }: TextDateReferencePropsType) {
   }
 
   return (
-    <p className="italic text-sx mt-1">
+    <p className="italic mb-1 lg:mb-0">
       * Predictions from date {format(startDate, "MMM/dd")} to date{" "}
       {format(endDate, "MMM/dd")}
     </p>
