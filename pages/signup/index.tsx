@@ -1,11 +1,13 @@
 import { ax } from "@/database/axios.config";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import BackLink from "@/components/UI/backLink";
 import { SignUpFormType } from "@/utils/types/pageTypes/signupTypes";
-import { handleChangeSignUpForm, handleSubmitSignUpForm } from "@/utils/functions/pageFunctions/signupFunctions";
+import {
+  handleChangeSignUpForm,
+  handleSubmitSignUpForm,
+} from "@/utils/functions/pageFunctions/signupFunctions";
 
 export default function SignUpPage() {
   const router = useRouter(),
@@ -19,9 +21,9 @@ export default function SignUpPage() {
       passwordConfirm: "",
     }),
     mainClass =
-      "text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-12",
+      "text-white min-h-screen px-auto pt-8 pb-8 flex flex-col justify-around gap-8 lg:grid lg:grid-rows-6 lg:justify-stretch lg:px-6",
     h1Class =
-      "mx-16 text-center text-4xl mt-6 border-b flex border-white justify-center items-center py-4 lg:w-10/12 lg:justify-start lg:mt-4 lg:px-4 lg:border-b-2 lg:text-4xl",
+      "mx-12 text-center text-4xl mt-6 border-b flex border-white justify-center items-center py-4 lg:justify-start lg:mt-4 lg:px-4 lg:border-b-2 lg:text-4xl",
     formClass = "px-10 py-2 flex flex-col justify-around gap-4 md:row-span-5",
     divClass = "flex flex-col gap-2",
     labelClass = "indent-1",
@@ -36,7 +38,10 @@ export default function SignUpPage() {
         <h1 className={h1Class} style={lgTextShadow}>
           Sign up
         </h1>
-        <form className={formClass} onSubmit={(e) => handleSubmitSignUpForm({ e, form, ax, router })}>
+        <form
+          className={formClass}
+          onSubmit={(e) => handleSubmitSignUpForm({ e, form, ax, router })}
+        >
           <div className={divClass}>
             <label className={labelClass} htmlFor="username">
               Username
