@@ -70,7 +70,7 @@ export default function ControlFormDesk({
         value={controlForm.Classificacao}
       />
       <div className="flex relative flex-row justify-start gap-x-32 gap-y-16 w-[95vw] border-red-500 lg:flex-wrap lg:text-white/90">
-        <div className="flex flex-row justify-start gap-x-6 gap-y-12 border-red-500 w-[45%] items-start">
+        <div className="flex flex-row justify-start gap-x-6 gap-y-12 border-red-500 w-[60%] items-start">
           <div className="flex flex-col justify-start gap-6 border-red-500 w-full">
             <div className="flex font-semibold border-white">
               <label htmlFor="baseDate" className={labelClass}>

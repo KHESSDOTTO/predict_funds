@@ -6,7 +6,7 @@ import {
 } from "@/utils/types/generalTypes/types";
 import { NFTooltip } from "./netFundingPredChartTooltip";
 import { handleAbsOrPctChange } from "./forms/absOrPctPredsViewFormFunctions";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import {
   adjustNetFundingChartAxis,
   exportNetFundingPred,
@@ -26,13 +26,19 @@ import {
 } from "recharts";
 import PredList from "../predList";
 import AbsOrPctPredsViewForm from "./forms/absOrPctPredsViewForm";
-import type { NetFundingPredChartPropsType } from "./netFundingPredChartTypes";
+import type {
+  NetFundingPredChartPropsType,
+  TextAvgErrorPredsPropsType,
+  TextDateReferencePropsType,
+} from "./netFundingPredChartTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
 import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
 import { useDevice } from "@/contexts/deviceContext";
+import { classificacoes } from "@/utils/globalVars";
+import { start } from "repl";
 
 export default function NetFundingPredChart({
   title = "Net Funding",
@@ -42,8 +48,6 @@ export default function NetFundingPredChart({
   predList = true,
   exportPosition = "bottom",
 }: NetFundingPredChartPropsType) {
-  consoleLog({ historic });
-  consoleLog({ predictions });
   const { user } = useUser();
   const [domainYaxisNF, setDomainYaxisNF] = useState<number[]>([-100, 100]);
   const [ticksYaxisNF, setTicksYaxisNF] = useState<number[]>([]);
@@ -265,26 +269,14 @@ export default function NetFundingPredChart({
           </ResponsiveContainer>
         </div>
 
-        {!smallV &&
-          predictions.length &&
-          predictions[0]["mean"] &&
-          historic.length &&
-          historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
-            <>
-              <div className="my-2 lg:hidden text-center">
-                * Average daily prediction error on this fund:&nbsp;
-                <span className="font-bold ml-2">
-                  {`R$ ${formatterBrNumber.format(
-                    predictions[0]["mean"]
-                  )} (~${formatterPct.format(
-                    (predictions[0]["mean"] /
-                      historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
-                      100
-                  )}% of Net Asset)`}
-                </span>
-              </div>
-            </>
-          )}
+        {!smallV && (
+          <>
+            <div className="my-2 lg:hidden text-center">
+              <TextDateReference predictions={predictions} />
+              <TextAvgErrorPreds {...{ historic, predictions }} />
+            </div>
+          </>
+        )}
         {!smallV && exportPosition === "bottom" && (
           <div
             className="text-center lg:absolute lg:left-0 lg:bottom-0"
@@ -313,24 +305,72 @@ export default function NetFundingPredChart({
           </div>
         )}
       </div>
-      {!smallV &&
-        predictions.length &&
-        predictions[0]["mean"] &&
-        historic.length &&
-        historic[historic.length - 1]["VL_PATRIM_LIQ_ms"] && (
-          <div className="mt-6 hidden lg:block">
-            * Average daily prediction error on this fund:&nbsp;
-            <span className="font-bold ml-2">
-              {`R$ ${formatterBrNumber.format(
-                predictions[0]["mean"]
-              )} (~${formatterPct.format(
-                (predictions[0]["mean"] /
-                  historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
-                  100
-              )}% of Net Asset)`}
-            </span>
-          </div>
-        )}
+      {!smallV && (
+        <div className="mt-6 hidden lg:block">
+          <TextDateReference predictions={predictions} />
+          <TextAvgErrorPreds {...{ historic, predictions }} />
+        </div>
+      )}
     </div>
+  );
+}
+
+function TextAvgErrorPreds({
+  historic,
+  predictions,
+}: TextAvgErrorPredsPropsType) {
+  if (
+    !predictions[0]?.["mean"] ||
+    !historic[historic.length - 1]?.["VL_PATRIM_LIQ_ms"] ||
+    !predictions[0]?.["CNPJ_FUNDO"]
+  ) {
+    return <></>;
+  }
+
+  const classificacoesStr: string[] = [...classificacoes];
+
+  return (
+    <p>
+      <span>
+        <span>
+          * Average daily prediction error on&nbsp;
+          {classificacoesStr.includes(predictions[0]["CNPJ_FUNDO"])
+            ? "these funds"
+            : "this fund"}
+          :
+        </span>
+        <span className="font-bold ml-2">
+          {`R$ ${formatterBrNumber.format(
+            predictions[0]["mean"]
+          )} (~${formatterPct.format(
+            (predictions[0]["mean"] /
+              historic[historic.length - 1]["VL_PATRIM_LIQ_ms"]) *
+              100
+          )}% of Net Asset)`}
+        </span>
+      </span>
+    </p>
+  );
+}
+
+function TextDateReference({ predictions }: TextDateReferencePropsType) {
+  if (!predictions.length) {
+    return <></>;
+  }
+
+  const startDate = predictions[0]?.["DT_COMPTC"]
+    ? subDays(predictions[0]["DT_COMPTC"], 4)
+    : 0;
+  const endDate = predictions[predictions.length - 1]?.["DT_COMPTC"] ?? 0;
+
+  if (!startDate || !endDate) {
+    return <></>;
+  }
+
+  return (
+    <p className="italic mb-1 lg:mb-0">
+      * Predictions from date {format(startDate, "MMM/dd")} to date{" "}
+      {format(endDate, "MMM/dd")}
+    </p>
   );
 }

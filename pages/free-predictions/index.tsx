@@ -11,6 +11,7 @@ import { GetServerSideProps } from "next";
 import toast from "react-hot-toast";
 
 export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
+  const contactEmail = "khess.dotto@predictfunds.com.br";
   const [chartsData, setChartsData] = useState<AggregateChartsDataType>({
     "Renda Fixa": {
       historic: [],
@@ -26,11 +27,11 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
     },
   });
   const [loadingToast, setLoadingToast] = useState<boolean>(false);
-  const [controlForm, setControlForm] = useState({
+  const controlForm = {
     baseDate: ancoras[ancoras.length - 1] || "",
     weeksBack: 8,
     weeksAhead: 4,
-  });
+  };
   const linkClass =
     "hover:text-yellow-600 lg:hover:scale-110 transition-all duration-200";
 
@@ -105,10 +106,10 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
       </main>
       <footer className="pt-10 bg-black">
         <a
-          href="mailto:khess.dotto@predictfunds.com.br"
+          href={`mailto:${contactEmail}`}
           className="block mb-4 ml-4 w-fit hover:text-blue-500 transition-all cursor-pointer"
         >
-          Contact us at: khess.dotto@predictfunds.com.br
+          Contact us at: {contactEmail}
         </a>
         <Link href={"/signup"} className="hover:scale-110 transition-all">
           <div className="bg-yellow-200/20 hover:text-yellow-600 duration-200 text-2xl py-8 text-center border-t-2 hover:border-yellow-800">

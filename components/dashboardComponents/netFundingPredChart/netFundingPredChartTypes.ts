@@ -50,6 +50,15 @@ interface ExportNetFundingPredParams {
   predictions: PredictionsType[];
 }
 
+interface TextAvgErrorPredsPropsType {
+  historic: HistoricType[];
+  predictions: PredictionsType[];
+}
+
+interface TextDateReferencePropsType {
+  predictions: PredictionsType[];
+}
+
 export type {
   UnifiedDataPredsType,
   AdjustNetFundingChartAxisParamsType,
@@ -58,4 +67,6 @@ export type {
   AbsOrPctPredsViewFormPropsType,
   NetFundingPredChartPropsType,
   ExportNetFundingPredParams,
+  TextAvgErrorPredsPropsType,
+  TextDateReferencePropsType,
 };
