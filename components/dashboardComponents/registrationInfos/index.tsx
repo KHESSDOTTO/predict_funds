@@ -34,7 +34,7 @@ export default function RegistrationInfos({
           />
         </div>
       )}
-      {isLoading && !registration && (
+      {!isLoading && !registration && (
         <p className="italic text-center mt-1 px-2 text-gray-400 lg:text-start">
           No data was found
         </p>

@@ -105,10 +105,10 @@ export default function CorrelCardsSection({
         </TitleComponent>
       </div>
       <section className="relative w-full py-2 mb-8 lg:mb-2">
-        <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
+        <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:py-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
-            className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
+            className="hidden lg:block absolute right-0 scale-90 top-0"
             onClick={() => {
               track("export_cards_correls", {
                 username: user?.username || null,
@@ -146,7 +146,7 @@ export default function CorrelCardsSection({
                 prevEl: ".swiper-button-prev .correl-card-swiper",
               }}
               speed={600}
-              style={{ width: "90%", height: "auto" }}
+              style={{ width: "95%", height: "auto" }}
               breakpoints={breakpoints}
             >
               {selCorrels.map((cE: any[], index: number) => {

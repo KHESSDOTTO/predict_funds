@@ -129,7 +129,7 @@ export default function NetFundingPredChart({
           <AbsOrPctPredsViewForm {...formArgs} />
           {exportPosition === "right" && (
             <div
-              className="scale-90 lg:block absolute right-8 bottom-[50%] translate-y-[50%]"
+              className="scale-90 lg:block absolute right-0 bottom-[50%] translate-y-[50%]"
               onClick={() => {
                 track("export_nf_pred_chart", {
                   username: user?.username || null,

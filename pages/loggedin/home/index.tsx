@@ -44,7 +44,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
     <div className="bg-black/90">
       <div className="min-h-screen w-full overflow-x-hidden relative">
         <Header user={user} />
-        <div className="px-4 lg:px-8">
+        <div className="px-6 lg:px-8">
           <Dashboard {...dashboardProps} />
         </div>
         <div className="flex justify-center px-4 py-8 lg:justify-center lg:mt-4">

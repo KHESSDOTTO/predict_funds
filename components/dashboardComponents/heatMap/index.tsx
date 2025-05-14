@@ -56,10 +56,10 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
       <div className="flex justify-center lg:block lg:w-full">
         <TitleComponent>{title}</TitleComponent>
       </div>
-      <div className="text-sm text-gray-200 pb-4 pt-2 flex relative justify-center lg:py-6 lg:mb-6 lg:pt-4 lg:text-base">
+      <div className="text-sm text-gray-200 pb-6 pt-2 flex relative justify-center lg:pb-5 lg:mb-6 lg:pt-4 lg:text-base">
         <HeatMapForm {...heatMapFormArgs} />
         <div
-          className="absolute bottom-[50%] translate-y-[50%] right-10 scale-90 hidden lg:block"
+          className="absolute top-1 right-0 scale-90 hidden lg:block"
           onClick={() =>
             heatMapObj && controlForm
               ? exportHeatMap({ selCnpj: controlForm.buscaCnpj, heatMapObj })
@@ -88,8 +88,8 @@ export default function HeatMap({ title, heatMapObj }: HeatMapPropsType) {
         <>
           {/* Desk */}
           <div
-            className="overflow-x-auto hidden lg:block lg:w-11/12 mx-auto rounded-md hover:scale-[101%] duration-200 transition-all"
-            style={{ boxShadow: "0 3px 10px 0 rgba(255,255,255,0.8)" }}
+            className="overflow-x-auto hidden lg:block lg:w-full mx-auto rounded-md hover:scale-[101%] duration-200 transition-all"
+            style={{ boxShadow: "0 3px 9px 0 rgba(255,255,255,0.7)" }}
           >
             <table className="text-center border border-gray-500 rounded-md border-separate border-spacing-0 overflow-hidden">
               <thead>
