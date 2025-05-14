@@ -129,8 +129,8 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           modules={[Pagination, Navigation]}
           pagination
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: `.swiper-button-next.${styles.swiperButtonNext}`,
+            prevEl: `.swiper-button-prev.${styles.swiperButtonPrev}`,
           }}
           loop={true}
           speed={600}

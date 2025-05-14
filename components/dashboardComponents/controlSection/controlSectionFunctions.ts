@@ -237,17 +237,12 @@ async function getData(
     Multimercado: setPredictionMultimercadoData,
     Ações: setPredictionAcoesData,
   };
-
   const encodedParam = encodeURIComponent(cnpj || "");
-  consoleLog({ encodedParam });
-
   const newRegistration = await selRegistration(
     encodedParam,
     controlForm,
     setControlForm
   );
-
-  consoleLog({ newRegistration });
 
   setRegistration(newRegistration);
 
