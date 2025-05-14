@@ -30,7 +30,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
       <div className="min-h-screen relative text-white/90 pb-16">
         {userFromToken && <Header user={userFromToken} />}
 
-        <div className="px-6 lg:px-8">
+        <div className="px-4 lg:px-8">
           <div className="mt-12 lg:mt-14 mb-8 lg:mb-8">
             <LogoPredict bold={false} />
           </div>
