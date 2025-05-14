@@ -28,7 +28,7 @@ export default function SelFundInfos({
       <h3 className="mb-4 font-semibold text-lg lg:text-lg">
         Selected fund infos:
       </h3>
-      <ul className="flex flex-col gap-4 text-base lg:px-2 lg:text-sm">
+      <ul className="flex flex-col gap-4 text-base lg:text-sm">
         <li className="flex border-b-2 px-1 border-gray-400 lg:border-none items-center lg:w-full">
           <span className="w-[200px] lg:w-[240px] text-left">CVM Class:</span>
           &nbsp;

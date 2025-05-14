@@ -34,17 +34,17 @@ export default function RegistrationInfos({
           />
         </div>
       )}
-      {isLoading && !registration && (
+      {!isLoading && !registration && (
         <p className="italic text-center mt-1 px-2 text-gray-400 lg:text-start">
           No data was found
         </p>
       )}
       {!isLoading && registration && (
-        <ul className="italic text-white/80 flex flex-col gap-1 pl-6 pr-4 lg:ml-8 lg:px-0">
+        <ul className="italic text-white/80 flex flex-col gap-1 lg:px-0">
           {fieldsToShow.map((cE, cI) => {
             return (
               <li key={titlesOfFields[cI]}>
-                <span className="font-semibold text-white -ml-1 mr-2">
+                <span className="font-semibold text-white">
                   {titlesOfFields[cI]} :
                 </span>
                 <span>{registration[cE]}</span>

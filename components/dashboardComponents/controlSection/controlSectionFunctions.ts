@@ -11,7 +11,10 @@ import type {
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 import { classificacoes } from "@/utils/globalVars";
-import { convertDtComptcToDate } from "@/utils/functions/genericFunctions";
+import {
+  consoleLog,
+  convertDtComptcToDate,
+} from "@/utils/functions/genericFunctions";
 
 async function getHistoricData(
   encodedParam: string,
@@ -234,10 +237,7 @@ async function getData(
     Multimercado: setPredictionMultimercadoData,
     Ações: setPredictionAcoesData,
   };
-
   const encodedParam = encodeURIComponent(cnpj || "");
-  console.log("");
-
   const newRegistration = await selRegistration(
     encodedParam,
     controlForm,

@@ -20,8 +20,6 @@ import { useControlForm } from "@/contexts/controlFormContext";
 import { useUser } from "@/contexts/userContext";
 import { track } from "@vercel/analytics";
 
-SwiperCore.use([Navigation]);
-
 export default function CorrelCardsSection({
   correls,
 }: CorrelCardsSectionProps) {
@@ -105,10 +103,10 @@ export default function CorrelCardsSection({
         </TitleComponent>
       </div>
       <section className="relative w-full py-2 mb-8 lg:mb-2">
-        <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:pb-6 lg:mb-6 lg:pt-4 lg:text-base">
+        <div className="text-sm text-gray-200 mb-4 flex relative justify-center lg:py-4 lg:text-base">
           <CorrelCardsForm numMonths={numMonths} setNumMonths={setNumMonths} />
           <div
-            className="hidden lg:block absolute right-8 scale-90 bottom-[50%] translate-y-[50%]"
+            className="hidden lg:block absolute right-0 scale-90 top-0"
             onClick={() => {
               track("export_cards_correls", {
                 username: user?.username || null,
@@ -139,14 +137,15 @@ export default function CorrelCardsSection({
         ) : (
           <>
             <Swiper
+              modules={[Navigation]}
               slidesPerGroup={1}
               loop={true}
               navigation={{
-                nextEl: ".swiper-button-next .correl-card-swiper",
-                prevEl: ".swiper-button-prev .correl-card-swiper",
+                nextEl: `.swiper-button-prev.${styles.swiperButtonNext}`,
+                prevEl: `.swiper-button-next.${styles.swiperButtonPrev}`,
               }}
               speed={600}
-              style={{ width: "90%", height: "auto" }}
+              style={{ width: "95%", height: "auto" }}
               breakpoints={breakpoints}
             >
               {selCorrels.map((cE: any[], index: number) => {
@@ -168,10 +167,10 @@ export default function CorrelCardsSection({
               })}
             </Swiper>
             <div
-              className={`swiper-button-prev correl-card-swiper ${styles.swiperButtonPrev}`}
+              className={`swiper-button-prev ${styles.swiperButtonPrev}`}
             ></div>
             <div
-              className={`swiper-button-next correl-card-swiper ${styles.swiperButtonNext}`}
+              className={`swiper-button-next ${styles.swiperButtonNext}`}
             ></div>
             <div
               className="lg:hidden absolute right-[50%] bottom-0 translate-x-[50%] translate-y-full"

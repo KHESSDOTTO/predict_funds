@@ -144,7 +144,7 @@ export default function NetFundingHistogramChart({
         </div>
       ) : (
         <>
-          <div className="py-4 px-0 lg:px-8 flex flex-col lg:flex-row lg:flex-wrap gap-6 lg:gap-12">
+          <div className="py-4 px-0 flex flex-col lg:flex-row lg:flex-wrap gap-6 lg:gap-12">
             <div className="relative lg:w-full">
               <SelFundInfos
                 {...{
@@ -161,7 +161,7 @@ export default function NetFundingHistogramChart({
             </div>
             <div className="flex flex-grow flex-col lg:flex-row items-end">
               <div className="flex mt-2 flex-col w-full lg:mt-0 lg:relative">
-                <div className="text-sm lg:px-1 py-4 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
+                <div className="text-sm lg:px-1 py-6 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
                   <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
                 </div>
                 <div className="hidden lg:block text-center text-gray-400 text-sm lg:text-base lg:text-left lg:absolute lg:top-0 lg:right-1">
@@ -181,7 +181,7 @@ export default function NetFundingHistogramChart({
                 <div className="flex flex-col gap-4 lg:pt-8 lg:pb-10 relative">
                   <div className="bg-gray-800 pt-4 lg:w-full pr-1 rounded-xl relative lg:bottom-10">
                     <ResponsiveContainer
-                      height={smallV ? 200 : isMobile ? 350 : 500}
+                      height={smallV ? 200 : isMobile ? 350 : 480}
                       minWidth={250}
                     >
                       <BarChart data={histogram ? histogram[absOrPct] : []}>

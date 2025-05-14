@@ -5,8 +5,8 @@ export default function CorrelCardsForm({
   setNumMonths,
 }: CorrelCardsFormPropsType) {
   return (
-    <form className="flex gap-2 left-8 md:gap-8 lg:absolute">
-      <h4 className="mr-2 md:mr-6">Correlation period: </h4>
+    <form className="flex gap-2 left-0 top-0 lg:gap-6 lg:absolute">
+      <h4 className="mr-2">Correlation period: </h4>
       <div className="flex text-xs items-center gap-1 md:text-sm">
         <input
           type="radio"

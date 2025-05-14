@@ -8,7 +8,7 @@ export default function VisualizationForm({
 }: VisualizationFormPropsType) {
   return (
     <form className="flex items-center gap-2 md:gap-8">
-      <h4 className="mr-2 md:mr-6">Visualization: </h4>
+      <h4 className="mr-2 md:mr-6 font-bold">Visualization: </h4>
       <div className="flex text-xs items-center gap-1 md:text-sm">
         <input
           type="radio"

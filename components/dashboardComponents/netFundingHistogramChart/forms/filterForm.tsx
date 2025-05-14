@@ -38,10 +38,10 @@ export default function FilterForm({
 
   return (
     <form className="w-full flex flex-col items-center lg:w-fit max-w-full">
-      <h3 className="mx-auto mb-2 lg:mb-4 lg:mr-0 lg:w-full text-lg">
+      <h3 className="mx-auto mb-2 lg:mb-4 lg:mr-0 lg:w-full text-lg font-bold">
         Filters:
       </h3>
-      <div className="relative flex flex-col items-start lg:items-stretch gap-4 w-full lg:w-fit lg:px-2">
+      <div className="relative flex flex-col items-start lg:items-stretch gap-4 w-full lg:w-fit lg:px-0">
         <div className="w-full flex flex-col items-center gap-4 lg:gap-2 lg:w-fit lg:items-center justify-center">
           <div className="mt-4 mb-2 lg:my-0 flex items-center gap-4 lg:w-full">
             <h4>CVM Class:</h4>
@@ -69,7 +69,7 @@ export default function FilterForm({
 
             return (
               <div key={title} className="flex flex-col w-fit">
-                <h4 className="mb-0 text-base text-center lg:text-left lg:text-sm px-1 lg:m-0 lg:relative top-1">
+                <h4 className="mb-0 text-base text-center lg:text-left lg:text-sm lg:m-0 lg:relative top-1">
                   {title}
                 </h4>
                 <DualRangeSliderWithTippy

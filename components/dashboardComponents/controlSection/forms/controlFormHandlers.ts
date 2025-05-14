@@ -66,7 +66,7 @@ async function handleControlFormSubmit(
 
   setIsLoading(true);
 
-  getData(
+  await getData(
     user,
     controlForm,
     setControlForm,
@@ -81,6 +81,8 @@ async function handleControlFormSubmit(
     setPredictionMultimercadoData,
     setCurrSubmitToast
   );
+
+  setIsLoading(false);
 }
 
 export { handleControlFormChange, handleControlFormSubmit };
