@@ -1,0 +1,36 @@
+.blackBlurTitle {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  width: 1200px;
+  max-width: 100vw;
+  height: 300px;
+  transform: translate(50%, 50%);
+  background-image: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, 0.8) 35%,
+    transparent
+  );
+}
+
+.blackBlurLinks {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  width: 80vw;
+  height: 100px;
+  transform: translate(50%, 50%);
+  background-image: radial-gradient(
+    closest-side,
+    rgba(0, 0, 0, 0.6) 30%,
+    rgba(0, 0, 0, 0.1) 80%,
+    transparent
+  );
+}
+
+@media (max-width: 992px) {
+  .black-blur-title,
+  .black-blur-links {
+    display: none;
+  }
+}

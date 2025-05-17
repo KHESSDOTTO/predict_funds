@@ -1,0 +1,26 @@
+.swiperContainer {
+  --swiper-pagination-bullet-inactive-color: white;
+}
+
+.swiperButtonNext,
+.swiperButtonPrev {
+  color: white;
+  position: absolute;
+  top: 55%;
+  z-index: 10;
+}
+
+.swiperButtonNext::after,
+.swiperButtonPrev::after {
+  font-size: 24px;
+}
+
+@media (max-width: 992px) {
+  .swiperButtonNext {
+    right: -12px;
+  }
+
+  .swiperButtonPrev {
+    left: -12px;
+  }
+}

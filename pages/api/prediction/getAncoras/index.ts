@@ -9,10 +9,13 @@ async function GetAncoras(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
+
     const ancoras = await PredictionsModel.getAncoras();
+
     return res.status(200).json(ancoras);
   } catch (err) {
     console.error(err);
+
     return res.status(500).json({ error: err });
   }
 }

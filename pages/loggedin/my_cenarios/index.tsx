@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { verifyToken } from "@/utils/jwt.config";
 import toast from "react-hot-toast";
 import LogoPredict from "@/components/UI/logoPredict";
-import CenarioCard from "@/components/general/cenarioCard";
+import CenarioCard from "@/components/cenarioPageComponents/cenarioCard";
 import {
   excludeCenario,
   exportCenarios,
@@ -28,7 +28,6 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   return (
     <div className="bg-black/90 h-full">
       <div className="min-h-screen relative text-white/90 pb-16">
-
         {userFromToken && <Header user={userFromToken} />}
 
         <div className="px-4 lg:px-8">
@@ -73,12 +72,10 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
           `}
         >
           <div
-            onClick={
-              () => {
-                track('export_cenarios', { username: user?.username || null });
-                exportCenarios({ cenarios });
-              }
-            }
+            onClick={() => {
+              track("export_cenarios", { username: user?.username || null });
+              exportCenarios({ cenarios });
+            }}
           >
             <ButtonGreen shadowSize="none" shadowColor="">
               Export

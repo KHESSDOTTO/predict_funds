@@ -1,77 +1,32 @@
+import { ArrCnpjNameType } from "@/database/models/cadastroFundos/cadastroFundosTypes";
 import { Schema, model, models } from "mongoose";
 import type {
   CadastroFundosDocType,
   CadastroFundosModelType,
 } from "./cadastroFundosTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
-const CadastroFundosSchema = new Schema(
+const CadastroFundosSchema = new Schema<
+  CadastroFundosDocType,
+  CadastroFundosModelType
+>(
   {
-    CNPJ_FUNDO: { type: String, required: true, trim: true, unique: true },
-    TP_FUNDO: { type: String, required: true, trim: true, unique: false },
-    DENOM_SOCIAL: { type: String, required: true, trim: true, unique: false },
-    DT_REG: { type: String, required: true, trim: true, unique: false },
-    DT_CONST: { type: String, required: true, trim: true, unique: false },
-    CD_CVM: { type: Number, required: true, trim: true, unique: false },
-    DT_CANCEL: { type: String, required: true, trim: true, unique: false },
-    SIT: { type: String, required: true, trim: true, unique: false },
-    DT_INI_SIT: { type: String, required: true, trim: true, unique: false },
-    DT_INI_ATIV: { type: String, required: true, trim: true, unique: false },
-    DT_INI_EXERC: { type: String, required: true, trim: true, unique: false },
-    DT_FIM_EXERC: { type: String, required: true, trim: true, unique: false },
-    CLASSE: { type: String, required: true, trim: true, unique: false },
-    DT_INI_CLASSE: { type: String, required: true, trim: true, unique: false },
-    RENTAB_FUNDO: { type: String, required: true, trim: true, unique: false },
-    CONDOM: { type: String, required: true, trim: true, unique: false },
-    FUNDO_COTAS: { type: String, required: true, trim: true, unique: false },
-    FUNDO_EXCLUSIVO: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: false,
-    },
-    TRIB_LPRAZO: { type: String, required: true, trim: true, unique: false },
-    PUBLICO_ALVO: { type: String, required: true, trim: true, unique: false },
-    ENTID_INVEST: { type: String, required: true, trim: true, unique: false },
-    TAXA_PERFM: { type: Number, required: true, trim: true, unique: false },
-    INF_TAXA_PERFM: { type: String, required: true, trim: true, unique: false },
-    TAXA_ADM: { type: Number, required: true, trim: true, unique: false },
-    INF_TAXA_ADM: { type: String, required: true, trim: true, unique: false },
-    VL_PATRIM_LIQ: { type: Number, required: true, trim: true, unique: false },
-    DT_PATRIM_LIQ: { type: String, required: true, trim: true, unique: false },
-    DIRETOR: { type: String, required: true, trim: true, unique: false },
-    CNPJ_ADMIN: { type: String, required: true, trim: true, unique: false },
-    ADMIN: { type: String, required: true, trim: true, unique: false },
-    PF_PJ_GESTOR: { type: String, required: true, trim: true, unique: false },
-    CPF_CNPJ_GESTOR: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: false,
-    },
-    GESTOR: { type: String, required: true, trim: true, unique: false },
-    CNPJ_AUDITOR: { type: String, required: true, trim: true, unique: false },
-    AUDITOR: { type: String, required: true, trim: true, unique: false },
-    CNPJ_CUSTODIANTE: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: false,
-    },
-    CUSTODIANTE: { type: String, required: true, trim: true, unique: false },
-    CNPJ_CONTROLADOR: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: false,
-    },
-    CONTROLADOR: { type: String, required: true, trim: true, unique: false },
-    INVEST_CEMPR_EXTER: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: false,
-    },
-    CLASSE_ANBIMA: { type: String, required: true, trim: true, unique: false },
+    ID_Registro_Fundo: { type: Number, required: true, unique: false },
+    CNPJ_Fundo: { type: String, required: true, unique: false },
+    Codigo_CVM: { type: Number, required: true, unique: false },
+    Tipo_Fundo: { type: String, required: true, unique: false },
+    Denominacao_Social_F: { type: String, required: true, unique: false },
+    Situacao_F: { type: String, required: true, unique: false },
+    ID_Registro_Classe: { type: Number, required: true, unique: false },
+    CNPJ_Classe: { type: String, required: true, unique: false },
+    Tipo_Classe: { type: String, required: true, unique: false },
+    Denominacao_Social_C: { type: String, required: true, unique: false },
+    Situacao_C: { type: String, required: true, unique: false },
+    Classificacao: { type: String, required: true, unique: false },
+    Publico_Alvo: { type: String, required: true, unique: false },
+    CLASSE: { type: String, required: true, unique: false },
+    PUBLICO_ALVO: { type: String, required: true, unique: false },
+    updated_at: { type: Date, required: true, unique: false },
   },
   { timestamps: true }
 );
@@ -79,52 +34,72 @@ const CadastroFundosSchema = new Schema(
 CadastroFundosSchema.statics.getCadastroByCnpj = async function (cnpj: string) {
   try {
     const cadastro = await CadastroFundosModel.findOne({
-      CNPJ_FUNDO: cnpj,
+      CNPJ_Fundo: cnpj,
     });
+
     return cadastro;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 };
 
-CadastroFundosSchema.statics.getAnbimaClassByCnpj = async function (
+CadastroFundosSchema.statics.getClassificacaoByCnpj = async function (
   cnpj: string
 ) {
   try {
-    const anbimaClass = (await CadastroFundosModel.findOne(
+    const classificacao = (await CadastroFundosModel.findOne(
       {
-        CNPJ_FUNDO: cnpj,
+        CNPJ_Fundo: cnpj,
       },
       {
-        CLASSE_ANBIMA: 1,
+        Classificacao: 1,
         _id: 0,
       }
-    )) as { CLASSE_ANBIMA: string } | null;
+    )) as { Classificacao: string } | null;
 
-    if (!anbimaClass) {
+    if (!classificacao) {
       return false;
     }
 
-    return anbimaClass.CLASSE_ANBIMA;
+    return classificacao.Classificacao;
   } catch (err) {
     console.log(err);
+
     return false;
   }
 };
 
 CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
   try {
-    const arrCnpjNames = await CadastroFundosModel.find(
+    const arrCnpjNamesRaw = await CadastroFundosModel.find(
       {
-        CNPJ_FUNDO: { $in: cnpjs },
+        CNPJ_Fundo: { $in: cnpjs },
       },
       {
         _id: 0,
-        CNPJ_FUNDO: 1,
-        DENOM_SOCIAL: 1,
+        CNPJ_Fundo: 1,
+        Denominacao_Social_F: 1,
       }
     );
+
+    const lastIndex = arrCnpjNamesRaw.length - 1;
+    const foundCnpjs: string[] = [];
+    let arrCnpjNames: ArrCnpjNameType[] = [];
+
+    for (let i = lastIndex; i >= 0; i--) {
+      if (foundCnpjs.length === cnpjs.length) {
+        break;
+      }
+
+      const currElement = arrCnpjNamesRaw[i];
+
+      if (!foundCnpjs.includes(currElement["CNPJ_Fundo"])) {
+        foundCnpjs.push(currElement["CNPJ_Fundo"]);
+        arrCnpjNames.push(currElement);
+      }
+    }
 
     return arrCnpjNames;
   } catch (err) {
@@ -134,14 +109,14 @@ CadastroFundosSchema.statics.getArrCnpjName = async function (cnpjs: string[]) {
   }
 };
 
-CadastroFundosSchema.index({ CNPJ_FUNDO: 1 });
+CadastroFundosSchema.index({ CNPJ_Fundo: 1 });
 
 const CadastroFundosModel =
   (models.cadastro_fundos as CadastroFundosModelType) ||
   model<CadastroFundosDocType, CadastroFundosModelType>(
     "cadastro_fundos",
     CadastroFundosSchema,
-    "cadastro_fundos"
+    "HN_cadastro_fundos_cvm175"
   );
 
 export default CadastroFundosModel;

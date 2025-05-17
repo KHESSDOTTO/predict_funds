@@ -1,86 +1,64 @@
-function generateYaxisTicksBasedOnMaxMod(
-  maxMod: number,
-  isPct: boolean,
-  maxValueTick = 100000,
-  numTicks = 9,
-  times = 1
-) {
+function generateYaxisTicksBasedOnDomain(
+  domain: [number, number],
+  numTicks: number = 9
+): number[] {
+  if (
+    !domain ||
+    domain.length < 2 ||
+    typeof domain[0] !== "number" ||
+    typeof domain[1] !== "number"
+  ) {
+    return [];
+  }
+
   const ticks: number[] = [];
+  const minTick = domain[0];
+  const maxTick = domain[1];
+  const step = (maxTick - minTick) / Math.max(numTicks - 1, 1);
 
-  const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTick;
-
-  if (maxMod <= adjustMaxValueTick || times > 50) {
-    // Prevent infinite recursion by limiting times
-    const minTick = -adjustMaxValueTick;
-    const maxTick = adjustMaxValueTick;
-    const step = (maxTick - minTick) / (numTicks - 1);
-
-    for (let i = 0; i < numTicks; i++) {
-      ticks.push(minTick + step * i);
-    }
-
-    return ticks;
+  for (let i = 0; i < numTicks; i++) {
+    ticks.push(minTick + step * i);
   }
 
-  let newMaxValueTick = adjustMaxValueTick;
-  const newMaxFirstTime = isPct ? 0.1 : 200000;
-  const newMaxSecondTime = isPct ? 0.15 : 500000;
-  const defaultStep = isPct ? 0.05 : 500000;
-
-  if (times == 1) {
-    newMaxValueTick = newMaxFirstTime;
-  } else if (times == 2) {
-    newMaxValueTick = newMaxSecondTime;
-  } else {
-    newMaxValueTick += defaultStep; // Simplify the logic for increasing maxValueTick
-  }
-
-  return generateYaxisTicksBasedOnMaxMod(
-    maxMod,
-    isPct,
-    newMaxValueTick,
-    numTicks,
-    times + 1
-  );
+  return ticks;
 }
 
 function generateYaxisDomainBasedOnMaxMod(
   maxMod: number,
   isPct: boolean,
-  maxValueTick = 100000,
+  maxValueTickTry = 100000,
   times = 1
-) {
-  const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTick;
+): [number, number] {
+  const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTickTry;
+  let step = isPct ? 0.05 : 500000;
 
-  if (maxMod <= adjustMaxValueTick || times > 50) {
+  if (!isPct) {
+    if (maxMod > 50000000) {
+      step = 10000000;
+    } else if (maxMod > 10000000) {
+      step = 5000000;
+    }
+  }
+
+  if (maxMod <= adjustMaxValueTick || times > 1000) {
     // Prevent infinite recursion
     const minTick = -adjustMaxValueTick;
     const maxTick = adjustMaxValueTick;
+    const domain: [number, number] = [minTick, maxTick];
 
-    const domain = [minTick, maxTick];
     return domain;
   }
 
   // Adjust newMaxValueTick based on the current attempt (times)
-  let newMaxValueTick = adjustMaxValueTick;
-  const newMaxFirstTime = isPct ? 0.1 : 200000;
-  const newMaxSecondTime = isPct ? 0.15 : 500000;
-  const defaultStep = isPct ? 0.05 : 500000;
-
-  if (times == 1) {
-    newMaxValueTick = newMaxFirstTime;
-  } else if (times == 2) {
-    newMaxValueTick = newMaxSecondTime;
-  } else {
-    newMaxValueTick += defaultStep; // Simplify the logic for increasing maxValueTick
-  }
+  let newMaxValueTickTry = adjustMaxValueTick;
+  newMaxValueTickTry += step; // Simplify the logic for increasing maxValueTick
 
   return generateYaxisDomainBasedOnMaxMod(
     maxMod,
     isPct,
-    newMaxValueTick,
+    newMaxValueTickTry,
     times + 1
   );
 }
 
-export { generateYaxisTicksBasedOnMaxMod, generateYaxisDomainBasedOnMaxMod };
+export { generateYaxisTicksBasedOnDomain, generateYaxisDomainBasedOnMaxMod };

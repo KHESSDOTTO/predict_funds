@@ -1,5 +1,8 @@
 import { Document, Model } from "mongoose";
-import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
+import {
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 
 // Interface of original document on collection
 interface PredictionDocType_doc {
@@ -18,7 +21,7 @@ interface PredictionDocType extends Document, PredictionsType {
 interface PredictionModelType extends Model<PredictionDocType> {
   getPredictions(
     controlForm: DashboardControlFormType
-  ): Promise<false | PredictionsType>;
+  ): Promise<false | PredictionsType[]>;
   getPredsForHistogram(
     controlForm: DashboardControlFormType
   ): Promise<RawHistogramData[]>;
@@ -31,8 +34,7 @@ interface RawHistogramData {
   CNPJ_FUNDO: string;
   CAPTC_LIQ_ABS_ms: number;
   CAPTC_LIQ_PCT_ms: number;
-  CLASSE: string;
-  CLASSE_ANBIMA: string;
+  Classificacao: string;
   vol_252: number;
   VL_PATRIM_LIQ: number;
   NR_COTST: number;
@@ -45,5 +47,5 @@ export type {
   PredictionDocType_doc,
   PredictionDocType,
   PredictionModelType,
-  RawHistogramData
-}
+  RawHistogramData,
+};

@@ -1,10 +1,12 @@
 import { ToneColorsInterface } from "@/utils/types/generalTypes/types";
 import { ax } from "@/database/axios.config";
 import toast from "react-hot-toast";
-import type { DoLogoutParamsType } from "@/utils/types/generalTypes/types";
+import type {
+  DoLogoutParamsType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 
 function capitalize(string: string) {
-
   switch (string.length) {
     case 0:
       return string;
@@ -13,7 +15,6 @@ function capitalize(string: string) {
     default:
       return string[0].toUpperCase() + string.slice(1);
   }
-  
 }
 
 function getToneColor(
@@ -40,33 +41,6 @@ function pushIfNew(val: any, arr: any[]) {
   }
 }
 
-function buildPredKey(
-  varCota: string | number,
-  varCotistas: string | number,
-  varNF: string | number,
-  absOrPct: "abs" | "pct"
-): string {
-  const mapPrefix: any = {
-    abs: "abs_BRL",
-    pct: "pct_PL",
-  };
-
-  const predKey = [
-    mapPrefix[absOrPct],
-    (Number(varCota) * 100)
-      .toFixed(1)
-      .replaceAll(".", "_")
-      .replaceAll("-", "n"),
-    (Number(varCotistas) * 100)
-      .toFixed(1)
-      .replaceAll(".", "_")
-      .replaceAll("-", "n"),
-    (Number(varNF) * 100).toFixed(1).replaceAll(".", "_").replaceAll("-", "n"),
-  ].join("__");
-
-  return predKey;
-}
-
 function consoleLog(varObj: any): void {
   const varName = Object.keys(varObj)[0];
   console.log(`${varName}`);
@@ -91,12 +65,24 @@ function arrUnique(arr: any[]): any[] {
   return Array(newSet);
 }
 
+function convertDtComptcToDate(pred: PredictionsType | PredictionsType[]) {
+  return Array.isArray(pred)
+    ? pred.map((cE) => ({
+        ...cE,
+        DT_COMPTC: new Date(cE.DT_COMPTC || ""),
+      }))
+    : {
+        ...pred,
+        DT_COMPTC: new Date(pred.DT_COMPTC || ""),
+      };
+}
+
 export {
   capitalize,
   pushIfNew,
   getToneColor,
-  buildPredKey,
   consoleLog,
   doLogout,
   arrUnique,
+  convertDtComptcToDate,
 };

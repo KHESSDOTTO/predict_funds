@@ -1,0 +1,30 @@
+.swiperButtonNext,
+.swiperButtonPrev {
+  color: white;
+  position: absolute;
+  top: 62%;
+  z-index: 10;
+}
+
+.swiperButtonNext::after,
+.swiperButtonPrev::after {
+  font-size: 24px;
+}
+
+.swiperButtonNext {
+  right: 0px;
+}
+
+.swiperButtonPrev {
+  left: 0px;
+}
+
+@media (max-width: 992px) {
+  .swiperButtonNext {
+    transform: translateX(12px);
+  }
+
+  .swiperButtonPrev {
+    transform: translateX(-12px);
+  }
+}

@@ -9,17 +9,17 @@ async function GetHistogramData(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     await connect();
-    const predictions4Weeks = await PredictionsModel.getPredsForHistogram(
+    const predictions = await PredictionsModel.getPredsForHistogram(
       req.body
     );
 
-    if (!predictions4Weeks) {
+    if (! predictions) {
       return res
         .status(500)
         .send("There was an error when fetching the data for the histogram.");
     }
 
-    return res.status(200).json(predictions4Weeks);
+    return res.status(200).json(predictions);
   } catch (err) {
     console.error(err);
     

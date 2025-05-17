@@ -1,9 +1,17 @@
-import { DashboardControlFormType, PredictionsType } from "@/utils/types/generalTypes/types";
+import {
+  DashboardControlFormType,
+  PredictionsType,
+} from "@/utils/types/generalTypes/types";
 import { Schema, model, models } from "mongoose";
-import { buildPredKey } from "@/utils/functions/genericFunctions";
-import { PredictionDocType, PredictionModelType, RawHistogramData } from "./predictionsType";
+import {
+  PredictionDocType,
+  PredictionModelType,
+  RawHistogramData,
+} from "./predictionsType";
+import { addWeeks } from "date-fns";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
-const PredictionSchema = new Schema(
+const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
   {
     CNPJ_FUNDO: { type: String, required: true, trim: true, unique: false },
     ancora: { type: Date, required: true, unique: false },
@@ -20,29 +28,24 @@ const PredictionSchema = new Schema(
 PredictionSchema.statics.getPredictions = async function (
   controlForm: DashboardControlFormType
 ) {
-  const {
-    varCota,
-    varCotistas,
-    varNF,
-    baseDate,
-    buscaCnpj,
-    weeksAhead
-  } = controlForm;
-  const predKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
-  const predKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
+  let { baseDate, buscaCnpj, weeksAhead } = controlForm;
+  const baseDateAdj = new Date(baseDate);
+  const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
+  const predKeyPct = "pct_PL__0_0__0_0__0_0";
+  const decodedCnpj = decodeURIComponent(buscaCnpj);
 
   try {
     let prediction: PredictionDocType | null = null;
     prediction = await PredictionsModel.findOne(
       {
-        CNPJ_FUNDO: buscaCnpj,
-        ancora: new Date(baseDate),
+        CNPJ_FUNDO: decodedCnpj,
+        ancora: baseDateAdj,
         weeks_ahead: weeksAhead,
       },
       {
         _id: 0,
         CNPJ_FUNDO: 1,
-        CLASSE_ANBIMA: 1,
+        Classificacao: 1,
         [predKeyAbs]: 1,
         [predKeyPct]: 1,
         CI90: 1,
@@ -71,17 +74,15 @@ PredictionSchema.statics.getPredictions = async function (
       }
     }
 
-    let finalPred: PredictionsType | null;
-    if (prediction) {
-      finalPred = { ...prediction };
-    } else {
-      finalPred = prediction;
-    }
+    let finalPred: PredictionsType | null = prediction
+      ? { ...prediction }
+      : prediction;
+    const returnArr: PredictionsType[] = [];
 
     if (prediction) {
       finalPred = {
         CNPJ_FUNDO: prediction.CNPJ_FUNDO,
-        CLASSE_ANBIMA: prediction.CLASSE_ANBIMA,
+        Classificacao: prediction.Classificacao,
         CAPTC_LIQ_ABS_ms: prediction[predKeyAbs],
         CAPTC_LIQ_PCT_ms: prediction[predKeyPct],
         CI90_ABS: prediction.CI90,
@@ -114,17 +115,31 @@ PredictionSchema.statics.getPredictions = async function (
           (prediction[predKeyPct] as number) - (prediction.CI99_PCT as number),
           (prediction[predKeyPct] as number) + (prediction.CI99_PCT as number),
         ],
-        mean: prediction['mean'], // Average deviation from the last predictions
+        mean: prediction["mean"], // Average deviation from the last predictions
       };
+
+      // Repeat the prediction doc for the number of weeks ahead it refers to
+      const endPredDate = addWeeks(baseDateAdj, weeksAhead); // Last date for a 4 week prediction
+      let lastDate = baseDateAdj;
+
+      while (lastDate < endPredDate) {
+        const newDate = addWeeks(lastDate, 1);
+
+        returnArr.push({
+          ...finalPred,
+          DT_COMPTC: newDate,
+        });
+
+        lastDate = newDate;
+      }
     } else {
-        
       return false;
     }
 
-    return finalPred;
+    return returnArr;
   } catch (err) {
     console.log(err);
-    
+
     return false;
   }
 };
@@ -133,39 +148,26 @@ PredictionSchema.statics.getPredsForHistogram = async function (
   controlForm: DashboardControlFormType
 ): Promise<RawHistogramData[]> {
   /*
-    Prediction of all CNPJs for the selected period. Prediction of the selected CNPJ are based on params (controlForm),
-      others default (zero), to build histogram
+    Prediction of all CNPJs for the selected period.
   */
 
-  const {
-    varCota,
-    varCotistas,
-    varNF,
-    baseDate,
-    buscaCnpj,
-    weeksAhead,
-  } = controlForm;
-  const customPredKeyAbs = buildPredKey(varCota, varCotistas, varNF, "abs");
-  const defaultPredKeyAbs = "abs_BRL__0_0__0_0__0_0";
-  const customPredKeyPct = buildPredKey(varCota, varCotistas, varNF, "pct");
-  const defaultPredKeyPct = "pct_PL__0_0__0_0__0_0";
+  const { baseDate, buscaCnpj, weeksAhead } = controlForm;
+  const predKeyAbs = "abs_BRL__0_0__0_0__0_0";
+  const predKeyPct = "pct_PL__0_0__0_0__0_0";
 
   try {
     let predictions: PredictionsType[] | null = null;
 
     const projection = {
       CNPJ_FUNDO: 1,
-      CLASSE: 1,
-      CLASSE_ANBIMA: 1,
+      Classificacao: 1,
       vol_252: 1,
       VL_PATRIM_LIQ: 1,
       NR_COTST: 1,
       QT_DIA_CONVERSAO_COTA: 1,
       QT_DIA_PAGTO_RESGATE: 1,
-      [customPredKeyAbs]: 1,
-      [defaultPredKeyAbs]: 1,
-      [customPredKeyPct]: 1,
-      [defaultPredKeyPct]: 1,
+      [predKeyAbs]: 1,
+      [predKeyPct]: 1,
     };
 
     predictions = await PredictionsModel.find(
@@ -176,45 +178,37 @@ PredictionSchema.statics.getPredsForHistogram = async function (
       projection
     );
 
-    if (! predictions) {
+    if (!predictions) {
       return [];
     }
 
     const finalPredictions = predictions.map((cE) => {
-      let predKeyAbs;
-      let predKeyPct;
       let newElement;
 
       if (cE.CNPJ_FUNDO === buscaCnpj) {
-        predKeyAbs = customPredKeyAbs;
-        predKeyPct = customPredKeyPct;
         newElement = {
-          CNPJ_FUNDO: cE['CNPJ_FUNDO'],
-          CLASSE: cE['CLASSE'],
-          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
-          vol_252: cE['vol_252'],
-          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
-          NR_COTST: cE['NR_COTST'],
-          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
-          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CNPJ_FUNDO: cE["CNPJ_FUNDO"],
+          Classificacao: cE["Classificacao"],
+          vol_252: cE["vol_252"],
+          VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
+          NR_COTST: cE["NR_COTST"],
+          QT_DIA_CONVERSAO_COTA: cE["QT_DIA_CONVERSAO_COTA"],
+          QT_DIA_PAGTO_RESGATE: cE["QT_DIA_PAGTO_RESGATE"],
           CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
           CAPTC_LIQ_PCT_ms: cE[predKeyPct],
-        }
+        };
       } else {
-        predKeyAbs = defaultPredKeyAbs;
-        predKeyPct = defaultPredKeyPct;
         newElement = {
-          CNPJ_FUNDO: '',
-          CLASSE: cE['CLASSE'],
-          CLASSE_ANBIMA: cE['CLASSE_ANBIMA'],
-          vol_252: cE['vol_252'],
-          VL_PATRIM_LIQ: cE['VL_PATRIM_LIQ'],
-          NR_COTST: cE['NR_COTST'],
-          QT_DIA_CONVERSAO_COTA: cE['QT_DIA_CONVERSAO_COTA'],
-          QT_DIA_PAGTO_RESGATE: cE['QT_DIA_PAGTO_RESGATE'],
+          CNPJ_FUNDO: "",
+          Classificacao: cE["Classificacao"],
+          vol_252: cE["vol_252"],
+          VL_PATRIM_LIQ: cE["VL_PATRIM_LIQ"],
+          NR_COTST: cE["NR_COTST"],
+          QT_DIA_CONVERSAO_COTA: cE["QT_DIA_CONVERSAO_COTA"],
+          QT_DIA_PAGTO_RESGATE: cE["QT_DIA_PAGTO_RESGATE"],
           CAPTC_LIQ_ABS_ms: cE[predKeyAbs],
           CAPTC_LIQ_PCT_ms: cE[predKeyPct],
-        }
+        };
       }
 
       return newElement;
@@ -230,6 +224,7 @@ PredictionSchema.statics.getPredsForHistogram = async function (
 
 PredictionSchema.statics.getAncoras = async function () {
   const ancoras: Date[] = await PredictionsModel.distinct("ancora");
+
   return ancoras;
 };
 
@@ -237,6 +232,7 @@ PredictionSchema.statics.getCalcDatesPred = async function () {
   const datahoraPredicao: Date[] = await PredictionsModel.distinct(
     "datahora_predicao"
   );
+
   return datahoraPredicao;
 };
 
@@ -245,7 +241,7 @@ const PredictionsModel =
   model<PredictionDocType, PredictionModelType>(
     "predictions",
     PredictionSchema,
-    "HN_predictions"
+    "HN_predictions_cvm175"
   );
 
 export default PredictionsModel;
