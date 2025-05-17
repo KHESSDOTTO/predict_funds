@@ -65,7 +65,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   return (
     <div className="bg-black/90">
       <div className="min-h-screen relative text-white">
-        <Header user={user}></Header>
+        <Header />
         <PwdConfirmModal
           showModal={showModal}
           setShowModal={setShowModal}

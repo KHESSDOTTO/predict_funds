@@ -22,10 +22,6 @@ interface SideBarPropsType {
   setShowSideBar: Function;
 }
 
-interface HeaderPropsType {
-  user: UserType;
-}
-
 interface CadastroFundosType extends CadastroFundosDocType_doc {}
 
 interface PredictionsDataObjectType {

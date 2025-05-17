@@ -43,7 +43,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   return (
     <div className="bg-black/90">
       <div className="min-h-screen w-full overflow-x-hidden relative">
-        <Header user={user} />
+        <Header />
         <div className="px-4 lg:px-8">
           <Dashboard {...dashboardProps} />
         </div>

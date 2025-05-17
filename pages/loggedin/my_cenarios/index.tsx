@@ -1,7 +1,7 @@
 import ButtonGreen from "@/components/UI/buttonGreen";
 import Header from "@/components/layout/header";
 import { useUser } from "@/contexts/userContext";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { verifyToken } from "@/utils/jwt.config";
 import toast from "react-hot-toast";
 import LogoPredict from "@/components/UI/logoPredict";
@@ -28,8 +28,7 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   return (
     <div className="bg-black/90 h-full">
       <div className="min-h-screen relative text-white/90 pb-16">
-        {userFromToken && <Header user={userFromToken} />}
-
+        <Header />
         <div className="px-4 lg:px-8">
           <div className="mt-12 lg:mt-14 mb-8 lg:mb-8">
             <LogoPredict bold={false} />
