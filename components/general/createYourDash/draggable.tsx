@@ -6,14 +6,20 @@ export default function Draggable({children, id}: CYDDroppablePropsType) {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
     id: id,
   });
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+  let style: React.CSSProperties = {
+    touchAction: 'none', // Evitar drag com scroll em mobile
+  };
 
+  if (transform) {
+    style = {
+      ...style,
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    };
+  }
   
   return (
-    <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
       {children}
-    </div>
+    </button>
   );
 }

@@ -7,19 +7,20 @@ export default function CreateYourDashList()
 {
   const containers = ['A', 'B', 'C'];
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);
-  const draggableMarkup = (
-    <Draggable id="draggable">Drag me</Draggable>
-  );
+  const draggableMarkups = [
+    <Draggable id="draggable1">Drag me1</Draggable>,
+    <Draggable id="draggable2">Drag me2</Draggable>,
+  ];
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      {parent === null ? draggableMarkup : null}
+      {parent === null ? draggableMarkups.map((cE) => cE) : null}
 
       {containers.map((id) => (
         // We updated the Droppable component so it would accept an `id`
         // prop and pass it to `useDroppable`
         <Droppable key={id} id={id}>
-          {parent === id ? draggableMarkup : 'Drop here'}
+          {parent === id ? draggableMarkups.map((cE) => cE) : 'Drop here'}
         </Droppable>
       ))}
     </DndContext>
