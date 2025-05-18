@@ -15,6 +15,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import type { MyCenariosPagePropsType } from "@/utils/types/pageTypes/myCenariosTypes";
 import { consoleLog } from "@/utils/functions/genericFunctions";
 import { track } from "@vercel/analytics";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
   const { user, cenarios, setCenarios } = useUser();
@@ -34,13 +35,13 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
             <LogoPredict bold={false} />
           </div>
           <div className="flex justify-center lg:hidden">
-            <h1 className="text-center text-2xl border-b px-8 border-white font-semibold pb-2 mb-8 lg:text-left lg:border-b lg:border-white/90 lg:mb-12 lg:px-16">
+            <TitleComponent htmlTag="h2">
               My Cenarios
-            </h1>
+            </TitleComponent>
           </div>
-          <h1 className="hidden text-xl px-8 font-bold pt-6 pb-2 mb-4 lg:block lg:border-b lg:border-white lg:mb-12 lg:w-full">
+          <TitleComponent htmlTag="h2">
             My Cenarios
-          </h1>
+          </TitleComponent>
           <section
             id="cenarios"
             className="mb-8 lg:mb-0 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"

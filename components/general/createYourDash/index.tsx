@@ -1,36 +1,75 @@
-import { DndContext, DragEndEvent, UniqueIdentifier } from "@dnd-kit/core";
+import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import Draggable from "./draggable";
 import Droppable from "./droppable";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+import TitleComponent from "@/components/UI/titleComponent";
+import Card from "./card";
+import { dashComponentsList } from "@/components/dashboardComponents/dashboardComponentsMap";
+import { handleDragEnd } from "./cydHandlers";
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import SortableItem from "./sortableItem";
 
 export default function CreateYourDashList()
 {
-  const containers = ['A', 'B', 'C'];
-  const [parent, setParent] = useState<UniqueIdentifier | null>(null);
-  const draggableMarkups = [
-    <Draggable id="draggable1">Drag me1</Draggable>,
-    <Draggable id="draggable2">Drag me2</Draggable>,
-  ];
-
-  return (
-    <DndContext onDragEnd={handleDragEnd}>
-      {parent === null ? draggableMarkups.map((cE) => cE) : null}
-
-      {containers.map((id) => (
-        // We updated the Droppable component so it would accept an `id`
-        // prop and pass it to `useDroppable`
-        <Droppable key={id} id={id}>
-          {parent === id ? draggableMarkups.map((cE) => cE) : 'Drop here'}
-        </Droppable>
-      ))}
-    </DndContext>
+  const [dashComponents, setDashComponents] = useState([]);
+  const dashboardOptions: ReactNode[] = [];
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
   );
 
-  function handleDragEnd(event: DragEndEvent) {
-    const {over} = event;
+  dashComponentsList.forEach((cE) => {
+    const { title, description, id, icon } = cE;
 
-    // If the item is dropped over a container, set it as the parent
-    // otherwise reset the parent to `null`
-    setParent(over ? over.id : null);
-  }
+    dashboardOptions.push(
+      <Draggable id={String(id)}>
+        <Card title={title} description={description} icon={icon} />
+      </Draggable>
+    )
+  })
+
+  return (
+    <div className="py-12 px-6">
+      <TitleComponent htmlTag="h1">Build your dash</TitleComponent>
+      <DndContext
+        onDragEnd={ (event) => handleDragEnd({event, dashComponents, setDashComponents}) }
+        sensors={sensors}
+        collisionDetection={closestCenter}
+      >
+        <div className="flex flex-col gap-4">
+          <div className="rounded-xl mt-4">
+            <TitleComponent htmlTag="h2">Component options</TitleComponent>
+              <Droppable id="component-options-area" disableOver>
+                <div className="flex gap-x-6 gap-y-2 flex-wrap">
+                  {dashboardOptions.map(cE => cE)}
+                </div>
+              </Droppable>
+          </div>
+          <div className="w-full">
+            <TitleComponent>Your Dashboard</TitleComponent>
+            <div id="your-dashboard-area" className="flex gap-12 w-full">
+              <Droppable id='user-dashboard-area'>
+                  <div className="p-4 border-2 border-dashed rounded-xl border-spacing-4 w-full h-64">
+                    {
+                      ! dashComponents.length &&
+                        <span>
+                          + Drop here the components for your dashboard
+                        </span>
+                    }
+                    <SortableContext
+                      items={dashComponents}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      {dashComponents.map(id => <SortableItem key={id} id={id} content="lala" />)}
+                    </SortableContext>
+                  </div>
+              </Droppable>
+            </div>
+          </div>
+        </div>
+      </DndContext>
+    </div>
+  );
 }
