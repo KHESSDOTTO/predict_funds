@@ -7,7 +7,18 @@ function handleDragEnd({
     setDashComponents
 }: {event: any, dashComponents: any, setDashComponents: Dispatch<SetStateAction<any>>}) {
     const {active, over} = event;
+
+    if (!over) return;
     
+    // Add new
+    if (over.id === 'user-dashboard-area' && !dashComponents.includes(active.id)) {
+      setDashComponents((prevComponents: string[]) => [...prevComponents, active.id]);
+      
+      return;
+    }
+    // End: add new
+
+    // Resort
     if (active.id !== over.id) {
       setDashComponents((items: any) => {
         const oldIndex = items.indexOf(active.id);
@@ -16,6 +27,7 @@ function handleDragEnd({
         return arrayMove(items, oldIndex, newIndex);
       });
     }
+    // End: Resort
 
     return;
 }
