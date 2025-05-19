@@ -28,6 +28,13 @@ interface PredictionsDataObjectType {
   [key: string]: PredictionsType[];
 }
 
+interface DashMapType {
+  id: number|string;
+  title: string;
+  description: string;
+  icon: ReactNode;
+}
+
 interface PredictionsType {
   DT_COMPTC?: Date;
   CNPJ_FUNDO: string;
@@ -142,7 +149,6 @@ export type {
   HistoricDataObjectType,
   HistoricType,
   SideBarPropsType,
-  HeaderPropsType,
   DashboardControlFormType,
   CenarioType,
   PredictionsDataObjectType,
@@ -156,4 +162,5 @@ export type {
   AbsOrPctType,
   AbsOrPctNFFieldsType,
   DoLogoutParamsType,
+  DashMapType
 };

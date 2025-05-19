@@ -8,6 +8,8 @@ export default function Draggable({children, id}: CYDDroppablePropsType) {
   });
   let style: React.CSSProperties = {
     touchAction: 'none', // Evitar drag com scroll em mobile
+    flexGrow: 1,
+    maxWidth: '24%'
   };
 
   if (transform) {

@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+import { DragEndEvent } from "@dnd-kit/core";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 interface CYDDraggablePropsType  {
     children?: ReactNode;
@@ -10,19 +11,30 @@ interface CYDDroppablePropsType extends CYDDraggablePropsType {
 }
 
 interface CardPropsType {
+    order?: number;
     title: string;
     description: string;
     icon: ReactNode;
 }
 
 interface SortableItemPropsType {
-    id: string;
-    content: string
+    id: string,
+    key: string,
+    order?: number,
+}
+
+interface HandleDragEndParamsType {
+  event: DragEndEvent,
+  availableComponents: string[],
+  setAvailableComponents: Dispatch<SetStateAction<string[]>>,
+  dashComponents: string[],
+  setDashComponents: Dispatch<SetStateAction<string[]>>
 }
 
 export type {
     CYDDroppablePropsType,
     CYDDraggablePropsType,
     SortableItemPropsType,
-    CardPropsType
+    CardPropsType,
+    HandleDragEndParamsType
 }

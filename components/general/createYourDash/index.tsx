@@ -5,45 +5,62 @@ import { ReactNode, useState } from "react";
 import TitleComponent from "@/components/UI/titleComponent";
 import Card from "./card";
 import { dashComponentsList } from "@/components/dashboardComponents/dashboardComponentsMap";
-import { handleDragEnd } from "./cydHandlers";
+import { handleDragEnd, saveDash } from "./cydHandlers";
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import SortableItem from "./sortableItem";
+import ButtonGreen from "@/components/UI/buttonGreen";
+import ButtonIndigo from "@/components/UI/buttonIndigo";
 
 export default function CreateYourDashList()
 {
-  const [dashComponents, setDashComponents] = useState([]);
-  const dashboardOptions: ReactNode[] = [];
+  const [availableComponents, setAvailableComponents] = useState(
+    dashComponentsList.map(item => String(item.id))
+  );
+  const [dashComponents, setDashComponents] = useState<string[]>([]);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
-  dashComponentsList.forEach((cE) => {
-    const { title, description, id, icon } = cE;
-
-    dashboardOptions.push(
-      <Draggable id={String(id)}>
-        <Card title={title} description={description} icon={icon} />
+  // Filter dashComponentsList to only show available components
+  const dashboardOptions: ReactNode[] = availableComponents.map(id => {
+    const component = dashComponentsList.find(comp => String(comp.id) === id);
+    if (!component) return null;
+    
+    return (
+      <Draggable key={id} id={id}>
+        <Card 
+          title={component.title} 
+          description={component.description} 
+          icon={component.icon} 
+        />
       </Draggable>
-    )
-  })
+    );
+  }).filter(Boolean);
+  const handleDragEndStaticArgs = {
+    availableComponents,
+    setAvailableComponents,
+    dashComponents,
+    setDashComponents
+  };
 
   return (
-    <div className="py-12 px-6">
+    <div className="pt-12 px-6">
       <TitleComponent htmlTag="h1">Build your dash</TitleComponent>
       <DndContext
-        onDragEnd={ (event) => handleDragEnd({event, dashComponents, setDashComponents}) }
+        onDragEnd={ (event) => handleDragEnd({...handleDragEndStaticArgs, event}) }
         sensors={sensors}
         collisionDetection={closestCenter}
       >
         <div className="flex flex-col gap-4">
           <div className="rounded-xl mt-4">
             <TitleComponent htmlTag="h2">Component options</TitleComponent>
-              <Droppable id="component-options-area" disableOver>
-                <div className="flex gap-x-6 gap-y-2 flex-wrap">
-                  {dashboardOptions.map(cE => cE)}
+              <Droppable id="component-options-area">
+                <div className="flex gap-x-6 gap-y-2 flex-wrap min-h-24 rounded-xl w-full">
+                  {dashboardOptions.length ? dashboardOptions : (
+                    <span className="block w-full text-gray-400 p-4">All components were added to your dashboard</span>
+                  )}
                 </div>
               </Droppable>
           </div>
@@ -51,9 +68,9 @@ export default function CreateYourDashList()
             <TitleComponent>Your Dashboard</TitleComponent>
             <div id="your-dashboard-area" className="flex gap-12 w-full">
               <Droppable id='user-dashboard-area'>
-                  <div className="p-4 border-2 border-dashed rounded-xl border-spacing-4 w-full h-64">
+                  <div className="p-4 border-2 border-dashed rounded-xl border-spacing-4 w-full min-h-64">
                     {
-                      ! dashComponents.length &&
+                      !dashComponents.length &&
                         <span>
                           + Drop here the components for your dashboard
                         </span>
@@ -62,7 +79,15 @@ export default function CreateYourDashList()
                       items={dashComponents}
                       strategy={verticalListSortingStrategy}
                     >
-                      {dashComponents.map(id => <SortableItem key={id} id={id} content="lala" />)}
+                      <div className="flex flex-col h-fit">
+                        {dashComponents.map((id, order) => (
+                          <SortableItem
+                            key={id}
+                            id={id}
+                            order={order + 1}
+                          />
+                        ))}
+                      </div>
                     </SortableContext>
                   </div>
               </Droppable>
@@ -70,6 +95,11 @@ export default function CreateYourDashList()
           </div>
         </div>
       </DndContext>
+      <div className="w-full flex justify-center mt-10">
+        <div onClick={saveDash}>
+          <ButtonGreen shadowColor="white/30" shadowSize="md">Save</ButtonGreen>
+        </div>
+      </div>
     </div>
   );
 }

@@ -9,7 +9,8 @@ export default function Droppable({children, id, disableOver}: CYDDroppableProps
   const style = {
     backgroundColor: isOver && ! disableOver ? 'rgba(255,255,255,0.5)' : 'inherit',
     width: '100%',
-    duration: '200ms'
+    duration: '200ms',
+    borderRadius: '12px'
   };
   
   

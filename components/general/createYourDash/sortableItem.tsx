@@ -1,35 +1,44 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Card from "./card";
+import { dashComponentsList } from "@/components/dashboardComponents/dashboardComponentsMap";
 import { SortableItemPropsType } from "./cydTypes";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
-// SortableItem component
-export default function SortableItem ({
-    id,
-    content
-}: SortableItemPropsType)
-{
+export default function SortableItem({
+  order,
+  id,
+  key,
+}: SortableItemPropsType) {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
-    transition
+    transition,
   } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    flexGrow: 1
   };
 
+  // Find the component data by ID
+  const componentData = dashComponentsList.find(comp => String(comp.id) === id);
+
+  if (!componentData) {
+    return null;
+  }
+
   return (
-    <div 
-      ref={setNodeRef} 
-      style={style} 
-      className="px-4 py-3 my-2 bg-white rounded-lg shadow cursor-grab active:cursor-grabbing border border-gray-200 hover:border-blue-400 transition-colors"
-      {...attributes} 
-      {...listeners}
-    >
-      {content}
+    <div ref={setNodeRef} key={key} style={style} {...attributes} {...listeners}>
+      <Card
+        order={order}
+        title={componentData.title} 
+        description={componentData.description} 
+        icon={componentData.icon}
+      />
     </div>
   );
-};
+}
