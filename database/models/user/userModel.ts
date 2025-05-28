@@ -20,7 +20,7 @@ const UserPreferencesSchema = new Schema<UserPreferencesType>(
     netFundingDash: [
       {
         type: Number,
-        default: dashComponentsList.map((cE) => Number(cE.id)),
+        default: dashComponentsList,
         unique: false,
         required: true,
       },

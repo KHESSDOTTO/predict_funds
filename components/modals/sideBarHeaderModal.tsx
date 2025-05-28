@@ -34,7 +34,7 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
       </div>
       <div
         className={`bg-black transition-all pointer-event-none absolute h-[70vh] w-[80%] top-[15vh] left-[10vw] rounded-xl text-white flex flex-col px-[5vw] py-[5vh] gap-8`}
-        style={{boxShadow: '0 0 15px rgba(255,255,255,0.5)'}}
+        style={{ boxShadow: "0 0 15px rgba(255,255,255,0.5)" }}
       >
         <div>
           <h2 className="font-bold">My Products</h2>
@@ -42,16 +42,22 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
             <li className="flex gap-4 items-end">
               <h3>Future Net Funding</h3>
               <div className="text-xs flex gap-2 text-blue-200">
-                <Link href={"/loggedin/home"}
-          className="cursor-pointer">
+                <Link href={"/loggedin/home"} className="cursor-pointer">
                   <span className="transition-all hover:text-yellow-600">
                     Simulate
                   </span>
                 </Link>
-                <Link href={"/loggedin/my_cenarios"}
-          className="cursor-pointer">
+                <Link href={"/loggedin/my_cenarios"} className="cursor-pointer">
                   <span className="transition-all cursor-pointer hover:text-yellow-600">
                     Cenarios
+                  </span>
+                </Link>
+                <Link
+                  href={"/loggedin/create-your-dash"}
+                  className="cursor-pointer"
+                >
+                  <span className="transition-all cursor-pointer hover:text-yellow-600">
+                    Build your dash
                   </span>
                 </Link>
               </div>

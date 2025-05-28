@@ -23,13 +23,20 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { useUser } from "@/contexts/userContext";
 import toast from "react-hot-toast";
 import { UserType } from "@/utils/types/generalTypes/types";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
-export default function CreateYourDashList(pagePros: { user: UserType }) {
+export default function CreateYourDashList(pageProps: { user: UserType }) {
   const { user, setUser } = useUser();
   const [availableComponents, setAvailableComponents] = useState(
     dashComponentsList.map((item) => String(item.id))
   );
-  const [dashComponents, setDashComponents] = useState<string[]>([]);
+  const [dashComponents, setDashComponents] = useState<string[]>(
+    user?.preferences?.netFundingDash.map((id) => String(id)) || []
+  );
+
+  consoleLog({ availableComponents });
+  consoleLog({ dashComponents });
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -42,7 +49,14 @@ export default function CreateYourDashList(pagePros: { user: UserType }) {
       const component = dashComponentsList.find(
         (comp) => String(comp.id) === id
       );
-      if (!component) return null;
+
+      const isInDash = pageProps.user.preferences?.netFundingDash.includes(
+        Number(id)
+      );
+
+      if (!component || isInDash) {
+        return null;
+      }
 
       return (
         <Draggable key={id} id={id}>
@@ -55,6 +69,9 @@ export default function CreateYourDashList(pagePros: { user: UserType }) {
       );
     })
     .filter(Boolean);
+
+  consoleLog({ dashboardOptions });
+
   const handleDragEndStaticArgs = {
     availableComponents,
     setAvailableComponents,
@@ -64,7 +81,11 @@ export default function CreateYourDashList(pagePros: { user: UserType }) {
 
   useEffect(() => {
     if (!user) {
-      setUser(pagePros.user ?? null);
+      setUser(pageProps.user ?? null);
+      setDashComponents(
+        pageProps.user?.preferences?.netFundingDash.map((id) => String(id)) ||
+          []
+      );
     }
 
     return;

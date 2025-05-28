@@ -72,8 +72,8 @@ export interface ClientInfoUpdateUserInfoNoPwd {
   cnpj: string;
   address: string;
   contactPhone: string;
+  preferences: UserPreferencesType;
   pwd?: string;
-  preferences?: UserPreferencesType;
 }
 
 export interface UserPreferencesType {
