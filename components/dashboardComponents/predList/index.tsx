@@ -1,9 +1,9 @@
 import ButtonIndigo from "@/components/UI/buttonIndigo";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { handleAddRow } from "./predListFunctions";
 import PredRow from "./predRow";
 import AddRow from "./addRow";
+import crypto from "crypto";
 import type {
   PredListPropsType,
   PredRowStaticParamsType,
@@ -21,11 +21,11 @@ export default function PredList({
   const [lastHistoricDate, setLastHistoricDate] = useState(new Date());
   const isPct = varName === "CAPTC_LIQ_PCT_ms";
   const [predRows, setPredRows] = useState<PredRowType[]>([
-    { id: uuidv4(), direction: "backward", numPer: 8 },
-    { id: uuidv4(), direction: "backward", numPer: 4 },
+    { id: "row1", direction: "backward", numPer: 8 },
+    { id: "row2", direction: "backward", numPer: 4 },
   ]);
   const [newRow, setNewRow] = useState<PredRowType>({
-    id: uuidv4(),
+    id: "newRow",
     direction: "backward",
     numPer: 8,
   });
@@ -75,9 +75,14 @@ export default function PredList({
           </tr>
         </thead>
         <tbody>
-          {predRows.map((cE) => {
+          {predRows.map((cE, cI) => {
             const predRowArgs = { ...predRowStaticArgs, cE };
-            return <PredRow {...predRowArgs} />;
+            const uniqueKey = crypto
+              .createHash("md5")
+              .update(JSON.stringify({...cE, ...predRowStaticArgs, cI}))
+              .digest("hex");
+
+            return <PredRow {...predRowArgs} key={uniqueKey} />;
           })}
           {showAddRow && <AddRow {...addRowArgs} />}
         </tbody>

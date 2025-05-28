@@ -2,13 +2,14 @@ import Link from "next/link";
 import { HeaderPropsType } from "@/utils/types/generalTypes/types";
 import { useState } from "react";
 import SideBar from "../modals/sideBarHeaderModal";
+import { useUser } from "@/contexts/userContext";
 // import DisconnectBtn from "../UI/disconnectBtn";
 
-function Header({ user }: HeaderPropsType) {
+function Header() {
   // For the sideBar component to work properly, it should be placed inside a container that has position: relative.
 
   const [showSideBar, setShowSideBar] = useState(false);
-  let { username, cnpj } = user;
+  const { user } = useUser();
 
   function handleSideBar() {
     setShowSideBar(true);
@@ -90,7 +91,7 @@ function Header({ user }: HeaderPropsType) {
               </svg>
               <p>
                 <span className="hidden md:inline">Username: </span>
-                {username}
+                {user?.username}
               </p>
             </div>
             <div className="col-span-5 flex items-center gap-1 md:gap-2 md:flex-row">
@@ -104,7 +105,7 @@ function Header({ user }: HeaderPropsType) {
               </svg>
               <p>
                 <span className="hidden md:inline">CNPJ: </span>
-                {cnpj}
+                {user?.cnpj}
               </p>
             </div>
           </div>

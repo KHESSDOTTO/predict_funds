@@ -46,6 +46,7 @@ export default function RegistrationInfos({
               <li key={titlesOfFields[cI]}>
                 <span className="font-semibold text-white">
                   {titlesOfFields[cI]} :
+                  &nbsp;
                 </span>
                 <span>{registration[cE]}</span>
               </li>

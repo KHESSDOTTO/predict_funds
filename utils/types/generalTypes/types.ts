@@ -22,14 +22,17 @@ interface SideBarPropsType {
   setShowSideBar: Function;
 }
 
-interface HeaderPropsType {
-  user: UserType;
-}
-
 interface CadastroFundosType extends CadastroFundosDocType_doc {}
 
 interface PredictionsDataObjectType {
   [key: string]: PredictionsType[];
+}
+
+interface DashMapType {
+  id: number|string;
+  title: string;
+  description: string;
+  icon: ReactNode;
 }
 
 interface PredictionsType {
@@ -146,7 +149,6 @@ export type {
   HistoricDataObjectType,
   HistoricType,
   SideBarPropsType,
-  HeaderPropsType,
   DashboardControlFormType,
   CenarioType,
   PredictionsDataObjectType,
@@ -160,4 +162,5 @@ export type {
   AbsOrPctType,
   AbsOrPctNFFieldsType,
   DoLogoutParamsType,
+  DashMapType
 };

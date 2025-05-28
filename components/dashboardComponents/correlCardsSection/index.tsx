@@ -138,7 +138,6 @@ export default function CorrelCardsSection({
           <>
             <Swiper
               modules={[Navigation]}
-              slidesPerGroup={1}
               loop={true}
               navigation={{
                 nextEl: `.swiper-button-prev.${styles.swiperButtonNext}`,
