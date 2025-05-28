@@ -7,6 +7,7 @@ import {
 } from "recharts/types/component/DefaultTooltipContent";
 import { UserContextType } from "@/contexts/userContext/userContextTypes";
 import { CadastroFundosDocType_doc } from "@/database/models/cadastroFundos/cadastroFundosTypes";
+import { UserPreferencesType } from "@/database/models/user/userType";
 
 type AbsOrPctType = "abs" | "pct";
 
@@ -29,7 +30,7 @@ interface PredictionsDataObjectType {
 }
 
 interface DashMapType {
-  id: number|string;
+  id: number | string;
   title: string;
   description: string;
   icon: ReactNode;
@@ -74,6 +75,7 @@ interface UserType {
   emailConfirm: boolean;
   isActive: boolean;
   cnpjs: string[];
+  preferences?: UserPreferencesType;
 }
 
 interface HistoricDataObjectType {
@@ -162,5 +164,5 @@ export type {
   AbsOrPctType,
   AbsOrPctNFFieldsType,
   DoLogoutParamsType,
-  DashMapType
+  DashMapType,
 };
