@@ -27,22 +27,21 @@ import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function CreateYourDashList(pageProps: { user: UserType }) {
   const { user, setUser } = useUser();
-  const [availableComponents, setAvailableComponents] = useState(
-    dashComponentsList.map((item) => String(item.id))
-  );
   const [dashComponents, setDashComponents] = useState<string[]>(
     user?.preferences?.netFundingDash.map((id) => String(id)) || []
   );
 
-  consoleLog({ availableComponents });
-  consoleLog({ dashComponents });
-
+  // Derive availableComponents from dashComponents instead of managing separate state
+  const availableComponents = dashComponentsList
+    .map((item) => String(item.id))
+    .filter((id) => !dashComponents.includes(id));
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
   // Filter dashComponentsList to only show available components
   const dashboardOptions: ReactNode[] = availableComponents
     .map((id) => {
@@ -50,9 +49,8 @@ export default function CreateYourDashList(pageProps: { user: UserType }) {
         (comp) => String(comp.id) === id
       );
 
-      const isInDash = pageProps.user.preferences?.netFundingDash.includes(
-        Number(id)
-      );
+      // FIX: Use current dashComponents state instead of pageProps
+      const isInDash = dashComponents.includes(id);
 
       if (!component || isInDash) {
         return null;
@@ -73,8 +71,6 @@ export default function CreateYourDashList(pageProps: { user: UserType }) {
   consoleLog({ dashboardOptions });
 
   const handleDragEndStaticArgs = {
-    availableComponents,
-    setAvailableComponents,
     dashComponents,
     setDashComponents,
   };

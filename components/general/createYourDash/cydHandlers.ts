@@ -1,13 +1,11 @@
 import { UserType } from "@/utils/types/generalTypes/types";
 import { arrayMove } from "@dnd-kit/sortable";
-import { HandleDragEndParamsType } from "./cydTypes";
 import { Dispatch, SetStateAction } from "react";
 import { ax } from "@/database/axios.config";
+import { HandleDragEndParamsType } from "./cydTypes";
 
 function handleDragEnd({
   event,
-  availableComponents,
-  setAvailableComponents,
   dashComponents,
   setDashComponents,
 }: HandleDragEndParamsType) {
@@ -15,39 +13,35 @@ function handleDragEnd({
 
   if (!over) return;
 
+  const activeId = active.id as string;
+  const overId = over.id as string;
+
   // Adding from options to dashboard
-  if (
-    over.id === "user-dashboard-area" &&
-    availableComponents.includes(active.id as string)
-  ) {
+  if (overId === "user-dashboard-area" && !dashComponents.includes(activeId)) {
     // Add to dashboard
-    setDashComponents((prev) => [...prev, active.id as string]);
-    // Remove from available components
-    setAvailableComponents((prev) => prev.filter((id) => id !== active.id));
+    setDashComponents((prev) => [...prev, activeId]);
     return;
   }
 
-  // Removing from dashboard (dragging to options area or anywhere else outside)
+  // Removing from dashboard (dragging to options area)
   if (
-    over.id === "component-options-area" &&
-    dashComponents.includes(active.id as string)
+    overId === "component-options-area" &&
+    dashComponents.includes(activeId)
   ) {
     // Remove from dashboard
-    setDashComponents((prev) => prev.filter((id) => id !== active.id));
-    // Add back to available components
-    setAvailableComponents((prev) => [...prev, active.id as string]);
+    setDashComponents((prev) => prev.filter((id) => id !== activeId));
     return;
   }
 
   // Reordering within dashboard
   if (
-    dashComponents.includes(active.id as string) &&
-    dashComponents.includes(over.id as string) &&
-    active.id !== over.id
+    dashComponents.includes(activeId) &&
+    dashComponents.includes(overId) &&
+    activeId !== overId
   ) {
     setDashComponents((items) => {
-      const oldIndex = items.indexOf(active.id as string);
-      const newIndex = items.indexOf(over.id as string);
+      const oldIndex = items.indexOf(activeId);
+      const newIndex = items.indexOf(overId);
 
       return arrayMove(items, oldIndex, newIndex);
     });

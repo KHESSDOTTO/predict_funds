@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import {
   CadastroFundosType,
   HistoricType,
@@ -31,6 +31,7 @@ import { useDevice } from "@/contexts/deviceContext";
 
 export default function Dashboard({ ancoras }: DashboardPropsType) {
   const userContext = useUser();
+  const userPreferences = userContext.user?.preferences?.netFundingDash;
   const { controlForm, setControlForm } = useControlForm();
   const { isMobile } = useDevice();
   const [historicFundData, setHistoricFundData] = useState<HistoricType[]>([]);
@@ -113,6 +114,29 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     return;
   }, [ancoras]);
 
+  const optionalComponentsMap: { [key: number]: ReactNode } = {
+    2: (
+      <NetFundingHistogramChart
+        {...{
+          currCnpj: controlForm.buscaCnpj,
+          smallV: false,
+          Classificacao: registration ? registration["Classificacao"] : "",
+          isMobile,
+          dataForHistogram,
+          loadingHistogram,
+          setLoadingHistogram,
+        }}
+      />
+    ),
+    3: (
+      <ValueQuotaChart
+        {...{ smallV: false, isMobile, historic: historicFundData }}
+      />
+    ),
+    4: <CorrelCardsSection padding="5px 0" correls={correls} />,
+    5: <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />,
+  };
+
   return (
     <main className="flex flex-col items-center gap-8 lg:gap-12 min-w-full text-sm py-2">
       <div className="mt-14 w-full">
@@ -138,7 +162,10 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
         >
           {classificacoes.map((currClass) => {
             return (
-              <SwiperSlide key={`swiper-dashboard-${currClass}`} className="px-2 mb-12">
+              <SwiperSlide
+                key={`swiper-dashboard-${currClass}`}
+                className="px-2 mb-12"
+              >
                 <NetFundingPredChart
                   {...{
                     title: ["Net Funding CVM Class", currClass],
@@ -187,30 +214,14 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
           }}
         />
       </div>
-      <div className="w-full">
-        <NetFundingHistogramChart
-          {...{
-            currCnpj: controlForm.buscaCnpj,
-            smallV: false,
-            Classificacao: registration ? registration["Classificacao"] : "",
-            isMobile,
-            dataForHistogram,
-            loadingHistogram,
-            setLoadingHistogram,
-          }}
-        />
-      </div>
-      <div className="w-full">
-        <ValueQuotaChart
-          {...{ smallV: false, isMobile, historic: historicFundData }}
-        />
-      </div>
-      <div className="w-full">
-        <CorrelCardsSection padding="5px 0" correls={correls} />
-      </div>
-      <div className="w-full">
-        <HeatMap title="Heat Map - Correlations" heatMapObj={heatMapObj} />
-      </div>
+
+      {userPreferences &&
+        userPreferences.map((idComponent) => {
+          return (
+            <div className="w-full">{optionalComponentsMap[idComponent]}</div>
+          );
+        })}
+
       <div className="w-full flex justify-center lg:hidden">
         <CenariosBtnSection saveCenario={() => saveCenario(saveCenariosArgs)} />
       </div>
