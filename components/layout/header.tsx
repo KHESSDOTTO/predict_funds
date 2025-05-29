@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { HeaderPropsType } from "@/utils/types/generalTypes/types";
 import { useState } from "react";
 import SideBar from "../modals/sideBarHeaderModal";
 import { useUser } from "@/contexts/userContext";
