@@ -18,6 +18,7 @@ import {
 } from "@/utils/functions/pageFunctions/loggedInProfileFunctions";
 import ProfileForm from "@/components/pageForms/profileForm";
 import { doLogout } from "@/utils/functions/genericFunctions";
+import TitleComponent from "@/components/UI/titleComponent";
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
   return (
     <div className="bg-black/90">
       <div className="min-h-screen relative text-white">
-        <Header user={user}></Header>
+        <Header />
         <PwdConfirmModal
           showModal={showModal}
           setShowModal={setShowModal}
@@ -79,13 +80,13 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
           <div className="w-full mt-6 mb-4 lg:mb-12">
             <LogoPredict bold={false} />
           </div>
-          <div className="lg:px-28 flex justify-center w-full">
-            <h1 className="text-center lg:text-left w-fit text-3xl my-6 px-8 pb-2 font-serif lg:w-full border-b lg:border-white lg:mt-0 lg:mb-12">
+          <div className="flex justify-center w-full">
+            <TitleComponent htmlTag="h2">
               Profile
-            </h1>
+            </TitleComponent>
           </div>
           <div className="flex flex-col items-center lg:items-start">
-            <section id="userInfos" className="relative lg:px-16">
+            <section id="userInfos" className="relative lg:px-16 lg:mt-2">
               <ProfileForm {...profileFormArgs} />
             </section>
             <div className="flex justify-center items-center mb-4 underline font-semibold transition-all hover:text-yellow-700 hover:border-yellow-700 hover:cursor-pointer lg:absolute lg:py-12 lg:border-l-2 lg:hidden">

@@ -14,6 +14,7 @@ export interface UserModelDocType extends Document {
   emailConfirm: boolean;
   isActive: boolean;
   createdAt: Date;
+  preferences: UserPreferencesType;
 }
 
 // Interface for the model itself, custom static methods should go in here
@@ -52,6 +53,7 @@ export interface CreateUserInfoType {
   contactPhone: string;
   passwordConfirm: string;
   cnpjs: string[];
+  preferences: UserPreferencesType;
 }
 
 export interface LoginUserInfoType {
@@ -70,7 +72,12 @@ export interface ClientInfoUpdateUserInfoNoPwd {
   cnpj: string;
   address: string;
   contactPhone: string;
+  preferences: UserPreferencesType;
   pwd?: string;
+}
+
+export interface UserPreferencesType {
+  netFundingDash: number[];
 }
 
 export type GenericObjectReturnType =

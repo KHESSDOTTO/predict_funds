@@ -10,9 +10,24 @@ import {
   ClientInfoUpdateUserInfoNoPwd,
   CreateUserInfoType,
   GenericObjectReturnType,
+  UserPreferencesType,
 } from "./userType";
+import { dashComponentsList } from "@/components/dashboardComponents/dashboardComponentsMap";
 import { consoleLog } from "@/utils/functions/genericFunctions";
-import { UserType } from "@/utils/types/generalTypes/types";
+
+const UserPreferencesSchema = new Schema<UserPreferencesType>(
+  {
+    netFundingDash: [
+      {
+        type: Number,
+        default: dashComponentsList,
+        unique: false,
+        required: true,
+      },
+    ],
+  },
+  { _id: false }
+);
 
 const UserSchema = new Schema(
   {
@@ -55,6 +70,7 @@ const UserSchema = new Schema(
     products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
     emailConfirm: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true, required: true },
+    preferences: { type: UserPreferencesSchema, required: true },
   },
   { timestamps: true }
 );
@@ -105,7 +121,7 @@ UserSchema.statics.sendConfirmEmail = async function (
       from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
       to: email,
       subject: "Confirm Your E-mail - PREDICT FUNDS",
-      html: `<p>Click here to activate your account:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_API_URL }/user/account-confirm/${ userId }">CLICK HERE</a>`,
+      html: `<p>Click here to activate your account:<p> <a href="${process.env.NEXT_PUBLIC_BASE_API_URL}/user/account-confirm/${userId}">CLICK HERE</a>`,
     });
 
     return true;
@@ -134,7 +150,7 @@ UserSchema.statics.sendPwdUpdateEmail = async function (
       from: process.env.NEXT_PUBLIC_EMAIL_ADDRESS,
       to: email,
       subject: `Change password - CNPJ: ${cnpj} - PREDICT FUNDS`,
-      html: `<p>Click here to change your password:<p> <a href="${ process.env.NEXT_PUBLIC_BASE_URL }/pwd-change/${ userId }/${ changeId }">CLICK HERE</a>`,
+      html: `<p>Click here to change your password:<p> <a href="${process.env.NEXT_PUBLIC_BASE_URL}/pwd-change/${userId}/${changeId}">CLICK HERE</a>`,
     });
 
     console.log("E-mail sent!");
@@ -172,11 +188,17 @@ or password didn't match the required format",
     const createdUserOriginal = await UserModel.create({
       ...clientInfo,
       passwordHash: hashedPassword,
+      preferences: {
+        netFundingDash: dashComponentsList.map((cE) => Number(cE.id)),
+      },
     });
 
     const createdUser = createdUserOriginal.toObject();
 
-    await UserModel.sendConfirmEmail(String(createdUser._id), createdUser.email);
+    await UserModel.sendConfirmEmail(
+      String(createdUser._id),
+      createdUser.email
+    );
 
     delete createdUser.passwordHash;
     delete createdUser._id;
@@ -207,9 +229,7 @@ UserSchema.statics.doLogin = async function (clientInfo: {
       username: username,
     })
       .lean()
-      .exec()
-    ;
-
+      .exec();
     if (!user) {
       return {
         ok: false,
@@ -241,7 +261,7 @@ UserSchema.statics.doLogin = async function (clientInfo: {
       return {
         ok: true,
         status: 200,
-        msg: (user as UserModelDocType),
+        msg: user as UserModelDocType,
         token: token,
         authCookie: authCookie,
       };
@@ -382,9 +402,7 @@ UserSchema.statics.doUpdateUserPwd = async function (
       newPwd.match(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/gm
       ) &&
-      newPwd === confirmNewPwd
-    ;
-
+      newPwd === confirmNewPwd;
     if (!pwdValidation) {
       return {
         ok: false,

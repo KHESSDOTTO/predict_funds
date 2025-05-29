@@ -30,8 +30,7 @@ export default function SelFundInfos({
       </h3>
       <ul className="flex flex-col gap-4 text-base lg:text-sm">
         <li className="flex border-b-2 px-1 border-gray-400 lg:border-none items-center lg:w-full">
-          <span className="w-[200px] lg:w-[240px] text-left">CVM Class:</span>
-          &nbsp;
+          <span className="w-[200px] lg:w-[240px] text-left">CVM Class:&nbsp;</span>
           <span
             className="
                 grow text-gray-200 italic
@@ -44,11 +43,11 @@ export default function SelFundInfos({
 
         {infosArr.map(([currField, currInfos]) => {
           return (
-            <li className="flex border-b-2 py-1 px-1 border-gray-400 lg:border-none items-center lg:w-full">
+            <li key={currField} className="flex border-b-2 py-1 px-1 border-gray-400 lg:border-none items-center lg:w-full">
               <span className="text-left w-[200px] lg:w-[240px]">
                 {currInfos["title"]}:
+                &nbsp;
               </span>
-              &nbsp;
               <span
                 className="
                     grow text-gray-200 italic 

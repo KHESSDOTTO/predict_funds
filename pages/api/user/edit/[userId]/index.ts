@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import UserModel from "@/database/models/user/userModel";
+import { consoleLog } from "@/utils/functions/genericFunctions";
 
 async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = req.query;
@@ -30,6 +31,7 @@ async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
     return res.status(confirmation.status).json(confirmation.msg);
   } catch (err) {
     console.log(err);
+
     return res.status(500).send(`Error: ${err}`);
   }
 }

@@ -19,10 +19,8 @@ function generateToken(user: UserModelDocType) {
     address,
     cnpj,
     contactPhone,
-    emailConfirm,
-    isActive,
-    createdAt,
     cnpjs,
+    preferences,
   } = user;
 
   return jwt.sign(
@@ -33,10 +31,8 @@ function generateToken(user: UserModelDocType) {
       address,
       cnpj,
       contactPhone,
-      emailConfirm,
-      isActive,
-      createdAt,
       cnpjs,
+      preferences,
     },
     signature,
     {
@@ -51,17 +47,10 @@ function verifyToken(token: string) {
   if (secret) {
     try {
       const userToken = jwt.verify(token, secret);
+
       return userToken;
     } catch (err: any) {
       console.log("Error verifying token:", err.name, err.message);
-
-      if (err.name === "TokenExpiredError") {
-        console.log("Token has expired");
-      } else if (err.name === "JsonWebTokenError") {
-        console.log("Invalid token");
-      } else {
-        console.log("Other error during token verification");
-      }
 
       throw err;
     }

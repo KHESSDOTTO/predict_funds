@@ -2,7 +2,7 @@ import { verifyToken } from "@/utils/jwt.config";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useUser } from "@/contexts/userContext";
-import { doLogout } from "@/utils/functions/genericFunctions";
+import { consoleLog, doLogout } from "@/utils/functions/genericFunctions";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/dashboardComponents";
 import ButtonRed from "@/components/UI/buttonRed";
@@ -43,7 +43,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
   return (
     <div className="bg-black/90">
       <div className="min-h-screen w-full overflow-x-hidden relative">
-        <Header user={user} />
+        <Header />
         <div className="px-4 lg:px-8">
           <Dashboard {...dashboardProps} />
         </div>
