@@ -3,6 +3,7 @@ import {
   DndContext,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -36,7 +37,17 @@ export default function CreateYourDashList(pageProps: { user: UserType }) {
     .map((item) => String(item.id))
     .filter((id) => !dashComponents.includes(id));
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -67,8 +78,6 @@ export default function CreateYourDashList(pageProps: { user: UserType }) {
       );
     })
     .filter(Boolean);
-
-  consoleLog({ dashboardOptions });
 
   const handleDragEndStaticArgs = {
     dashComponents,
