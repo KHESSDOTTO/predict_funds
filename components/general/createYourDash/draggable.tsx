@@ -1,4 +1,3 @@
-import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CYDDroppablePropsType } from "./cydTypes";
 import { useDevice } from "@/contexts/deviceContext";
@@ -8,22 +7,33 @@ export default function Draggable({ children, id }: CYDDroppablePropsType) {
     id: id,
   });
   const { isMobile } = useDevice();
+
   let style: React.CSSProperties = {
-    touchAction: "none", // Evitar drag com scroll em mobile
+    touchAction: "none",
+    overflow: "hidden",
     flexGrow: 1,
     maxWidth: isMobile ? "100%" : "24%",
+    cursor: "grab", // Add cursor feedback
   };
 
   if (transform) {
     style = {
       ...style,
       transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      cursor: "grabbing", // Change cursor while dragging
     };
   }
 
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...listeners}
+      {...attributes}
+      role="button" // For accessibility
+      tabIndex={0} // For keyboard accessibility
+    >
       {children}
-    </button>
+    </div>
   );
 }
