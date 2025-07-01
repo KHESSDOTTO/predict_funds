@@ -29,7 +29,7 @@ export default function DualRangeSliderWithTippy({
 
   return (
     <>
-      <div className="w-72 px-4 overflow-hidden flex flex-col lg:px-2 lg:w-[360px] lg:relative">
+      <div className="w-72 px-4 overflow-hidden flex flex-col lg:px-[10px] lg:w-[360px] lg:relative">
         <div
           className="relative py-4 w-full flex items-center"
           onMouseEnter={() => setTooltipVisible(true)}
