@@ -35,13 +35,11 @@ export default function MyCenarios({ userFromToken }: MyCenariosPagePropsType) {
             <LogoPredict bold={false} />
           </div>
           <div className="flex justify-center lg:hidden">
-            <TitleComponent htmlTag="h2">
-              My Cenarios
-            </TitleComponent>
+            <TitleComponent htmlTag="h2">My Cenarios</TitleComponent>
           </div>
-          <TitleComponent htmlTag="h2">
-            My Cenarios
-          </TitleComponent>
+          <div className="hidden lg:block">
+            <TitleComponent htmlTag="h2">My Cenarios</TitleComponent>
+          </div>
           <section
             id="cenarios"
             className="mb-8 lg:mb-0 flex flex-col gap-8 lg:justify-center lg:items-center lg:gap-0 lg:px-2 text-black"

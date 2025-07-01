@@ -38,7 +38,7 @@ import { useUser } from "@/contexts/userContext";
 import { formatterBrNumber, formatterPct } from "@/utils/numberFormatters";
 import { useDevice } from "@/contexts/deviceContext";
 import { classificacoes } from "@/utils/globalVars";
-import crypto from 'crypto';
+import crypto from "crypto";
 
 export default function NetFundingPredChart({
   title = "Net Funding",
@@ -114,17 +114,16 @@ export default function NetFundingPredChart({
           {typeof title === "string" && title}
           {typeof title === "object" &&
             title.map((cE, cI) => {
-              const uniqueKeyRaw = JSON.stringify({title, cE, cI});
+              const uniqueKeyRaw = JSON.stringify({ title, cE, cI });
               const uniqueKey = crypto
-                .createHash('md5')
+                .createHash("md5")
                 .update(uniqueKeyRaw)
-                .digest('hex');
-              
+                .digest("hex");
+
               return (
-                <div key={uniqueKey}>
-                  {cI > 0 && <br />}
-                  <span>{cE}</span>
-                </div>
+                <span className="block" key={uniqueKey}>
+                  {cE}
+                </span>
               );
             })}
         </h2>

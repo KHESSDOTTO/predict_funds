@@ -39,7 +39,7 @@ export default function CreateYourDashList(pageProps: { user: UserType }) {
   const sensors = useSensors(
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
+        delay: 100,
         tolerance: 5,
       },
     }),

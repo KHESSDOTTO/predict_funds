@@ -159,7 +159,7 @@ export default function NetFundingHistogramChart({
                 <FilterForm {...filterFormProps} />
               </div>
             </div>
-            <div className="flex flex-grow flex-col lg:flex-row items-end">
+            <div className="flex flex-grow flex-col lg:flex-1 lg:flex-row items-end">
               <div className="flex mt-2 flex-col w-full lg:mt-0 lg:relative">
                 <div className="text-sm lg:px-1 py-6 lg:pt-0 lg:text-gray-200 flex relative justify-center lg:text-base lg:justify-start">
                   <VisualizationForm {...{ absOrPct, setAbsOrPct }} />
