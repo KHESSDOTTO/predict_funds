@@ -148,13 +148,13 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
       <div className="w-full">
         <RegistrationInfos isLoading={isLoading} registration={registration} />
       </div>
-      <div className="lg:hidden w-full relative">
+      <div className="nf-classificacoes-container lg:hidden w-full relative">
         <Swiper
           modules={[Pagination, Navigation]}
           pagination
           navigation={{
-            nextEl: `.swiper-button-next.${styles.swiperButtonNext}`,
-            prevEl: `.swiper-button-prev.${styles.swiperButtonPrev}`,
+            nextEl: `.nf-classificacoes-container .swiper-button-next`,
+            prevEl: `.nf-classificacoes-container .swiper-button-prev`,
           }}
           loop={true}
           speed={600}
