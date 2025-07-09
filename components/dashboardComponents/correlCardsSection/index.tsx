@@ -78,7 +78,7 @@ export default function CorrelCardsSection({
   }, [correls, numMonths]);
 
   return (
-    <div>
+    <div className="correlCardsSection">
       <div className="flex justify-center lg:block lg:w-full">
         <TitleComponent>
           Quota - Correlations
@@ -140,8 +140,8 @@ export default function CorrelCardsSection({
               modules={[Navigation]}
               loop={true}
               navigation={{
-                nextEl: `.swiper-button-prev.${styles.swiperButtonNext}`,
-                prevEl: `.swiper-button-next.${styles.swiperButtonPrev}`,
+                nextEl: `.correlCardsSection .swiper-button-next`,
+                prevEl: `.correlCardsSection .swiper-button-prev`,
               }}
               speed={600}
               style={{ width: "95%", height: "auto" }}
