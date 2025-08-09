@@ -25,6 +25,7 @@ USER node
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
+# Copy all other necessary files
 COPY . .
 
 # Expose the port that the application listens on.
