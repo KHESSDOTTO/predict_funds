@@ -50,7 +50,6 @@ function Header() {
                   clipRule="evenodd"
                 />
               </svg>
-
               <p className="hidden lg:block">Dash</p>
             </Link>
           </div>
