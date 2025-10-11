@@ -9,7 +9,10 @@ import ButtonRed from "@/components/UI/buttonRed";
 import PwdConfirmModal from "@/components/modals/pwdConfirmModal";
 import { useUser } from "@/contexts/userContext";
 import LogoPredict from "@/components/UI/logoPredict";
-import type { ProfileFormType, ProfilePagePropsType } from "@/utils/types/pageTypes/profileTypes";
+import type {
+  ProfileFormType,
+  ProfilePagePropsType,
+} from "@/utils/types/pageTypes/profileTypes";
 import {
   handleSubmitOutside,
   handleSubmitNoEmail,
@@ -81,9 +84,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
             <LogoPredict bold={false} />
           </div>
           <div className="flex justify-center w-full">
-            <TitleComponent htmlTag="h2">
-              Profile
-            </TitleComponent>
+            <TitleComponent htmlTag="h2">Profile</TitleComponent>
           </div>
           <div className="flex flex-col items-center lg:items-start">
             <section id="userInfos" className="relative lg:px-16 lg:mt-2">
