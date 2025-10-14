@@ -36,7 +36,7 @@ function Header() {
           <div className="cursor-pointer">
             <Link
               href={"/loggedin/home"}
-              className="flex items-center duration-200 justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
+              className="flex items-center duration-200 justify-end md:gap-2 transition-all hover:text-yellow-600 md:justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ function Header() {
           <div>
             <Link
               href={"/loggedin/profile"}
-              className="flex cursor-pointer duration-200 items-center justify-end md:gap-2 hover:scale-110 transition-all hover:text-yellow-600 md:justify-center"
+              className="flex cursor-pointer duration-200 items-center justify-end md:gap-2 transition-all hover:text-yellow-600 md:justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +70,9 @@ function Header() {
                   clipRule="evenodd"
                 />
               </svg>
-              <p className="hidden lg:block">Profile</p>
+              <p className="hidden lg:block">
+                Profile
+              </p>
             </Link>
           </div>
           <div className="col-start-8 col-span-6 flex flex-col gap-2 md:flex-row md:gap-4 md:justify-around">

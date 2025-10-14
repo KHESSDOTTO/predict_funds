@@ -9,6 +9,7 @@ import { fetchData } from "@/utils/functions/pageFunctions/freePredictionsFuncti
 import getCachedAncoras from "@/cache/ancorasPredsCache";
 import { GetServerSideProps } from "next";
 import toast from "react-hot-toast";
+import LogoPredict from "@/components/UI/logoPredict";
 
 export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
   const contactEmail = "khess.dotto@predictfunds.com.br";
@@ -32,8 +33,6 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
     weeksBack: 8,
     weeksAhead: 4,
   };
-  const linkClass =
-    "hover:text-yellow-600 lg:hover:scale-110 transition-all duration-200";
 
   useEffect(() => {
     if (loadingToast) {
@@ -60,16 +59,23 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
 
   return (
     <div className="bg-black">
-      <header className="bg-black fixed w-full z-20 py-6 border-b-2 border-gray-500 flex justify-around">
-        <Link href={"/"} className={linkClass}>
-          Home
-        </Link>
-        <Link href={"/signup"} className={linkClass}>
-          Sign up
-        </Link>
-        <Link href={"/login"} className={linkClass}>
-          Login
-        </Link>
+      <header className="bg-black fixed w-full z-20 py-6 border-b-2 border-gray-500 px-6 flex justify-between items-center">
+        <div className="flex gap-24 relative">
+          <Link
+            href={"/"}
+            className="transition-border duration-300 flex gap-4 items-center"
+          >
+            <LogoPredict bold={false} size="md" />
+          </Link>
+        </div>
+        <div className="flex gap-8 items-center">
+          <div className="rounded-lg border-white border px-4 py-2 hover:text-yellow-600 hover:border-yellow-600 hover:cursor-pointer transition-all duration-300">
+            <Link href={"/signup"}>Sign up</Link>
+          </div>
+          <div className="rounded-lg border-white border px-4 py-2 hover:text-indigo-500 hover:border-indigo-500 hover:cursor-pointer transition-all duration-300">
+            <Link href={"/login"}>Login</Link>
+          </div>
+        </div>
       </header>
       <main className=" animate-fadeIn-l-r min-h-screen px-6 bg-black pt-[72px]">
         <div className="py-10">

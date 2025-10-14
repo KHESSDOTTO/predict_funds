@@ -1,16 +1,20 @@
-interface LogoPredictPropsType {
-  bold: boolean;
-}
+import { useDevice } from "@/contexts/deviceContext";
+import { sizes } from "./sizes";
+import { LogoPredictPropsType } from "./types";
+
 
 export default function LogoPredict(props: LogoPredictPropsType) {
   const { bold } = props;
   const lgTextShadow = { textShadow: "2px 2px 3px rgba(200,200,200,0.8)" };
+  const { isMobile } = useDevice();
+  const selectedSize = sizes[isMobile ? "mobile" : "desktop"][props.size ?? 'lg'];
+  const { textSize, iconSize, gapSize } = selectedSize;
 
   return (
     <div
       className={`${
         bold ? "font-bold" : ""
-      } flex justify-center items-center font-serif text-4xl lg:text-5xl gap-2 lg:gap-4 lg:justify-start`}
+      } flex justify-center items-center font-serif ${textSize} ${gapSize} lg:justify-start`}
       style={lgTextShadow}
     >
       <svg
@@ -19,7 +23,7 @@ export default function LogoPredict(props: LogoPredictPropsType) {
         viewBox="0 0 24 24"
         strokeWidth={1}
         stroke="currentColor"
-        className="size-12 lg:size-16"
+        className={ iconSize }
       >
         <path
           strokeLinecap="round"
