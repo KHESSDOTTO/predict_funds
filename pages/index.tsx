@@ -18,9 +18,6 @@ export default function Home() {
         </h1>
         <div className="relative overflow-visible h-48 w-full text-xl lg:top-16 flex flex-col gap-6 lg:gap-24 lg:flex-row justify-center items-center font-semibold">
           <div className={styles.blackBlurLinks}></div>
-          <Link href={"/about"} className={linkClass} style={smTextShadow}>
-            About us
-          </Link>
           <Link href={"/signup"} className={linkClass} style={smTextShadow}>
             Sign up
           </Link>
