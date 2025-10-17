@@ -60,7 +60,7 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
   return (
     <div className="bg-black">
       <header className="bg-black fixed w-full z-20 py-6 border-b-2 border-gray-500 px-6 flex justify-between items-center">
-        <div className="flex gap-24 relative">
+        <div className="flex relative">
           <Link
             href={"/"}
             className="transition-border duration-300 flex gap-4 items-center"
@@ -68,11 +68,11 @@ export default function FreePredictions({ ancoras }: FreePredictionsPropsType) {
             <LogoPredict bold={false} size="md" />
           </Link>
         </div>
-        <div className="flex gap-8 items-center">
-          <div className="rounded-lg border-white border px-4 py-2 hover:text-yellow-600 hover:border-yellow-600 hover:cursor-pointer transition-all duration-300">
+        <div className="flex gap-2 lg:gap-8 items-center text-sm lg:text-base">
+          <div className="rounded-lg border-white border px-3 lg:px-5 py-2 hover:text-yellow-600 hover:border-yellow-600 hover:cursor-pointer transition-all duration-300">
             <Link href={"/signup"}>Sign up</Link>
           </div>
-          <div className="rounded-lg border-white border px-4 py-2 hover:text-indigo-500 hover:border-indigo-500 hover:cursor-pointer transition-all duration-300">
+          <div className="rounded-lg border-white border px-3 lg:px-5 py-2 hover:text-indigo-500 hover:border-indigo-500 hover:cursor-pointer transition-all duration-300">
             <Link href={"/login"}>Login</Link>
           </div>
         </div>

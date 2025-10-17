@@ -2,18 +2,18 @@ export const sizes = {
   mobile: {
     sm: {
       textSize: "text-base",
-      iconSize: "size-8",
-      gapSize: "gap-2",
+      iconSize: "size-6",
+      gapSize: "gap-1",
     },
     md: {
       textSize: "text-lg",
-      iconSize: "size-10",
-      gapSize: "gap-4",
+      iconSize: "size-8",
+      gapSize: "gap-2",
     },
     lg: {
       textSize: "text-4xl",
-      iconSize: "size-12",
-      gapSize: "gap-6",
+      iconSize: "size-10",
+      gapSize: "gap-4",
     },
   },
   desktop: {
