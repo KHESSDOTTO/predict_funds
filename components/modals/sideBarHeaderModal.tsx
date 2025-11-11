@@ -47,11 +47,6 @@ function SideBar({ showSideBar, setShowSideBar }: SideBarPropsType) {
                     Simulate
                   </span>
                 </Link>
-                <Link href={"/loggedin/my_cenarios"} className="cursor-pointer">
-                  <span className="pb-1 px-1 lg:px-2 border-b border-blue-200/50 transition-all hover:text-yellow-600 hover:border-yellow-600/40">
-                    Cenarios
-                  </span>
-                </Link>
                 <Link
                   href={"/loggedin/create-your-dash"}
                   className="cursor-pointer"

@@ -10,16 +10,11 @@ import RegistrationInfos from "./registrationInfos";
 import CorrelCardsSection from "@/components/dashboardComponents/correlCardsSection";
 import HeatMap from "./heatMap";
 import type { HeatMapObjType } from "./heatMap/heatMapTypes";
-import CenariosBtnSection from "./cenarioBtnSection";
 import LogoPredict from "@/components/UI/logoPredict";
 import NetFundingPredChart from "./netFundingPredChart";
 import NetFundingHistogramChart from "./netFundingHistogramChart";
 import ValueQuotaChart from "./valueQuotaChart";
-import { saveCenario } from "./dashboardFunctions";
-import type {
-  DashboardPropsType,
-  SaveCenarioParamsType,
-} from "./dashboardTypes";
+import type { DashboardPropsType } from "./dashboardTypes";
 import type { RawHistogramData } from "@/database/models/prediction/predictionsType";
 import { useControlForm } from "@/contexts/controlFormContext";
 import { classificacoes } from "@/utils/globalVars";
@@ -66,12 +61,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
   );
   const [correls, setCorrels] = useState<any>(false);
   const [heatMapObj, setHeatMapObj] = useState<HeatMapObjType | false>(false);
-  const saveCenariosArgs: SaveCenarioParamsType = {
-    userContext,
-    controlForm,
-    historicData: historicFundData,
-    predictionData: predictionFundData,
-  };
   const controlSectionProps = {
     setHistoricRendaFixaData,
     setHistoricMultimercadoData,
@@ -81,7 +70,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
     setPredictionAcoesData,
     setHistoricData: setHistoricFundData,
     setPredictionData: setPredictionFundData,
-    saveCenario: () => saveCenario(saveCenariosArgs),
     setIsLoading: setIsLoading,
     registration: registration,
     setRegistration: setRegistration,
@@ -221,10 +209,6 @@ export default function Dashboard({ ancoras }: DashboardPropsType) {
             <div className="w-full">{optionalComponentsMap[idComponent]}</div>
           );
         })}
-
-      <div className="w-full flex justify-center lg:hidden">
-        <CenariosBtnSection saveCenario={() => saveCenario(saveCenariosArgs)} />
-      </div>
     </main>
   );
 }

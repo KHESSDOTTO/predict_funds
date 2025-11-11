@@ -122,13 +122,6 @@ interface FinalHistogramDataType {
   pct: HistogramSingleTypeData[];
 }
 
-interface CenarioType {
-  id: string;
-  params: DashboardControlFormType;
-  historicData: HistoricType[];
-  predictionData: PredictionsType[];
-}
-
 interface CardPropsType {
   title: string;
   imgSrc: string;
@@ -152,7 +145,6 @@ export type {
   HistoricType,
   SideBarPropsType,
   DashboardControlFormType,
-  CenarioType,
   PredictionsDataObjectType,
   PredictionsType,
   CadastroFundosType,

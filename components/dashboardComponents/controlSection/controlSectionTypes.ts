@@ -19,7 +19,6 @@ interface ControlSectionProps {
   setRegistration: Dispatch<SetStateAction<false | CadastroFundosType>>;
   setHistoricData: Dispatch<SetStateAction<HistoricType[]>>;
   setPredictionData: Dispatch<SetStateAction<PredictionsType[]>>;
-  saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setLoadingHistogram: Dispatch<SetStateAction<boolean>>;
   setDataForHistogram: Dispatch<SetStateAction<any>>;
