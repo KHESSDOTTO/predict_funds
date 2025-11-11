@@ -50,7 +50,6 @@ function consoleLog(varObj: any): void {
 async function doLogout({ userContext, router }: DoLogoutParamsType) {
   try {
     userContext.setUser(null);
-    userContext.setCenarios([]);
     await ax.post("/user/logout");
     toast.success("Logged out.");
     router.push("/");

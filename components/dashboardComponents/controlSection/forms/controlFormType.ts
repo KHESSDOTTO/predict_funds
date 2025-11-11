@@ -23,7 +23,6 @@ interface ControlFormPropsType {
   setPredictionAcoesData: Dispatch<SetStateAction<PredictionsType[]>>;
   setPredictionMultimercadoData: Dispatch<SetStateAction<PredictionsType[]>>;
   setPredictionRendaFixaData: Dispatch<SetStateAction<PredictionsType[]>>;
-  saveCenario: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
   setCurrSubmitToast: Dispatch<SetStateAction<string>>;
 }
 

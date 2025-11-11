@@ -12,11 +12,4 @@ interface DashboardPropsType {
   ancoras: string[] | null;
 }
 
-interface SaveCenarioParamsType {
-  userContext: UserContextType;
-  controlForm: DashboardControlFormType;
-  historicData: HistoricType[];
-  predictionData: PredictionsType[];
-}
-
-export type { DashboardPropsType, SaveCenarioParamsType };
+export type { DashboardPropsType };
