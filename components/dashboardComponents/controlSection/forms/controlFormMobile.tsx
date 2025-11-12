@@ -26,7 +26,6 @@ export default function ControlFormMobile({
   setPredictionAcoesData,
   setPredictionMultimercadoData,
   setPredictionRendaFixaData,
-  saveCenario,
   setCurrSubmitToast,
 }: ControlFormPropsType) {
   const selectInputClass =
@@ -175,15 +174,6 @@ export default function ControlFormMobile({
           <ButtonIndigo shadowSize="md" shadowColor="black">
             Update
           </ButtonIndigo>
-        </div>
-        <div
-          onClick={(e) => {
-            track("save_cenario", { username: user?.username || null });
-            saveCenario(e);
-          }}
-          className="absolute -right-2 bottom-1 text-xs text-indigo-800 px-1 transition-all duration-200 border-yellow-700 hover:text-yellow-600 lg:ml-8 lg:hover:border-yellow-800"
-        >
-          + Save Cenario
         </div>
       </div>
     </form>
