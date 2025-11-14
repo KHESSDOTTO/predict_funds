@@ -24,6 +24,6 @@
     "components/dashboardComponents/valueQuotaChart",
     "components/dashboardComponents/netFundingHistogramChart",
     "components/dashboardComponents/netFundingPredChart"
-  ],
+, "vitest.config.mts"  ],
   "exclude": ["node_modules"]
 }
