@@ -2,18 +2,18 @@ function generateYaxisTicksBasedOnDomain(
   domain: [number, number],
   numTicks: number = 9
 ): number[] {
-  if (
-    !domain ||
-    domain.length < 2 ||
-    typeof domain[0] !== "number" ||
-    typeof domain[1] !== "number"
-  ) {
+  const minTick = domain[0];
+  const maxTick = domain[1];
+
+  if (maxTick <= minTick) {
+    return [];
+  }
+
+  if (!Number.isInteger(numTicks) || numTicks < 2) {
     return [];
   }
 
   const ticks: number[] = [];
-  const minTick = domain[0];
-  const maxTick = domain[1];
   const step = (maxTick - minTick) / Math.max(numTicks - 1, 1);
 
   for (let i = 0; i < numTicks; i++) {
