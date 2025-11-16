@@ -40,17 +40,18 @@ class AxisFunctions {
    * Domain always must have central point on "zero".
    * @param maxMod maximum absolute (module, can be a %) value present on the chart
    * @param isPct if the domain is percentage based or absolute number based
-   * @param maxValueTickTry initial value to be tried, default is 100000
-   * @param times since it is a recursive function, the current try count (number of times function is being executed recursively).
+   * @param maxValueTry initial value to be tried, default is 100000
+   * @param currRecursionDepth current recursion depth
    * @returns array of two numbers representing the domain, minVal and maxVal [minVal, maxVal]
    */
   static getDomain(
     maxMod: number,
     isPct: boolean,
-    maxValueTickTry = 100000,
-    times = 1
+    maxValueTry = 100000,
+    currRecursionDepth = 1
   ): [number, number] {
-    const adjustMaxValueTick = isPct && times === 1 ? 0.05 : maxValueTickTry;
+    const adjustMaxValueTick =
+      isPct && currRecursionDepth === 1 ? 0.05 : maxValueTry;
     let step = isPct ? 0.05 : 500000;
 
     if (!isPct) {
@@ -61,7 +62,7 @@ class AxisFunctions {
       }
     }
 
-    if (maxMod <= adjustMaxValueTick || times > 1000) {
+    if (maxMod <= adjustMaxValueTick || currRecursionDepth > 1000) {
       // Prevent infinite recursion
       const minTick = -adjustMaxValueTick;
       const maxTick = adjustMaxValueTick;
@@ -70,13 +71,18 @@ class AxisFunctions {
       return domain;
     }
 
-    // Adjust newMaxValueTick based on the current attempt (times)
-    const isFirstItAndAbsolute = times === 1 && !isPct;
-    const newMaxValueTickTry = isFirstItAndAbsolute
+    // Adjust newMaxValueTick based on the current attempt (currRecursionDepth)
+    const isFirstItAndAbsolute = currRecursionDepth === 1 && !isPct;
+    const newMaxValueTry = isFirstItAndAbsolute
       ? step
       : adjustMaxValueTick + step;
 
-    return this.getDomain(maxMod, isPct, newMaxValueTickTry, times + 1);
+    return this.getDomain(
+      maxMod,
+      isPct,
+      newMaxValueTry,
+      currRecursionDepth + 1
+    );
   }
 }
 
