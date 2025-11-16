@@ -1,5 +1,5 @@
 import { it, expect } from "vitest";
-import { AxisFunctions } from "./axisFunctions";
+import AxisFunctions from "./axisFunctions";
 import { describe } from "node:test";
 
 describe("generateYaxisTicksBasedOnDomain", () => {

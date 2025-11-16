@@ -83,4 +83,4 @@ class AxisFunctions {
   }
 }
 
-export { AxisFunctions };
+export default AxisFunctions;

@@ -1,7 +1,5 @@
 import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes";
-import {
-  AxisFunctions
-} from "@/utils/functions/axisFunctions/axisFunctions";
+import AxisFunctions from "@/utils/functions/axisFunctions/axisFunctions";
 import type {
   ExportNetFundingPredParams,
   PrepareChartNFDataParamsType,
