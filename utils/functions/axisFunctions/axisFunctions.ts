@@ -9,7 +9,7 @@ class AxisFunctions {
    * @param numTicks Is the number of ticks desired for the Y axis of the chart
    * @returns Array of numbers to be used as ticks for an Y axis of a chart
    */
-  static generateYaxisTicksBasedOnDomain(
+  static getYaxisTicks(
     domain: [number, number],
     numTicks: number = 9
   ): number[] {
@@ -38,13 +38,13 @@ class AxisFunctions {
    * Generates domain based on maximum absolute (module) value present on the chart.
    * Domain is generated using "whole" numbers, like multiples of 100k or 1mln.
    * Domain always must have central point on "zero".
-   * @param maxMod maximum absolute value present on the chart
+   * @param maxMod maximum absolute (module, can be a %) value present on the chart
    * @param isPct if the domain is percentage based or absolute number based
    * @param maxValueTickTry initial value to be tried, default is 100000
    * @param times since it is a recursive function, the current try count (number of times function is being executed recursively).
    * @returns array of two numbers representing the domain, minVal and maxVal [minVal, maxVal]
    */
-  static generateYaxisDomainBasedOnMaxMod(
+  static getDomain(
     maxMod: number,
     isPct: boolean,
     maxValueTickTry = 100000,
@@ -71,15 +71,12 @@ class AxisFunctions {
     }
 
     // Adjust newMaxValueTick based on the current attempt (times)
-    const isFirstItAndAbsolute = times === 1 && ! isPct;
-    const newMaxValueTickTry = isFirstItAndAbsolute ? step : adjustMaxValueTick + step;
+    const isFirstItAndAbsolute = times === 1 && !isPct;
+    const newMaxValueTickTry = isFirstItAndAbsolute
+      ? step
+      : adjustMaxValueTick + step;
 
-    return this.generateYaxisDomainBasedOnMaxMod(
-      maxMod,
-      isPct,
-      newMaxValueTickTry,
-      times + 1
-    );
+    return this.getDomain(maxMod, isPct, newMaxValueTickTry, times + 1);
   }
 }
 

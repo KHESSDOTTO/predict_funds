@@ -43,13 +43,13 @@ function adjustNetFundingChartAxis({
         ? Number(Math.abs(modValuePred).toFixed(2))
         : Number(Math.abs(maxModValueNF).toFixed(2));
 
-    const newDomain = AxisFunctions.generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
+    const newDomain = AxisFunctions.getDomain(maxModValueNF, isPct);
 
     if (newDomain) {
       setDomainYaxisNF(newDomain);
     }
 
-    const newYaxisNFTicks = AxisFunctions.generateYaxisTicksBasedOnDomain(newDomain);
+    const newYaxisNFTicks = AxisFunctions.getYaxisTicks(newDomain);
 
     if (newYaxisNFTicks) {
       setTicksYaxisNF(newYaxisNFTicks);
