@@ -1,5 +1,6 @@
 /**
  * Class to encapsulate logic of axis helper functions.
+ * @class
  */
 class AxisFunctions {
   /**
