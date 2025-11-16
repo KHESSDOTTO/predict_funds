@@ -1,7 +1,6 @@
 import { AdjustNetFundingChartAxisParamsType } from "./netFundingPredChartTypes";
 import {
-  generateYaxisDomainBasedOnMaxMod,
-  generateYaxisTicksBasedOnDomain,
+  AxisFunctions
 } from "@/utils/functions/axisFunctions/axisFunctions";
 import type {
   ExportNetFundingPredParams,
@@ -46,13 +45,13 @@ function adjustNetFundingChartAxis({
         ? Number(Math.abs(modValuePred).toFixed(2))
         : Number(Math.abs(maxModValueNF).toFixed(2));
 
-    const newDomain = generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
+    const newDomain = AxisFunctions.generateYaxisDomainBasedOnMaxMod(maxModValueNF, isPct);
 
     if (newDomain) {
       setDomainYaxisNF(newDomain);
     }
 
-    const newYaxisNFTicks = generateYaxisTicksBasedOnDomain(newDomain);
+    const newYaxisNFTicks = AxisFunctions.generateYaxisTicksBasedOnDomain(newDomain);
 
     if (newYaxisNFTicks) {
       setTicksYaxisNF(newYaxisNFTicks);
