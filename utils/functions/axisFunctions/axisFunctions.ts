@@ -71,7 +71,8 @@ class AxisFunctions {
     }
 
     // Adjust newMaxValueTick based on the current attempt (times)
-    const newMaxValueTickTry = adjustMaxValueTick + step;
+    const isFirstItAndAbsolute = times === 1 && ! isPct;
+    const newMaxValueTickTry = isFirstItAndAbsolute ? step : adjustMaxValueTick + step;
 
     return this.generateYaxisDomainBasedOnMaxMod(
       maxMod,
