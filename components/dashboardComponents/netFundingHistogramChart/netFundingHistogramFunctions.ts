@@ -18,7 +18,6 @@ import type {
   FinalHistogramDataType,
   HistogramSingleTypeData,
 } from "@/utils/types/generalTypes/types";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 function prepareDualRangeSlidersData({
   sliderInfos,

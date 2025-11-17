@@ -15,7 +15,6 @@ import type {
   SelectWithFilterProps,
   SelectWithFiltersOptionType,
 } from "./selectInputWithFilterTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function SelectWithFilter({
   options,

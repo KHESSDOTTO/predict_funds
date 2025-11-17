@@ -1,6 +1,5 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import { getToneColor } from "@/utils/functions/genericFunctions";
-import { capitalize } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import type { RowDeskPropsType } from "./heatMapTypes";
 import crypto from "crypto";
 
@@ -19,12 +18,12 @@ export default function RowDesk({
         className={`py-3 px-6 text-base bg-gray-300 text-black text-center font-bold whitespace-nowrap w-1/12 border-r-2`}
         style={{ width: "30px" }}
       >
-        {capitalize(name)}
+        {Helpers.capitalize(name)}
       </td>
       {tickers.map((ticker) => {
         const id = crypto.createHash("md5").update(ticker).digest("hex");
         const value = selCorrels[name][ticker];
-        const color = getToneColor(value, toneColorsMapTxtRGB, 0.9);
+        const color = Helpers.getToneColor(value, toneColorsMapTxtRGB, 0.9);
         const valColor = value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
         return (
           <td

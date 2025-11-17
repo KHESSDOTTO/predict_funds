@@ -1,24 +1,25 @@
-import { consoleLog } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import { ExportCorrelsParamsType } from "./correlCardsSectionTypes";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
-function exportCorrels({
-  selCnpj,
-  correls
-}: ExportCorrelsParamsType): void {
+function exportCorrels({ selCnpj, correls }: ExportCorrelsParamsType): void {
   const workbook = XLSX.utils.book_new();
   const currTime = new Date();
   const fileName = "export_correls_" + currTime.toISOString() + ".xlsx";
-  
-  correls.forEach(currCorrelPeriod => {
-    const periodElement = currCorrelPeriod.filter(currField => currField[0] === 'janela_em_meses');
+
+  correls.forEach((currCorrelPeriod) => {
+    const periodElement = currCorrelPeriod.filter(
+      (currField) => currField[0] === "janela_em_meses"
+    );
     const sheetData = [
-        ['selCnpj', selCnpj],
-        ...currCorrelPeriod.filter(currField => currField[0] !== 'janela_em_meses'),
+      ["selCnpj", selCnpj],
+      ...currCorrelPeriod.filter(
+        (currField) => currField[0] !== "janela_em_meses"
+      ),
     ];
 
     if (periodElement.length !== 1) {
-      consoleLog({ periodElement });
+      Helpers.consoleLog({ periodElement });
       return;
     }
 
@@ -26,7 +27,7 @@ function exportCorrels({
 
     const sheet = XLSX.utils.aoa_to_sheet(sheetData);
     XLSX.utils.book_append_sheet(workbook, sheet, sheetTitle);
-  })
+  });
 
   XLSX.writeFile(workbook, fileName);
 

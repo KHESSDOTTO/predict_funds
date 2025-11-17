@@ -1,7 +1,6 @@
 import toast from "react-hot-toast";
 import { AxiosResponse } from "axios";
 import { ax } from "@/database/axios.config";
-import { subWeeks, addWeeks } from "date-fns";
 import type {
   CadastroFundosType,
   DashboardControlFormType,
@@ -11,10 +10,7 @@ import type {
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 import { classificacoes } from "@/utils/globalVars";
-import {
-  consoleLog,
-  convertDtComptcToDate,
-} from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 
 async function getHistoricData(
   encodedParam: string,
@@ -63,7 +59,7 @@ async function getPredictions(
 
   // Convert JSON string representation of date into Date object type
   if (responsePreds && responsePreds.data) {
-    finalPredictionData = convertDtComptcToDate(
+    finalPredictionData = Helpers.convertDtComptcToDate(
       responsePreds.data
     ) as PredictionsType[];
   }

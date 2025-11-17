@@ -1,6 +1,6 @@
 import { CardPropsType } from "@/utils/types/generalTypes/types";
 import Image from "next/image";
-import { getToneColor } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import { toneColorsMapTxtRGBDarker } from "@/utils/toneColors";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import { useRef } from "react";
@@ -10,13 +10,17 @@ export default function Card({ title, imgSrc, correlVal }: CardPropsType) {
   const withImg = imgSrc;
   const adjustTitle = mapTickers[title] ? mapTickers[title] : title;
   const innerContainer = useRef<HTMLDivElement>(null);
-  const color = getToneColor(Number(correlVal), toneColorsMapTxtRGBDarker, 1);
+  const color = Helpers.getToneColor(
+    Number(correlVal),
+    toneColorsMapTxtRGBDarker,
+    1
+  );
 
   return (
     <article
       className="w-full transition-all hover:scale-[105%] rounded-lg border border-white py-6 px-8 flex flex-col justify-between gap-6 items-center lg:min-w-72"
-      onMouseEnter={ () => handleHovering(innerContainer) }
-      onMouseLeave={ () => handleHoveringStops(innerContainer) }  
+      onMouseEnter={() => handleHovering(innerContainer)}
+      onMouseLeave={() => handleHoveringStops(innerContainer)}
     >
       <h4 className="border-b-2 border-gray-400 text-white pb-2 w-full">
         {adjustTitle}

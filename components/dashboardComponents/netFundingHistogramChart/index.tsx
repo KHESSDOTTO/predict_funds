@@ -20,7 +20,6 @@ import {
 } from "recharts";
 import { useEffect, useState } from "react";
 import FilterForm from "./forms/filterForm";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import {
   prepareHistogram,
   initializeSliders,

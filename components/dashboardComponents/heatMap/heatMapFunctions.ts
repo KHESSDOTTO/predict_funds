@@ -1,4 +1,3 @@
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import { HeatMapObjType } from "./heatMapTypes";
 import type {
   ExportHeatMapParams,

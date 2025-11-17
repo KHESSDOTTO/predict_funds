@@ -4,7 +4,6 @@ import {
   CorrelationsModelType,
   CorrelationsDocCorrelsQuery,
 } from "./correlationsType";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const CorrelationSchema = new Schema<
   CorrelationsDocType,

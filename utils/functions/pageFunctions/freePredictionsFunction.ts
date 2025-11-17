@@ -1,14 +1,11 @@
+import Helpers from '@/utils/functions/helpers';
+import { ax } from "@/database/axios.config";
 import { classificacoes } from "@/utils/globalVars";
 import {
   AggregateChartsDataType,
   FetchDataParamsType,
   FetchHistPredsParamsType,
 } from "@/utils/types/pageTypes/predictionsPageTypes";
-import { ax } from "@/database/axios.config";
-import {
-  consoleLog,
-  convertDtComptcToDate,
-} from "@/utils/functions/genericFunctions";
 import {
   HistoricType,
   PredictionsType,
@@ -104,7 +101,7 @@ async function fetchPredictions({
       buscaCnpj: dataKey,
     });
     const rawPrediction = predictionResponse.data;
-    const predictionArr = convertDtComptcToDate(
+    const predictionArr = Helpers.convertDtComptcToDate(
       rawPrediction
     ) as PredictionsType[];
 

@@ -4,7 +4,7 @@ import type {
   ExportNetFundingPredParams,
   PrepareChartNFDataParamsType,
 } from "./netFundingPredChartTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import * as XLSX from "xlsx";
 import {
   HistoricType,
@@ -85,8 +85,8 @@ function exportNetFundingPred({
     Array.isArray(predictions) && predictions.length > 0;
 
   if (!historicIsValid || !predictionsIsValid) {
-    consoleLog({ historicIsValid });
-    consoleLog({ predictionsIsValid });
+    Helpers.consoleLog({ historicIsValid });
+    Helpers.consoleLog({ predictionsIsValid });
 
     return;
   }
@@ -127,7 +127,7 @@ function predsToExport(predictions: PredictionsType[]) {
   const isValidPreds = Array.isArray(predictions) && predictions.length > 0;
 
   if (!isValidPreds) {
-    consoleLog({ isValidPreds });
+    Helpers.consoleLog({ isValidPreds });
 
     return [[]];
   }
@@ -166,7 +166,7 @@ function historicToExport(historic: HistoricType[]) {
   const isValidHistoric = Array.isArray(historic) && historic.length > 0;
 
   if (!isValidHistoric) {
-    consoleLog({ isValidHistoric });
+    Helpers.consoleLog({ isValidHistoric });
 
     return [[]];
   }

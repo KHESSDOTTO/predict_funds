@@ -13,7 +13,6 @@ import {
   UserPreferencesType,
 } from "./userType";
 import { dashComponentsList } from "@/components/dashboardComponents/dashboardComponentsMap";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const UserPreferencesSchema = new Schema<UserPreferencesType>(
   {

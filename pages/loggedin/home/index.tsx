@@ -2,7 +2,7 @@ import { verifyToken } from "@/utils/jwt.config";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useUser } from "@/contexts/userContext";
-import { consoleLog, doLogout } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/dashboardComponents";
 import ButtonRed from "@/components/UI/buttonRed";
@@ -48,7 +48,7 @@ export default function LoggedInHome({ user, ancoras }: LoggedInHomePropsType) {
           <Dashboard {...dashboardProps} />
         </div>
         <div className="flex justify-center px-4 py-8 lg:justify-center lg:mt-4">
-          <div onClick={() => doLogout(doLogoutArgs)} className="w-fit">
+          <div onClick={() => Helpers.doLogout(doLogoutArgs)} className="w-fit">
             <ButtonRed shadowColor="white/30" shadowSize="md">
               Log Out
             </ButtonRed>

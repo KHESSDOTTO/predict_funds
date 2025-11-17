@@ -31,7 +31,6 @@ import type {
   TextAvgErrorPredsPropsType,
   TextDateReferencePropsType,
 } from "./netFundingPredChartTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";

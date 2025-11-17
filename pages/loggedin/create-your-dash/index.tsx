@@ -1,12 +1,10 @@
 import CreateYourDashList from "@/components/general/createYourDash";
 import Header from "@/components/layout/header";
 import LogoPredict from "@/components/UI/logoPredict";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import { verifyToken } from "@/utils/jwt.config";
 import { UserType } from "@/utils/types/generalTypes/types";
 import { JwtPayload } from "jsonwebtoken";
 import { GetServerSideProps } from "next";
-import { useEffect } from "react";
 
 export default function CreateYourDash({ user }: { user: UserType }) {
   return (

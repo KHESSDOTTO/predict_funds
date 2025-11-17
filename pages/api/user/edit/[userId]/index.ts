@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "@/database/database.config";
 import UserModel from "@/database/models/user/userModel";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 async function UpdateUserInfoNoPwd(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = req.query;

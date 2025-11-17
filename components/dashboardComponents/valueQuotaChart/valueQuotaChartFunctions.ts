@@ -1,6 +1,9 @@
-import { consoleLog } from "@/utils/functions/genericFunctions";
-import { AdjustValueQuotaChartAxisParamsType, ExportValueQuotaParams } from "./valueQuotaChartTypes";
-import * as XLSX from 'xlsx';
+import Helpers from "@/utils/functions/helpers";
+import {
+  AdjustValueQuotaChartAxisParamsType,
+  ExportValueQuotaParams,
+} from "./valueQuotaChartTypes";
+import * as XLSX from "xlsx";
 
 function adjustValueQuotaChartAxis({
   historic,
@@ -34,13 +37,11 @@ function adjustValueQuotaChartAxis({
   setTicksYaxisVQ(newTicksYaxisVQ);
 }
 
-function exportValueQuota({
-    historic
-}: ExportValueQuotaParams) {
+function exportValueQuota({ historic }: ExportValueQuotaParams) {
   const isValidInput = Array.isArray(historic) && historic.length > 0;
 
-  if (! isValidInput) {
-    consoleLog({ isValidInput });
+  if (!isValidInput) {
+    Helpers.consoleLog({ isValidInput });
     return;
   }
 
@@ -58,17 +59,14 @@ function exportValueQuota({
     sheetData.push(Object.values(cE));
 
     return;
-  })
+  });
 
   const sheet = XLSX.utils.aoa_to_sheet(sheetData);
 
-  XLSX.utils.book_append_sheet(workbook, sheet, `quota_historic`)
+  XLSX.utils.book_append_sheet(workbook, sheet, `quota_historic`);
   XLSX.writeFile(workbook, fileName);
-  
+
   return;
 }
 
-export {
-  adjustValueQuotaChartAxis,
-  exportValueQuota,
- };
+export { adjustValueQuotaChartAxis, exportValueQuota };

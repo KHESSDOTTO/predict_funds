@@ -3,7 +3,6 @@ import Slider from "rc-slider";
 import Tippy from "@tippyjs/react";
 import { useState, useEffect } from "react";
 import type { DualRangeSliderWithTippyPropsType } from "./dualRangesWithTippyTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function DualRangeSliderWithTippy({
   minValSlider,

@@ -1,5 +1,5 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import { getToneColor } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers";
 import { HeatMapObjType } from "./heatMapTypes";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import type { RowMobilePropsType } from "./heatMapTypes";
@@ -24,7 +24,7 @@ export default function RowMobile({
       {selCorrelsKeys.map((key) => {
         const id = crypto.createHash("md5").update(key).digest("hex");
         const value = selCorrels[key][ticker];
-        const color = getToneColor(value, toneColorsMapTxtRGB, 0.9);
+        const color = Helpers.getToneColor(value, toneColorsMapTxtRGB, 0.9);
         const valColor = value < 0 ? "rgb(100, 0, 0)" : "rgb(0, 50, 0)";
         return (
           <td
