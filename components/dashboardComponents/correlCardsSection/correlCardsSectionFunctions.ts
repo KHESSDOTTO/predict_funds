@@ -1,4 +1,4 @@
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import { ExportCorrelsParamsType } from "./correlCardsSectionTypes";
 import * as XLSX from "xlsx";
 

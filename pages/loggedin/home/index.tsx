@@ -2,7 +2,7 @@ import { verifyToken } from "@/utils/jwt.config";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useUser } from "@/contexts/userContext";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import toast from "react-hot-toast";
 import Dashboard from "@/components/dashboardComponents";
 import ButtonRed from "@/components/UI/buttonRed";

@@ -4,7 +4,7 @@ import type {
   ExportNetFundingPredParams,
   PrepareChartNFDataParamsType,
 } from "./netFundingPredChartTypes";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import * as XLSX from "xlsx";
 import {
   HistoricType,

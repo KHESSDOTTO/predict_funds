@@ -10,7 +10,7 @@ import type {
 } from "@/utils/types/generalTypes/types";
 import type { Dispatch, SetStateAction } from "react";
 import { classificacoes } from "@/utils/globalVars";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 
 async function getHistoricData(
   encodedParam: string,

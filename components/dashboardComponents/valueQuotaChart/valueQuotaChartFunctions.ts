@@ -1,4 +1,4 @@
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import {
   AdjustValueQuotaChartAxisParamsType,
   ExportValueQuotaParams,

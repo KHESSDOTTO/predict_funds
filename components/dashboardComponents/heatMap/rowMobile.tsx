@@ -1,5 +1,5 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import { HeatMapObjType } from "./heatMapTypes";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import type { RowMobilePropsType } from "./heatMapTypes";

@@ -1,5 +1,5 @@
 import { toneColorsMapTxtRGB } from "@/utils/toneColors";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import type { RowDeskPropsType } from "./heatMapTypes";
 import crypto from "crypto";
 

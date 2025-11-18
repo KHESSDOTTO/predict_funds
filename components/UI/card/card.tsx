@@ -1,6 +1,6 @@
 import { CardPropsType } from "@/utils/types/generalTypes/types";
 import Image from "next/image";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import { toneColorsMapTxtRGBDarker } from "@/utils/toneColors";
 import { mapTickers } from "@/utils/mapTickersCorrels";
 import { useRef } from "react";

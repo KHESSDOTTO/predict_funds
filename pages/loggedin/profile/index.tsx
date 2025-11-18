@@ -20,7 +20,7 @@ import {
   doSubmitEmailChange,
 } from "@/utils/functions/pageFunctions/loggedInProfileFunctions";
 import ProfileForm from "@/components/pageForms/profileForm";
-import Helpers from "@/utils/functions/helpers";
+import Helpers from "@/utils/functions/helpers/helpers";
 import TitleComponent from "@/components/UI/titleComponent";
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
