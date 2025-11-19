@@ -108,7 +108,7 @@ class Helpers {
   static arrUnique(arr: any[]): any[] {
     const newSet = new Set(arr);
 
-    return Array(newSet);
+    return Array.from(newSet);
   }
 
   /**

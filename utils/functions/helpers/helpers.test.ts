@@ -100,7 +100,50 @@ describe("consoleLog()", () => {
   it("Should handle empty objects without throwing", () => {
     expect(() => Helpers.consoleLog({})).not.toThrow();
     expect(console.log).toHaveBeenCalledTimes(2);
-    expect(console.log).toHaveBeenNthCalledWith(1, 'undefined');
+    expect(console.log).toHaveBeenNthCalledWith(1, "undefined");
     expect(console.log).toHaveBeenNthCalledWith(2, undefined);
   });
 });
+
+// describe("doLogout()", () => {
+  /* To be implemented!! */
+// });
+
+describe("arrUnique", () => {
+  it("Should return same array if not duplicated", () => {
+    const arr1 = ["a", "b", "c", "d"];
+    const arr2 = [1, 2, 3, 4, 5];
+    const arr3 = ["a", "b", 2, "d"];
+
+    expect(Helpers.arrUnique(arr1)).toEqual(arr1);
+    expect(Helpers.arrUnique(arr2)).toEqual(arr2);
+    expect(Helpers.arrUnique(arr3)).toEqual(arr3);
+  });
+
+  it("Should return unique values if array has duplicated elements", () => {
+    const arr1 = {
+      input: ["a", "b", "c", "c"],
+      output: ["a", "b", "c"],
+    };
+    const arr2 = {
+      input: [1, 2, 2, 4, 5],
+      output: [1, 2, 4, 5],
+    };
+    const arr3 = {
+      input: [0, 0, 2, "d"],
+      output: [0, 2, "d"],
+    };
+
+    expect(Helpers.arrUnique(arr1.input)).toEqual(arr1.output);
+    expect(Helpers.arrUnique(arr2.input)).toEqual(arr2.output);
+    expect(Helpers.arrUnique(arr3.input)).toEqual(arr3.output);
+  });
+
+  it('Should not automatically convert types, "2" and 2 should not be treated as equals', () => {
+    const arr = ["2", 2, true, 0, "0", false];
+
+    expect(Helpers.arrUnique(arr)).toEqual(arr);
+  });
+});
+
+
