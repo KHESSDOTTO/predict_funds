@@ -83,7 +83,10 @@ class Helpers {
    * Redirects to home page (logged out home).
    * @param param0 Object containing user context and router
    */
-  static async doLogout({ userContext, router }: DoLogoutParamsType): Promise<void> {
+  static async doLogout({
+    userContext,
+    router,
+  }: DoLogoutParamsType): Promise<void> {
     try {
       userContext.setUser(null);
 

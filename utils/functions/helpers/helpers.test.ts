@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Helpers from "./helpers";
 
 describe("Helpers function capitalize()", () => {
@@ -55,5 +55,52 @@ describe("getToneColor()", () => {
 
   it("Return 'rgba(255, 255, 255, 0)' for value 0.0 and opacity 0", () => {
     expect(Helpers.getToneColor(0.0, dummyMapColors, 0));
+  });
+});
+
+describe("consoleLog()", () => {
+  const varTest = 55;
+
+  beforeEach(() => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("Should log the variable name and value when passed an object", () => {
+    Helpers.consoleLog({ varTest });
+
+    expect(console.log).toHaveBeenCalledTimes(2);
+    expect(console.log).toHaveBeenNthCalledWith(1, "varTest");
+    expect(console.log).toHaveBeenNthCalledWith(2, 55);
+  });
+
+  it("Should handle objects with string values", () => {
+    const testString = "hello";
+
+    Helpers.consoleLog({ testString });
+
+    expect(console.log).toHaveBeenCalledTimes(2);
+    expect(console.log).toHaveBeenNthCalledWith(1, "testString");
+    expect(console.log).toHaveBeenNthCalledWith(2, "hello");
+  });
+
+  it("Should handle objects with complex values", () => {
+    const testObj = { nested: "value" };
+
+    Helpers.consoleLog({ testObj });
+
+    expect(console.log).toHaveBeenCalledTimes(2);
+    expect(console.log).toHaveBeenNthCalledWith(1, "testObj");
+    expect(console.log).toHaveBeenNthCalledWith(2, { nested: "value" });
+  });
+
+  it("Should handle empty objects without throwing", () => {
+    expect(() => Helpers.consoleLog({})).not.toThrow();
+    expect(console.log).toHaveBeenCalledTimes(2);
+    expect(console.log).toHaveBeenNthCalledWith(1, 'undefined');
+    expect(console.log).toHaveBeenNthCalledWith(2, undefined);
   });
 });
