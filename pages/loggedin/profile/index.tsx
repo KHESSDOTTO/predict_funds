@@ -18,7 +18,7 @@ import {
   handleSubmitNoEmail,
   handleChangePwd,
   doSubmitEmailChange,
-} from "@/utils/functions/pageFunctions/loggedInProfileFunctions";
+} from "@/utils/functions/pageSpecificFunctions/loggedInProfileFunctions";
 import ProfileForm from "@/components/pageForms/profileForm";
 import Helpers from "@/utils/functions/helpers/helpers";
 import TitleComponent from "@/components/UI/titleComponent";

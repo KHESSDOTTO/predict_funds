@@ -1,7 +1,7 @@
 import {
   formatNumToPctStr,
   formatNumToStrMlnK,
-} from "@/utils/functions/formatNumbers";
+} from "@/utils/functions/numberFormatters/formatNumbers";
 import { numBinsMobile, numBinsDesktop } from "./histogramSettings";
 import * as XLSX from "xlsx";
 import type { DualRangeSliderWithTippyPropsType } from "@/components/UI/dualRangeSliderWithTippy/dualRangesWithTippyTypes";

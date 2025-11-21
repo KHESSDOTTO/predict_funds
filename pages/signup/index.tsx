@@ -7,7 +7,7 @@ import { SignUpFormType } from "@/utils/types/pageTypes/signupTypes";
 import {
   handleChangeSignUpForm,
   handleSubmitSignUpForm,
-} from "@/utils/functions/pageFunctions/signupFunctions";
+} from "@/utils/functions/pageSpecificFunctions/signupFunctions";
 
 export default function SignUpPage() {
   const router = useRouter(),

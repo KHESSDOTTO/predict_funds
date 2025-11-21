@@ -17,7 +17,7 @@ function formatNumToStrMlnK(number: number, roundUp: boolean = false): string {
   if (roundUp) {
     roundedNum = Math.ceil(num);
   } else {
-    roundedNum = Math.floor(num);
+    roundedNum = Math.round(num);
   }
 
   // Adding one decimal place to mln
