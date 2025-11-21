@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import Helpers from "./helpers";
+import { PredictionsType } from "@/utils/types/generalTypes/types";
 
 describe("Helpers function capitalize()", () => {
   it('Should return "I am fine, thanks." for "i am fine, thanks."', () => {
@@ -106,7 +107,7 @@ describe("consoleLog()", () => {
 });
 
 // describe("doLogout()", () => {
-  /* To be implemented!! */
+/* To be implemented!! */
 // });
 
 describe("arrUnique", () => {
@@ -146,4 +147,69 @@ describe("arrUnique", () => {
   });
 });
 
+describe("convertDtComptcToDate()", () => {
+  it("Should return field DT_COMPTC formatted as date when PredictionsType Type gets passed", () => {
+    const objTest = {
+      DT_COMPTC: "08/08/2022",
+      CNPJ_FUNDO: "string",
+      CI90_ABS: 1,
+      CI95_ABS: 1,
+      CI99_ABS: 1,
+      CI90_PCT: 1,
+      CI95_PCT: 1,
+      CI99_PCT: 1,
+      CI90_ABS_limits: [1, 2],
+      CI95_ABS_limits: [1, 2],
+      CI99_ABS_limits: [1, 2],
+      CI90_PCT_limits: [1, 2],
+      CI95_PCT_limits: [1, 2],
+      CI99_PCT_limits: [1, 2],
+      mean: 1,
+    } as unknown as PredictionsType; // Fix this -> done due to type issue/mismatch on api
+    const result = Helpers.convertDtComptcToDate(objTest) as PredictionsType;
 
+    expect(result["DT_COMPTC"]).toBeInstanceOf(Date);
+  });
+  it("Should return every element's field DT_COMPTC formatted as date when PredictionsType[] Type gets passed", () => {
+    const arrTest = [
+      {
+        DT_COMPTC: "08/08/2022",
+        CNPJ_FUNDO: "string",
+        CI90_ABS: 1,
+        CI95_ABS: 1,
+        CI99_ABS: 1,
+        CI90_PCT: 1,
+        CI95_PCT: 1,
+        CI99_PCT: 1,
+        CI90_ABS_limits: [1, 2],
+        CI95_ABS_limits: [1, 2],
+        CI99_ABS_limits: [1, 2],
+        CI90_PCT_limits: [1, 2],
+        CI95_PCT_limits: [1, 2],
+        CI99_PCT_limits: [1, 2],
+        mean: 1,
+      },
+      {
+        DT_COMPTC: "08/08/2022",
+        CNPJ_FUNDO: "string",
+        CI90_ABS: 1,
+        CI95_ABS: 1,
+        CI99_ABS: 1,
+        CI90_PCT: 1,
+        CI95_PCT: 1,
+        CI99_PCT: 1,
+        CI90_ABS_limits: [1, 2],
+        CI95_ABS_limits: [1, 2],
+        CI99_ABS_limits: [1, 2],
+        CI90_PCT_limits: [1, 2],
+        CI95_PCT_limits: [1, 2],
+        CI99_PCT_limits: [1, 2],
+        mean: 1,
+      },
+    ] as unknown[] as PredictionsType[]; // Fix this -> done due to type issue/mismatch on api
+    const result = Helpers.convertDtComptcToDate(arrTest) as PredictionsType[];
+
+    expect(result[0]["DT_COMPTC"]).toBeInstanceOf(Date);
+    expect(result[1]["DT_COMPTC"]).toBeInstanceOf(Date);
+  });
+});
