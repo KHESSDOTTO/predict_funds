@@ -63,4 +63,20 @@ describe("formatNumToStrMlnK()", () => {
   });
 });
 
-// describe("formatNumToPctStr()", () => {});
+describe("formatNumToPctStr()", () => {
+  it('Should return "3%" when passed number 3 and decimalPlaces 0', () => {
+    expect(formatNumToPctStr(3, 0)).toBe("3%");
+  });
+  it('Should return "3.5%" when passed number 3.5333 and decimalPlaces 1', () => {
+    expect(formatNumToPctStr(3.5333, 1)).toBe("3.5%");
+  });
+  it('Should return "0%" when passed number 0 and decimalPlaces 0', () => {
+    expect(formatNumToPctStr(0, 0)).toBe("0%");
+  });
+  it('Should return "(3%)" when passed number -3.22 and decimalPlaces 0', () => {
+    expect(formatNumToPctStr(-3.22, 0)).toBe("(3%)");
+  });
+  it('Should return "(3.7%)" when passed number -3.657 and decimalPlaces 1', () => {
+    expect(formatNumToPctStr(-3.657, 1)).toBe("(3.7%)");
+  });
+});

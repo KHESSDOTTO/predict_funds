@@ -1,3 +1,14 @@
+/**
+ * Return string based on number following the pattern:
+ * if 10^3 <= mod(x) < 10^6, return rounded whole number with sufix " k";
+ * if mod(x) < 10^3, return rounded number formatted as string
+ * if 10^6 <= mod(x), return rounded to 1 decimal place number sufixed " mln"
+ * if x < 0, also return number between parentesis "(<num>)"
+ * Param roundUp makes every rounding be rounded up.
+ * @param number the number to be formatted
+ * @param roundUp whether or not to always round numbers up
+ * @returns string containing the string correspondence of the number passed
+ */
 function formatNumToStrMlnK(number: number, roundUp: boolean = false): string {
   const absVal: number = Math.abs(number);
   const neg: boolean = number < 0;
@@ -32,6 +43,12 @@ function formatNumToStrMlnK(number: number, roundUp: boolean = false): string {
   return formattedNum;
 }
 
+/**
+ * Ads parenthesis to number if negative, ads % simbol at the end. Converts number to string.
+ * @param number number to be formatted
+ * @param decimalPlaces number of decimal places desired for rounding
+ * @returns the string correspondence of the number given the passed arguments
+ */
 function formatNumToPctStr(number: number, decimalPlaces: number) {
   let formattedNum: string;
 
