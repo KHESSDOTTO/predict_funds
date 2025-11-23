@@ -50,15 +50,9 @@ function formatNumToStrMlnK(number: number, roundUp: boolean = false): string {
  * @returns the string correspondence of the number given the passed arguments
  */
 function formatNumToPctStr(number: number, decimalPlaces: number) {
-  let formattedNum: string;
-
-  if (number < 0) {
-    formattedNum = "(" + number.toFixed(decimalPlaces) + "%" + ")";
-  } else {
-    formattedNum = number.toFixed(decimalPlaces) + "%";
-  }
-
-  return formattedNum;
+  return number < 0
+    ? "(" + Math.abs(number).toFixed(decimalPlaces) + "%" + ")"
+    : number.toFixed(decimalPlaces) + "%";
 }
 
 export { formatNumToStrMlnK, formatNumToPctStr };
