@@ -203,7 +203,7 @@ export default function NetFundingHistogramChart({
                           {histogram &&
                             histogram[absOrPct]?.map((entry, index) => (
                               <Cell
-                                key={`cell-${index}`}
+                                key={`cell-${entry.xTick}`}
                                 fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
                               />
                             ))}
