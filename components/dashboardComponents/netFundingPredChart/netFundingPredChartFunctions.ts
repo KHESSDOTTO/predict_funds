@@ -36,29 +36,32 @@ function adjustNetFundingChartAxis({
     ? Math.abs(Number(predictions[0][absOrPct]))
     : 0;
 
-  if (maxModValueNF) {
-    // Defyning domain.
-    maxModValueNF =
-      modValuePred > maxModValueNF
-        ? Number(Math.abs(modValuePred).toFixed(2))
-        : Number(Math.abs(maxModValueNF).toFixed(2));
-
-    const newDomain = AxisFunctions.getDomain(maxModValueNF, isPct);
-
-    if (newDomain) {
-      setDomainYaxisNF(newDomain);
-    }
-
-    const newYaxisNFTicks = AxisFunctions.getYaxisTicks(newDomain);
-
-    if (newYaxisNFTicks) {
-      setTicksYaxisNF(newYaxisNFTicks);
-    }
-
-    return true;
+  if (!maxModValueNF) {
+    return false;
   }
 
-  return false;
+  // Defyning domain.
+  maxModValueNF =
+    modValuePred > maxModValueNF
+      ? Number(Math.abs(modValuePred).toFixed(2))
+      : Number(Math.abs(maxModValueNF).toFixed(2));
+
+  const newDomain = AxisFunctions.getDomain(maxModValueNF, isPct);
+
+  if (newDomain) {
+    setDomainYaxisNF(newDomain);
+  }
+
+  const newYaxisNFTicks = AxisFunctions.getYaxisTicks(newDomain);
+
+  if (newYaxisNFTicks) {
+    setTicksYaxisNF(newYaxisNFTicks);
+  }
+
+  return {
+    newDomain,
+    newYaxisNFTicks,
+  };
 }
 
 function prepareChartNFData({
@@ -123,7 +126,12 @@ function exportNetFundingPred({
   return;
 }
 
-function predsToExport(predictions: PredictionsType[]) {
+/**
+ * Format predictions to be exported - YET TO IMPLEMENT UNIT TEST
+ * @param predictions Array of predictions to be formatted
+ * @returns Formatted predictions
+ */
+function predsToExport(predictions: PredictionsType[]): (string | number)[][] {
   const isValidPreds = Array.isArray(predictions) && predictions.length > 0;
 
   if (!isValidPreds) {
@@ -148,13 +156,9 @@ function predsToExport(predictions: PredictionsType[]) {
       formattedPreds.push(Object.keys(cleanedEl));
     }
 
-    const adjustedVals = Object.values(cleanedEl).map((cE) => {
-      if (Array.isArray(cE)) {
-        return cE.toString();
-      } else {
-        return cE;
-      }
-    });
+    const adjustedVals = Object.values(cleanedEl).map((cE) =>
+      Array.isArray(cE) ? cE.toString() : cE
+    );
 
     formattedPreds.push(adjustedVals);
   });
@@ -162,7 +166,12 @@ function predsToExport(predictions: PredictionsType[]) {
   return formattedPreds;
 }
 
-function historicToExport(historic: HistoricType[]) {
+/**
+ * Format historic to be exported - YET TO IMPLEMENT UNIT TEST
+ * @param historic Array of historic to be formatted
+ * @returns Formatted historic
+ */
+function historicToExport(historic: HistoricType[]): (string | number)[][] {
   const isValidHistoric = Array.isArray(historic) && historic.length > 0;
 
   if (!isValidHistoric) {
@@ -190,6 +199,12 @@ function historicToExport(historic: HistoricType[]) {
   return formattedHistoric;
 }
 
+/**
+ * Format y ticks for NF preds. chart
+ * @param num number to be formatted
+ * @param absOrPct if the tick are in absolute value (amount) or percentage
+ * @returns
+ */
 function yAxisTickFormats(num: number, absOrPct: "abs" | "pct") {
   const absNum = Math.abs(num);
   const numPct = num.toFixed(2) + "%";
