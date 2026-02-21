@@ -9,7 +9,6 @@ import {
   RawHistogramData,
 } from "./predictionsType";
 import { addWeeks } from "date-fns";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const PredictionSchema = new Schema<PredictionDocType, PredictionModelType>(
   {

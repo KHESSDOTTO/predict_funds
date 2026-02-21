@@ -1,7 +1,13 @@
-import { consoleLog } from "@/utils/functions/genericFunctions";
-import { lowerLimitOutliersHistogram, upperLimitOutliersHistogram } from "../histogramSettings";
+import {
+  lowerLimitOutliersHistogram,
+  upperLimitOutliersHistogram,
+} from "../histogramSettings";
 import { HandleSubmitParamsType } from "../netFundingHistogramChartTypes";
-import { filterDataForHistogram, getNumBinsForHistogram, prepareHistogram } from "../netFundingHistogramFunctions";
+import {
+  filterDataForHistogram,
+  getNumBinsForHistogram,
+  prepareHistogram,
+} from "../netFundingHistogramFunctions";
 
 function handleSubmit({
   e,
@@ -15,12 +21,12 @@ function handleSubmit({
 }: HandleSubmitParamsType) {
   e.preventDefault();
 
-  const numBins = getNumBinsForHistogram(isMobile)
+  const numBins = getNumBinsForHistogram(isMobile);
   const filteredDataForHistogram = filterDataForHistogram({
     currCnpj,
     dataForHistogram,
     histogramControlForm,
-    sliderInitialInfos
+    sliderInitialInfos,
   });
 
   const newHistogram = prepareHistogram(
@@ -29,15 +35,15 @@ function handleSubmit({
     currCnpj,
     lowerLimitOutliersHistogram,
     upperLimitOutliersHistogram
-  )
+  );
 
   setHistogram(
-    newHistogram ?
-      newHistogram :
-      {
-        abs: [],
-        pct: [],
-      }
+    newHistogram
+      ? newHistogram
+      : {
+          abs: [],
+          pct: [],
+        }
   );
 
   setCurrAppliedFilters(histogramControlForm);

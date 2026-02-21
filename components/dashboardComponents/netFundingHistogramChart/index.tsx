@@ -20,7 +20,6 @@ import {
 } from "recharts";
 import { useEffect, useState } from "react";
 import FilterForm from "./forms/filterForm";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import {
   prepareHistogram,
   initializeSliders,
@@ -204,7 +203,7 @@ export default function NetFundingHistogramChart({
                           {histogram &&
                             histogram[absOrPct]?.map((entry, index) => (
                               <Cell
-                                key={`cell-${index}`}
+                                key={`cell-${entry.xTick}`}
                                 fill={entry.selCnpjBin ? "#82ca9d" : "#8884d8"}
                               />
                             ))}

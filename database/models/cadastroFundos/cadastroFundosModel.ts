@@ -4,7 +4,6 @@ import type {
   CadastroFundosDocType,
   CadastroFundosModelType,
 } from "./cadastroFundosTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 const CadastroFundosSchema = new Schema<
   CadastroFundosDocType,

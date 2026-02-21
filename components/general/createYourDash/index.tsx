@@ -24,7 +24,6 @@ import ButtonGreen from "@/components/UI/buttonGreen";
 import { useUser } from "@/contexts/userContext";
 import toast from "react-hot-toast";
 import { UserType } from "@/utils/types/generalTypes/types";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 
 export default function CreateYourDashList(pageProps: { user: UserType }) {
   const { user, setUser } = useUser();

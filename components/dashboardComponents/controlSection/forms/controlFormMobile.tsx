@@ -103,7 +103,7 @@ export default function ControlFormMobile({
               {ancoras?.map((cE, cI) => {
                 const ancora = new Date(cE);
                 return (
-                  <option key={cI} value={cE}>
+                  <option key={cE} value={cE}>
                     {format(ancora, "dd/MM/yyyy")}
                   </option>
                 );
@@ -156,7 +156,7 @@ export default function ControlFormMobile({
             >
               {predictionWeeks.map((cE, cI) => {
                 return (
-                  <option key={cI} value={cE}>
+                  <option key={cE} value={cE}>
                     {cE + " weeks"}
                   </option>
                 );

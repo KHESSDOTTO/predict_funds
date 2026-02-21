@@ -18,9 +18,9 @@ import {
   handleSubmitNoEmail,
   handleChangePwd,
   doSubmitEmailChange,
-} from "@/utils/functions/pageFunctions/loggedInProfileFunctions";
+} from "@/utils/functions/pageSpecificFunctions/loggedInProfileFunctions";
 import ProfileForm from "@/components/pageForms/profileForm";
-import { doLogout } from "@/utils/functions/genericFunctions";
+import Helpers from "@/utils/functions/helpers/helpers";
 import TitleComponent from "@/components/UI/titleComponent";
 
 export default function ProfilePage({ user }: ProfilePagePropsType) {
@@ -104,7 +104,7 @@ export default function ProfilePage({ user }: ProfilePagePropsType) {
               >
                 Change Password
               </div>
-              <div onClick={() => doLogout({ userContext, router })}>
+              <div onClick={() => Helpers.doLogout({ userContext, router })}>
                 <ButtonRed shadowColor="white/30" shadowSize="md">
                   Log out
                 </ButtonRed>

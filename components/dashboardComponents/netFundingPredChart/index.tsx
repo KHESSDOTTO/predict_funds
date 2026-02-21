@@ -31,7 +31,6 @@ import type {
   TextAvgErrorPredsPropsType,
   TextDateReferencePropsType,
 } from "./netFundingPredChartTypes";
-import { consoleLog } from "@/utils/functions/genericFunctions";
 import ButtonGreen from "@/components/UI/buttonGreen";
 import { track } from "@vercel/analytics";
 import { useUser } from "@/contexts/userContext";
@@ -113,15 +112,9 @@ export default function NetFundingPredChart({
         >
           {typeof title === "string" && title}
           {typeof title === "object" &&
-            title.map((cE, cI) => {
-              const uniqueKeyRaw = JSON.stringify({ title, cE, cI });
-              const uniqueKey = crypto
-                .createHash("md5")
-                .update(uniqueKeyRaw)
-                .digest("hex");
-
+            title.map((cE) => {
               return (
-                <span className="block" key={uniqueKey}>
+                <span className="block" key={cE}>
                   {cE}
                 </span>
               );

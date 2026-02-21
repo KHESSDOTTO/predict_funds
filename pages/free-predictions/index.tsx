@@ -5,7 +5,7 @@ import {
   AggregateChartsDataType,
   FreePredictionsPropsType,
 } from "@/utils/types/pageTypes/predictionsPageTypes";
-import { fetchData } from "@/utils/functions/pageFunctions/freePredictionsFunction";
+import { fetchData } from "@/utils/functions/pageSpecificFunctions/freePredictionsFunction";
 import getCachedAncoras from "@/cache/ancorasPredsCache";
 import { GetServerSideProps } from "next";
 import toast from "react-hot-toast";
